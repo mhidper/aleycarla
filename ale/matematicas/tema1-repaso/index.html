@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repaso del Tema 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Layout: una columna estrecha; la hoja cuadriculada del ejercicio es el centro, y la corrección usa el rotulador magenta de la profesora */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1b2a4a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}.back:hover{text-decoration:underline}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 8px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(20,30,60,.45);display:flex;flex-direction:column;gap:16px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.prompt{font-size:1.12rem;line-height:1.6}
+.prompt p{margin:0 0 .4em}
+.m{font-size:1.18em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.m.wrapok{white-space:normal}
+sup{font-size:.68em;line-height:0}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.9em;margin:0 .12em;line-height:1.15}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .2em}
+.fields{display:flex;flex-direction:column;gap:14px}
+.field label{display:block;font-weight:700;font-size:.92rem;margin-bottom:4px}
+.frow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.in{font:400 1.15rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;width:100%;max-width:280px;font-variant-numeric:tabular-nums}
+.in:focus,.opt:focus-visible,button:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.pow{display:inline-flex;align-items:flex-start;gap:2px}
+.pow .base{width:5.2em}
+.pow .exp{width:3.6em;font-size:.95rem;padding:4px 6px;margin-top:-10px}
+.ins{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);border-radius:8px;font:700 1.1rem var(--f-body);width:40px;height:40px;cursor:pointer}
+.choice{display:flex;gap:8px}
+.opt{border:2px solid var(--line);background:var(--paper);color:var(--ink);font:700 1rem var(--f-body);padding:8px 22px;border-radius:8px;cursor:pointer}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.field.ok .in,.field.ok .opt[aria-pressed="true"]{border-color:var(--ok)}
+.field.bad .in,.field.bad .opt[aria-pressed="true"]{border-color:var(--marker)}
+.fmsg{font-size:.92rem;margin-top:4px;color:var(--marker);min-height:0}
+.field.ok .fmsg{color:var(--ok)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 22px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 18px;cursor:pointer}
+.hint{background:var(--chip);border:1.5px dashed var(--line);border-radius:8px;padding:10px 12px;font-size:.98rem}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}
+.stamp.b{color:var(--ok)} .stamp.mm{color:var(--marker)}
+.verdict{font-weight:700;font-size:1.05rem}
+.verdict.b{color:var(--ok)} .verdict.mm{color:var(--marker)}
+.sol{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sol h3{margin:0;font:800 1rem var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+.sol p{margin:0}
+.sol .line{font-size:1.08rem;overflow-x:auto}
+.warn{background:var(--marker-soft);border-left:4px solid var(--marker);padding:8px 10px;border-radius:0 6px 6px 0}
+.tables{display:flex;gap:28px;flex-wrap:wrap}
+.dt{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:1.05rem}
+.dt td{padding:1px 8px}
+.dt td:first-child{text-align:right;border-right:2px solid var(--ink)}
+.dt caption{text-align:left;font-size:.8rem;color:var(--muted);font-weight:700}
+.progress h2,.summary h2{font:800 1.15rem var(--f-display);margin:0 0 10px}
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 110px 52px;gap:10px;align-items:center;font-size:.92rem;padding:5px 0}
+.bar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar i.low{background:var(--marker)}
+.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:.9rem;color:var(--muted)}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
+.linkbtn.danger{color:var(--marker);font-weight:700}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.qlist li{display:flex;gap:10px;align-items:baseline}
+.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em}
+@media (max-width:420px){header h1{font-size:1.65rem}.prow{grid-template-columns:minmax(0,1fr) 70px 46px}.stamp{font-size:2.8rem}}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .25s ease-out}@keyframes pop{from{transform:rotate(-8deg) scale(1.6);opacity:0}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="../../">← Asignaturas de Ale</a>
+  <header>
+    <h1>Repaso del Tema 1 <span>Ale</span></h1>
+    <p>Ejercicios nuevos cada vez sobre potencias, múltiplos y divisores, m.c.d. y m.c.m., fracciones y problemas. Cada respuesta se corrige al momento y te enseña el método.</p>
+  </header>
+
+  <div class="tabs" role="group" aria-label="Modo">
+    <button id="mPractice" aria-pressed="true">Practicar</button>
+    <button id="mExam" aria-pressed="false">Prueba mixta</button>
+  </div>
+
+  <div class="chips" id="chips" role="group" aria-label="Tema"></div>
+
+  <main id="card"></main>
+
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const isPrime=n=>{if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true};
+const nf=n=>n.toLocaleString('es-ES');
+const sup=(b,e)=>`${b}<sup>${e}</sup>`;
+const P=s=>`<p>${s}</p>`;
+const L=s=>`<p class="line">${s}</p>`;
+const warn=s=>`<p class="warn">${s}</p>`;
+const words=['cero','uno','dos','tres','cuatro','cinco','seis'];
+const fr=(n,d)=>`<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+const F=x=>x[1]===1?`${x[0]}`:fr(x[0],x[1]);
+const simp=x=>{const g=gcd(x[0],x[1]);return[x[0]/g,x[1]/g]};
+const joinY=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a[a.length-1];
+
+function factorize(n){const f={};for(let p=2;n>1;p++){while(n%p===0){f[p]=(f[p]||0)+1;n/=p}}return f}
+const fmtF=f=>{const k=Object.keys(f).map(Number).sort((a,b)=>a-b);return k.length?k.map(p=>f[p]>1?sup(p,f[p]):p).join(' · '):'1'};
+function divTable(n,cap){let m=n,rows=[];for(let p=2;m>1;p++){while(m%p===0){rows.push([m,p]);m/=p}}rows.push([1,'']);return`<table class="dt">${cap?`<caption>${cap}</caption>`:''}${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`}
+function divisors(n){const d=[];for(let i=1;i<=n;i++)if(n%i===0)d.push(i);return d}
+
+/* pasos con fracciones */
+function sMul(x,y){const raw=[x[0]*y[0],x[1]*y[1]],r=simp(raw);return{r,h:`${F(x)} · ${F(y)} = ${fr(x[0]+'·'+y[0],x[1]+'·'+y[1])} = ${F(raw)}${r[1]!==raw[1]?' = '+F(r):''}`}}
+function sDiv(x,y){const raw=[x[0]*y[1],x[1]*y[0]],r=simp(raw);return{r,h:`${F(x)} : ${F(y)} = ${fr(x[0]+'·'+y[1],x[1]+'·'+y[0])} = ${F(raw)}${r[1]!==raw[1]?' = '+F(r):''}`}}
+function sAdd(x,y,sg){const D=lcm(x[1],y[1]),a=x[0]*D/x[1],b=y[0]*D/y[1],raw=[sg>0?a+b:a-b,D],r=simp(raw);const s=sg>0?'+':'−';
+  const mid=x[1]===y[1]?'':` = ${fr(a,D)} ${s} ${fr(b,D)}`;return{r,D,h:`${F(x)} ${s} ${F(y)}${mid} = ${F(raw)}${r[1]!==raw[1]?' = '+F(r):''}`}}
+
+const TOPICS={pot:'Potencias',div:'Múltiplos y divisores',fac:'Factorización, m.c.d. y m.c.m.',ops:'Operaciones combinadas',pro:'Problemas'};
+const NAMES=['Isabel','Lucía','Hugo','Marta','Pablo','Nuria','Daniel','Elena'];
+
+const G={
+/* ---------- POTENCIAS ---------- */
+potProd:{t:'pot',f(){const b=pick([2,3,5,7,10]);const k=pick([2,3,3]);const ex=Array.from({length:k},()=>R(2,7));const s=ex.reduce((a,c)=>a+c,0);const pr=ex.reduce((a,c)=>a*c,1);
+ return{prompt:P('Expresa como una única potencia:')+`<span class="m">${ex.map(e=>sup(b,e)).join(' · ')}</span>`,
+ fields:[{label:'Resultado',kind:'power',ans:{b,e:s},trap:(B,E)=>B===b&&E===pr&&pr!==s?'Has multiplicado los exponentes. Cuando se multiplican potencias de la misma base, los exponentes se suman.':null}],
+ hint:'Al <b>multiplicar</b> potencias de la misma base, la base se queda igual y los exponentes se <b>suman</b>.',
+ sol:P(`Todas tienen base ${b}. Al multiplicar, se suman los exponentes: ${ex.join(' + ')} = ${s}.`)+L(`${ex.map(e=>sup(b,e)).join(' · ')} = ${sup(b,s)}`)+warn('No hace falta calcular cuánto vale cada potencia: se trabaja solo con los exponentes.')}}},
+potCoc:{t:'pot',f(){const b=pick([2,3,5,7,10]);const m=R(6,13),n=R(2,m-2);
+ return{prompt:P('Expresa como una única potencia:')+`<span class="m">${sup(b,m)} : ${sup(b,n)}</span>`,
+ fields:[{label:'Resultado',kind:'power',ans:{b,e:m-n}}],
+ hint:'Al <b>dividir</b> potencias de la misma base, la base se queda igual y los exponentes se <b>restan</b>.',
+ sol:P(`Misma base (${b}). En la división se restan los exponentes: ${m} − ${n} = ${m-n}.`)+L(`${sup(b,m)} : ${sup(b,n)} = ${sup(b,m-n)}`)}}},
+potMix:{t:'pot',f(){const b=pick([2,3,5,7]);let txt,expl,res;const v=R(1,3);
+ if(v===1){const a=R(2,4),c=R(2,4),d=R(2,a*c-1);res=a*c-d;txt=`(${sup(b,a)})<sup>${c}</sup> : ${sup(b,d)}`;expl=`${a} · ${c} − ${d} = ${res}`}
+ else if(v===2){const a=R(2,7),c=R(2,4),d=R(2,3);res=a+c*d;txt=`${sup(b,a)} · (${sup(b,c)})<sup>${d}</sup>`;expl=`${a} + ${c} · ${d} = ${res}`}
+ else{const a=R(3,8),c=R(3,8),d=R(2,a+c-2);res=a+c-d;txt=`(${sup(b,a)} · ${sup(b,c)}) : ${sup(b,d)}`;expl=`(${a} + ${c}) − ${d} = ${res}`}
+ return{prompt:P('Expresa como una única potencia:')+`<span class="m">${txt}</span>`,
+ fields:[{label:'Resultado',kind:'power',ans:{b,e:res}}],
+ hint:'Resuelve primero el paréntesis. Producto: sumar exponentes. Cociente: restar. Potencia de potencia: multiplicar.',
+ sol:P('Se combinan las tres reglas: en el producto se suman los exponentes, en el cociente se restan y en la potencia de una potencia se multiplican.')+L(`Exponente: ${expl}`)+L(`${txt} = ${sup(b,res)}`)}}},
+potPot:{t:'pot',f(){const b=pick([2,3,5,7]);const a=R(2,5),c=R(2,4);
+ return{prompt:P('Expresa como una única potencia:')+`<span class="m">(${sup(b,a)})<sup>${c}</sup></span>`,
+ fields:[{label:'Resultado',kind:'power',ans:{b,e:a*c},trap:(B,E)=>B===b&&E===a+c&&a+c!==a*c?'Has sumado los exponentes. En una potencia de una potencia se multiplican.':null}],
+ hint:'Potencia de una potencia: la base se queda igual y los exponentes se <b>multiplican</b>.',
+ sol:P(`Es una potencia elevada a otra potencia, así que se multiplican los exponentes: ${a} · ${c} = ${a*c}.`)+L(`(${sup(b,a)})<sup>${c}</sup> = ${sup(b,a*c)}`)}}},
+potNum:{t:'pot',f(){const opts={2:[3,10],3:[2,7],5:[2,5],7:[2,4],10:[2,6]};const b=pick([2,3,3,5,7,10]);const e=R(...opts[b]);const v=b**e;
+ return{prompt:P(`Expresa <b>${nf(v)}</b> como una potencia.`),
+ fields:[{label:'Potencia',kind:'power',value:v}],
+ hint:'Divide el número entre un número primo una y otra vez hasta llegar a 1. Cuenta cuántas veces has dividido.',
+ sol:L(`${nf(v)} = ${Array(e).fill(b).join(' · ')} = ${sup(b,e)}`)+P(`Se multiplica ${b} por sí mismo ${e} veces.`)}}},
+potSame:{t:'pot',f(){const n=R(2,4);if(Math.random()<.5){let a,b;do{a=pick([2,3,4,5]);b=pick([2,3,5])}while(a===b);
+ return{prompt:P('Expresa como una única potencia:')+`<span class="m">${sup(a,n)} · ${sup(b,n)}</span>`,fields:[{label:'Resultado',kind:'power',ans:{b:a*b,e:n}}],
+ hint:'Las bases son distintas pero el exponente es el mismo. Multiplica las bases y deja el exponente.',
+ sol:P(`Mismo exponente (${n}): se multiplican las bases, ${a} · ${b} = ${a*b}, y el exponente se mantiene.`)+L(`${sup(a,n)} · ${sup(b,n)} = (${a} · ${b})<sup>${n}</sup> = ${sup(a*b,n)}`)}}
+ const q=pick([2,3,4,5]),b=pick([2,3,4]),a=q*b;
+ return{prompt:P('Expresa como una única potencia:')+`<span class="m">${sup(a,n)} : ${sup(b,n)}</span>`,fields:[{label:'Resultado',kind:'power',ans:{b:q,e:n}}],
+ hint:'Las bases son distintas pero el exponente es el mismo. Divide las bases y deja el exponente.',
+ sol:P(`Mismo exponente (${n}): se dividen las bases, ${a} : ${b} = ${q}, y el exponente se mantiene.`)+L(`${sup(a,n)} : ${sup(b,n)} = (${a} : ${b})<sup>${n}</sup> = ${sup(q,n)}`)}}},
+potMiss:{t:'pot',f(){const b=pick([2,3,5,7,10]);const v=R(1,3);let txt,x,expl,rule;
+ if(v===1){const a=R(2,8);x=R(2,8);txt=`${sup(b,a)} · ${sup(b,'□')} = ${sup(b,a+x)}`;expl=`${a} + □ = ${a+x}, así que □ = ${a+x} − ${a} = ${x}`;rule='En el producto se suman los exponentes.'}
+ else if(v===2){x=R(2,6);const r=R(2,7),a=x+r;txt=`${sup(b,a)} : ${sup(b,'□')} = ${sup(b,r)}`;expl=`${a} − □ = ${r}, así que □ = ${a} − ${r} = ${x}`;rule='En el cociente se restan los exponentes.'}
+ else{const a=R(2,5);x=R(2,4);txt=`(${sup(b,a)})<sup>□</sup> = ${sup(b,a*x)}`;expl=`${a} · □ = ${a*x}, así que □ = ${a*x} : ${a} = ${x}`;rule='En la potencia de una potencia se multiplican los exponentes.'}
+ return{prompt:P('¿Qué exponente falta en el hueco?')+`<span class="m">${txt}</span>`,fields:[{label:'Exponente que falta',kind:'number',ans:x}],
+ hint:'Piensa qué regla se aplica y haz la operación al revés.',sol:P(rule)+L(expl)}}},
+potTF:{t:'pot',f(){const v=R(1,5);const tr=Math.random()<.45;let left,r,real,why;
+ if(v===1){const b=pick([2,3,5,10]),a=R(2,6),c=R(2,6);real=a+c;r=tr?real:a*c;left=`${sup(b,a)} · ${sup(b,c)} = ${sup(b,r)}`;why=`En un producto de potencias de la misma base se suman los exponentes: ${a} + ${c} = ${real}.`}
+ else if(v===2){const b=pick([2,3,5,10]),c=R(2,4),k=R(2,5),A=c*k;real=A-c;r=tr?real:k;left=`${sup(b,A)} : ${sup(b,c)} = ${sup(b,r)}`;why=`En un cociente se restan los exponentes: ${A} − ${c} = ${real}.`}
+ else if(v===3){const b=pick([2,3,5,10]),a=R(2,5),c=R(2,4);real=a*c;r=tr?real:a+c;left=`(${sup(b,a)})<sup>${c}</sup> = ${sup(b,r)}`;why=`En la potencia de una potencia se multiplican los exponentes: ${a} · ${c} = ${real}.`}
+ else if(v===4){const a=R(2,6);real=a+1;r=tr?real:2*a;left=`${sup(2,a)} + ${sup(2,a)} = ${sup(2,r)}`;why=`${sup(2,a)} + ${sup(2,a)} = 2 · ${sup(2,a)} = ${sup(2,a+1)}. Las reglas de los exponentes sirven para multiplicar y dividir, no para sumar.`}
+ else{const b=pick([3,5,7,9]);real=1;r=tr?1:pick([0,b]);left=`${sup(b,0)} = ${r}`;why='Cualquier número (distinto de 0) elevado a 0 vale 1.'}
+ const ok=r===real;
+ return{prompt:P('¿Es verdadera o falsa esta igualdad?')+`<span class="m">${left}</span>`,fields:[{label:'Respuesta',kind:'choice',opts:['Verdadera','Falsa'],ans:ok?'Verdadera':'Falsa'}],
+ hint:'Recuerda las reglas: producto, se suman; cociente, se restan; potencia de potencia, se multiplican.',sol:P(why)+P(ok?'La igualdad es <b>verdadera</b>.':'La igualdad es <b>falsa</b>.')}}},
+
+/* ---------- MÚLTIPLOS Y DIVISORES ---------- */
+multRange:{t:'div',f(){const n=pick([3,4,6,7,8,9,11,12,13,15]);let a,b,ans;do{a=R(20,400);b=a+R(n*3,n*6);ans=[];for(let x=(Math.floor(a/n)+1)*n;x<b;x+=n)ans.push(x)}while(a%n===0||b%n===0||ans.length<3||ans.length>6);
+ const q=Math.floor(a/n);
+ return{prompt:P(`Escribe todos los múltiplos de ${n} que hay entre ${a} y ${b}.`),
+ fields:[{label:'Múltiplos, separados por comas',kind:'list',ans,explainExtra:ex=>ex.map(x=>x%n?`${x} no es múltiplo de ${n}.`:`${x} se sale del intervalo.`).join(' ')}],
+ hint:`Divide ${a} entre ${n}: el cociente te dice qué múltiplo queda justo por debajo de ${a}.`,
+ sol:L(`${a} : ${n} = ${q} y sobra ${a%n}`)+P(`El primer múltiplo de ${n} después de ${a} es ${q+1} · ${n} = ${ans[0]}. Se va sumando ${n} hasta pasar de ${b}:`)+L(ans.join(', '))}}},
+multEdge:{t:'div',f(){const n=pick([6,7,8,9,11,12,13,14,15,17,19,23]);const v=R(1,3);let q,ans,sol;
+ if(v===1){const k=Math.ceil(100/n);ans=k*n;q=`¿Cuál es el menor múltiplo de ${n} que tiene tres cifras?`;sol=L(`100 : ${n} = ${k-1} y sobra ${100%n}`)+P(`${k-1} · ${n} = ${(k-1)*n} todavía tiene dos cifras. El siguiente es ${k} · ${n} = <b>${ans}</b>.`)}
+ else if(v===2){const k=Math.floor(99/n);ans=k*n;q=`¿Cuál es el mayor múltiplo de ${n} que tiene dos cifras?`;sol=L(`99 : ${n} = ${k}${99%n?` y sobra ${99%n}`:', exacta'}`)+P(`El mayor es ${k} · ${n} = <b>${ans}</b>.`)}
+ else{let m;do{m=R(150,900)}while(m%n===0);const k=Math.floor(m/n);ans=k*n;q=`¿Cuál es el mayor múltiplo de ${n} que es menor que ${m}?`;sol=L(`${m} : ${n} = ${k} y sobra ${m%n}`)+P(`El mayor múltiplo por debajo de ${m} es ${k} · ${n} = <b>${ans}</b>.`)}
+ return{prompt:P(q),fields:[{label:'Respuesta',kind:'number',ans}],hint:'Divide y fíjate en el cociente y en el resto.',sol}}},
+divsRect:{t:'div',f(){const ctx=pick([['sillas','sillas'],['macetas','macetas'],['mesas','mesas'],['taquillas','taquillas']]);const N=pick([24,30,32,36,40,42,45,48,56,60,64,72,80,84,90,96,100]);const d=divisors(N);const ans=d.filter(x=>x>1&&x<N);const pairs=d.filter(x=>x*x<=N).map(x=>`${x} · ${N/x}`);
+ return{prompt:P(`Hay que colocar ${N} ${ctx[0]} en filas, todas con la misma cantidad y sin que sobre ninguna. Tiene que haber más de una fila y más de una en cada fila.`)+P('¿Cuántas puede haber en cada fila? Escribe todas las posibilidades.'),
+ fields:[{label:`${ctx[1][0].toUpperCase()+ctx[1].slice(1)} por fila, separadas por comas`,kind:'list',ans,explainExtra:ex=>ex.map(x=>x===1||x===N?`${x} no vale: tiene que haber más de una fila y más de una por fila.`:`${x} no divide a ${N}.`).join(' ')}],
+ hint:`La cantidad por fila tiene que ser un divisor de ${N}. Búscalos por parejas: 1 · ${N}, 2 · …`,
+ sol:P(`La cantidad por fila tiene que dividir a ${N}. Buscamos los divisores por parejas; cuando los números se cruzan, hemos terminado:`)+L(pairs.join('&nbsp;&nbsp;|&nbsp;&nbsp;'))+P(`Quitamos 1 y ${N}, que darían una sola fila o una por fila: <b>${ans.join(', ')}</b>.`)}}},
+divCommon:{t:'div',f(){let a,b,g;do{g=pick([6,8,9,10,12,14,15,16,18,20]);const x=R(1,5),y=R(2,7);a=g*x;b=g*y;if(x>=y||gcd(x,y)!==1)a=0}while(!a||b>150);const da=divisors(a),db=divisors(b),dc=divisors(g);
+ return{prompt:P(`Escribe todos los divisores comunes de ${a} y ${b}.`),fields:[{label:'Divisores comunes, separados por comas',kind:'list',ans:dc,explainExtra:ex=>ex.map(x=>a%x?`${x} no divide a ${a}.`:`${x} no divide a ${b}.`).join(' ')}],
+ hint:'Escribe los divisores de cada número por parejas y quédate con los que se repiten.',
+ sol:L(`Divisores de ${a}: ${da.join(', ')}`)+L(`Divisores de ${b}: ${db.join(', ')}`)+P(`Comunes: <b>${dc.join(', ')}</b>. El mayor de ellos, ${g}, es el m.c.d.`)}}},
+isDiv:{t:'div',f(){const b=pick([36,42,48,56,60,63,72,84,90,96,105,120]);const ds=divisors(b).filter(x=>x>1&&x<b);let a;if(Math.random()<.5)a=pick(ds);else{do{a=R(4,Math.floor(b/2))}while(b%a===0)}const q=Math.floor(b/a),r=b%a;
+ return{prompt:P(`¿Es ${a} divisor de ${b}?`),fields:[{label:'Respuesta',kind:'choice',opts:['Sí','No'],ans:r===0?'Sí':'No'}],
+ hint:`Haz la división ${b} : ${a}. Si es exacta (resto 0), ${a} es divisor.`,
+ sol:L(`${b} : ${a} = ${q}${r?` y sobra ${r}`:', exacta'}`)+P(r?`Como sobra ${r}, ${a} <b>no</b> es divisor de ${b}.`:`Como es exacta, ${a} <b>sí</b> es divisor de ${b} (${a} · ${q} = ${b}).`)}}},
+critDigit:{t:'div',f(){let d,disp,ans,known,pos;do{d=pick([2,3,5,6,9]);const a=R(1,9),c=R(0,9),e=R(0,9);
+ if(d===3||d===9){pos=1;disp=`${a}□${e}`;ans=[...Array(10).keys()].filter(x=>(a*100+x*10+e)%d===0);known=[a,e]}
+ else{pos=2;disp=`${a}${c}□`;ans=[...Array(10).keys()].filter(x=>(a*100+c*10+x)%d===0);known=[a,c]}}while(!ans.length);
+ const s=known[0]+known[1];
+ const rule={2:'Divisible entre 2: la última cifra es par.',5:'Divisible entre 5: acaba en 0 o en 5.',3:'Divisible entre 3: la suma de las cifras es múltiplo de 3.',9:'Divisible entre 9: la suma de las cifras es múltiplo de 9.',6:'Divisible entre 6: tiene que serlo entre 2 y entre 3 a la vez.'}[d];
+ let sol=P(rule);if(d===3||d===9||d===6)sol+=L(`Cifras conocidas: ${known[0]} + ${known[1]} = ${s}. Hace falta que ${s} + □ sea múltiplo de ${d===6?3:d}.`);
+ sol+=P(`Cifras que valen: <b>${ans.join(', ')}</b>.`);
+ return{prompt:P(`¿Qué cifras se pueden poner en el hueco para que el número <span class="m">${disp}</span> sea divisible entre ${d}? Escríbelas todas.`),
+ fields:[{label:'Cifras posibles, separadas por comas',kind:'list',ans,explainExtra:ex=>`Con ${ex.join(', ')} no sale divisible entre ${d}.`}],hint:rule,sol}}},
+prime:{t:'div',f(){const want=Math.random()<.5;let n;do{n=R(21,149)}while(isPrime(n)!==want||(!want&&(n%2===0||n%5===0)&&Math.random()<.85));
+ let sol;if(want){const ps=[2,3,5,7,11].filter(p=>p*p<=n);sol=P(`Probamos a dividir ${n} entre ${ps.join(', ')}. Ninguna división es exacta, y con el siguiente primo el cociente ya sería menor que el divisor.`)+P(`Solo tiene dos divisores, 1 y ${n}: es <b>primo</b>.`)}
+ else{let p=2;while(n%p)p++;sol=L(`${n} : ${p} = ${n/p}, exacta`)+P(`Tiene más divisores que 1 y ${n}: es <b>compuesto</b> (${n} = ${fmtF(factorize(n))}).`)}
+ return{prompt:P(`¿Es ${n} un número primo o compuesto?`),fields:[{label:'Respuesta',kind:'choice',opts:['Primo','Compuesto'],ans:want?'Primo':'Compuesto'}],
+ hint:'Prueba a dividir entre 2, 3, 5, 7, 11… Si alguna división es exacta, es compuesto.',sol}}},
+
+/* ---------- FACTORIZACIÓN, MCD, MCM ---------- */
+facN:{t:'fac',f(){let n,f;do{f={};n=1;for(const[p,lo,hi]of[[2,0,4],[3,0,3],[5,0,2],[7,0,1],[11,0,1]]){let e=R(lo,hi);if(p===11&&Math.random()<.8)e=0;if(e){f[p]=e;n*=p**e}}}while(n<24||n>600||Object.values(f).reduce((a,b)=>a+b,0)<3||Object.keys(f).length<2);
+ return{prompt:P(`Descompón ${n} en factores primos.`),
+ fields:[{label:'Factorización',kind:'factor',ans:n}],
+ hint:'Divide entre 2 todas las veces que puedas, luego entre 3, luego entre 5… Comprueba cada división multiplicando.',
+ sol:`<div class="tables">${divTable(n)}</div>`+L(`${n} = ${fmtF(f)}`)+warn('Comprueba cada paso al revés: el cociente por el divisor tiene que dar el número de arriba.')}}},
+facRev:{t:'fac',f(){let n,f;do{f={};n=1;for(const[p,hi]of[[2,4],[3,3],[5,2],[7,2],[11,1]]){const e=R(0,hi);if(e){f[p]=e;n*=p**e}}}while(n<30||n>2000||Object.keys(f).length<2);
+ const exp=Object.keys(f).map(Number).sort((a,b)=>a-b).flatMap(p=>Array(f[p]).fill(p));
+ return{prompt:P('¿Qué número tiene esta descomposición en factores primos?')+`<span class="m">${fmtF(f)}</span>`,fields:[{label:'Número',kind:'number',ans:n}],
+ hint:'Escribe cada potencia como multiplicación y multiplica todo.',sol:L(`${fmtF(f)} = ${exp.join(' · ')} = ${nf(n)}`)}}},
+mcdmcm:{t:'fac',f(){let a=0,b=0;do{a=0;const g=pick([2,3,4,5,6,7,8,9,10,12,14,15,18]);const x=R(1,6),y=R(2,9);if(x>=y||gcd(x,y)!==1)continue;a=g*x;b=g*y}while(!a||a<8||b>300);
+ const fa=factorize(a),fb=factorize(b);const ps=[...new Set([...Object.keys(fa),...Object.keys(fb)])].map(Number);const fm={},fM={};ps.forEach(p=>{if(fa[p]&&fb[p])fm[p]=Math.min(fa[p],fb[p]);fM[p]=Math.max(fa[p]||0,fb[p]||0)});
+ return{prompt:P(`Calcula el máximo común divisor y el mínimo común múltiplo de ${a} y ${b}.`),
+ fields:[{label:'m.c.d.',kind:'number',ans:gcd(a,b),trap:v=>v===lcm(a,b)?'Ese es el m.c.m.; el m.c.d. es el pequeño.':null},{label:'m.c.m.',kind:'number',ans:lcm(a,b),trap:v=>v===a*b&&a*b!==lcm(a,b)?'Has multiplicado los dos números. Eso es un múltiplo común, pero no el mínimo.':null}],
+ hint:'Descompón los dos números. m.c.d.: factores comunes con el menor exponente. m.c.m.: todos los factores con el mayor exponente.',
+ sol:`<div class="tables">${divTable(a,String(a))}${divTable(b,String(b))}</div>`+L(`${a} = ${fmtF(fa)}&nbsp;&nbsp;&nbsp;${b} = ${fmtF(fb)}`)+P('<b>m.c.d.</b>: solo los factores comunes, con el menor exponente.')+L(`m.c.d. = ${fmtF(fm)} = ${gcd(a,b)}`)+P('<b>m.c.m.</b>: todos los factores, comunes y no comunes, con el mayor exponente.')+L(`m.c.m. = ${fmtF(fM)} = ${lcm(a,b)}`)}}},
+mcm3:{t:'fac',f(){let ps,Lc;do{ps=[];const pool=[4,6,8,9,10,12,15,16,18,20,24,25,30];while(ps.length<3){const v=pick(pool);if(!ps.includes(v))ps.push(v)}ps.sort((a,b)=>a-b);Lc=ps.reduce(lcm)}while(Lc>720||Lc===ps[2]);
+ const fs=ps.map(factorize);const all={};fs.forEach(f=>Object.keys(f).forEach(p=>all[p]=Math.max(all[p]||0,f[p])));const prod=ps.reduce((a,b)=>a*b,1);
+ return{prompt:P(`Calcula el mínimo común múltiplo de ${joinY(ps)}.`),fields:[{label:'m.c.m.',kind:'number',ans:Lc,trap:v=>v===prod?'Has multiplicado los tres números. Es un múltiplo común, pero no el mínimo.':null}],
+ hint:'Descompón los tres números y toma todos los factores primos que aparezcan, cada uno con su mayor exponente.',
+ sol:`<div class="tables">${ps.map(p=>divTable(p,String(p))).join('')}</div>`+L(ps.map((p,i)=>`${p} = ${fmtF(fs[i])}`).join('&nbsp;&nbsp;&nbsp;'))+L(`m.c.m. = ${fmtF(all)} = ${Lc}`)}}},
+
+/* ---------- OPERACIONES COMBINADAS ---------- */
+int:{t:'ops',f(){const k=R(1,4);let txt,steps,res;
+ if(k===1){const a=R(2,6),c=R(1,8),b=c+R(1,6),e=R(2,9),q=R(2,9),d=e*q;res=a*(b-c)+q;txt=`${a} · (${b} − ${c}) + ${d} : ${e}`;steps=[`${a} · ${b-c} + ${d} : ${e}`,`${a*(b-c)} + ${q}`,`${res}`]}
+ else if(k===2){let a,b,c,d,e,kk;do{b=R(2,5);d=R(1,6);c=d+R(1,4);e=R(2,6);kk=R(2,9);a=e*kk-b*(c-d)}while(a<1);res=kk;txt=`[${a} + ${b} · (${c} − ${d})] : ${e}`;steps=[`[${a} + ${b} · ${c-d}] : ${e}`,`[${a} + ${b*(c-d)}] : ${e}`,`${e*kk} : ${e}`,`${kk}`]}
+ else if(k===3){let a,b,c,d;do{a=R(2,20);b=R(2,5);c=R(2,5);d=R(2,40)}while(a+b*c*c-d<0);res=a+b*c*c-d;txt=`${a} + ${b} · ${sup(c,2)} − ${d}`;steps=[`${a} + ${b} · ${c*c} − ${d}`,`${a} + ${b*c*c} − ${d}`,`${res}`]}
+ else{const b=R(1,9),s=R(2,6),a=b+s;const cs=divisors(s*s).filter(x=>x>1&&x<s*s);const c=pick(cs.length?cs:[s]);const d=R(2,6),e=R(2,6);res=s*s/c+d*e;txt=`(${a} − ${b})<sup>2</sup> : ${c} + ${d} · ${e}`;steps=[`${sup(s,2)} : ${c} + ${d} · ${e}`,`${s*s} : ${c} + ${d*e}`,`${s*s/c} + ${d*e}`,`${res}`]}
+ return{prompt:P('Calcula:')+`<span class="m">${txt}</span>`,fields:[{label:'Resultado',kind:'number',ans:res}],
+ hint:'Orden: 1) paréntesis y corchetes, 2) potencias, 3) multiplicaciones y divisiones, 4) sumas y restas.',
+ sol:L(txt)+steps.map(s=>L('= '+s)).join('')+P('Primero paréntesis; después potencias; luego multiplicaciones y divisiones; al final sumas y restas.')}}},
+frCombo:{t:'ops',f(){let txt,steps,res;for(;;){const v=R(1,3);const b=R(2,9),a=R(1,9),d=R(2,8),c=R(1,9),f=R(2,8),e=R(1,9);if(gcd(a,b)!==1||gcd(c,d)!==1||gcd(e,f)!==1)continue;
+ if(v===1){if(c*f<=e*d)continue;const s1=sAdd([c,d],[e,f],-1),s2=sMul([a,b],s1.r);txt=`${fr(a,b)} · (${fr(c,d)} − ${fr(e,f)})`;steps=[['Primero el paréntesis (resta con denominador común):',s1.h],['Después el producto:',s2.h]];res=s2.r}
+ else if(v===2){const s1=sAdd([a,b],[c,d],1),s2=sDiv(s1.r,[e,f]);txt=`(${fr(a,b)} + ${fr(c,d)}) : ${fr(e,f)}`;steps=[['Primero el paréntesis (suma con denominador común):',s1.h],['Después la división (se multiplica en cruz):',s2.h]];res=s2.r}
+ else{const s1=sMul([c,d],[e,f]);if(a*s1.r[1]<=s1.r[0]*b)continue;const s2=sAdd([a,b],s1.r,-1);txt=`${fr(a,b)} − ${fr(c,d)} · ${fr(e,f)}`;steps=[['Primero el producto (va antes que la resta):',s1.h],['Después la resta:',s2.h]];res=s2.r}
+ if(res[1]<=120&&res[0]<=150)break}
+ return{prompt:P('Calcula y simplifica el resultado:')+`<span class="m">${txt}</span>`,fields:[{label:'Resultado (escribe la fracción así: 3/4)',kind:'fraction',ans:res}],
+ hint:'Primero el paréntesis; si no hay, multiplicaciones y divisiones antes que sumas y restas. Para sumar o restar, mismo denominador.',
+ sol:steps.map(([t,h])=>P(t)+L(h)).join('')+warn('Para sumar o restar fracciones, pásalas al mismo denominador antes de operar con los numeradores.')}}},
+frSimple:{t:'ops',f(){let k=R(1,2),txt,steps,res;for(;;){const b=R(2,9),d=R(2,9),a=R(1,9),c=R(1,9);if(gcd(a,b)!==1||gcd(c,d)!==1||b===d)continue;
+ if(k===1){const s=sAdd([a,b],[c,d],1);txt=`${fr(a,b)} + ${fr(c,d)}`;steps=[s.h];res=s.r}
+ else{if(a*d<=c*b)continue;const s=sAdd([a,b],[c,d],-1);txt=`${fr(a,b)} − ${fr(c,d)}`;steps=[s.h];res=s.r}
+ if(res[1]<=120&&res[0]<=200)break}
+ return{prompt:P('Calcula y simplifica el resultado:')+`<span class="m">${txt}</span>`,fields:[{label:'Resultado (escribe la fracción así: 3/4)',kind:'fraction',ans:res}],
+ hint:'Busca un denominador común (el m.c.m. de los denominadores) y transforma las dos fracciones.',
+ sol:steps.map(L).join('')+P('Al final, simplifica dividiendo numerador y denominador entre el mismo número.')}}},
+frOf:{t:'ops',f(){const b=pick([3,4,5,6,8,10]);let a;do{a=R(1,b-1)}while(gcd(a,b)!==1);const N=b*R(4,30);const res=N/b*a;
+ const ctx=pick([[`En un colegio hay ${N} alumnos y ${fr(a,b)} de ellos van en autobús.`,'¿Cuántos alumnos van en autobús?'],[`Un depósito de ${N} litros está lleno en sus ${fr(a,b)}.`,'¿Cuántos litros de agua tiene?'],[`Una excursión de ${N} km se hace en dos días. El primer día se recorren ${fr(a,b)} del camino.`,'¿Cuántos kilómetros se recorren el primer día?']]);
+ return{prompt:P(ctx[0])+P(ctx[1]),fields:[{label:'Respuesta',kind:'number',ans:res}],hint:'Divide entre el denominador y multiplica por el numerador.',
+ sol:L(`${fr(a,b)} de ${N} = ${N} : ${b} · ${a} = ${N/b} · ${a} = ${res}`)+P(`Se divide el total en ${b} partes iguales (${N/b} cada una) y se toman ${a}.`)}}},
+
+/* ---------- PROBLEMAS ---------- */
+prGrow:{t:'pro',f(){const v=R(1,3);let txt,q,k,n,lv,trap;
+ if(v===1){k=R(2,4);n=R(3,5);while(k**n>1100)n--;txt=`${pick(NAMES)} empieza una cadena: envía un mensaje a ${k} amigos (ronda 1). En la ronda 2, cada uno lo reenvía a ${k} personas nuevas, y así en cada ronda.`;q=`¿Cuántas personas reciben el mensaje en la ronda ${n}?`;lv=i=>`Ronda ${i}`}
+ else if(v===2){k=R(3,6);n=pick([3,4]);if(k**n>1300)n=3;const nm=['Pasillos','Estanterías','Baldas','Cajas'];txt=`En un almacén hay ${k} pasillos. Cada pasillo tiene ${k} estanterías y cada estantería tiene ${k} baldas${n===4?`. En cada balda hay ${k} cajas`:''}.`;q=n===4?'¿Cuántas cajas hay en total?':'¿Cuántas baldas hay en total?';lv=i=>nm[i-1]}
+ else{k=2;n=R(5,10);txt='Una bacteria se divide en dos cada hora. Empezamos con una sola bacteria.';q=`¿Cuántas bacterias habrá al cabo de ${n} horas?`;lv=i=>`Hora ${i}`;trap=x=>x===2*n?`Has calculado 2 · ${n}. Cada hora el número se multiplica por 2, así que hay que multiplicar ${n} veces.`:null}
+ const val=k**n;let sum=0;for(let i=1;i<=n;i++)sum+=k**i;
+ return{prompt:P(txt)+P(q+' Exprésalo como potencia y calcula su valor.'),
+ fields:[{label:'Como potencia',kind:'power',ans:{b:k,e:n}},{label:'Valor',kind:'number',ans:val,trap:x=>x===sum&&v!==3?'Has sumado todos los niveles. Solo se pregunta por el último.':(trap?trap(x):null)}],
+ hint:'Haz un esquema por niveles. En cada nivel el número se multiplica por lo mismo.',
+ sol:Array.from({length:n},(_,i)=>L(`${lv(i+1)}: ${i===0?k:Array(i+1).fill(k).join(' · ')} = ${sup(k,i+1)} = ${nf(k**(i+1))}`)).join('')+P(`Respuesta: <b>${sup(k,n)} = ${nf(val)}</b>.`)+warn('Cuando algo se multiplica por el mismo número en cada paso, el resultado es una potencia: la base es lo que se multiplica y el exponente, el número de pasos.')}}},
+prSquare:{t:'pro',f(){const ctx=pick([['baldosas','un mosaico cuadrado'],['sillas','un cuadrado, con tantas filas como sillas por fila'],['plantas','un huerto cuadrado, con una planta en cada hueco']]);let N,s;do{N=R(30,400);s=Math.floor(Math.sqrt(N))}while(s*s===N);const nm=pick(NAMES);
+ return{prompt:P(`${nm} tiene ${N} ${ctx[0]} y quiere colocarlas formando ${ctx[1]}, lo más grande posible.`)+P('a) ¿Cuántas habrá en cada lado? ¿Cuántas le sobrarán?')+P('b) ¿Cuántas más necesitaría para completar el siguiente cuadrado?'),
+ fields:[{label:'a) En cada lado',kind:'number',ans:s},{label:'a) Sobran',kind:'number',ans:N-s*s},{label:'b) Faltan para el siguiente cuadrado',kind:'number',ans:(s+1)**2-N}],
+ hint:`Busca el mayor número que, multiplicado por sí mismo, no pase de ${N}.`,
+ sol:P(`Un cuadrado de lado n usa n · n = n² elementos. Buscamos el mayor cuadrado que no pase de ${N} (la raíz cuadrada entera de ${N}).`)+L(`${s} · ${s} = ${s*s} ✓&nbsp;&nbsp;&nbsp;${s+1} · ${s+1} = ${(s+1)**2} ✗ (se pasa)`)+P(`a) <b>${s}</b> en cada lado. Sobran ${N} − ${s*s} = <b>${N-s*s}</b>.`)+P(`b) El siguiente cuadrado necesita ${(s+1)**2}. Faltan ${(s+1)**2} − ${N} = <b>${(s+1)**2-N}</b>.`)}}},
+prMcm:{t:'pro',f(){const v=R(1,4);const k=v===4?2:pick([2,3]);let ps,Lc;do{ps=[];const pool=v===1?[6,8,9,10,12,15,18,20,24]:[4,6,8,9,10,12,14,15,18,20,21,24,30];while(ps.length<k){const x=pick(pool);if(!ps.includes(x))ps.push(x)}ps.sort((a,b)=>a-b);Lc=ps.reduce(lcm)}while(Lc>420||Lc===ps[ps.length-1]);
+ const nm=pick(NAMES);let txt,q,lab;
+ if(v===1){txt=`En una costa hay ${k} faros. ${joinY(ps.map((p,i)=>`${i?'otro':'Uno'} se enciende cada ${p} segundos`))}. Ahora mismo se han encendido a la vez.`;q='¿Dentro de cuántos segundos volverán a encenderse a la vez?';lab='Segundos'}
+ else if(v===2){const ln=['A','B','C'];txt=`De una estación salen autobuses de ${k} líneas: ${joinY(ps.map((p,i)=>`la ${ln[i]} cada ${p} minutos`))}. A las 8:00 han salido juntos.`;q='¿Cuántos minutos después volverán a salir juntos?';lab='Minutos'}
+ else if(v===3){txt=`${nm} tiene canicas. Tanto si las agrupa ${joinY(ps.map(p=>`de ${p} en ${p}`))}, no le sobra ninguna.`;q='¿Cuál es el menor número de canicas que puede tener?';lab='Canicas'}
+ else{txt=`${nm} riega el cactus cada ${ps[0]} días y el helecho cada ${ps[1]} días. Hoy ha regado los dos.`;q='¿Dentro de cuántos días volverá a regar los dos el mismo día?';lab='Días'}
+ const prod=ps.reduce((a,b)=>a*b,1);const fs=ps.map(factorize);const all={};fs.forEach(f=>Object.keys(f).forEach(p=>all[p]=Math.max(all[p]||0,f[p])));
+ return{prompt:P(txt)+P(q),fields:[{label:lab,kind:'number',ans:Lc,trap:x=>x===prod&&prod!==Lc?'Has multiplicado los números. Sale un múltiplo común, pero no el menor.':null}],
+ hint:'Cuando se pregunta cuándo vuelven a coincidir, o el menor número que se puede agrupar de varias formas, se busca el m.c.m.',
+ sol:P('Buscamos el menor número que es múltiplo de todos: el <b>m.c.m.</b>')+L(ps.map((p,i)=>`${p} = ${fmtF(fs[i])}`).join('&nbsp;&nbsp;&nbsp;'))+L(`m.c.m. = ${fmtF(all)} = ${Lc}`)+P(`Respuesta: <b>${Lc}</b>.`)}}},
+prMcd:{t:'pro',f(){let g,x,y;do{g=R(3,15);x=R(2,9);y=R(2,9)}while(x===y||gcd(x,y)!==1||g*Math.max(x,y)>150);const a=g*x,b=g*y;const nm=pick(NAMES);const v=R(1,4);let txt,l1,l2,a2,s2;
+ if(v===1){txt=`${nm} tiene ${a} caramelos de fresa y ${b} de limón. Quiere hacer bolsas sin mezclar sabores, todas con el mismo número de caramelos y lo más grandes posible.`;l1='Caramelos en cada bolsa';l2='Número total de bolsas';a2=x+y;s2=`Bolsas: ${a} : ${g} = ${x} de fresa y ${b} : ${g} = ${y} de limón, en total <b>${x+y}</b>.`}
+ else if(v===2){txt=`${nm} tiene dos cintas, una de ${a} cm y otra de ${b} cm. Quiere cortarlas en trozos iguales, lo más largos posible, sin que sobre nada.`;l1='Largo de cada trozo (cm)';l2='Número total de trozos';a2=x+y;s2=`Trozos: ${a} : ${g} = ${x} y ${b} : ${g} = ${y}, en total <b>${x+y}</b>.`}
+ else if(v===3){txt=`A una excursión van ${a} chicos y ${b} chicas. Se forman grupos con el mismo número de personas, sin mezclar chicos y chicas, y lo más grandes posible.`;l1='Personas en cada grupo';l2='Número total de grupos';a2=x+y;s2=`Grupos: ${a} : ${g} = ${x} de chicos y ${b} : ${g} = ${y} de chicas, en total <b>${x+y}</b>.`}
+ else{txt=`El suelo de una habitación mide ${a} dm de largo y ${b} dm de ancho. Se quiere cubrir con baldosas cuadradas iguales, lo más grandes posible, sin cortar ninguna.`;l1='Lado de cada baldosa (dm)';l2='Número de baldosas';a2=x*y;s2=`Caben ${a} : ${g} = ${x} baldosas a lo largo y ${b} : ${g} = ${y} a lo ancho: ${x} · ${y} = <b>${x*y}</b> baldosas.`}
+ const fa=factorize(a),fb=factorize(b);
+ return{prompt:P(txt),fields:[{label:l1,kind:'number',ans:g,trap:z=>z===lcm(a,b)?'Ese es el m.c.m. Aquí se busca el mayor número que divide a los dos: el m.c.d.':null},{label:l2,kind:'number',ans:a2}],
+ hint:'Repartir en partes iguales lo más grandes posible, sin que sobre nada, es una pregunta de m.c.d.',
+ sol:L(`${a} = ${fmtF(fa)}&nbsp;&nbsp;&nbsp;${b} = ${fmtF(fb)}`)+L(`m.c.d.(${a}, ${b}) = ${g}`)+P(`${l1}: <b>${g}</b>.`)+P(s2)}}}
+};
+
+function startExam(){const q=[];Object.keys(TOPICS).forEach(t=>{const ids=Object.keys(G).filter(id=>G[id].t===t);const a=pick(ids);let b=pick(ids);while(b===a&&ids.length>1)b=pick(ids);q.push(a,b)});for(let i=q.length-1;i>0;i--){const j=R(0,i);[q[i],q[j]]=[q[j],q[i]]}st.exam={q,idx:0,res:[]};load(q[0])}
+
+const KEY='repaso-tema1-v1';
+let stats={};try{stats=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(stats))}catch(e){}}
+const st={mode:'practice',topic:'all',gen:null,ex:null,answered:false,last:null,streak:0,exam:null,confirm:false};
+
+function pickGen(){let t=st.topic;const ks=Object.keys(TOPICS);
+ if(t==='all'){const w=ks.map(k=>{const s=stats[k]||{ok:0,n:0};return 1+2*(1-(s.ok+1)/(s.n+2))});let r=Math.random()*w.reduce((a,b)=>a+b);t=ks[ks.length-1];for(let i=0;i<ks.length;i++){r-=w[i];if(r<=0){t=ks[i];break}}}
+ const ids=Object.keys(G).filter(id=>G[id].t===t);let id=pick(ids);let tries=0;while(ids.length>1&&id===st.last&&tries++<10)id=pick(ids);return id}
+
+function fieldHTML(fd,i){let inp;
+ if(fd.kind==='power')inp=`<span class="pow"><input class="in base" id="f${i}b" inputmode="numeric" aria-label="Base" placeholder="base" autocomplete="off"><input class="in exp" id="f${i}e" inputmode="numeric" aria-label="Exponente" placeholder="exp." autocomplete="off"></span>`;
+ else if(fd.kind==='choice')inp=`<div class="choice" id="f${i}" data-v="">${fd.opts.map(o=>`<button type="button" class="opt" data-o="${o}" aria-pressed="false">${o}</button>`).join('')}</div>`;
+ else{const ph={number:'',list:'p. ej. 1, 2, 3',fraction:'p. ej. 3/4',factor:'p. ej. 2^3·3^2'}[fd.kind];const im=fd.kind==='number'?'numeric':'text';
+  inp=`<input class="in" id="f${i}" inputmode="${im}" placeholder="${ph}" autocomplete="off" autocapitalize="off" spellcheck="false">`+(fd.kind==='factor'?`<button type="button" class="ins" data-ins="·" data-t="f${i}" aria-label="Insertar multiplicación">·</button><button type="button" class="ins" data-ins="^" data-t="f${i}" aria-label="Insertar exponente">^</button>`:'')}
+ const lid=fd.kind==='power'?`f${i}b`:`f${i}`;
+ return`<div class="field" id="fd${i}"><label for="${lid}">${fd.label}</label><div class="frow">${inp}</div><div class="fmsg" id="fm${i}"></div></div>`}
+
+function render(){
+ const c=$('#card');
+ if(st.mode==='exam'&&st.exam.idx>=st.exam.q.length)return renderSummary();
+ const ex=st.ex;const meta=st.mode==='exam'?`<span>Pregunta ${st.exam.idx+1} de ${st.exam.q.length}</span>`:`<span>${st.streak>1?`Racha: ${st.streak} seguidas`:''}</span>`;
+ c.innerHTML=`<div class="sheet"><div class="meta"><span>${TOPICS[G[st.gen].t]}</span>${meta}</div>
+ <div class="prompt">${ex.prompt}</div>
+ <form class="fields" id="frm" autocomplete="off">${ex.fields.map(fieldHTML).join('')}</form>
+ <div class="actions" id="acts"><button class="primary" id="check" type="button">Comprobar</button><button class="ghost" id="hintBtn" type="button">Pista</button></div>
+ <div class="hint" id="hint" hidden>${ex.hint}</div>
+ <div class="stamp" id="stamp" hidden></div>
+ <div id="res" hidden></div></div>`;
+ c.querySelectorAll('.choice').forEach(ch=>ch.addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||st.answered)return;ch.dataset.v=b.dataset.o;ch.querySelectorAll('.opt').forEach(o=>o.setAttribute('aria-pressed',o===b?'true':'false'))}));
+ c.querySelectorAll('.ins').forEach(b=>b.addEventListener('click',()=>{const t=document.getElementById(b.dataset.t);const s=t.selectionStart??t.value.length;t.value=t.value.slice(0,s)+b.dataset.ins+t.value.slice(t.selectionEnd??s);t.focus();t.setSelectionRange(s+1,s+1)}));
+ $('#frm').addEventListener('submit',e=>e.preventDefault());
+ c.querySelectorAll('input').forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();st.answered?next():check()}}));
+ $('#check').onclick=check;
+ $('#hintBtn').onclick=()=>{$('#hint').hidden=!$('#hint').hidden};
+ const first=c.querySelector('input');if(first&&window.matchMedia('(hover:hover)').matches)first.focus({preventScroll:true});
+}
+
+function val(id){const e=document.getElementById(id);return e?e.value.trim():''}
+const SUPS={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
+function checkField(fd,i){
+ switch(fd.kind){
+ case'number':{const s=val('f'+i).replace(/[.\s]/g,'');if(!s)return{ok:false,msg:'Sin respuesta.'};if(!/^-?\d+$/.test(s))return{ok:false,msg:'Escribe solo un número.'};const v=+s;if(v===fd.ans)return{ok:true};return{ok:false,msg:(fd.trap&&fd.trap(v))||''}}
+ case'list':{const m=val('f'+i).match(/\d+/g);if(!m)return{ok:false,msg:'Sin respuesta.'};const u=[...new Set(m.map(Number))];const A=new Set(fd.ans);const extra=u.filter(x=>!A.has(x));const miss=fd.ans.filter(x=>!u.includes(x));if(!extra.length&&!miss.length)return{ok:true};const msg=[];if(extra.length)msg.push(fd.explainExtra?fd.explainExtra(extra):`Sobran: ${extra.join(', ')}.`);if(miss.length)msg.push(miss.length===1?'Te falta 1 número.':`Te faltan ${miss.length} números.`);return{ok:false,msg:msg.join(' ')}}
+ case'fraction':{const s=val('f'+i).replace(/\s/g,'');if(!s)return{ok:false,msg:'Sin respuesta.'};const m=s.match(/^(-?\d+)(?:\/(\d+))?$/);if(!m)return{ok:false,msg:'Escribe la fracción así: 3/4.'};const n=+m[1],d=m[2]?+m[2]:1;if(!d)return{ok:false,msg:'El denominador no puede ser 0.'};const[an,ad]=fd.ans;if(n*ad!==an*d)return{ok:false,msg:''};if(gcd(n,d)!==1)return{ok:false,msg:`El valor es correcto, pero falta simplificar: divide arriba y abajo entre ${gcd(n,d)}.`};return{ok:true}}
+ case'factor':{let s=val('f'+i).replace(/\s/g,'');if(!s)return{ok:false,msg:'Sin respuesta.'};s=s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>'^'+[...m].map(c=>SUPS[c]).join('')).replace(/[×x*.·]/gi,'·');let prod=1;for(const t of s.split('·').filter(Boolean)){const m=t.match(/^(\d+)(?:\^(\d+))?$/);if(!m)return{ok:false,msg:'No se entiende cómo está escrito. Usa por ejemplo 2^3·3^2.'};const p=+m[1],e=m[2]?+m[2]:1;if(!isPrime(p))return{ok:false,msg:`${p} no es primo: hay que seguir descomponiéndolo.`};prod*=p**e}if(prod!==fd.ans)return{ok:false,msg:`Ese producto da ${nf(prod)}, no ${nf(fd.ans)}.`};return{ok:true}}
+ case'power':{const b=val(`f${i}b`),e=val(`f${i}e`);if(!b&&!e)return{ok:false,msg:'Sin respuesta.'};if(!/^\d+$/.test(b)||!/^\d+$/.test(e))return{ok:false,msg:'Escribe la base y el exponente.'};const B=+b,E=+e;
+  if(fd.value){if(E>=2&&B**E===fd.value)return{ok:true};if(E<2)return{ok:false,msg:'El exponente tiene que ser mayor que 1.'};return{ok:false,msg:`${sup(B,E)} vale ${nf(B**E)}, no ${nf(fd.value)}.`}}
+  if(B===fd.ans.b&&E===fd.ans.e)return{ok:true};const t=fd.trap&&fd.trap(B,E);if(t)return{ok:false,msg:t};return{ok:false,msg:B!==fd.ans.b?'Revisa la base.':'Revisa el exponente.'}}
+ case'choice':{const v=document.getElementById('f'+i).dataset.v;if(!v)return{ok:false,msg:'Elige una opción.'};return{ok:v===fd.ans}}
+ }}
+
+function check(){if(st.answered)return;const ex=st.ex;
+ const rs=ex.fields.map(checkField);
+ if(rs.every(r=>r.msg==='Sin respuesta.'||r.msg==='Elige una opción.')){$('#fm0').textContent='Escribe tu respuesta antes de comprobar.';return}
+ st.answered=true;const nOk=rs.filter(r=>r.ok).length;const all=nOk===rs.length;
+ rs.forEach((r,i)=>{const fd=$('#fd'+i);fd.classList.add(r.ok?'ok':'bad');$('#fm'+i).innerHTML=r.ok?'Bien.':(r.msg||'No es correcto.')});
+ document.querySelectorAll('#card input, #card .opt, #card .ins').forEach(e=>e.disabled=true);
+ const stamp=$('#stamp');stamp.hidden=false;stamp.className='stamp '+(all?'b':'mm');stamp.textContent=all?'B':'M';
+ const t=G[st.gen].t;
+ if(st.mode==='practice'){stats[t]=stats[t]||{ok:0,n:0};stats[t].n++;if(all)stats[t].ok++;save();st.streak=all?st.streak+1:0;renderProgress()}
+ else st.exam.res.push({gen:st.gen,score:nOk/rs.length});
+ const res=$('#res');res.hidden=false;
+ const verdict=all?`<p class="verdict b">¡Bien hecho!</p>`:`<p class="verdict mm">${nOk?`Tienes ${nOk} de ${rs.length} bien. Repasa la solución.`:'Repasa la solución paso a paso.'}</p>`;
+ const sol=`<div class="sol" id="sol"><h3>Solución</h3>${ex.sol}</div>`;
+ res.innerHTML=verdict+(all&&st.mode==='practice'?`<button class="linkbtn" id="showSol" type="button">Ver la solución</button><div hidden id="solWrap">${sol}</div>`:sol);
+ if($('#showSol'))$('#showSol').onclick=()=>{$('#solWrap').hidden=false;$('#showSol').hidden=true};
+ const acts=$('#acts');const last=st.mode==='exam'&&st.exam.idx===st.exam.q.length-1;
+ acts.innerHTML=`<button class="primary" id="nextBtn" type="button">${last?'Ver nota':'Siguiente'}</button>`+(st.mode==='practice'?`<button class="ghost" id="againBtn" type="button">Otro parecido</button>`:'');
+ $('#nextBtn').onclick=next;if($('#againBtn'))$('#againBtn').onclick=()=>load(st.gen);
+ $('#hint').hidden=true;$('#nextBtn').focus({preventScroll:true});
+}
+
+function load(id){st.gen=id;st.last=id;st.ex=G[id].f();st.answered=false;render()}
+function next(){if(st.mode==='exam'){st.exam.idx++;if(st.exam.idx>=st.exam.q.length)return renderSummary();load(st.exam.q[st.exam.idx])}else load(pickGen());$('#card').scrollIntoView({block:'nearest'})}
+
+function renderSummary(){const r=st.exam.res;const tot=r.reduce((a,b)=>a+b.score,0);const nota=Math.round(tot/r.length*100)/10;
+ $('#card').innerHTML=`<div class="sheet summary"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nf(nota)}</div>
+ <ul class="qlist">${r.map((x,i)=>`<li><b style="color:var(${x.score===1?'--ok':'--marker'})">${x.score===1?'B':'M'}</b><span>${i+1}. ${TOPICS[G[x.gen].t]}${x.score>0&&x.score<1?` (a medias)`:''}</span></li>`).join('')}</ul>
+ <p>${nota>=5?'Aprobado. Puedes repetir la prueba: cada vez salen ejercicios distintos.':'Repasa en «Practicar» los temas marcados con M y vuelve a intentarlo: cada prueba tiene ejercicios nuevos.'}</p>
+ <div class="actions"><button class="primary" id="again" type="button">Otra prueba</button><button class="ghost" id="toP" type="button">Volver a practicar</button></div></div>`;
+ $('#again').onclick=startExam;$('#toP').onclick=()=>setMode('practice')}
+
+function setMode(m){st.mode=m;$('#mPractice').setAttribute('aria-pressed',m==='practice');$('#mExam').setAttribute('aria-pressed',m==='exam');$('#chips').hidden=m==='exam';if(m==='exam')startExam();else{st.streak=0;load(pickGen())}}
+
+function renderChips(){const opts=[['all','Todo mezclado'],...Object.entries(TOPICS)];$('#chips').innerHTML=opts.map(([k,v])=>`<button type="button" data-k="${k}" aria-pressed="${st.topic===k}">${v}</button>`).join('');
+ $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{st.topic=b.dataset.k;renderChips();load(pickGen())})}
+
+function renderProgress(){const ks=Object.keys(TOPICS);const tot=ks.reduce((a,k)=>a+(stats[k]?.n||0),0);
+ $('#progress').innerHTML=`<h2>Tu progreso</h2>${ks.map(k=>{const s=stats[k]||{ok:0,n:0};const p=s.n?Math.round(s.ok/s.n*100):0;return`<div class="prow"><span>${TOPICS[k]}</span><div class="bar"><i class="${s.n&&p<60?'low':''}" style="width:${p}%"></i></div><span class="num">${s.ok}/${s.n}</span></div>`}).join('')}
+ <div class="pfoot"><span>${tot?`${tot} ejercicios hechos. «Todo mezclado» te da más de lo que peor llevas.`:'Aún no hay ejercicios hechos en este dispositivo.'}</span>${tot?(st.confirm?`<span><button class="linkbtn danger" id="rYes" type="button">Sí, borrar</button><button class="linkbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="linkbtn" id="rst" type="button">Borrar progreso</button>`):''}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};
+ if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{stats={};save();st.confirm=false;renderProgress()}}
+
+$('#mPractice').onclick=()=>setMode('practice');
+$('#mExam').onclick=()=>setMode('exam');
+renderChips();renderProgress();load(pickGen());
+</script>
+
+</body>
+</html>

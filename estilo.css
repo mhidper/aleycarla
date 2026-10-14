@@ -1,0 +1,35 @@
+/* Estilo común de las portadas: hoja cuadriculada de cuaderno y rotulador magenta */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --chip:#ffffff;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --chip:#18233d; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+h1{font-family:var(--f-display);font-weight:800;font-size:2.2rem;line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700}
+h2{font:800 1.1rem var(--f-display);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px;color:var(--muted)}
+p{margin:0}
+.lead{color:var(--muted);max-width:60ch}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.back:hover{text-decoration:underline}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{display:block;text-decoration:none;color:var(--ink);background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:18px;box-shadow:0 10px 24px -18px rgba(20,30,60,.45);transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card:focus-visible{outline:3px solid var(--marker);outline-offset:3px}
+.card b{display:block;font:800 1.4rem var(--f-display)}
+.card span{color:var(--muted);font-size:.95rem}
+.subject{display:flex;flex-direction:column;gap:10px}
+.list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.list a{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink);background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.list a:hover b{text-decoration:underline}
+.list a span{color:var(--muted);font-size:.92rem}
+.empty{color:var(--muted);font-style:italic}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
