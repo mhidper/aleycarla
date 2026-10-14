@@ -1,0 +1,34 @@
+/*
+  Catálogo de la web. Para añadir una app:
+  1. Crea la carpeta  <persona>/<asignatura>/<nombre-app>/index.html
+  2. Añádela aquí en la lista "apps" de esa asignatura.
+  "tono" es el color de la tapa del cuaderno (0-360).
+*/
+window.CATALOGO = {
+  ale: {
+    nombre: 'Ale', curso: '1º ESO',
+    asignaturas: [
+      { id: 'matematicas', nombre: 'Matemáticas', tono: 215, apps: [
+        { titulo: 'Repaso del Tema 1', descripcion: 'Potencias, múltiplos y divisores, m.c.d. y m.c.m., fracciones y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
+      ]},
+      { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
+      { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
+      { id: 'geografia-historia', nombre: 'Geografía e Historia', tono: 30, apps: [] },
+      { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [] },
+      { id: 'frances', nombre: 'Francés', tono: 190, apps: [] }
+    ]
+  },
+  carla: {
+    nombre: 'Carla', curso: '3º ESO',
+    asignaturas: [
+      { id: 'matematicas', nombre: 'Matemáticas', tono: 215, apps: [] },
+      { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
+      { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
+      { id: 'geografia-historia', nombre: 'Geografía e Historia', tono: 30, apps: [] },
+      { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [] },
+      { id: 'fisica-quimica', nombre: 'Física y Química', tono: 330, apps: [] },
+      { id: 'tecnologia', nombre: 'Tecnología y Digitalización', tono: 50, apps: [] },
+      { id: 'frances', nombre: 'Francés', tono: 190, apps: [] }
+    ]
+  }
+};

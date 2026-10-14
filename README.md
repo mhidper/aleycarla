@@ -5,17 +5,19 @@ Apps de estudio para Ale (1º ESO) y Carla (3º ESO). Cada app es una página HT
 ## Estructura
 
 ```
-index.html            Portada
-estilo.css            Estilo común de las portadas
+index.html            Web principal: elegir niña → asignatura → app
+catalogo.js           Lista de niñas, asignaturas y apps (lo único que hay que editar)
 ale/
-  index.html          Asignaturas de Ale
   matematicas/
     tema1-repaso/     Repaso del Tema 1 (potencias, divisibilidad, fracciones, problemas)
 carla/
-  index.html          Asignaturas de Carla
 ```
 
-Para añadir una app: crear `<persona>/<asignatura>/<nombre-app>/index.html` y enlazarla desde el `index.html` de esa persona.
+Para añadir una app:
+1. Crear `<persona>/<asignatura>/<nombre-app>/index.html`.
+2. Añadirla en `catalogo.js`, dentro de `apps` de esa asignatura (título, descripción y ruta).
+
+Las asignaturas también se añaden, quitan o renombran en `catalogo.js`.
 
 ## Publicación
 
