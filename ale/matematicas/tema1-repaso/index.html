@@ -87,6 +87,10 @@ sup{font-size:.68em;line-height:0}
 .pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:.9rem;color:var(--muted)}
 .linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;font:inherit;cursor:pointer;padding:4px}
 .linkbtn.danger{color:var(--marker);font-weight:700}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}
+.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
 .grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
 .qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
 .qlist li{display:flex;gap:10px;align-items:baseline}
@@ -420,10 +424,10 @@ function renderChips(){const opts=[['all','Todo mezclado'],...Object.entries(TOP
 
 function renderProgress(){const ks=Object.keys(TOPICS);const tot=ks.reduce((a,k)=>a+(stats[k]?.n||0),0);
  $('#progress').innerHTML=`<h2>Tu progreso</h2>${ks.map(k=>{const s=stats[k]||{ok:0,n:0};const p=s.n?Math.round(s.ok/s.n*100):0;return`<div class="prow"><span>${TOPICS[k]}</span><div class="bar"><i class="${s.n&&p<60?'low':''}" style="width:${p}%"></i></div><span class="num">${s.ok}/${s.n}</span></div>`}).join('')}
- <div class="pfoot"><span>${tot?`${tot} ejercicios hechos. «Todo mezclado» te da más de lo que peor llevas.`:'Aún no hay ejercicios hechos en este dispositivo.'}</span>${tot?(st.confirm?`<span><button class="linkbtn danger" id="rYes" type="button">Sí, borrar</button><button class="linkbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="linkbtn" id="rst" type="button">Borrar progreso</button>`):''}</div>`;
+ <div class="pfoot"><span>${tot?`${tot} ejercicios hechos. «Todo mezclado» te da más de lo que peor llevas.`:'Aún no hay ejercicios hechos en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${tot?'':' disabled'}>Borrar progreso</button>`}</div>`;
  if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};
  if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
- if($('#rYes'))$('#rYes').onclick=()=>{stats={};save();st.confirm=false;renderProgress()}}
+ if($('#rYes'))$('#rYes').onclick=()=>{stats={};save();st.confirm=false;st.streak=0;renderProgress()}}
 
 $('#mPractice').onclick=()=>setMode('practice');
 $('#mExam').onclick=()=>setMode('exam');
