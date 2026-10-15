@@ -9,7 +9,7 @@ index.html            Web principal: elegir niña → asignatura → app
 catalogo.js           Lista de niñas, asignaturas y apps (lo único que hay que editar)
 ale/
   matematicas/
-    tema1-repaso/     Repaso del Tema 1 (potencias, divisibilidad, fracciones, problemas)
+    tema1-repaso/     Repaso de Matemáticas (potencias, divisibilidad, fracciones, porcentajes, reglas de tres, problemas)
 carla/
 ```
 

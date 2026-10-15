@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Repaso del Tema 1</title>
+<title>Repaso de Matemáticas</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
 <style>
 /* Layout: una columna estrecha; la hoja cuadriculada del ejercicio es el centro, y la corrección usa el rotulador magenta de la profesora */
@@ -51,6 +51,7 @@ sup{font-size:.68em;line-height:0}
 .pow{display:inline-flex;align-items:flex-start;gap:2px}
 .pow .base{width:5.2em}
 .pow .exp{width:3.6em;font-size:.95rem;padding:4px 6px;margin-top:-10px}
+.unit{font-weight:700;color:var(--muted)}
 .ins{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);border-radius:8px;font:700 1.1rem var(--f-body);width:40px;height:40px;cursor:pointer}
 .choice{display:flex;gap:8px}
 .opt{border:2px solid var(--line);background:var(--paper);color:var(--ink);font:700 1rem var(--f-body);padding:8px 22px;border-radius:8px;cursor:pointer}
@@ -104,8 +105,8 @@ sup{font-size:.68em;line-height:0}
 <div class="wrap">
   <a class="back" href="../../../#ale/matematicas">← Matemáticas de Ale</a>
   <header>
-    <h1>Repaso del Tema 1 <span>Ale</span></h1>
-    <p>Ejercicios nuevos cada vez sobre potencias, múltiplos y divisores, m.c.d. y m.c.m., fracciones y problemas. Cada respuesta se corrige al momento y te enseña el método.</p>
+    <h1>Repaso de Matemáticas <span>Ale</span></h1>
+    <p>Ejercicios nuevos cada vez sobre potencias, múltiplos y divisores, m.c.d. y m.c.m., fracciones, porcentajes, reglas de tres y problemas. Cada respuesta se corrige al momento y te enseña el método.</p>
   </header>
 
   <div class="tabs" role="group" aria-label="Modo">
@@ -133,6 +134,10 @@ const P=s=>`<p>${s}</p>`;
 const L=s=>`<p class="line">${s}</p>`;
 const warn=s=>`<p class="warn">${s}</p>`;
 const words=['cero','uno','dos','tres','cuatro','cinco','seis'];
+const dec=x=>{const r=Math.round(x*100)/100;return r.toLocaleString('es-ES',{maximumFractionDigits:2})};
+function parseNum(s,ans){s=s.replace(/[\s€%]/g,'').replace(/(km|kg|g|cm|horas?|días?|personas?)$/i,'');if(!s)return null;
+ if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)){const th=parseFloat(s.replace(/\./g,'').replace(',','.'));const dc=/,/.test(s)?th:parseFloat(s);return Math.abs(th-ans)<=Math.abs(dc-ans)?th:dc}
+ s=s.replace(',','.');if(!/^-?\d+(\.\d+)?$/.test(s))return NaN;return parseFloat(s)}
 const fr=(n,d)=>`<span class="frac"><span>${n}</span><span>${d}</span></span>`;
 const F=x=>x[1]===1?`${x[0]}`:fr(x[0],x[1]);
 const simp=x=>{const g=gcd(x[0],x[1]);return[x[0]/g,x[1]/g]};
@@ -149,7 +154,7 @@ function sDiv(x,y){const raw=[x[0]*y[1],x[1]*y[0]],r=simp(raw);return{r,h:`${F(x
 function sAdd(x,y,sg){const D=lcm(x[1],y[1]),a=x[0]*D/x[1],b=y[0]*D/y[1],raw=[sg>0?a+b:a-b,D],r=simp(raw);const s=sg>0?'+':'−';
   const mid=x[1]===y[1]?'':` = ${fr(a,D)} ${s} ${fr(b,D)}`;return{r,D,h:`${F(x)} ${s} ${F(y)}${mid} = ${F(raw)}${r[1]!==raw[1]?' = '+F(r):''}`}}
 
-const TOPICS={pot:'Potencias',div:'Múltiplos y divisores',fac:'Factorización, m.c.d. y m.c.m.',ops:'Operaciones combinadas',pro:'Problemas'};
+const TOPICS={pot:'Potencias',div:'Múltiplos y divisores',fac:'Factorización, m.c.d. y m.c.m.',ops:'Operaciones combinadas',pro:'Problemas',pct:'Porcentajes y reglas de tres'};
 const NAMES=['Isabel','Lucía','Hugo','Marta','Pablo','Nuria','Daniel','Elena'];
 
 const G={
@@ -331,6 +336,72 @@ prMcd:{t:'pro',f(){let g,x,y;do{g=R(3,15);x=R(2,9);y=R(2,9)}while(x===y||gcd(x,y
  return{prompt:P(txt),fields:[{label:l1,kind:'number',ans:g,trap:z=>z===lcm(a,b)?'Ese es el m.c.m. Aquí se busca el mayor número que divide a los dos: el m.c.d.':null},{label:l2,kind:'number',ans:a2}],
  hint:'Repartir en partes iguales lo más grandes posible, sin que sobre nada, es una pregunta de m.c.d.',
  sol:L(`${a} = ${fmtF(fa)}&nbsp;&nbsp;&nbsp;${b} = ${fmtF(fb)}`)+L(`m.c.d.(${a}, ${b}) = ${g}`)+P(`${l1}: <b>${g}</b>.`)+P(s2)}}}
+,/* ---------- PORCENTAJES Y REGLAS DE TRES ---------- */
+pctOf:{t:'pct',f(){const p=pick([5,10,12,15,20,25,30,35,40,45,60,65,75,80,85,90]);const step=100/gcd(p,100);let N;do{N=step*R(1,60)}while(N<40||N>2000);const res=N*p/100;
+ const ctx=pick([[`Calcula el ${p}% de ${nf(N)}.`,'Resultado',''],[`En una carrera participan ${nf(N)} corredores y el ${p}% llega a la meta en menos de una hora.`,'¿Cuántos corredores son?','corredores'],[`Una granja produce ${nf(N)} litros de leche al mes y vende el ${p}% a una quesería.`,'¿Cuántos litros vende a la quesería?','litros'],[`Un libro tiene ${nf(N)} páginas y ${pick(NAMES)} ya ha leído el ${p}%.`,'¿Cuántas páginas ha leído?','páginas']]);
+ return{prompt:P(ctx[0])+(ctx[1]==='Resultado'?'':P(ctx[1])),fields:[{label:ctx[1]==='Resultado'?'Resultado':'Respuesta',kind:'number',ans:res,unit:ctx[2]}],
+ hint:`El ${p}% es ${p} de cada 100. Multiplica por ${p} y divide entre 100.`,
+ sol:L(`${p}% de ${nf(N)} = ${nf(N)} · ${p} : 100 = ${nf(N*p)} : 100 = <b>${nf(res)}</b>`)+P(`También se puede multiplicar directamente por ${dec(p/100)}: ${nf(N)} · ${dec(p/100)} = ${nf(res)}.`)}}},
+pctInverse:{t:'pct',f(){const p=pick([5,10,15,20,25,30,35,40,45,60,65,70,75,80,85,90]);const step=100/gcd(p,100);let N;do{N=step*R(1,80)}while(N<40||N>2500);const b=N*p/100;
+ const ctx=pick([[`El ${p}% de un número es ${nf(b)}.`,'¿Cuál es ese número?',''],[`En un colegio, ${nf(b)} alumnos van andando, que son el ${p}% del total.`,'¿Cuántos alumnos tiene el colegio?','alumnos'],[`${pick(NAMES)} ya ha ahorrado ${nf(b)} €, que es el ${p}% de lo que cuesta la bici que quiere.`,'¿Cuánto cuesta la bici?','€'],[`En una encuesta, ${nf(b)} personas dicen que prefieren el verano. Son el ${p}% de los encuestados.`,'¿Cuántas personas se encuestaron?','personas']]);
+ return{prompt:P(ctx[0])+P(ctx[1]),fields:[{label:'Respuesta',kind:'number',ans:N,unit:ctx[2],trap:v=>(v===b*p||v===b*p/100)?`Has multiplicado ${nf(b)} por ${p}. Aquí ${nf(b)} es solo una parte (el ${p}%) y buscas el total, que tiene que ser mayor: hay que dividir.`:null}],
+ hint:`Conoces la parte (el ${p}%) y buscas el todo (el 100%). Piensa: si el ${p}% son ${nf(b)}, ¿cuánto es el 1%? ¿Y el 100%?`,
+ sol:P(`Sabemos que el ${p}% del total son ${nf(b)}. Para pasar al 100%:`)+L(`Total = ${nf(b)} · 100 : ${p} = ${nf(b*100)} : ${p} = <b>${nf(N)}</b>`)+P(`Comprobación: el ${p}% de ${nf(N)} es ${nf(N)} · ${p} : 100 = ${nf(b)} ✓`)+warn('Si te dan una parte y preguntan por el total, el resultado tiene que salir mayor que la parte. Si te sale un número enorme, has multiplicado en lugar de dividir.')}}},
+pctWhich:{t:'pct',f(){const b=pick([20,25,40,50,80,120,150,200,250,300,400,500,600,800]);let p;do{p=R(1,19)*5}while((b*p)%100);const a=b*p/100;const v=R(1,3);let txt,q,ans,trap,sol;
+ if(v===1){txt=`En un examen se han presentado ${b} alumnos y han aprobado ${a}.`;q='¿Qué porcentaje ha aprobado?';ans=p;sol=L(`${a} : ${b} · 100 = ${dec(a/b)} · 100 = <b>${p}%</b>`)}
+ else if(v===2){txt=`En un examen se han presentado ${b} alumnos y han aprobado ${a}.`;q='¿Qué porcentaje ha <b>suspendido</b>?';ans=100-p;trap=x=>x===p?'Ese es el porcentaje de aprobados. Se pregunta por los que han suspendido.':null;sol=L(`Suspensos: ${b} − ${a} = ${b-a}`)+L(`${b-a} : ${b} · 100 = <b>${100-p}%</b>`)+P(`Otra forma: si aprueba el ${p}%, suspende el 100% − ${p}% = ${100-p}%.`)}
+ else{txt=`Un depósito tiene capacidad para ${b} litros y contiene ${a} litros.`;q='¿Qué porcentaje del depósito está lleno?';ans=p;sol=L(`${a} : ${b} · 100 = <b>${p}%</b>`)}
+ return{prompt:P(txt)+P(q),fields:[{label:'Porcentaje',kind:'decimal',ans,unit:'%',trap}],
+ hint:'Divide la parte entre el total y multiplica por 100.',sol:P('Porcentaje = parte : total · 100')+sol}}},
+pctChange:{t:'pct',f(){const up=Math.random()<.3;let P0,Q,d;
+ if(Math.random()<.6){d=pick(up?[5,10,15,20,25,30]:[10,15,20,25,30,35,40,45,50,60]);const step=100/gcd(d,100);do{P0=step*R(1,40)}while(P0<20||P0>600);Q=up?P0*(100+d)/100:P0*(100-d)/100}
+ else{P0=R(40,500);Q=up?P0+R(5,Math.floor(P0*.4)):P0-R(5,Math.floor(P0*.6));d=Math.abs(P0-Q)/P0*100}
+ const item=pick(['una chaqueta','unas zapatillas','un patinete','una mochila','unos auriculares','una lámpara']);const diff=Math.abs(P0-Q);const ratio=Q/P0*100;
+ const txt=up?`El precio de ${item} ha pasado de ${nf(P0)} € a ${nf(Q)} €.`:`${item[0].toUpperCase()+item.slice(1)} que costaba ${nf(P0)} € ahora cuesta ${nf(Q)} €.`;
+ const q=up?'¿En qué porcentaje ha subido el precio?':'¿Qué porcentaje se ha rebajado?';
+ return{prompt:P(txt)+P(q+(Number.isInteger(d)?'':' Redondea a dos decimales.')),fields:[{label:up?'Subida':'Rebaja',kind:'decimal',ans:d,unit:'%',trap:x=>Math.abs(x-ratio)<.02?(up?`Ese es el precio nuevo comparado con el antiguo (${dec(ratio)}%). La subida es lo que pasa del 100%.`:`Ese es el porcentaje que se paga ahora (${nf(Q)} de ${nf(P0)}). La rebaja es lo que falta hasta el 100%.`):null}],
+ hint:up?'Calcula cuántos euros ha subido y divide entre el precio antiguo. Multiplica por 100.':'Calcula cuántos euros te descuentan y divide entre el precio original. Multiplica por 100.',
+ sol:L(`${up?'Subida':'Descuento'} en euros: ${nf(Math.max(P0,Q))} − ${nf(Math.min(P0,Q))} = ${nf(diff)} €`)+L(`${nf(diff)} : ${nf(P0)} · 100 = <b>${dec(d)}%</b>${Number.isInteger(d)?'':' (redondeado)'}`)+P(`Otra forma: ${nf(Q)} : ${nf(P0)} · 100 = ${dec(ratio)}%. Ahora se paga el ${dec(ratio)}% del precio, así que ${up?`ha subido ${dec(ratio)}% − 100% = ${dec(d)}%`:`la rebaja es 100% − ${dec(ratio)}% = ${dec(d)}%`}.`)+warn('El porcentaje se calcula siempre sobre el precio de antes.')}}},
+pctFinal:{t:'pct',f(){const up=Math.random()<.35;const d=up?pick([10,21,5,15,20]):pick([10,15,20,25,30,40,50,60]);const step=100/gcd(d,100);let P0;do{P0=step*R(1,40)}while(P0<20||P0>800);const x=P0*d/100;const F=up?P0+x:P0-x;
+ const item=pick(['una bicicleta','un abrigo','una tableta','una raqueta','unas botas']);
+ const txt=up?(d===21?`Una factura de ${nf(P0)} € sin IVA tiene que pagar un 21% de IVA.`:`Un abono de ${nf(P0)} € sube un ${d}% el año que viene.`):`En las rebajas, ${item} de ${nf(P0)} € tiene un descuento del ${d}%.`;
+ const q=up?'¿Cuánto habrá que pagar en total?':'¿Cuánto hay que pagar?';
+ return{prompt:P(txt)+P(q),fields:[{label:'Precio final',kind:'decimal',ans:F,unit:'€',trap:v=>Math.abs(v-x)<.01?(up?'Eso es solo lo que sube. Hay que sumarlo al precio inicial.':'Eso es lo que te descuentan. Hay que restarlo del precio original.'):null}],
+ hint:up?`Calcula el ${d}% y súmalo al precio.`:`Calcula el ${d}% y réstalo al precio.`,
+ sol:L(`${d}% de ${nf(P0)} = ${nf(P0)} · ${d} : 100 = ${dec(x)} €`)+L(`${nf(P0)} ${up?'+':'−'} ${dec(x)} = <b>${dec(F)} €</b>`)+P(`Atajo: ${up?`pagas el ${100+d}%`:`pagas el ${100-d}%`}, así que ${nf(P0)} · ${dec((up?100+d:100-d)/100)} = ${dec(F)} €.`)}}},
+pctOriginal:{t:'pct',f(){const d=pick([10,20,25,30,40,50,60,75]);const k=100-d;const step=100/gcd(k,100);let P0;do{P0=step*R(1,30)}while(P0<20||P0>800);const Q=P0*k/100;
+ const item=pick(['un videojuego','una sudadera','un reloj','unas gafas de sol','una guitarra']);
+ return{prompt:P(`Con un descuento del ${d}%, ${item} cuesta ${nf(Q)} €.`)+P('¿Cuál era su precio antes del descuento?'),
+ fields:[{label:'Precio original',kind:'decimal',ans:P0,unit:'€',trap:v=>Math.abs(v-(Q+Q*d/100))<.01?`Has sumado el ${d}% de ${nf(Q)} €. Pero el descuento se calculó sobre el precio original, no sobre el rebajado.`:null}],
+ hint:`Si te descuentan el ${d}%, pagas el ${k}% del precio original. Conoces ese ${k}% y buscas el 100%.`,
+ sol:P(`Con un ${d}% de descuento se paga el 100% − ${d}% = ${k}% del precio original.`)+L(`${k}% del original = ${nf(Q)} €`)+L(`Original = ${nf(Q)} · 100 : ${k} = <b>${nf(P0)} €</b>`)+P(`Comprobación: ${d}% de ${nf(P0)} = ${dec(P0*d/100)} €, y ${nf(P0)} − ${dec(P0*d/100)} = ${nf(Q)} € ✓`)+warn(`No vale sumar el ${d}% al precio rebajado: el ${d}% de ${nf(Q)} es menos dinero que el ${d}% de ${nf(P0)}.`)}}},
+r3Direct:{t:'pct',f(){const v=R(1,4);let txt,q,ans,unit,sol,hint='Directa: si una cantidad se multiplica por 2, la otra también. Calcula primero cuánto corresponde a 1.',trap=null;
+ if(v===1){const u=pick([1.5,2,2.5,3,3.5,4,1.2,1.8]);const a=R(2,8);let c;do{c=R(2,15)}while(c===a);const fr0=pick(['manzanas','naranjas','tomates','fresas']);txt=`${a} kg de ${fr0} cuestan ${dec(a*u)} €.`;q=`¿Cuánto costarán ${c} kg?`;ans=c*u;unit='€';sol=L(`1 kg: ${dec(a*u)} : ${a} = ${dec(u)} €`)+L(`${c} kg: ${c} · ${dec(u)} = <b>${dec(ans)} €</b>`)}
+ else if(v===2){const u=pick([12,14,15,16,18,20]);const a=pick([5,10,20,25,30,40]);let c;do{c=R(3,50)}while(c===a);txt=`Un coche gasta ${a} litros de gasolina en recorrer ${a*u} km.`;q=`¿Cuántos kilómetros recorre con ${c} litros?`;ans=c*u;unit='km';sol=L(`Con 1 litro: ${a*u} : ${a} = ${u} km`)+L(`Con ${c} litros: ${c} · ${u} = <b>${ans} km</b>`)}
+ else if(v===3){const g=pick([50,75,100,125,150,200]);const a=R(2,6);let c;do{c=R(2,12)}while(c===a);const ing=pick(['harina','azúcar','arroz','pasta']);txt=`Una receta para ${a} personas lleva ${a*g} g de ${ing}.`;q=`¿Cuántos gramos harán falta para ${c} personas?`;ans=c*g;unit='g';sol=L(`Por persona: ${a*g} : ${a} = ${g} g`)+L(`Para ${c} personas: ${c} · ${g} = <b>${ans} g</b>`)}
+ else{const r=pick([0.25,0.5,0.75,1.5,2,2.5,3,4,5]);let m,m2;do{m=R(4,60);m2=R(4,90)}while(m2<=m||!Number.isInteger(m*r*4)||!Number.isInteger(m2*r*4));const D=m*r,D2=m2*r;const more=Math.random()<.5;
+  txt=`Dos pueblos que están a ${dec(D)} km de distancia aparecen en un mapa separados ${m} cm.`;
+  if(more){q=`Otros dos pueblos aparecen en el mismo mapa a ${m2} cm. ¿Cuántos kilómetros <b>más</b> los separan que a los primeros?`;ans=D2-D;trap=x=>Math.abs(x-D2)<.01?`${dec(D2)} km es la distancia total entre los otros dos pueblos. Se pregunta cuántos km más que los ${dec(D)} km de los primeros.`:null;
+   sol=L(`1 cm del mapa: ${dec(D)} : ${m} = ${dec(r)} km`)+L(`${m2} cm: ${m2} · ${dec(r)} = ${dec(D2)} km`)+L(`Diferencia: ${dec(D2)} − ${dec(D)} = <b>${dec(ans)} km</b>`)+warn('Lee bien la pregunta: «cuántos más» pide una diferencia, no el total.')}
+  else{q=`Si otros dos pueblos aparecen a ${m2} cm en el mismo mapa, ¿a cuántos kilómetros están?`;ans=D2;sol=L(`1 cm del mapa: ${dec(D)} : ${m} = ${dec(r)} km`)+L(`${m2} cm: ${m2} · ${dec(r)} = <b>${dec(ans)} km</b>`)}
+  unit='km'}
+ return{prompt:P(txt)+P(q),fields:[{label:'Respuesta',kind:'decimal',ans,unit,trap}],hint,sol:P('Es una proporción <b>directa</b>: si una cantidad aumenta, la otra aumenta en la misma proporción. Se reduce a la unidad:')+sol}}},
+r3Inverse:{t:'pct',f(){const v=R(1,4);let a,b,a2,txt,q,unit,whole=null,more=false,check;
+ for(let tries=0;;tries++){
+  if(v===1){a=R(2,12);b=R(4,60);a2=R(2,20);txt=`${a} obreros tardan ${b} días en construir un muro.`;q=`¿Cuántos días tardarían ${a2} obreros?`;unit='días';check='si trabajan más obreros, tardan menos días; si son menos, tardan más.'}
+  else if(v===2){const pp=R(4,30)*R(5,12),c1=R(2,30)*5;a=c1;b=pp;a2=R(1,40)*5;txt=`Si ${pp} personas financian un proyecto aportando ${c1} € cada una,`;
+   more=a2<a&&Math.random()<.4;q=more?`¿cuántas personas <b>más</b> harían falta si cada una aportara ${a2} €?`:`¿cuántas personas harían falta si cada una aportara ${a2} €?`;unit='personas';whole='No puede salir un número de personas con decimales. Revisa si la proporción es directa o inversa.';check='si cada persona aporta menos dinero, hacen falta más personas.'}
+  else if(v===3){a=R(4,12)*10;b=R(2,9);a2=R(4,13)*10;txt=`Un coche que va a ${a} km/h tarda ${b} horas en hacer un viaje.`;q=`¿Cuántas horas tardaría yendo a ${a2} km/h?`;unit='horas';check='si va más rápido, tarda menos horas.'}
+  else{a=R(2,8);b=R(2,24);a2=R(2,12);txt=`${a} grifos iguales llenan una piscina en ${b} horas.`;q=`¿Cuántas horas tardarían ${a2} grifos?`;unit='horas';check='con más grifos se tarda menos; con menos grifos, más.'}
+  if(a2!==a&&Number.isInteger(a*b/a2)&&a*b/a2>=2)break}
+ const T=a*b,val=T/a2,ans=more?val-b:val,direct=b*a2/a;
+ return{prompt:P(txt)+P(q),fields:[{label:'Respuesta',kind:'number',ans,unit,whole,trap:x=>Math.abs(x-direct)<.01&&direct!==val?'Has hecho una regla de tres directa. Aquí, cuanto más de una cosa, menos de la otra: es inversa.':(more&&x===val?`${val} es el total de personas. Se pregunta cuántas más que las ${b} de antes.`:null)}],
+ hint:'¿Si una cantidad aumenta, la otra disminuye? Entonces es inversa: el producto de las dos se mantiene.',
+ sol:P('Es una proporción <b>inversa</b>: si una cantidad aumenta, la otra disminuye. El producto se mantiene constante:')+L(`${a} · ${b} = ${nf(T)}`)+L(`${nf(T)} : ${a2} = <b>${val}</b> ${unit}`)+(more?L(`Personas de más: ${val} − ${b} = <b>${ans}</b>`):'')+warn('Comprueba si tiene sentido: '+check)}}},
+r3Kind:{t:'pct',f(){const it=pick([['El número de kilos de patatas que compras y lo que pagas.','Directa','Más kilos, más dinero.'],['El número de pintores y el tiempo que tardan en pintar una casa.','Inversa','Más pintores, menos tiempo.'],['La velocidad de un tren y el tiempo que tarda en un trayecto.','Inversa','Más velocidad, menos tiempo.'],['Los litros de gasolina y los kilómetros que recorre un coche.','Directa','Más litros, más kilómetros.'],['El número de amigos que comparten un regalo y lo que paga cada uno.','Inversa','Más amigos, menos paga cada uno.'],['Los centímetros en un mapa y los kilómetros reales.','Directa','Más centímetros, más kilómetros.'],['El número de vacas y los días que les dura un montón de pienso.','Inversa','Más vacas, menos días.'],['Las horas trabajadas y el sueldo, cobrando lo mismo por hora.','Directa','Más horas, más sueldo.'],['El número de grifos y el tiempo que tardan en llenar un depósito.','Inversa','Más grifos, menos tiempo.'],['El número de invitados y la cantidad de comida que hay que preparar.','Directa','Más invitados, más comida.']]);
+ return{prompt:P('¿Qué tipo de proporcionalidad hay entre estas dos cantidades?')+P(`<b>${it[0]}</b>`),fields:[{label:'Proporcionalidad',kind:'choice',opts:['Directa','Inversa'],ans:it[1]}],
+ hint:'Imagina que la primera cantidad se duplica. ¿La segunda también se duplica, o se reduce a la mitad?',
+ sol:P(`${it[2]} Es <b>${it[1].toLowerCase()}</b>.`)+P('Directa: las dos suben o bajan a la vez. Inversa: cuando una sube, la otra baja.')}}}
 };
 
 function startExam(){const q=[];Object.keys(TOPICS).forEach(t=>{const ids=Object.keys(G).filter(id=>G[id].t===t);const a=pick(ids);let b=pick(ids);while(b===a&&ids.length>1)b=pick(ids);q.push(a,b)});for(let i=q.length-1;i>0;i--){const j=R(0,i);[q[i],q[j]]=[q[j],q[i]]}st.exam={q,idx:0,res:[]};load(q[0])}
@@ -347,8 +418,8 @@ function pickGen(){let t=st.topic;const ks=Object.keys(TOPICS);
 function fieldHTML(fd,i){let inp;
  if(fd.kind==='power')inp=`<span class="pow"><input class="in base" id="f${i}b" inputmode="numeric" aria-label="Base" placeholder="base" autocomplete="off"><input class="in exp" id="f${i}e" inputmode="numeric" aria-label="Exponente" placeholder="exp." autocomplete="off"></span>`;
  else if(fd.kind==='choice')inp=`<div class="choice" id="f${i}" data-v="">${fd.opts.map(o=>`<button type="button" class="opt" data-o="${o}" aria-pressed="false">${o}</button>`).join('')}</div>`;
- else{const ph={number:'',list:'p. ej. 1, 2, 3',fraction:'p. ej. 3/4',factor:'p. ej. 2^3·3^2'}[fd.kind];const im=fd.kind==='number'?'numeric':'text';
-  inp=`<input class="in" id="f${i}" inputmode="${im}" placeholder="${ph}" autocomplete="off" autocapitalize="off" spellcheck="false">`+(fd.kind==='factor'?`<button type="button" class="ins" data-ins="·" data-t="f${i}" aria-label="Insertar multiplicación">·</button><button type="button" class="ins" data-ins="^" data-t="f${i}" aria-label="Insertar exponente">^</button>`:'')}
+ else{const ph={number:'',decimal:'',list:'p. ej. 1, 2, 3',fraction:'p. ej. 3/4',factor:'p. ej. 2^3·3^2'}[fd.kind];const im=fd.kind==='number'?'numeric':fd.kind==='decimal'?'decimal':'text';
+  inp=`<input class="in" id="f${i}" inputmode="${im}" placeholder="${ph}" autocomplete="off" autocapitalize="off" spellcheck="false">`+(fd.unit?`<span class="unit">${fd.unit}</span>`:'')+(fd.kind==='factor'?`<button type="button" class="ins" data-ins="·" data-t="f${i}" aria-label="Insertar multiplicación">·</button><button type="button" class="ins" data-ins="^" data-t="f${i}" aria-label="Insertar exponente">^</button>`:'')}
  const lid=fd.kind==='power'?`f${i}b`:`f${i}`;
  return`<div class="field" id="fd${i}"><label for="${lid}">${fd.label}</label><div class="frow">${inp}</div><div class="fmsg" id="fm${i}"></div></div>`}
 
@@ -376,7 +447,8 @@ function val(id){const e=document.getElementById(id);return e?e.value.trim():''}
 const SUPS={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
 function checkField(fd,i){
  switch(fd.kind){
- case'number':{const s=val('f'+i).replace(/[.\s]/g,'');if(!s)return{ok:false,msg:'Sin respuesta.'};if(!/^-?\d+$/.test(s))return{ok:false,msg:'Escribe solo un número.'};const v=+s;if(v===fd.ans)return{ok:true};return{ok:false,msg:(fd.trap&&fd.trap(v))||''}}
+ case'number':{const v=parseNum(val('f'+i),fd.ans);if(v===null)return{ok:false,msg:'Sin respuesta.'};if(Number.isNaN(v))return{ok:false,msg:'Escribe solo un número.'};if(Math.abs(v-fd.ans)<1e-9)return{ok:true};const t=fd.trap&&fd.trap(v);if(t)return{ok:false,msg:t};if(!Number.isInteger(v)&&fd.whole)return{ok:false,msg:fd.whole};return{ok:false,msg:''}}
+ case'decimal':{const v=parseNum(val('f'+i),fd.ans);if(v===null)return{ok:false,msg:'Sin respuesta.'};if(Number.isNaN(v))return{ok:false,msg:'Escribe solo un número (puedes usar coma o punto para los decimales).'};if(Math.abs(v-fd.ans)<0.0101)return{ok:true};const t=fd.trap&&fd.trap(v);if(t)return{ok:false,msg:t};if(Math.abs(v-fd.ans)<0.1)return{ok:false,msg:'Casi. Revisa el redondeo: da el resultado con dos decimales.'};return{ok:false,msg:''}}
  case'list':{const m=val('f'+i).match(/\d+/g);if(!m)return{ok:false,msg:'Sin respuesta.'};const u=[...new Set(m.map(Number))];const A=new Set(fd.ans);const extra=u.filter(x=>!A.has(x));const miss=fd.ans.filter(x=>!u.includes(x));if(!extra.length&&!miss.length)return{ok:true};const msg=[];if(extra.length)msg.push(fd.explainExtra?fd.explainExtra(extra):`Sobran: ${extra.join(', ')}.`);if(miss.length)msg.push(miss.length===1?'Te falta 1 número.':`Te faltan ${miss.length} números.`);return{ok:false,msg:msg.join(' ')}}
  case'fraction':{const s=val('f'+i).replace(/\s/g,'');if(!s)return{ok:false,msg:'Sin respuesta.'};const m=s.match(/^(-?\d+)(?:\/(\d+))?$/);if(!m)return{ok:false,msg:'Escribe la fracción así: 3/4.'};const n=+m[1],d=m[2]?+m[2]:1;if(!d)return{ok:false,msg:'El denominador no puede ser 0.'};const[an,ad]=fd.ans;if(n*ad!==an*d)return{ok:false,msg:''};if(gcd(n,d)!==1)return{ok:false,msg:`El valor es correcto, pero falta simplificar: divide arriba y abajo entre ${gcd(n,d)}.`};return{ok:true}}
  case'factor':{let s=val('f'+i).replace(/\s/g,'');if(!s)return{ok:false,msg:'Sin respuesta.'};s=s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>'^'+[...m].map(c=>SUPS[c]).join('')).replace(/[×x*.·]/gi,'·');let prod=1;for(const t of s.split('·').filter(Boolean)){const m=t.match(/^(\d+)(?:\^(\d+))?$/);if(!m)return{ok:false,msg:'No se entiende cómo está escrito. Usa por ejemplo 2^3·3^2.'};const p=+m[1],e=m[2]?+m[2]:1;if(!isPrime(p))return{ok:false,msg:`${p} no es primo: hay que seguir descomponiéndolo.`};prod*=p**e}if(prod!==fd.ans)return{ok:false,msg:`Ese producto da ${nf(prod)}, no ${nf(fd.ans)}.`};return{ok:true}}

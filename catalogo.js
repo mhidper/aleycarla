@@ -9,7 +9,7 @@ window.CATALOGO = {
     nombre: 'Ale', curso: '1º ESO',
     asignaturas: [
       { id: 'matematicas', nombre: 'Matemáticas', tono: 215, apps: [
-        { titulo: 'Repaso del Tema 1', descripcion: 'Potencias, múltiplos y divisores, m.c.d. y m.c.m., fracciones y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
+        { titulo: 'Repaso de Matemáticas', descripcion: 'Potencias, divisibilidad, m.c.d. y m.c.m., fracciones, porcentajes, reglas de tres y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
       ]},
       { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
       { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
