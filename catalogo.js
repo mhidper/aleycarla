@@ -12,7 +12,8 @@ window.CATALOGO = {
         { titulo: 'Repaso de Matemáticas', descripcion: 'Potencias, divisibilidad, m.c.d. y m.c.m., fracciones, porcentajes, reglas de tres y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
       ]},
       { id: 'ham', nombre: 'Historia del Arte y de la Música', tono: 300, apps: [
-        { titulo: 'Arte y Música: Temas 1 y 2', descripcion: 'Arte del Paleolítico y megalitismo; música de la Edad Media y Barroco. Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' }
+        { titulo: 'Arte y Música: Temas 1 y 2', descripcion: 'Arte del Paleolítico y megalitismo; música de la Edad Media y Barroco. Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' },
+        { titulo: 'Fichas animadas: Tema 2', descripcion: 'Megalitismo y Barroco musical paso a paso, con animaciones y preguntas al final de cada ficha', ruta: 'ale/ham/tema2-animado/' }
       ]},
       { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
       { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },

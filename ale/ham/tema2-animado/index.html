@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fichas animadas: Tema 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Misma familia visual que la app de los temas 1 y 2: hoja cuadriculada, rotulador magenta. El escenario de la animación es una lámina clara fija en ambos temas. */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1b2a4a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --parch:#f6efe0; --parch-line:#e2d5b8; --voice2:#c0127e;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --parch:#22283a; --parch-line:#3a4258; --voice2:#ff5fb9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --parch:#22283a; --parch-line:#3a4258; --voice2:#ff5fb9; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.back:hover{text-decoration:underline}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick h2{font:700 .78rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:4px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .88rem var(--f-body);padding:6px 11px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{border-color:var(--ink);background:var(--btn);color:var(--btn-fg);font-weight:700}
+.chips button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+.chips button.done[aria-current="true"]::after{color:var(--btn-fg)}
+button:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:18px 16px 20px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(20,30,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0}
+.sheet h2.t{font:800 1.4rem var(--f-display);margin:-6px 0 0;text-wrap:balance}
+.stage{border-radius:12px;overflow:hidden;border:1px solid var(--parch-line);background:#f6efe0;line-height:0}
+.stage>svg{width:100%;height:auto;display:block}
+.stage svg text{font-family:var(--f-body)}
+.cap{font-size:1.15rem;line-height:1.5;margin:0;min-height:4.5em;max-width:62ch}
+.cap b{color:var(--marker)}
+@media (prefers-reduced-motion:no-preference){.cap.in{animation:capin .35s ease-out}@keyframes capin{from{opacity:0;transform:translateY(4px)}}}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--marker)}
+.dots i.past{background:var(--muted)}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctrl .sp{flex:1}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 22px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.ghost:disabled,.primary:disabled{opacity:.4;cursor:default}
+.nogsap{background:var(--marker-soft);border:1.5px solid var(--marker);border-radius:10px;padding:10px 14px;margin:0}
+.steps-list{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+/* Comprobación */
+.quiz{display:flex;flex-direction:column;gap:16px;border-top:2px solid var(--ink);padding-top:14px}
+.quiz h3{font:800 1.15rem var(--f-display);margin:0}
+.qq{display:flex;flex-direction:column;gap:8px}
+.qq p.q{font-weight:700;margin:0;font-size:1.05rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:0;font-size:.95rem}
+.exp.b{color:var(--ok)} .exp.mm{color:var(--marker)}
+.exp b{color:var(--ink)}
+.stamp{font-family:var(--f-hand);font-size:2.4rem;line-height:1;color:var(--ok);transform:rotate(-6deg);display:inline-block}
+@media (max-width:420px){header h1{font-size:1.65rem}.cap{font-size:1.05rem}.primary{padding:12px 16px}.ghost{padding:11px 12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
+  <header>
+    <h1>Fichas animadas <span>Tema 2</span></h1>
+    <p>Megalitismo y Barroco musical, paso a paso. Pulsa «Siguiente» para ver cada parte y, al final de cada ficha, comprueba lo que has aprendido.</p>
+  </header>
+  <section class="sheet" id="sheet" aria-labelledby="ttl">
+    <p class="kicker" id="kick"></p>
+    <h2 class="t" id="ttl"></h2>
+    <div class="stage" id="stagebox"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <div class="ctrl">
+      <button class="ghost" id="bBack">← Atrás</button>
+      <button class="ghost" id="bAgain">↻ Repetir</button>
+      <span class="sp"></span>
+      <button class="primary" id="bNext">Siguiente →</button>
+    </div>
+    <div class="quiz" id="quiz" hidden></div>
+  </section>
+  <nav class="pick" id="pick" aria-label="Todas las fichas"></nav>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* =================== DIBUJOS (los mismos que la app de los temas 1 y 2) =================== */
+const ROCK=(w,h,c1='#d8b88e',c2='#c69f72')=>`<rect width="${w}" height="${h}" fill="${c1}"/><path d="M0 ${h*.7} C ${w*.2} ${h*.6}, ${w*.35} ${h*.85}, ${w*.6} ${h*.75} S ${w*.9} ${h*.6}, ${w} ${h*.7} L ${w} ${h} L 0 ${h} Z" fill="${c2}" opacity=".55"/><path d="M${w*.1} 0 C ${w*.25} ${h*.15}, ${w*.4} ${h*.05}, ${w*.55} ${h*.18} S ${w*.85} ${h*.1}, ${w} ${h*.2} L ${w} 0 Z" fill="${c2}" opacity=".4"/>`;
+const LAND=(w,h)=>`<rect width="${w}" height="${h}" fill="#dbe7ee"/><path d="M0 ${h-34} C ${w*.3} ${h-40}, ${w*.6} ${h-28}, ${w} ${h-36} L ${w} ${h} L 0 ${h} Z" fill="#b5c28c"/><path d="M0 ${h-20} C ${w*.4} ${h-26}, ${w*.7} ${h-14}, ${w} ${h-22} L ${w} ${h} L 0 ${h} Z" fill="#9fae76"/>`;
+const STONE='#8f8a80', STONE_D='#6f6a61', STONE_L='#a9a499';
+const person=(x,y)=>`<g fill="#3a3a3a" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round"><circle cx="${x}" cy="${y}" r="3.2" stroke="none"/><line x1="${x}" y1="${y+3}" x2="${x}" y2="${y+13}"/><line x1="${x}" y1="${y+13}" x2="${x-3}" y2="${y+21}"/><line x1="${x}" y1="${y+13}" x2="${x+3}" y2="${y+21}"/><line x1="${x-4}" y1="${y+7}" x2="${x+4}" y2="${y+7}"/></g>`;
+
+const ILL={
+bisonte:()=>({vb:'0 0 240 160',s:ROCK(240,160)+`
+ <path d="M200 80 C 214 86, 214 100, 207 112" fill="none" stroke="#241812" stroke-width="3" stroke-linecap="round"/>
+ <g stroke="#241812" stroke-width="3" stroke-linejoin="round" fill="#7d2c14">
+  <path d="M84 108 L79 140 L88 140 L94 110 Z"/><path d="M102 110 L101 141 L110 141 L113 110 Z"/>
+  <path d="M168 106 L171 140 L180 140 L182 104 Z"/><path d="M188 98 L195 137 L203 137 L199 96 Z"/>
+ </g>
+ <path d="M62 96 C 58 70, 80 46, 110 44 C 132 42, 152 52, 176 57 C 196 62, 206 76, 201 95 C 197 108, 181 112, 166 110 L 96 113 C 80 113, 67 108, 62 96 Z" fill="#a63d1e" stroke="#241812" stroke-width="3"/>
+ <path d="M66 92 C 70 64, 92 46, 118 46 C 108 58, 98 72, 92 100 C 82 104, 72 102, 66 92 Z" fill="#241812" opacity=".75"/>
+ <path d="M150 96 C 165 100, 182 98, 196 90" fill="none" stroke="#c27a2c" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+ <path d="M64 92 C 50 88, 40 98, 42 112 C 44 123, 57 125, 66 115 Z" fill="#7d2c14" stroke="#241812" stroke-width="3"/>
+ <path d="M47 118 L50 133 L57 120" fill="#241812" stroke="#241812" stroke-width="2"/>
+ <path d="M54 94 C 46 84, 50 76, 60 78" fill="none" stroke="#241812" stroke-width="3" stroke-linecap="round"/>
+ <circle cx="52" cy="102" r="2.2" fill="#241812"/>`}),
+levantina:()=>{const C='#9b2f1b';
+ const archer=(x,y,f=1)=>`<g fill="${C}" stroke="${C}" stroke-linecap="round"><circle cx="${x}" cy="${y-5}" r="4.2" stroke="none"/><path d="M${x-7} ${y} L${x+7} ${y} L${x+1.5} ${y+19} L${x-1.5} ${y+19} Z" stroke="none"/><line x1="${x}" y1="${y+19}" x2="${x-11*f}" y2="${y+42}" stroke-width="3.2"/><line x1="${x}" y1="${y+19}" x2="${x+10*f}" y2="${y+42}" stroke-width="3.2"/><line x1="${x+5*f}" y1="${y+2}" x2="${x+16*f}" y2="${y+6}" stroke-width="2.4"/><path d="M${x+16*f} ${y-8} Q ${x+25*f} ${y+6} ${x+16*f} ${y+20}" fill="none" stroke-width="2"/><line x1="${x+4*f}" y1="${y+6}" x2="${x+30*f}" y2="${y+6}" stroke-width="1.6"/></g>`;
+ return{vb:'0 0 240 160',s:ROCK(240,160,'#e2c49c','#d2ad80')+archer(40,62)+archer(82,74)+`
+ <g fill="${C}" stroke="${C}" stroke-linecap="round">
+  <path d="M160 78 C 170 70, 196 70, 204 78 C 206 86, 196 90, 182 90 C 170 90, 160 88, 160 78 Z" stroke="none"/>
+  <path d="M202 78 L212 62 L218 64 L210 80 Z" stroke="none"/><circle cx="214" cy="61" r="4" stroke="none"/>
+  <path d="M214 57 L210 44 M211 49 L204 44 M214 57 L222 44 M220 48 L227 44" fill="none" stroke-width="2"/>
+  <line x1="166" y1="88" x2="150" y2="110" stroke-width="3"/><line x1="172" y1="89" x2="162" y2="114" stroke-width="3"/>
+  <line x1="196" y1="88" x2="214" y2="108" stroke-width="3"/><line x1="190" y1="89" x2="200" y2="114" stroke-width="3"/>
+  <line x1="122" y1="70" x2="146" y2="72" stroke-width="1.6"/><path d="M146 72 l-5 -3 l1 6 Z" stroke="none"/>
+  <line x1="128" y1="86" x2="152" y2="84" stroke-width="1.6"/><path d="M152 84 l-5 -3 l0 6 Z" stroke="none"/>
+ </g>`}},
+pigmentos:()=>({vb:'0 0 300 150',s:ROCK(300,150,'#e6d2b2','#d6bc94')+[['#a63d1e','Rojo','hierro o sangre'],['#241812','Negro','carbón'],['#c98a2b','Ocre','tierra'],['#d8b23a','Amarillo','tierra y plantas']].map((c,i)=>{const x=40+i*73;return`<path d="M${x-22} 60 C ${x-26} 38, ${x-6} 26, ${x+8} 32 C ${x+26} 38, ${x+28} 62, ${x+16} 72 C ${x+4} 82, ${x-18} 78, ${x-22} 60 Z" fill="${c[0]}"/><text x="${x}" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#2e2117">${c[1]}</text><text x="${x}" y="122" text-anchor="middle" font-size="11" fill="#4a382a">${c[2]}</text>`}).join('')}),
+venus:()=>({vb:'0 0 160 200',s:`<rect width="160" height="200" fill="#e8dcc4"/><g fill="#b8925a" stroke="#6e5332" stroke-width="2.5" stroke-linejoin="round">
+ <path d="M68 160 L72 190 L79 190 L81 168 Z"/><path d="M92 160 L88 190 L81 190 L80 168 Z"/>
+ <path d="M50 100 C 38 130, 52 152, 70 162 L 90 162 C 108 152, 122 130, 110 100 Z"/>
+ <ellipse cx="80" cy="108" rx="30" ry="24"/>
+ <ellipse cx="68" cy="80" rx="14" ry="19"/><ellipse cx="92" cy="80" rx="14" ry="19"/>
+ <path d="M58 64 C 50 72, 48 88, 54 98" fill="none"/><path d="M102 64 C 110 72, 112 88, 106 98" fill="none"/>
+ <ellipse cx="80" cy="40" rx="18" ry="20"/></g>
+ <g fill="none" stroke="#6e5332" stroke-width="1.6">${[26,32,38,44,50].map(y=>`<path d="M${64+Math.abs(y-38)*.35} ${y} Q 80 ${y+4} ${96-Math.abs(y-38)*.35} ${y}"/>`).join('')}</g>
+ <circle cx="80" cy="112" r="2.4" fill="#6e5332"/>`}),
+baston:()=>({vb:'0 0 240 120',s:`<rect width="240" height="120" fill="#e8dcc4"/>
+ <path d="M24 78 C 80 72, 150 62, 216 40" fill="none" stroke="#7a6648" stroke-width="20" stroke-linecap="round"/>
+ <path d="M24 78 C 80 72, 150 62, 216 40" fill="none" stroke="#dcc9a4" stroke-width="15" stroke-linecap="round"/>
+ <path d="M30 70 C 18 60, 26 46, 40 52" fill="none" stroke="#7a6648" stroke-width="11" stroke-linecap="round"/>
+ <path d="M30 70 C 18 60, 26 46, 40 52" fill="none" stroke="#dcc9a4" stroke-width="7" stroke-linecap="round"/>
+ <circle cx="40" cy="77" r="6.5" fill="#e8dcc4" stroke="#7a6648" stroke-width="2"/>
+ <g stroke="#7a6648" stroke-width="1.6" fill="none">${Array.from({length:12},(_,i)=>{const x=70+i*12,y=76-i*3.2;return`<path d="M${x} ${y-4} l5 6 l5 -6"/>`}).join('')}</g>`}),
+menhir:()=>({vb:'0 0 240 160',s:LAND(240,160)+`<path d="M104 140 C 98 100, 101 60, 114 28 C 124 22, 135 32, 138 58 C 142 94, 140 120, 138 140 Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><path d="M114 30 C 108 60, 108 100, 112 138 L 104 140 C 98 100, 101 60, 114 28 Z" fill="${STONE_D}" opacity=".6"/>`+person(178,118)}),
+alineamiento:()=>{let s=LAND(240,160);for(let i=7;i>=0;i--){const t=i/7,x=24+t*190,y=140-t*36,h=56*(1-t*.55),w=13*(1-t*.5);s+=`<path d="M${x-w} ${y} C ${x-w-1} ${y-h*.6}, ${x-w*.4} ${y-h}, ${x} ${y-h} C ${x+w*.5} ${y-h}, ${x+w+1} ${y-h*.5}, ${x+w} ${y} Z" fill="${i%2?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="1.5"/>`}return{vb:'0 0 240 160',s}},
+cromlech:()=>{let s=LAND(240,160);const st=[];const n=16;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,x=120+92*Math.cos(a),y=104+26*Math.sin(a),k=.7+.3*(Math.sin(a)+1)/2;st.push({x,y,k,i})}
+ st.sort((p,q)=>p.y-q.y).forEach(p=>{const h=40*p.k,w=8*p.k;s+=`<rect x="${p.x-w}" y="${p.y-h}" width="${w*2}" height="${h}" rx="2" fill="${p.i%2?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="1.4"/>`});
+ const front=st.filter(p=>p.y>110).sort((p,q)=>p.x-q.x);for(let i=0;i+1<front.length;i+=2){const p=front[i],q=front[i+1];const h=40*Math.min(p.k,q.k);s+=`<rect x="${p.x-9}" y="${Math.min(p.y,q.y)-h-7}" width="${q.x-p.x+18}" height="8" rx="2" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="1.4"/>`}
+ return{vb:'0 0 240 160',s}},
+dolmen:()=>({vb:'0 0 240 160',s:LAND(240,160)+`<rect x="70" y="72" width="22" height="66" rx="4" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><rect x="150" y="70" width="24" height="68" rx="4" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><rect x="110" y="78" width="20" height="60" rx="4" fill="${STONE_D}" stroke="${STONE_D}" stroke-width="2" opacity=".85"/><path d="M50 74 C 60 56, 120 50, 196 58 C 204 62, 200 74, 190 76 C 140 80, 90 82, 56 82 C 48 82, 46 78, 50 74 Z" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="2"/>`+person(212,118)}),
+corredor:()=>{let s=`<rect width="240" height="160" class="parch"/><circle cx="150" cy="80" r="70" fill="none" class="inks" stroke-width="1.5" stroke-dasharray="5 5" opacity=".6"/>`;
+ const stones=[];for(let x=30;x<=122;x+=13){stones.push([x,62],[x,98])}for(let i=0;i<11;i++){const a=-Math.PI*.78+i*(Math.PI*1.56/10);stones.push([160+34*Math.cos(a),80+34*Math.sin(a)])}
+ s+=stones.map(([x,y])=>`<rect x="${x-6}" y="${y-6}" width="12" height="12" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="1.2"/>`).join('');
+ s+=`<text x="76" y="85" text-anchor="middle" font-size="12" font-weight="700" class="ink">pasillo</text><text x="162" y="85" text-anchor="middle" font-size="12" font-weight="700" class="ink">cámara</text><text x="196" y="150" text-anchor="middle" font-size="11" class="mut">túmulo de tierra</text><text x="10" y="20" font-size="11" class="mut">Vista desde arriba</text>`;return{vb:'0 0 240 160',s}},
+talayot:()=>{let s=LAND(240,160);const top=48,bot=140;s+=`<path d="M58 ${bot} L84 ${top} L156 ${top} L182 ${bot} Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/>`;
+ let r=0;for(let y=bot;y>top;y-=13,r++){const t=(bot-y)/(bot-top),l=58+26*t,rr=182-26*t;s+=`<line x1="${l}" y1="${y}" x2="${rr}" y2="${y}" stroke="${STONE_D}" stroke-width="1.3"/>`;if(y-13>=top-1)for(let x=l+(r%2?14:24);x<rr-6;x+=22)s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y-13}" stroke="${STONE_D}" stroke-width="1.3"/>`}
+ s+=`<path d="M112 ${bot} L112 118 L128 118 L128 ${bot} Z" fill="#3b3833"/>`+person(206,118);return{vb:'0 0 240 160',s}},
+naveta:()=>{let s=LAND(240,160);s+=`<path d="M34 140 L40 72 C 70 56, 168 52, 196 66 C 214 78, 216 118, 212 140 Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/>`;
+ for(let y=128,r=0;y>66;y-=14,r++){s+=`<path d="M${38+(128-y)*.05} ${y} L ${212-(128-y)*.15} ${y}" stroke="${STONE_D}" stroke-width="1.3"/>`;for(let x=50+(r%2?12:0);x<205;x+=26)s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+14}" stroke="${STONE_D}" stroke-width="1.3"/>`}
+ s+=`<path d="M48 140 L48 116 L62 116 L62 140 Z" fill="#3b3833"/>`+person(226,118);return{vb:'0 0 240 160',s}},
+taula:()=>{let s=LAND(240,160);for(let i=0;i<9;i++){const a=Math.PI*(1.1+i*0.1),x=120+80*Math.cos(a)*-1,y=120+18*Math.sin(a);s+=`<rect x="${x-10}" y="${y-32}" width="20" height="34" rx="3" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="1.2" opacity=".85"/>`}
+ s+=`<rect x="105" y="58" width="30" height="82" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><rect x="78" y="40" width="84" height="20" rx="3" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="2"/>`+person(186,118);return{vb:'0 0 240 160',s}},
+tetragrama:()=>{let s=`<rect width="300" height="130" class="parch"/>`;const ys=[34,48,62,76];ys.forEach(y=>s+=`<line x1="18" y1="${y}" x2="284" y2="${y}" stroke="#b3261e" stroke-width="1.4"/>`);
+ s+=`<path d="M24 41 L32 41 L32 55 L24 55 Z M24 41 L24 55" fill="none" class="inks" stroke-width="3"/>`;
+ const notes=[[50,62],[72,55],[94,48],[104,41],[126,48],[148,55],[170,48],[192,55],[214,62],[236,62],[258,69]];notes.forEach(([x,y])=>s+=`<rect x="${x-5}" y="${y-5}" width="10" height="10" class="ink"/>`);
+ s+=`<line x1="104" y1="41" x2="104" y2="56" class="inks" stroke-width="1.6"/><text x="150" y="110" text-anchor="middle" font-size="15" font-style="italic" class="ink">Ky - ri - e    e - lé - i - son</text>`;return{vb:'0 0 300 130',s}},
+monodia:()=>{let s=`<rect width="300" height="120" class="parch"/>`;[30,42,54,66,78].forEach(y=>s+=`<line x1="14" y1="${y}" x2="286" y2="${y}" class="inks" stroke-width="1" opacity=".55"/>`);
+ [[40,60],[70,54],[100,48],[130,42],[160,48],[190,54],[220,48],[250,60]].forEach(([x,y])=>s+=`<ellipse cx="${x}" cy="${y}" rx="6.5" ry="5" class="ink" transform="rotate(-20 ${x} ${y})"/><line x1="${x+6}" y1="${y}" x2="${x+6}" y2="${y-26}" class="inks" stroke-width="1.6"/>`);
+ s+=`<text x="150" y="108" text-anchor="middle" font-size="13" class="mut">una sola melodía</text>`;return{vb:'0 0 300 120',s}},
+polifonia:()=>{let s=`<rect width="300" height="120" class="parch"/>`;[24,34,44,54,64,74,84].forEach(y=>s+=`<line x1="14" y1="${y}" x2="286" y2="${y}" class="inks" stroke-width="1" opacity=".55"/>`);
+ const v1=[[40,34],[80,29],[120,24],[160,29],[200,34],[240,29]],v2=[[40,74],[80,79],[120,69],[160,74],[200,64],[240,74]];
+ v1.forEach(([x,y])=>s+=`<ellipse cx="${x}" cy="${y}" rx="6.5" ry="5" class="ink" transform="rotate(-20 ${x} ${y})"/>`);v2.forEach(([x,y])=>s+=`<ellipse cx="${x+10}" cy="${y}" rx="6.5" ry="5" class="v2" transform="rotate(-20 ${x+10} ${y})"/>`);
+ s+=`<text x="150" y="108" text-anchor="middle" font-size="13" class="mut">varias melodías a la vez</text>`;return{vb:'0 0 300 120',s}},
+acordes:()=>{let s=`<rect width="300" height="120" class="parch"/>`;[30,42,54,66,78].forEach(y=>s+=`<line x1="14" y1="${y}" x2="286" y2="${y}" class="inks" stroke-width="1" opacity=".55"/>`);
+ [[50,[78,66,54]],[100,[72,60,48]],[150,[66,54,42]],[200,[72,60,48]],[250,[78,66,54]]].forEach(([x,ys])=>{ys.forEach(y=>s+=`<ellipse cx="${x}" cy="${y}" rx="6.5" ry="5" class="ink" transform="rotate(-20 ${x} ${y})"/>`);s+=`<line x1="${x+6}" y1="${ys[0]}" x2="${x+6}" y2="${ys[2]-28}" class="inks" stroke-width="1.6"/>`});
+ s+=`<path d="M290 104 L10 104" class="inks" stroke-width="0"/><text x="150" y="108" text-anchor="middle" font-size="13" class="mut">notas apiladas: acordes</text>`;return{vb:'0 0 300 120',s}},
+laud:()=>({vb:'0 0 160 160',s:`<rect width="160" height="160" class="parch"/><path d="M68 44 L56 18 L72 14 L86 44 Z" fill="#8a5a2b" class="inks" stroke-width="2"/><rect x="70" y="40" width="20" height="46" fill="#8a5a2b" class="inks" stroke-width="2"/><path d="M80 152 C 38 152, 28 110, 50 86 C 62 72, 98 72, 110 86 C 132 110, 122 152, 80 152 Z" fill="#c99a5b" class="inks" stroke-width="2.5"/><circle cx="80" cy="108" r="11" fill="none" class="inks" stroke-width="2"/><circle cx="80" cy="108" r="5" fill="none" class="inks" stroke-width="1"/><rect x="70" y="134" width="20" height="4" class="ink"/>${[74,78,82,86].map(x=>`<line x1="${x}" y1="42" x2="${x}" y2="136" class="inks" stroke-width=".8"/>`).join('')}`}),
+arpa:()=>{let s=`<rect width="160" height="160" class="parch"/>`;for(let x=50;x<=118;x+=8){const yt=32+(x-40)*.11,yb=148-(x-44)*1.27;s+=`<line x1="${x}" y1="${yt}" x2="${x}" y2="${yb}" class="inks" stroke-width=".9"/>`}
+ s+=`<path d="M44 148 L130 38" stroke="#8a5a2b" stroke-width="9" stroke-linecap="round"/><path d="M40 150 L40 30 C 70 22, 110 36, 132 36" fill="none" stroke="#6b4422" stroke-width="6" stroke-linecap="round"/>`;return{vb:'0 0 160 160',s}},
+pandero:()=>{let s=`<rect width="160" height="160" class="parch"/><circle cx="80" cy="80" r="56" fill="#ead9b6" stroke="#8a5a2b" stroke-width="9"/>`;for(let i=0;i<8;i++){const a=i/8*Math.PI*2,x=80+56*Math.cos(a),y=80+56*Math.sin(a);s+=`<circle cx="${x}" cy="${y}" r="6" fill="#d9b23a" class="inks" stroke-width="1.2"/>`}return{vb:'0 0 160 160',s}},
+gaita:()=>({vb:'0 0 160 160',s:`<rect width="160" height="160" class="parch"/><path d="M66 98 L52 150" stroke="#6b4422" stroke-width="7" stroke-linecap="round"/>${[112,122,132].map(y=>`<circle cx="${66-(y-98)*.27}" cy="${y}" r="1.8" fill="#ead9b6"/>`).join('')}<path d="M98 70 L130 14" stroke="#6b4422" stroke-width="7" stroke-linecap="round"/><path d="M90 66 L108 22" stroke="#6b4422" stroke-width="5" stroke-linecap="round"/><path d="M60 70 L30 40" stroke="#6b4422" stroke-width="4" stroke-linecap="round"/><path d="M58 84 C 50 60, 72 48, 96 58 C 120 68, 116 98, 92 104 C 74 108, 62 100, 58 84 Z" fill="#9b2f1b" class="inks" stroke-width="2"/>`}),
+organo:()=>{let s=`<rect width="160" height="160" class="parch"/>`;const hs=[88,80,72,64,56,50,44,38];hs.forEach((h,i)=>{const x=34+i*12;s+=`<rect x="${x}" y="${118-h}" width="9" height="${h}" rx="2" fill="#c9b27a" class="inks" stroke-width="1.5"/><path d="M${x+2} ${118-h+10} L${x+7} ${118-h+10}" class="inks" stroke-width="2"/>`});
+ s+=`<rect x="26" y="116" width="108" height="16" rx="2" fill="#8a5a2b" class="inks" stroke-width="2"/>`;for(let i=0;i<9;i++)s+=`<rect x="${32+i*11}" y="134" width="9" height="12" fill="#f5efe0" class="inks" stroke-width="1.2"/>`;return{vb:'0 0 160 160',s}},
+violin:()=>({vb:'0 0 160 170',s:`<rect width="160" height="170" class="parch"/><rect x="76" y="10" width="8" height="52" fill="#3b2a1a"/><circle cx="80" cy="10" r="6" fill="#8a5a2b" class="inks" stroke-width="1.5"/><path d="M80 52 C 58 52, 52 68, 58 82 C 61 90, 61 94, 55 100 C 46 114, 50 150, 80 152 C 110 150,114 114,105 100 C 99 94, 99 90, 102 82 C 108 68, 102 52, 80 52 Z" fill="#b5652a" class="inks" stroke-width="2.5"/><path d="M66 104 c -4 6, 4 14, 0 20 M94 104 c 4 6, -4 14, 0 20" fill="none" class="inks" stroke-width="2"/><rect x="70" y="118" width="20" height="3" class="ink"/>${[77,79,81,83].map(x=>`<line x1="${x}" y1="14" x2="${x}" y2="140" class="inks" stroke-width=".7"/>`).join('')}<rect x="74" y="138" width="12" height="10" rx="2" class="ink"/>`}),
+clave:()=>{let s=`<rect width="260" height="140" class="parch"/><path d="M24 34 L24 112 L70 112 C 150 112, 222 100, 236 82 L 236 70 C 186 44, 110 34, 24 34 Z" fill="#7b3f22" class="inks" stroke-width="2.5"/><path d="M48 44 L48 102 L 74 102 C 146 102, 210 92, 224 78 C 180 54, 110 44, 48 44 Z" fill="#d8b56c"/>`;
+ for(let y=50;y<=98;y+=6)s+=`<line x1="52" y1="${y}" x2="${120+ (98-y)*1.6}" y2="${y}" stroke="#6b4422" stroke-width=".8"/>`;
+ for(let i=0;i<12;i++)s+=`<rect x="26" y="${38+i*6}" width="20" height="5" fill="${i%3===1?'#222':'#f5efe0'}" stroke="#222" stroke-width=".6"/>`;return{vb:'0 0 260 140',s}},
+guitarra:()=>({vb:'0 0 160 180',s:`<rect width="160" height="180" class="parch"/><rect x="74" y="12" width="12" height="70" fill="#5a3a20"/>${[22,30,38,46,54,62,70].map(y=>`<line x1="74" y1="${y}" x2="86" y2="${y}" stroke="#d8c08a" stroke-width="1"/>`).join('')}<path d="M70 4 L90 4 L88 14 L72 14 Z" fill="#8a5a2b" class="inks" stroke-width="1.5"/><path d="M80 76 C 56 76, 50 92, 56 104 C 60 112, 60 116, 52 124 C 40 140, 48 172, 80 174 C 112 172,120 140,108 124 C 100 116, 100 112, 104 104 C 110 92, 104 76, 80 76 Z" fill="#d9a85e" class="inks" stroke-width="2.5"/><circle cx="80" cy="120" r="12" fill="#3b2a1a"/><circle cx="80" cy="120" r="15" fill="none" class="inks" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="68" y="150" width="24" height="4" class="ink"/>${[76,78,80,82,84].map(x=>`<line x1="${x}" y1="12" x2="${x}" y2="152" stroke="#2a1a0e" stroke-width=".7"/>`).join('')}`}),
+vieira:()=>{let s=`<rect width="200" height="160" class="parch"/>`;
+ s+=`<path d="M100 18 l6 14 l15 -4 l-9 12 l12 9 l-15 1 l1 15 l-10 -11 l-10 11 l1 -15 l-15 -1 l12 -9 l-9 -12 l15 4 Z" fill="#d4a017" stroke="#8a6d10" stroke-width="1"/>`;
+ s+=`<path d="M100 146 L 44 82 C 52 58, 148 58, 156 82 Z" fill="#ecd9b0" stroke="#8a6d3b" stroke-width="2.5" stroke-linejoin="round"/>`;
+ for(let i=1;i<9;i++){const a=Math.PI*(1.12+i*0.084),x=100+70*Math.cos(a)*-1,y=146-78*Math.sin(-a+Math.PI*2)*-1;const tx=44+i*12.5,ty=74-Math.sin(i/9*Math.PI)*12;s+=`<line x1="100" y1="146" x2="${tx}" y2="${ty}" stroke="#8a6d3b" stroke-width="1.6"/>`}
+ s+=`<path d="M86 140 L 78 152 L 122 152 L 114 140 Z" fill="#ecd9b0" stroke="#8a6d3b" stroke-width="2"/>`;return{vb:'0 0 200 160',s}},
+codice:()=>{let s=`<rect width="280" height="170" fill="#c9b48a"/><path d="M140 26 C 110 16, 50 16, 22 24 L 22 156 C 50 148, 110 148, 140 158 Z" fill="#f4ead2" stroke="#8a6d3b" stroke-width="2"/><path d="M140 26 C 170 16, 230 16, 258 24 L 258 156 C 230 148, 170 148, 140 158 Z" fill="#f4ead2" stroke="#8a6d3b" stroke-width="2"/>`;
+ s+=`<rect x="34" y="34" width="30" height="30" fill="#2b4a8c"/><text x="49" y="58" text-anchor="middle" font-size="24" font-weight="700" fill="#d4a017" font-family="Georgia,serif">S</text>`;
+ const staff=(x,y,w)=>{let o='';for(let k=0;k<4;k++)o+=`<line x1="${x}" y1="${y+k*5}" x2="${x+w}" y2="${y+k*5}" stroke="#b3261e" stroke-width=".9"/>`;for(let n=0;n<w/14;n++)o+=`<rect x="${x+6+n*14}" y="${y+((n*7)%4)*5-3}" width="5" height="5" fill="#222"/>`;return o};
+ s+=staff(70,38,60)+staff(34,76,96)+staff(34,112,96)+staff(150,38,96)+staff(150,76,96);
+ s+=`<rect x="152" y="108" width="92" height="38" fill="#e6c98c" stroke="#8a6d3b" stroke-width="1.5"/>`+[166,184,202,220].map((x,i)=>`<g fill="${['#9b2f1b','#2b4a8c','#3c6b35','#9b2f1b'][i]}"><circle cx="${x+4}" cy="118" r="4"/><rect x="${x}" y="122" width="8" height="18" rx="2"/></g>`).join('');
+ for(let y=60;y<=66;y+=6)s+=`<line x1="70" y1="${y}" x2="130" y2="${y}" stroke="#7a6648" stroke-width="1.5" stroke-dasharray="6 3"/>`;return{vb:'0 0 280 170',s}},
+estaciones:()=>{let s=`<rect width="320" height="110" class="parch"/>`;const cx=[40,120,200,280];
+ s+=`<g transform="translate(40 50)">${Array.from({length:6},(_,i)=>`<ellipse cx="0" cy="-14" rx="7" ry="12" fill="#e58fb4" transform="rotate(${i*60})"/>`).join('')}<circle r="6" fill="#d9b23a"/></g>`;
+ s+=`<g transform="translate(120 50)"><circle r="14" fill="#e8a317"/>${Array.from({length:8},(_,i)=>`<line x1="0" y1="-19" x2="0" y2="-27" stroke="#e8a317" stroke-width="3" stroke-linecap="round" transform="rotate(${i*45})"/>`).join('')}</g>`;
+ s+=`<g transform="translate(200 50) rotate(-30)"><path d="M0 -26 C 18 -12, 18 12, 0 26 C -18 12, -18 -12, 0 -26 Z" fill="#c2561c"/><line x1="0" y1="-24" x2="0" y2="30" stroke="#7a3410" stroke-width="2"/></g>`;
+ s+=`<g transform="translate(280 50)" stroke="#5aa0d6" stroke-width="3" stroke-linecap="round">${[0,60,120].map(r=>`<g transform="rotate(${r})"><line x1="0" y1="-24" x2="0" y2="24"/><path d="M-6 -18 L0 -12 L6 -18 M-6 18 L0 12 L6 18" fill="none"/></g>`).join('')}</g>`;
+ ['primavera','verano','otoño','invierno'].forEach((t,i)=>s+=`<text x="${cx[i]}" y="98" text-anchor="middle" font-size="12" class="mut">${t}</text>`);return{vb:'0 0 320 110',s}},
+cronologia:()=>{const X=y=>80+(y-1630)*1.6;let s=`<rect width="320" height="210" class="parch"/>`;
+ s+=`<rect x="${X(1630)}" y="20" width="${X(1750)-X(1630)}" height="168" fill="var(--voice2)" opacity=".07"/>`;
+ [1650,1700,1750].forEach(y=>s+=`<line x1="${X(y)}" y1="20" x2="${X(y)}" y2="188" class="inks" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/><text x="${X(y)}" y="202" text-anchor="middle" font-size="11" class="mut">${y}</text>`);
+ const P=[['Gaspar Sanz',1640,1710,'ES'],['Pachelbel',1653,1706,'AL'],['Albinoni',1671,1751,'IT'],['Vivaldi',1678,1741,'IT'],['Haendel',1685,1759,'IN'],['Bach',1685,1750,'AL']];
+ const col={IT:'#3c7a4a',AL:'#2b4a8c',IN:'#9b2f1b',ES:'#c27a12'};
+ P.forEach((p,i)=>{const y=34+i*26;s+=`<rect x="${X(p[1])}" y="${y}" width="${X(p[2])-X(p[1])}" height="12" rx="6" fill="${col[p[3]]}"/><text x="${X(p[1])-4}" y="${y+10}" text-anchor="end" font-size="11" font-weight="700" class="ink">${p[0]}</text>`});
+ s+=`<text x="${X(1745)}" y="16" text-anchor="end" font-size="11" class="mut">1750: muere Bach, fin del Barroco</text>`;
+ return{vb:'0 0 320 210',s}},
+};
+
+/* =================== PIEZAS PARA LAS ESCENAS =================== */
+const INK='#1b2a4a',MUT='#56637d',MAG='#c0127e',BLUE='#2b4a8c',GREEN='#3c7a4a',RED='#9b2f1b',ORANGE='#c27a12',SKY='#dbe7ee';
+const PB=`<rect width="400" height="250" fill="#f6efe0"/>`;
+const land=(inner='')=>`<rect width="400" height="250" fill="${SKY}"/>${inner}<path d="M0 212 C 120 204, 250 220, 400 208 L400 250 L0 250 Z" fill="#b5c28c"/><path d="M0 232 C 160 224, 280 238, 400 228 L400 250 L0 250 Z" fill="#9fae76"/>`;
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||14}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" fill="${o.c||INK}"${o.cls?` class="${o.cls}"`:''}${o.it?' font-style="italic"':''}${o.ff?` font-family="${o.ff}"`:''}>${s}</text>`;
+const tw=(s,size)=>Math.round([...s].length*size*.56+22);
+const chip=(cls,x,y,s,c=MAG,size=13)=>{const w=tw(s,size),h=size+13;return`<g class="${cls}"><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="#fff" stroke="${c}" stroke-width="2"/>${T(x,y+size*.36,s,{size,c,w:700})}</g>`};
+const nest=(key,x,y,w)=>{const d=ILL[key]();d.s=d.s.replace(/^\s*<rect width="\d+" height="\d+"[^>]*\/>/,'');const p=d.vb.split(' ').map(Number);return`<svg x="${x}" y="${y}" width="${w}" height="${w*p[3]/p[2]}" viewBox="${d.vb}">${d.s}</svg>`};
+const stone=(x,y,w,h,f=STONE)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="${f}" stroke="${STONE_D}" stroke-width="2"/>`;
+const clip=(id,inner,h=227)=>`<defs><clipPath id="${id}"><rect width="400" height="${h}"/></clipPath></defs><g clip-path="url(#${id})">${inner}</g>`;
+const note=(x,y,c=INK,stem=true)=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="5" transform="rotate(-20 ${x} ${y})" fill="${c}"/>${stem?`<line x1="${x+6.5}" y1="${y-1}" x2="${x+6.5}" y2="${y-30}" stroke="${c}" stroke-width="2"/>`:''}`;
+const staff=(x1,x2,y,gap=8,c='#8a7a5c')=>[0,1,2,3,4].map(k=>`<line x1="${x1}" y1="${y+k*gap}" x2="${x2}" y2="${y+k*gap}" stroke="${c}" stroke-width="1.2"/>`).join('');
+const balance=(cls,l,r,cl,cr)=>`<g><rect x="196" y="120" width="8" height="104" fill="#8a6d3b"/><path d="M168 230 L232 230 L222 218 L178 218 Z" fill="#8a6d3b"/><circle cx="200" cy="120" r="7" fill="#6e5332"/>
+ <g class="${cls}"><rect x="96" y="116" width="208" height="8" rx="4" fill="#6e5332"/>
+  ${[[110,l,cl],[290,r,cr]].map(([x,t,c])=>`<line x1="${x}" y1="122" x2="${x-26}" y2="168" stroke="#6e5332" stroke-width="2"/><line x1="${x}" y1="122" x2="${x+26}" y2="168" stroke="#6e5332" stroke-width="2"/><path d="M${x-36} 168 L${x+36} 168 C ${x+30} 186, ${x-30} 186, ${x-36} 168 Z" fill="#d9b884" stroke="#6e5332" stroke-width="2"/>${chip('',x,152,t,c,12)}`).join('')}
+ </g></g>`;
+
+/* =================== ESCENAS ===================
+   Cada escena: svg() dibuja el estado final; anim(tl,E) monta la línea de tiempo.
+   E() cierra cada paso: tiene que llamarse tantas veces como textos hay en steps. */
+const SCENES=[
+/* ---------- ARTE ---------- */
+{id:'mobiliar',b:'Arte',t:'El arte mobiliar',
+ steps:[
+  'El <b>arte mobiliar</b> está formado por <b>objetos que se pueden mover</b> de un sitio a otro.',
+  'Se hacían de <b>piedra, hueso o marfil</b>, decorados con relieves y grabados, y a veces también pintados.',
+  'Destacan los <b>bastones de mando</b> (quizá instrumentos de caza o símbolos de autoridad), armas como los propulsores, <b>colgantes</b> y <b>plaquetas</b> con animales recortados.',
+  'Las <b>venus paleolíticas</b> son estatuillas de mujer con los atributos femeninos muy marcados. Se relacionan con el <b>culto a la fertilidad y a la maternidad</b>.'],
+ svg(){let s=`<rect width="400" height="250" fill="#eadfc8"/><path d="M0 196 C 110 184, 230 210, 400 192 L400 250 L0 250 Z" fill="#ddceaf"/>`;
+  s+=`<g class="obj ven">${nest('venus',23,40,64)}</g>`;
+  s+=`<g class="obj o2">${nest('baston',105,62,92)}</g>`;
+  s+=`<g class="obj o2"><path d="M226 42 Q250 74 274 42" fill="none" stroke="#7a6648" stroke-width="2.5"/><path d="M250 68 C 234 90, 236 120, 250 126 C 264 120, 266 90, 250 68 Z" fill="#efe6d2" stroke="#7a6648" stroke-width="2.5"/><circle cx="250" cy="80" r="3.5" fill="#eadfc8" stroke="#7a6648" stroke-width="1.5"/><path d="M243 98 l7 6 l7 -6 M243 108 l7 6 l7 -6" fill="none" stroke="#7a6648" stroke-width="1.5"/></g>`;
+  s+=`<g class="obj o2"><path d="M312 124 L316 94 C 320 72, 338 58, 358 60 C 370 62, 378 72, 380 84 C 382 94, 376 98, 370 96 L 356 92 C 350 102, 346 114, 346 124 Z" fill="#efe6d2" stroke="#7a6648" stroke-width="2.5" stroke-linejoin="round"/><circle cx="364" cy="74" r="2.5" fill="#7a6648"/><path d="M328 70 l-7 -9 M334 65 l-5 -10 M341 61 l-3 -10" stroke="#7a6648" stroke-width="2" stroke-linecap="round"/></g>`;
+  s+=[[55,'venus'],[151,'bastón de mando'],[250,'colgante'],[345,'plaqueta']].map(([x,t])=>T(x,152,t,{size:13,w:700,cls:'lab'+(x===55?' lv':'')})).join('')+T(345,168,'(animal recortado)',{size:11,c:MUT,cls:'lab'});
+  s+=chip('mat',120,194,'piedra','#6f6a61')+chip('mat',200,194,'hueso','#8a6d3b')+chip('mat',280,194,'marfil','#a08a5c');
+  s+=chip('mat2',200,228,'con relieves, grabados y a veces pintura',INK,12);
+  s+=chip('fert',200,226,'culto a la fertilidad y la maternidad',MAG,13);
+  return s},
+ anim(tl,E){
+  tl.from('.obj',{scale:0,opacity:0,transformOrigin:'50% 50%',stagger:.22,duration:.55,ease:'back.out(2)'});
+  tl.to('.obj',{y:-14,duration:.3,yoyo:true,repeat:1,stagger:.12,ease:'sine.inOut'});E();
+  tl.from('.mat',{y:18,opacity:0,stagger:.25,duration:.45,ease:'back.out(2)'});tl.from('.mat2',{opacity:0,scale:.7,transformOrigin:'50% 50%',duration:.45});E();
+  tl.from('.lab',{opacity:0,y:8,stagger:.3,duration:.4});E();
+  tl.to(['.mat','.mat2','.lab'],{opacity:0,duration:.4});tl.to('.o2',{opacity:.18,duration:.4},'<');
+  tl.to('.ven',{x:145,y:16,scale:1.55,transformOrigin:'50% 50%',duration:.9,ease:'power2.inOut'});
+  tl.from('.fert',{opacity:0,y:12,duration:.45});E()},
+ qs:[{q:'¿Qué es el arte mobiliar?',ok:'Objetos que se pueden llevar de un sitio a otro',no:['Pinturas en las paredes de las cuevas','Monumentos hechos con piedras enormes','Muebles de madera tallada'],exp:'Mobiliar viene de «móvil»: son objetos que se pueden mover.'},
+     {q:'¿Con qué se relacionan las venus paleolíticas?',ok:'Con el culto a la fertilidad y a la maternidad',no:['Con la caza de bisontes','Con el culto al sol','Con los enterramientos colectivos'],exp:'Eran funciones esenciales para que el grupo sobreviviera.'}]},
+
+{id:'megalito',b:'Arte',t:'¿Qué es un megalito?',
+ steps:[
+  '<b>Megalito</b> viene del griego: <b>megas</b> significa «grande» y <b>lithos</b>, «piedra».',
+  'Un megalito es, por tanto, una <b>piedra grande</b>. Los monumentos megalíticos se construyen con bloques de piedra enormes.',
+  'La arquitectura <b>nace en el Neolítico</b>, cuando el ser humano se hace <b>sedentario</b> y deja de ir de un lado a otro. Los megalitos se construyen hasta la <b>Edad del Bronce</b>.',
+  'Su función era <b>religiosa y funeraria</b>.'],
+ svg(){let s=land();
+  s+=`<g class="w">${T(110,100,'megas',{size:36,w:800,c:MAG,it:true,ff:'Georgia,serif'})}${T(110,128,'= grande',{size:16,c:MUT})}</g><g class="w">${T(200,104,'+',{size:30,w:700})}</g><g class="w">${T(290,100,'lithos',{size:36,w:800,c:MAG,it:true,ff:'Georgia,serif'})}${T(290,128,'= piedra',{size:16,c:MUT})}</g>`;
+  s+=T(200,46,'megalito = «piedra grande»',{size:21,w:800,c:MAG,cls:'res'});
+  s+=`<g class="tline"><line x1="40" y1="66" x2="360" y2="66" stroke="${MUT}" stroke-width="2"/><circle cx="64" cy="66" r="6" fill="${INK}"/><circle cx="336" cy="66" r="6" fill="${INK}"/>${T(64,90,'Neolítico',{size:14,w:700})}${T(336,90,'Edad del Bronce',{size:14,w:700})}</g>`;
+  s+=`<line class="prog" x1="64" y1="66" x2="336" y2="66" stroke="${MAG}" stroke-width="5" stroke-linecap="round"/>`;
+  s+=`<g class="hut"><path d="M40 226 L40 198 L76 198 L76 226 Z" fill="#b08455" stroke="#6e5332" stroke-width="2"/><path d="M32 200 L58 172 L84 200 Z" fill="#c9a24e" stroke="#6e5332" stroke-width="2"/><rect x="53" y="208" width="10" height="18" fill="#4a3826"/></g>`;
+  s+=`<g class="gb"><path d="M146 226 C 134 196, 146 160, 180 150 C 216 140, 252 156, 258 188 C 262 208, 258 220, 254 226 Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2.5"/><path d="M160 200 C 158 180, 170 164, 190 158" fill="none" stroke="${STONE_L}" stroke-width="4" stroke-linecap="round"/></g>`;
+  s+=`<g class="pp">${person(286,203)}</g>`;
+  s+=chip('fn',140,124,'religiosa')+chip('fn',262,124,'funeraria');
+  return s},
+ anim(tl,E){
+  tl.from('.w',{opacity:0,y:14,stagger:.35,duration:.5});E();
+  tl.to('.w',{opacity:0,duration:.35});tl.from('.res',{opacity:0,y:-8,duration:.4});
+  tl.from('.gb',{y:-240,duration:1,ease:'bounce.out'});tl.from('.pp',{opacity:0,duration:.3});E();
+  tl.to('.res',{opacity:0,duration:.3});tl.from('.tline',{opacity:0,duration:.4});
+  tl.from('.hut',{scale:0,transformOrigin:'50% 100%',duration:.5,ease:'back.out(2)'});
+  tl.from('.prog',{scaleX:0,transformOrigin:'0% 50%',duration:1.4,ease:'power1.inOut'});E();
+  tl.from('.fn',{scale:0,transformOrigin:'50% 50%',stagger:.3,duration:.45,ease:'back.out(2)'});E()},
+ qs:[{q:'¿Qué significa «megalito»?',ok:'Piedra grande',no:['Piedra larga','Corona de piedras','Tablero de piedra'],exp:'Megas: grande. Lithos: piedra.'},
+     {q:'¿Cuándo nace la arquitectura?',ok:'En el Neolítico, cuando el ser humano se hace sedentario',no:['En el Paleolítico, con las pinturas de las cuevas','En la Edad Media','En el Barroco'],exp:'Al quedarse a vivir en un sitio fijo empieza a construir. Los megalitos llegan hasta la Edad del Bronce.'}]},
+
+{id:'menhir',b:'Arte',t:'El menhir y el alineamiento',
+ steps:[
+  '<b>Menhir</b> significa «<b>piedra larga</b>»: es una sola piedra clavada en vertical en el suelo. Es el <b>elemento fundamental</b> del megalitismo.',
+  'No se sabe seguro para qué servía. Quizá para <b>fijar las almas de los muertos</b>, para <b>rendir culto al sol</b> o para <b>marcar el territorio</b>.',
+  'Si se colocan varios menhires <b>en hilera</b>, forman un <b>alineamiento</b>.'],
+ svg(){let s=land(`<circle class="sun" cx="92" cy="92" r="24" fill="#f2b53a"/>`);
+  s+=clip('cg3',`<g class="men"><path d="M162 226 C 156 170, 160 110, 176 62 C 188 54, 202 66, 206 98 C 212 150, 210 200, 208 226 Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2.5"/><path d="M176 64 C 168 110, 166 170, 170 224 L 162 226 C 156 170, 160 110, 176 62 Z" fill="${STONE_D}" opacity=".6"/></g>`);
+  s+=`<g class="per">${person(244,203)}</g>`;
+  s+=chip('f',300,40,'¿fijar las almas?',INK,12)+chip('f',300,74,'¿culto al sol?',ORANGE,12)+chip('f',300,108,'¿marcar el territorio?',GREEN,12);
+  for(let i=6;i>=0;i--){const t=i/6,x=40+t*320,y=228-t*44,h=92*(1-t*.5),w=19*(1-t*.45);
+   s+=`<path class="al" d="M${x-w} ${y} C ${x-w-1} ${y-h*.6}, ${x-w*.4} ${y-h}, ${x} ${y-h} C ${x+w*.5} ${y-h}, ${x+w+1} ${y-h*.5}, ${x+w} ${y} Z" fill="${i%2?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="2"/>`}
+  s+=T(200,44,'alineamiento',{size:24,w:800,c:MAG,cls:'allab'});
+  return s},
+ anim(tl,E){
+  tl.from('.men',{y:180,duration:1.3,ease:'power2.out'});tl.from('.per',{opacity:0,duration:.3});E();
+  tl.from('.sun',{y:170,duration:1.4,ease:'power1.out'});tl.from('.f',{opacity:0,x:24,stagger:.35,duration:.4},'-=.7');E();
+  tl.to(['.men','.per','.f','.sun'],{opacity:0,duration:.4});
+  tl.from('.al',{y:30,opacity:0,stagger:{each:.18,from:'end'},duration:.45,ease:'back.out(1.6)'});tl.from('.allab',{opacity:0,y:-8,duration:.4});E()},
+ qs:[{q:'¿Qué significa «menhir»?',ok:'Piedra larga',no:['Piedra grande','Corona de piedras','Tablero de piedra'],exp:'Es una piedra larga clavada en vertical.'},
+     {q:'Varios menhires colocados en hilera forman…',ok:'Un alineamiento',no:['Un crómlech','Un dolmen','Una taula'],exp:'En fila: alineamiento. En círculo sería un crómlech.'}]},
+
+{id:'cromlech',b:'Arte',t:'El crómlech',
+ steps:[
+  'Si los menhires se colocan <b>en círculo</b>, forman un <b>crómlech</b>. Su nombre significa «<b>corona de piedras</b>».',
+  'Quizá se usaba como <b>santuario</b> para algún <b>culto agrario o solar</b>.',
+  'El crómlech más conocido es <b>Stonehenge</b>, en <b>Gran Bretaña</b>. Algunas de sus piedras tienen otra encima, apoyada como un dintel.'],
+ svg(){let s=land(`<circle class="sun" cx="200" cy="72" r="22" fill="#f2b53a"/>`);
+  const n=10,st=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2+Math.PI/n,x=200+150*Math.cos(a),y=186+36*Math.sin(a),k=.72+.28*(Math.sin(a)+1)/2;st.push({x,y,k,i})}
+  const byx=[...st].sort((p,q)=>p.x-q.x);byx.forEach((p,r)=>{p.lx=28+r*38;p.ly=236});
+  [...st].sort((p,q)=>p.y-q.y).forEach(p=>{const h=56*p.k,w=11*p.k;s+=`<rect class="st" data-dx="${(p.lx-p.x).toFixed(1)}" data-dy="${(p.ly-p.y).toFixed(1)}" x="${(p.x-w).toFixed(1)}" y="${(p.y-h).toFixed(1)}" width="${(w*2).toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${p.i%2?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="1.6"/>`});
+  const front=st.filter(p=>p.y>186).sort((p,q)=>p.x-q.x);
+  for(let i=0;i+1<front.length;i+=2){const p=front[i],q=front[i+1];const top=Math.min(p.y-56*p.k,q.y-56*q.k);s+=`<rect class="lin" x="${(p.x-13).toFixed(1)}" y="${(top-9).toFixed(1)}" width="${(q.x-p.x+26).toFixed(1)}" height="10" rx="3" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="1.6"/>`}
+  s+=T(200,36,'«corona de piedras»',{size:20,w:800,c:MAG,cls:'crown'});
+  s+=chip('ch2',200,30,'¿santuario agrario o solar?',ORANGE,13);
+  s+=T(200,36,'Stonehenge (Gran Bretaña)',{size:20,w:800,c:INK,cls:'sth'});
+  return s},
+ anim(tl,E){
+  tl.from('.st',{opacity:0,duration:.4,stagger:.04});
+  tl.from('.st',{x:(i,el)=>+el.dataset.dx,y:(i,el)=>+el.dataset.dy,duration:1.5,ease:'power2.inOut',stagger:.05});
+  tl.from('.crown',{opacity:0,y:-8,duration:.4});E();
+  tl.to('.crown',{opacity:0,duration:.3});tl.from('.sun',{y:180,duration:1.4,ease:'power1.out'});tl.from('.ch2',{opacity:0,scale:.6,transformOrigin:'50% 50%',duration:.4});E();
+  tl.to('.ch2',{opacity:0,duration:.3});tl.from('.lin',{y:-90,opacity:0,stagger:.25,duration:.7,ease:'bounce.out'});tl.from('.sth',{opacity:0,y:-8,duration:.4});E()},
+ qs:[{q:'¿Cómo están colocados los menhires de un crómlech?',ok:'En círculo',no:['En fila','Uno encima de otro','En forma de barco'],exp:'Crómlech: «corona de piedras», menhires en círculo.'},
+     {q:'¿Cuál es el crómlech más conocido?',ok:'Stonehenge (Gran Bretaña)',no:['Menga (Antequera)','El Romeral (Antequera)','Willendorf (Austria)'],exp:'Stonehenge, en Gran Bretaña. Menga y El Romeral son dólmenes.'}]},
+
+{id:'dolmen',b:'Arte',t:'El dolmen',
+ steps:[
+  'Para hacer un <b>dolmen</b>, primero se clavan en el suelo <b>grandes piedras verticales</b>…',
+  '…y encima se colocan otras <b>horizontales</b> que hacen de techo. Dolmen significa «<b>tablero de piedra</b>».',
+  'Se usaba como <b>enterramiento colectivo</b>: allí se enterraba a muchas personas.',
+  'Algunos tienen un <b>pasillo</b> que lleva a una <b>cámara</b>. Se llaman <b>dolmen de corredor</b> o <b>de galería</b>.',
+  'En <b>Antequera (Málaga)</b> están el dolmen de <b>El Romeral</b>, de corredor (pasillo y cámara sepulcral), y el de <b>Menga</b>, de galería (pasillo adintelado).'],
+ svg(){let s=`<g class="elev">`+land();
+  s+=clip('cg5',`<g class="up">${stone(180,130,34,98,STONE_D)}</g><g class="up">${stone(110,122,38,106)}</g><g class="up">${stone(252,120,40,108)}</g>`);
+  s+=`<rect class="inside" x="148" y="134" width="104" height="92" fill="#f2b53a" opacity=".45"/>`;
+  s+=`<path class="slab" d="M80 124 C 92 100, 190 92, 318 104 C 330 110, 326 124, 312 128 C 230 132, 150 134, 88 134 C 78 134, 74 130, 80 124 Z" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="2.5"/>`;
+  s+=`<g class="per">${person(346,203)}</g>`;
+  s+=chip('insl',200,60,'enterramiento colectivo',MAG,14);
+  s+=`</g><g class="plan"><rect width="400" height="250" fill="#f6efe0"/>`;
+  for(let x=40;x<=196;x+=17){s+=`<rect class="ps" x="${x-6}" y="${92}" width="12" height="12" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="1.2"/><rect class="ps" x="${x-6}" y="${136}" width="12" height="12" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="1.2"/>`}
+  for(let i=0;i<13;i++){const a=-Math.PI*.8+i*(Math.PI*1.6/12);const x=262+50*Math.cos(a),y=120+50*Math.sin(a);s+=`<rect class="ps" x="${(x-6).toFixed(1)}" y="${(y-6).toFixed(1)}" width="12" height="12" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="1.2"/>`}
+  s+=T(118,124,'pasillo',{size:14,w:700,cls:'pl'})+T(264,125,'cámara',{size:14,w:700,cls:'pl'})+T(14,24,'Visto desde arriba',{size:13,a:'start',c:MUT,cls:'pl vista'});
+  s+=T(200,26,'Antequera (Málaga)',{size:16,w:800,cls:'cardh'});
+  [[15,'El Romeral','de corredor:','pasillo y cámara'],[205,'Menga','de galería:','pasillo adintelado']].forEach(([x,n,a,b])=>{s+=`<g class="card"><rect x="${x}" y="182" width="180" height="60" rx="10" fill="#fff" stroke="${MAG}" stroke-width="2"/>${T(x+90,203,n,{size:15,w:800,c:MAG})}${T(x+90,220,a,{size:12,w:700})}${T(x+90,235,b,{size:12})}</g>`});
+  return s+`</g>`},
+ anim(tl,E){
+  gsap.set('.plan',{opacity:0});
+  tl.from('.up',{y:110,duration:1,stagger:.25,ease:'power2.out'});E();
+  tl.from('.slab',{y:-150,duration:1,ease:'bounce.out'});tl.from('.per',{opacity:0,duration:.3});E();
+  tl.from('.inside',{opacity:0,duration:.6});tl.from('.insl',{opacity:0,y:-8,duration:.4});E();
+  tl.to('.elev',{opacity:0,duration:.5});tl.to('.plan',{opacity:1,duration:.01},'<');tl.from('.plan>rect:first-child',{opacity:0,duration:.4},'<');
+  tl.from('.ps',{scale:0,transformOrigin:'50% 50%',stagger:.035,duration:.25});tl.from('.pl',{opacity:0,stagger:.2,duration:.3});E();
+  tl.to('.vista',{opacity:0,duration:.3});tl.from('.cardh',{opacity:0,duration:.3});tl.from('.card',{y:40,opacity:0,stagger:.3,duration:.5});E()},
+ qs:[{q:'¿Para qué se usaba el dolmen?',ok:'Como enterramiento colectivo',no:['Como vivienda','Como torre de vigilancia','Como santuario solar'],exp:'Allí se enterraba a muchas personas.'},
+     {q:'Según tus apuntes, el dolmen de Menga (Antequera) es…',ok:'De galería, con un pasillo adintelado',no:['De corredor, con pasillo y cámara sepulcral','Un crómlech','Un talayot'],exp:'Menga: de galería. El Romeral: de corredor, con pasillo y cámara.'}]},
+
+{id:'talayot',b:'Arte',t:'Baleares: el talayot',
+ steps:[
+  'En las <b>Islas Baleares</b>, durante la <b>Edad del Bronce</b>, se levantó una arquitectura <b>ciclópea</b>: hecha con bloques de piedra enormes.',
+  'El <b>talayot</b> es una torre de piedra. Podía ser <b>circular, cuadrado o escalonado</b>.',
+  'Al principio se pensó que solo servía para <b>defenderse</b>. Hoy se cree que también pudo tener un <b>uso ritual</b> y servir de <b>almacén</b> para guardar y repartir la carne.'],
+ svg(){let s=land();
+  s+=`<g class="tit">${T(200,44,'Islas Baleares',{size:22,w:800})}${T(200,68,'Edad del Bronce',{size:15,c:MUT})}</g>`;
+  s+=`<g class="cyc">`+[[70,176,62,52],[134,170,70,58],[206,174,58,54],[266,168,66,60],[100,128,64,44],[166,124,70,46],[238,126,62,44]].map(([x,y,w,h])=>`<g class="cb">${stone(x,y,w,h)}</g>`).join('')+`</g>`;
+  const top=82,bot=228,rows=8,rh=(bot-top)/rows,cx=190;
+  for(let r=0;r<rows;r++){const y1=bot-(r+1)*rh,half=118-48*(r/rows),n=Math.max(3,Math.round(half*2/34)),bw=half*2/n,xs=[];
+   if(r%2){xs.push([cx-half,bw/2]);for(let k=0;k<n-1;k++)xs.push([cx-half+bw/2+k*bw,bw]);xs.push([cx+half-bw/2,bw/2])}else for(let k=0;k<n;k++)xs.push([cx-half+k*bw,bw]);
+   s+=`<g class="row">`+xs.map(([x,w],k)=>`<rect x="${x.toFixed(1)}" y="${y1.toFixed(1)}" width="${w.toFixed(1)}" height="${rh.toFixed(1)}" fill="${(k+r)%3?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="1.5"/>`).join('')+`</g>`}
+  s+=`<path class="door" d="M180 228 L180 204 L200 204 L200 228 Z" fill="#3b3833"/>`;
+  s+=`<g class="per6">${person(338,203)}</g>`;
+  s+=chip('fn',62,104,'defensa',RED)+chip('fn',344,104,'¿ritual?',ORANGE)+chip('fn',200,48,'almacén de carne',GREEN);
+  return s},
+ anim(tl,E){
+  tl.from('.tit',{opacity:0,y:-10,duration:.4});tl.from('.cb',{y:-240,stagger:.18,duration:.65,ease:'bounce.out'});tl.from('.per6',{opacity:0,duration:.3});E();
+  tl.to(['.cyc','.tit'],{opacity:0,duration:.4});tl.from('.row',{y:-40,opacity:0,stagger:.2,duration:.35,ease:'power2.out'});tl.from('.door',{opacity:0,duration:.3});E();
+  tl.from('.fn',{scale:0,transformOrigin:'50% 50%',stagger:.3,duration:.45,ease:'back.out(2)'});E()},
+ qs:[{q:'¿Cuándo se levantan los talayots de Baleares?',ok:'En la Edad del Bronce',no:['En el Paleolítico','En el Neolítico antiguo','En la Edad Media'],exp:'La arquitectura megalítica balear es de la Edad del Bronce.'},
+     {q:'¿Qué funciones pudo tener un talayot?',ok:'Defensa, quizá ritual y almacén de carne',no:['Solo enterramiento','Era una iglesia','Era la casa del rey'],exp:'Primero se pensó solo en la defensa; hoy se le atribuyen también las otras dos.'}]},
+
+{id:'naveta',b:'Arte',t:'Baleares: la naveta',
+ steps:[
+  'Fíjate bien en la forma de este <b>barco</b>…',
+  '…y ahora dale la vuelta. La <b>naveta</b> es una construcción alargada con forma de <b>barco invertido</b>.',
+  'Sirvió como <b>vivienda</b> y como <b>enterramiento colectivo</b>. Las funerarias tenían un <b>pasillo</b> que terminaba en una o dos <b>cámaras</b>, una encima de otra.'],
+ svg(){let s=land();
+  s+=`<g class="sea"><rect x="0" y="196" width="400" height="54" fill="#6fa7c9"/><path d="M0 200 Q 25 192 50 200 T 100 200 T 150 200 T 200 200 T 250 200 T 300 200 T 350 200 T 400 200" fill="none" stroke="#e8f3f8" stroke-width="2.5"/></g>`;
+  const NAV='M60 228 L340 228 C 332 196, 300 168, 262 163 L138 163 C 100 168, 68 196, 60 228 Z';
+  s+=`<defs><clipPath id="cnav"><path d="${NAV}"/></clipPath></defs><g class="nav"><path d="${NAV}" fill="${STONE}"/><g clip-path="url(#cnav)">`+[180,196,212].map(y=>`<line x1="40" y1="${y}" x2="360" y2="${y}" stroke="${STONE_D}" stroke-width="1.3" opacity=".7"/>`).join('')+[[110,163,180],[170,163,180],[230,163,180],[290,163,180],[140,180,196],[200,180,196],[260,180,196],[110,196,212],[170,196,212],[230,196,212],[290,196,212],[140,212,228],[200,212,228],[260,212,228]].map(([x,a,b])=>`<line x1="${x}" y1="${a}" x2="${x}" y2="${b}" stroke="${STONE_D}" stroke-width="1.3" opacity=".7"/>`).join('')+`</g><path d="${NAV}" fill="none" stroke="${STONE_D}" stroke-width="2.5"/><path d="M86 228 L86 206 L100 206 L100 228 Z" fill="#3b3833"/></g>`;
+  s+=`<g class="cut"><rect x="100" y="210" width="134" height="14" fill="#2a2724"/><rect x="236" y="176" width="66" height="22" rx="3" fill="#2a2724"/><rect x="236" y="201" width="66" height="23" rx="3" fill="#2a2724"/></g>`;
+  s+=`<g class="cutl">${T(168,206,'pasillo',{size:12,w:700,c:'#fff'})}${T(270,152,'cámaras',{size:13,w:700})}<line x1="270" y1="156" x2="270" y2="174" stroke="${INK}" stroke-width="1.5"/></g>`;
+  s+=`<g class="boat"><g class="rig"><line x1="200" y1="142" x2="200" y2="44" stroke="#6e4a2a" stroke-width="4"/><path d="M205 52 L205 134 L284 134 Z" fill="#f4ead2" stroke="#8a6d3b" stroke-width="2"/></g><path class="hull" d="M60 142 L340 142 C 332 174, 300 202, 262 207 L138 207 C 100 202, 68 174, 60 142 Z" fill="#8a5a33" stroke="#5a3a20" stroke-width="2.5"/></g>`;
+  s+=chip('nfn',110,56,'vivienda',GREEN,14)+chip('nfn',280,56,'enterramiento colectivo',MAG,14);
+  return s},
+ anim(tl,E){
+  gsap.set(['.nav','.cut','.cutl','.nfn'],{opacity:0});
+  tl.from('.boat',{x:-340,duration:1.6,ease:'power2.out'});tl.to('.boat',{y:3,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut'});E();
+  tl.to('.rig',{opacity:0,duration:.4});tl.to('.hull',{scaleY:-1,y:21,transformOrigin:'50% 50%',duration:1.1,ease:'power2.inOut'});tl.to('.sea',{opacity:0,duration:.7},'<');
+  tl.to('.nav',{opacity:1,duration:.6});tl.to('.hull',{opacity:0,duration:.6},'<');E();
+  tl.to('.cut',{opacity:.9,duration:.6});tl.to('.cutl',{opacity:1,duration:.3});tl.fromTo('.nfn',{scale:0,transformOrigin:'50% 50%'},{opacity:1,scale:1,stagger:.3,duration:.45,ease:'back.out(2)'});E()},
+ qs:[{q:'¿Qué forma tiene una naveta?',ok:'De barco invertido',no:['De torre','De mesa','De círculo de piedras'],exp:'Es alargada y parece un barco puesto del revés.'},
+     {q:'¿Para qué sirvió la naveta?',ok:'Como vivienda y como enterramiento colectivo',no:['Solo como torre de defensa','Como santuario del sol','Como almacén de barcos'],exp:'Tuvo los dos usos.'}]},
+
+{id:'taula',b:'Arte',t:'Baleares: la taula',
+ steps:[
+  'Para hacer una <b>taula</b>, primero se levanta un gran <b>bloque vertical</b>…',
+  '…que sostiene encima otro <b>bloque horizontal</b>. Juntos parecen una gran mesa o una letra T.',
+  'Cerca de las taulas se han encontrado restos de <b>hogueras</b> y de <b>ofrendas de animales</b>. Por eso se cree que tenían un <b>uso ritual</b>.'],
+ svg(){let s=land();
+  for(let i=0;i<9;i++){const a=Math.PI*(1.1+i*.1),x=200-130*Math.cos(a),y=196+22*Math.sin(a);s+=stone(x-12,y-38,24,40,STONE_L).replace('stroke-width="2"','stroke-width="1.4" opacity=".8"')}
+  s+=clip('cg8',`<g class="tv">${stone(182,100,36,128)}</g>`,229);
+  s+=`<g class="th">${stone(132,78,136,26,STONE_L)}</g>`;
+  s+=`<g class="per">${person(316,203)}</g>`;
+  const fire=(x,y)=>`<g class="fire"><path d="M${x-16} ${y} L${x+16} ${y}" stroke="#4a3826" stroke-width="5" stroke-linecap="round"/><path class="fl" d="M${x-12} ${y-2} C ${x-14} ${y-16}, ${x-4} ${y-20}, ${x} ${y-34} C ${x+6} ${y-20}, ${x+14} ${y-16}, ${x+12} ${y-2} Z" fill="#e8731c"/><path class="fl" d="M${x-6} ${y-2} C ${x-7} ${y-10}, ${x-2} ${y-14}, ${x} ${y-22} C ${x+3} ${y-14}, ${x+7} ${y-10}, ${x+6} ${y-2} Z" fill="#f6c343"/></g>`;
+  s+=fire(80,224)+fire(356,222);
+  const bone=(x,y,r)=>`<g class="bone" transform="rotate(${r} ${x} ${y})"><rect x="${x-10}" y="${y-2}" width="20" height="4" rx="2" fill="#f4efe4" stroke="#8a7a5c"/><circle cx="${x-10}" cy="${y-2}" r="3" fill="#f4efe4" stroke="#8a7a5c"/><circle cx="${x-10}" cy="${y+2}" r="3" fill="#f4efe4" stroke="#8a7a5c"/><circle cx="${x+10}" cy="${y-2}" r="3" fill="#f4efe4" stroke="#8a7a5c"/><circle cx="${x+10}" cy="${y+2}" r="3" fill="#f4efe4" stroke="#8a7a5c"/></g>`;
+  s+=bone(120,232,-15)+bone(260,236,10)+bone(140,240,25);
+  s+=chip('rit',200,42,'¿uso ritual?',ORANGE,15);
+  return s},
+ anim(tl,E){
+  tl.from('.tv',{y:132,duration:1.1,ease:'power2.out'});E();
+  tl.from('.th',{y:-120,duration:1,ease:'power3.in'});tl.to('.th',{y:-5,duration:.12,yoyo:true,repeat:1});tl.from('.per',{opacity:0,duration:.3});E();
+  tl.from('.fire',{scale:0,transformOrigin:'50% 100%',stagger:.2,duration:.4});
+  tl.to('.fl',{scaleY:1.25,transformOrigin:'50% 100%',duration:.22,yoyo:true,repeat:5,stagger:.08});
+  tl.from('.bone',{opacity:0,stagger:.15,duration:.3},'<');tl.from('.rit',{opacity:0,scale:.6,transformOrigin:'50% 50%',duration:.4});E()},
+ qs:[{q:'¿Cómo es una taula?',ok:'Un bloque horizontal sobre otro vertical que lo sostiene',no:['Una torre de piedras','Varias piedras en círculo','Una construcción con forma de barco'],exp:'Forma de mesa o de T.'},
+     {q:'¿Por qué se cree que las taulas tenían un uso ritual?',ok:'Porque cerca hay restos de hogueras y de ofrendas de animales',no:['Porque tienen pinturas de bisontes','Porque dentro hay tumbas','Porque miran al mar'],exp:'Los restos de hogueras y ofrendas apuntan a ceremonias.'}]},
+
+/* ---------- MÚSICA ---------- */
+{id:'barroco',b:'Música',t:'El Barroco musical',
+ steps:[
+  'El <b>Barroco</b> musical va de <b>1600</b> a <b>1750</b>, el año en que muere <b>Johann Sebastian Bach</b>.',
+  'Domina la <b>música profana</b> (la que no es religiosa) sobre la religiosa.',
+  'Se compone <b>en vertical</b>, con <b>acordes</b>: varias notas que suenan a la vez.',
+  'Usa mucha <b>ornamentación</b>, igual que las otras artes de la época.',
+  'Los <b>ritmos</b> son <b>muy marcados</b>, casi mecánicos.',
+  'La música <b>instrumental</b> y la <b>vocal</b> tienen la <b>misma importancia</b>.'],
+ svg(){const X=y=>30+(y-1550)*1.36;let s=PB;
+  s+=`<line x1="30" y1="40" x2="370" y2="40" stroke="${MUT}" stroke-width="2"/>`+[1600,1650,1700,1750].map(y=>`<line x1="${X(y)}" y1="34" x2="${X(y)}" y2="46" stroke="${MUT}" stroke-width="1.5"/>`).join('');
+  s+=`<rect class="bar" x="${X(1600)}" y="35" width="${X(1750)-X(1600)}" height="10" rx="5" fill="${MAG}"/>`;
+  s+=T(X(1600),66,'1600',{size:13,w:700})+T(X(1750),66,'1750',{size:13,w:700,cls:'y1750'})+T(X(1750),82,'muere Bach',{size:11,c:MUT,cls:'y1750'})+T(X(1675),26,'Barroco',{size:14,w:800,c:MAG});
+  s+=`<g class="p1">${balance('beam1','profana','religiosa',MAG,BLUE)}</g>`;
+  s+=`<g class="p2">${staff(110,290,140)}<g class="nt">${note(200,172,INK,false)}</g><g class="nt">${note(200,156,INK,false)}</g><g class="nt">${note(200,140,INK,false)}</g>${T(200,220,'acorde: notas a la vez',{size:15,w:700,c:MAG,cls:'acl'})}</g>`;
+  s+=`<g class="p3">${staff(110,290,140)}${note(200,164)}${T(172,112,'tr',{size:20,w:800,c:MAG,it:true,ff:'Georgia,serif',cls:'trl'})}<path class="orn" pathLength="1" stroke-dasharray="1" d="M190 106 q 6 -10 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0 t 12 0" fill="none" stroke="${MAG}" stroke-width="3" stroke-linecap="round"/><path class="orn" pathLength="1" stroke-dasharray="1" d="M120 196 C 140 184, 160 208, 180 196 S 220 184, 240 196 S 270 208, 285 194" fill="none" stroke="${MAG}" stroke-width="2.5" stroke-linecap="round"/>${T(200,228,'adornos',{size:15,w:700,c:MAG,cls:'trl'})}</g>`;
+  s+=`<g class="p4"><path d="M168 230 L186 112 L214 112 L232 230 Z" fill="#8a5a33" stroke="#5a3a20" stroke-width="2.5"/><rect x="178" y="190" width="44" height="30" rx="3" fill="#6e4426"/><g class="pend"><line x1="200" y1="214" x2="200" y2="118" stroke="#e7d6b6" stroke-width="3"/><rect x="192" y="146" width="16" height="12" rx="2" fill="#e7d6b6"/></g>${T(280,150,'tic',{size:18,w:800,c:MAG,cls:'tic'})}${T(122,170,'tac',{size:18,w:800,c:MAG,cls:'tic'})}</g>`;
+  s+=`<g class="p5">${balance('beam5','instrumental','vocal',BLUE,MAG)}</g>`;
+  return s},
+ anim(tl,E){
+  gsap.set(['.p1','.p2','.p3','.p4','.p5'],{opacity:0});
+  tl.from('.bar',{scaleX:0,transformOrigin:'0% 50%',duration:1.6,ease:'none'});tl.from('.y1750',{opacity:0,duration:.4});E();
+  tl.to('.p1',{opacity:1,duration:.4});tl.fromTo('.beam1',{rotation:0,svgOrigin:'200 120'},{rotation:-11,svgOrigin:'200 120',duration:1,ease:'elastic.out(1,.45)'});E();
+  tl.to('.p1',{opacity:0,duration:.35});tl.to('.p2',{opacity:1,duration:.35},'<');
+  tl.from('.nt',{x:i=>[-70,0,70][i],y:i=>[-16,0,16][i],duration:1.1,delay:.3,ease:'power2.inOut'});tl.from('.acl',{opacity:0,duration:.3});E();
+  tl.to('.p2',{opacity:0,duration:.35});tl.to('.p3',{opacity:1,duration:.35},'<');tl.from('.trl',{opacity:0,duration:.3});tl.fromTo('.orn',{strokeDashoffset:1},{strokeDashoffset:0,duration:1.4,stagger:.4,ease:'power1.inOut'},'<');E();
+  tl.to('.p3',{opacity:0,duration:.35});tl.to('.p4',{opacity:1,duration:.35},'<');
+  tl.fromTo('.pend',{rotation:-24,svgOrigin:'200 214'},{rotation:24,svgOrigin:'200 214',duration:.45,ease:'sine.inOut',yoyo:true,repeat:5});
+  tl.from('.tic',{opacity:0,stagger:.45,duration:.15},'<');E();
+  tl.to('.p4',{opacity:0,duration:.35});tl.to('.p5',{opacity:1,duration:.35},'<');tl.fromTo('.beam5',{rotation:-14,svgOrigin:'200 120'},{rotation:0,svgOrigin:'200 120',duration:1.3,ease:'elastic.out(1,.35)'});E()},
+ qs:[{q:'¿Qué año marca el final del Barroco musical?',ok:'1750, cuando muere Bach',no:['1600, cuando empieza el estilo','1700, a mitad de siglo','1685, cuando nacen Bach y Haendel'],exp:'El Barroco va de 1600 a 1750.'},
+     {q:'¿Cómo se compone en el Barroco?',ok:'En vertical, con acordes',no:['Solo con una melodía, sin acordes','Sin ritmo marcado','Solo para voces, sin instrumentos'],exp:'Varias notas que suenan a la vez forman un acorde.'}]},
+
+{id:'formas',b:'Música',t:'Formas instrumentales y vocales',
+ steps:[
+  'En el Barroco los instrumentos se perfeccionan muchísimo y aparecen <b>formas musicales nuevas</b>. Vamos a ordenarlas.',
+  'Las <b>formas instrumentales</b> (solo instrumentos): <b>sonata, suite, concierto grosso, obertura y fuga</b>.',
+  'Las <b>formas vocales</b> (con voces): <b>ópera, oratorio, cantata y pasión</b>.'],
+ svg(){let s=PB;
+  s+=`<g class="box"><rect x="16" y="100" width="180" height="147" rx="12" fill="#e7edf7" stroke="${BLUE}" stroke-width="2"/>${T(106,122,'Instrumentales',{size:15,w:800,c:BLUE})}</g>`;
+  s+=`<g class="box"><rect x="204" y="100" width="180" height="147" rx="12" fill="#fbe4f1" stroke="${MAG}" stroke-width="2"/>${T(294,122,'Vocales',{size:15,w:800,c:MAG})}</g>`;
+  const I=['sonata','suite','concierto grosso','obertura','fuga'],V=['ópera','oratorio','cantata','pasión'];
+  const scat=shuffle([[70,22],[200,22],[330,22],[70,50],[200,50],[330,50],[70,78],[200,78],[330,78]]);let k=0;
+  const mk=(cls,x,y,t,c)=>{const [sx,sy]=scat[k++];return chip('fc '+cls,x,y,t,c,11).replace(`<g class="fc ${cls}">`,`<g class="fc ${cls}" data-dx="${sx-x}" data-dy="${sy-y}">`)};
+  const order=shuffle([...I.map((t,i)=>['fi',106,144+i*23,t,BLUE]),...V.map((t,i)=>['fv',294,144+i*23,t,MAG])]);
+  order.forEach(a=>s+=mk(...a));
+  return s},
+ anim(tl,E){
+  tl.from('.box',{opacity:0,y:20,stagger:.2,duration:.4});
+  tl.fromTo('.fc',{x:(i,el)=>+el.dataset.dx,y:(i,el)=>+el.dataset.dy-30,opacity:0},{x:(i,el)=>+el.dataset.dx,y:(i,el)=>+el.dataset.dy,opacity:1,stagger:.1,duration:.4});E();
+  tl.to('.fi',{x:0,y:0,stagger:.2,duration:.7,ease:'power2.inOut'});E();
+  tl.to('.fv',{x:0,y:0,stagger:.2,duration:.7,ease:'power2.inOut'});E()},
+ qs:[{q:'¿Cuál de estas es una forma vocal?',ok:'El oratorio',no:['La suite','La fuga','La sonata'],exp:'Vocales: ópera, oratorio, cantata y pasión.'},
+     {q:'¿Cuál de estas es una forma instrumental?',ok:'El concierto grosso',no:['La cantata','La ópera','La pasión'],exp:'Instrumentales: sonata, suite, concierto grosso, obertura y fuga.'}]},
+
+{id:'escuelas',b:'Música',t:'Las escuelas europeas',
+ steps:[
+  '<b>Italia</b>: aquí nacen las raíces del nuevo estilo. En la escuela veneciana destacan <b>Albinoni</b> y <b>Vivaldi</b>.',
+  '<b>Inglaterra</b> iba algo atrasada en música. Su músico más notable, <b>Haendel</b>, era de origen alemán.',
+  '<b>Alemania</b> usa las formas italianas y las lleva a su máxima perfección. Destacan <b>Pachelbel</b> y, sobre todo, <b>Bach</b>.',
+  'En <b>España</b> destaca <b>Gaspar Sanz</b>, guitarrista y compositor.'],
+ svg(){const X=y=>120+(y-1640)*2.15;let s=PB;
+  s+=`<g class="ax">`+[1650,1700,1750].map(y=>`<line x1="${X(y)}" y1="26" x2="${X(y)}" y2="226" stroke="${MUT}" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>${T(X(y),242,y,{size:12,c:MUT})}`).join('')+`</g>`;
+  const R=[['it','Albinoni',1671,1751,GREEN,48],['it','Vivaldi',1678,1741,GREEN,76],['in','Haendel',1685,1759,RED,118],['al','Pachelbel',1653,1706,BLUE,160],['al','Bach',1685,1750,BLUE,188],['es','Gaspar Sanz',1640,1710,ORANGE,226]];
+  const C={it:['Italia',1671,GREEN,36],in:['Inglaterra',1685,RED,106],al:['Alemania',1653,BLUE,148],es:['España',1640,ORANGE,214]};
+  Object.entries(C).forEach(([k,[n,y0,c,yy]])=>s+=T(X(y0),yy-1,n.toUpperCase(),{size:10,w:800,c,a:'start',cls:'cl-'+k}));
+  R.forEach(([k,n,a,b,c,y])=>{s+=`<rect class="b-${k}" x="${X(a)}" y="${y-7}" width="${X(b)-X(a)}" height="15" rx="7.5" fill="${c}"/>`+T(X(a)-6,y+5,n,{size:13,w:700,a:'end',cls:'n-'+k})+T((X(a)+X(b))/2,y+4.5,`${a}–${b}`,{size:10,w:700,c:'#fff',cls:'n-'+k})});
+  return s},
+ anim(tl,E){tl.from('.ax',{opacity:0,duration:.4});
+  ['it','in','al','es'].forEach(k=>{tl.from('.cl-'+k,{opacity:0,duration:.3});tl.from('.b-'+k,{scaleX:0,transformOrigin:'0% 50%',stagger:.3,duration:1,ease:'power2.out'});tl.from('.n-'+k,{opacity:0,duration:.3,stagger:.1});E()})},
+ qs:[{q:'¿En qué país surgen las raíces del Barroco musical?',ok:'En Italia',no:['En Inglaterra','En Alemania','En España'],exp:'En Italia, sobre todo en la escuela veneciana.'},
+     {q:'Haendel es el gran músico barroco de Inglaterra, pero era de origen…',ok:'Alemán',no:['Italiano','Español','Inglés'],exp:'Nació en Halle (Alemania) y se quedó a vivir en Inglaterra.'}]},
+
+{id:'italia',b:'Música',t:'Italia: Albinoni y Vivaldi',
+ steps:[
+  '<b>Tommaso Albinoni</b> nació en <b>Venecia</b>. Era un <b>dilettante</b>: componía por el gusto de componer. Hoy se le recuerda por su música instrumental, sobre todo por su <b>Adagio</b>.',
+  '<b>Antonio Vivaldi</b> (Venecia, 1678 – Viena, 1741) era sacerdote y pelirrojo. Por eso le llamaban el «<b>Padre Rosso</b>».',
+  'Su obra más popular es <b>Las cuatro estaciones</b>: cuatro conciertos que describen cada estación. En la primavera se oyen fuentes, viento, tormenta y pájaros; en el invierno, una chimenea y la lluvia.',
+  'También escribió <b>óperas</b>, como <i>Orlando</i> o <i>La olimpiada</i>, y conciertos para <b>flauta</b> y para <b>mandolina</b>.'],
+ svg(){let s=PB;
+  s+=`<g class="pA">${T(200,40,'Tommaso Albinoni · Venecia',{size:17,w:800,cls:'a1'})}<g class="a1">${T(200,118,'Adagio',{size:46,c:MAG,it:true,ff:'Georgia,serif'})}</g>`;
+  [[110,186],[165,200],[235,192],[295,204],[140,214],[265,214]].forEach(([x,y],i)=>s+=`<g class="fnote">${T(x,y,i%2?'♪':'♫',{size:24,c:i%2?BLUE:MAG})}</g>`);
+  s+=chip('a1',200,228,'dilettante: compone por gusto',INK,13)+`</g>`;
+  s+=`<g class="pB">${T(200,34,'Antonio Vivaldi',{size:19,w:800})}${T(200,54,'Venecia 1678 – Viena 1741',{size:13,c:MUT})}
+   <path d="M130 250 C 136 196, 164 180, 200 180 C 236 180, 264 196, 270 250 Z" fill="#2a2a2a"/><path d="M186 182 L200 198 L214 182 Z" fill="#fff"/>
+   <circle cx="200" cy="130" r="38" fill="#f1d3b3"/>
+   <path class="hair" d="M160 136 C 152 92, 184 76, 204 80 C 232 82, 252 102, 242 140 C 238 124, 232 112, 222 106 C 206 112, 180 110, 166 112 C 162 120, 162 128, 160 136 Z" fill="#7a6a5a"/>
+   <circle cx="186" cy="132" r="3" fill="#2a2a2a"/><circle cx="214" cy="132" r="3" fill="#2a2a2a"/><path d="M190 150 Q200 156 210 150" fill="none" stroke="#8a4a3a" stroke-width="2"/>
+   ${chip('rosso',318,110,'«Padre Rosso»',RED,15)}</g>`;
+  const ic={pri:`<g>${Array.from({length:6},(_,i)=>`<ellipse cx="0" cy="-13" rx="6.5" ry="11" fill="#e58fb4" transform="rotate(${i*60})"/>`).join('')}<circle r="6" fill="#d9b23a"/></g>`,
+   ver:`<g><circle r="13" fill="#e8a317"/>${Array.from({length:8},(_,i)=>`<line x1="0" y1="-18" x2="0" y2="-25" stroke="#e8a317" stroke-width="3" stroke-linecap="round" transform="rotate(${i*45})"/>`).join('')}</g>`,
+   oto:`<g transform="rotate(-30)"><path d="M0 -24 C 16 -11, 16 11, 0 24 C -16 11, -16 -11, 0 -24 Z" fill="#c2561c"/><line x1="0" y1="-22" x2="0" y2="28" stroke="#7a3410" stroke-width="2"/></g>`,
+   inv:`<g stroke="#5aa0d6" stroke-width="3" stroke-linecap="round">${[0,60,120].map(r=>`<g transform="rotate(${r})"><line x1="0" y1="-22" x2="0" y2="22"/><path d="M-6 -16 L0 -10 L6 -16 M-6 16 L0 10 L6 16" fill="none"/></g>`).join('')}</g>`};
+  s+=`<g class="pC">${T(200,26,'Las cuatro estaciones',{size:18,w:800,c:MAG})}<circle cx="200" cy="118" r="56" fill="none" stroke="#e2d5b8" stroke-width="2" stroke-dasharray="4 5"/><g class="wheel">`+[['pri',-90],['ver',0],['oto',90],['inv',180]].map(([k,a])=>{const r=a*Math.PI/180,x=200+56*Math.cos(r),y=118+56*Math.sin(r);return`<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><circle r="22" fill="#fff" stroke="#e2d5b8" stroke-width="2"/><g transform="scale(.8)">${ic[k]}</g></g>`}).join('')+`</g>
+   ${T(200,118,'4',{size:28,w:800})}${T(200,134,'conciertos',{size:11,c:MUT})}
+   ${chip('sl',200,214,'primavera: fuentes, viento, tormenta, pájaros',GREEN,12)}${chip('sl',200,239,'invierno: chimenea y lluvia',BLUE,12)}</g>`;
+  s+=`<g class="pD">${T(200,34,'Más obras de Vivaldi',{size:18,w:800})}<g class="oc">${nest('violin',150,48,100)}</g>${chip('oc',200,170,'óperas: Orlando, La olimpiada',MAG,13)}${chip('oc',112,212,'conciertos de flauta',BLUE,13)}${chip('oc',290,212,'conciertos de mandolina',GREEN,13)}</g>`;
+  return s},
+ anim(tl,E){
+  gsap.set(['.pB','.pC','.pD'],{opacity:0});
+  tl.from('.a1',{opacity:0,y:10,stagger:.3,duration:.45});tl.fromTo('.fnote',{y:20,opacity:0},{y:-36,opacity:1,duration:2.4,stagger:.35,ease:'sine.out'},'<.4');E();
+  tl.to('.pA',{opacity:0,duration:.4});tl.to('.pB',{opacity:1,duration:.4},'<');tl.to('.hair',{fill:'#c4401c',duration:1.1});tl.from('.rosso',{scale:0,transformOrigin:'50% 50%',duration:.45,ease:'back.out(2)'});E();
+  tl.to('.pB',{opacity:0,duration:.4});tl.to('.pC',{opacity:1,duration:.4},'<');tl.from('.wheel',{rotation:-360,svgOrigin:'200 118',duration:2.4,ease:'power2.out'});tl.from('.sl',{opacity:0,y:10,stagger:.35,duration:.4});E();
+  tl.to('.pC',{opacity:0,duration:.4});tl.to('.pD',{opacity:1,duration:.4},'<');tl.from('.oc',{y:20,opacity:0,stagger:.3,duration:.45});E()},
+ qs:[{q:'¿Por qué llamaban a Vivaldi el «Padre Rosso»?',ok:'Por su pelo rojo y porque era sacerdote',no:['Porque vestía siempre de rojo','Porque nació en Roma','Porque era el padre de muchos músicos'],exp:'Rosso es «rojo» en italiano: pelirrojo y cura.'},
+     {q:'¿Por qué obra se recuerda hoy sobre todo a Albinoni?',ok:'Por su Adagio',no:['Por Las cuatro estaciones','Por El Mesías','Por el Canon'],exp:'Las cuatro estaciones son de Vivaldi, El Mesías de Haendel y el Canon de Pachelbel.'}]},
+
+{id:'haendel',b:'Música',t:'Inglaterra: Haendel',
+ steps:[
+  '<b>Georg Friedrich Haendel</b> nació en <b>Halle (Alemania)</b> en 1685. Su padre quería que estudiara Derecho, pero él lo dejó todo por la música. Se quedó a vivir en <b>Inglaterra</b>, protegido por el rey <b>Jorge I</b>.',
+  'Escribió óperas como <i>Julio César</i> y música para divertir a la corte, como la <b>Música acuática</b>: una suite para amenizar un paseo en barco del rey Jorge I por el río <b>Támesis</b>.',
+  'Otra suite para divertir a la corte es la <b>Música para fuegos artificiales</b>.',
+  'Su gran obra religiosa es <b>El Mesías</b>, un <b>oratorio</b> que compuso en unas <b>cuatro semanas</b>. Tiene tres partes: el anuncio del Mesías, la vida y los sufrimientos de Jesús y la Resurrección.'],
+ svg(){let s=PB;
+  s+=`<g class="pA">${T(200,34,'Haendel',{size:20,w:800,cls:'h1t'})}
+   <path d="M60 120 C 70 80, 120 70, 150 96 C 170 120, 150 160, 110 168 C 76 172, 54 150, 60 120 Z" fill="#dbe7d0" stroke="#9fae76" stroke-width="2"/>
+   <path d="M230 110 C 260 70, 340 70, 360 110 C 372 150, 340 196, 290 196 C 240 194, 214 150, 230 110 Z" fill="#dbe7d0" stroke="#9fae76" stroke-width="2"/>
+   <line x1="296" y1="140" x2="112" y2="122" stroke="${MAG}" stroke-width="2.5" stroke-dasharray="6 6"/>
+   <circle class="dot" cx="296" cy="140" r="7" fill="${INK}"/><circle class="dot" cx="112" cy="122" r="7" fill="${RED}"/>
+   ${T(296,166,'Halle',{size:14,w:700})}${T(296,182,'(Alemania)',{size:12,c:MUT})}${T(108,148,'Londres',{size:14,w:700})}${T(108,164,'(Inglaterra)',{size:12,c:MUT})}
+   <circle class="trav" cx="112" cy="122" r="5" fill="${MAG}"/>
+   <g class="king"><path d="M88 86 L92 70 L100 80 L108 66 L116 80 L124 70 L128 86 Z" fill="#e8b923" stroke="#8a6d1b" stroke-width="1.5"/>${T(108,60,'Jorge I',{size:12,w:700})}</g></g>`;
+  s+=`<g class="pB"><rect width="400" height="250" fill="${SKY}"/>${T(200,34,'Música acuática',{size:20,w:800,c:BLUE})}<rect x="0" y="170" width="400" height="80" fill="#6fa7c9"/><path d="M0 174 Q 25 166 50 174 T 100 174 T 150 174 T 200 174 T 250 174 T 300 174 T 350 174 T 400 174" fill="none" stroke="#e8f3f8" stroke-width="2.5"/>${T(360,232,'Támesis',{size:13,w:700,c:'#fff'})}
+   <g class="barge"><path d="M120 168 L280 168 L262 196 L138 196 Z" fill="#8a5a33" stroke="#5a3a20" stroke-width="2.5"/><rect x="170" y="134" width="60" height="34" fill="#c0392b"/><path d="M164 134 L200 116 L236 134 Z" fill="#e8b923"/><path d="M186 112 L189 102 L195 108 L200 98 L205 108 L211 102 L214 112 Z" fill="#e8b923"/>
+   ${[[150,120],[250,118],[200,84]].map(([x,y],i)=>`<g class="bn">${T(x,y,i%2?'♫':'♪',{size:22,c:MAG})}</g>`).join('')}</g></g>`;
+  s+=`<g class="pC"><rect width="400" height="250" fill="#1b2a4a"/>${T(200,236,'Música para fuegos artificiales',{size:15,w:700,c:'#fff'})}`+[[110,90,'#f6c343'],[290,80,'#ff5fb9'],[200,140,'#7fd3f7']].map(([x,y,c])=>`<g class="burst">${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return`<line x1="${(x+10*Math.cos(a)).toFixed(1)}" y1="${(y+10*Math.sin(a)).toFixed(1)}" x2="${(x+44*Math.cos(a)).toFixed(1)}" y2="${(y+44*Math.sin(a)).toFixed(1)}" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`}).join('')}<circle cx="${x}" cy="${y}" r="5" fill="${c}"/></g>`).join('')+`</g>`;
+  s+=`<g class="pD">${T(200,34,'El Mesías · oratorio',{size:20,w:800,c:MAG})}`+[0,1,2,3].map(i=>`<g class="wk"><rect x="${58+i*74}" y="54" width="62" height="58" rx="6" fill="#fff" stroke="${INK}" stroke-width="2"/><rect x="${58+i*74}" y="54" width="62" height="16" rx="6" fill="${RED}"/>${T(89+i*74,94,'semana '+(i+1),{size:11,w:700})}</g>`).join('')+
+   [['1. Anuncio del Mesías',148],['2. Vida y sufrimientos de Jesús',184],['3. La Resurrección',220]].map(([t,y])=>chip('part',200,y,t,INK,13)).join('')+`</g>`;
+  return s},
+ anim(tl,E){
+  gsap.set(['.pB','.pC','.pD'],{opacity:0});
+  tl.from('.h1t',{opacity:0,duration:.3});tl.from('.dot',{scale:0,transformOrigin:'50% 50%',stagger:.25,duration:.35});tl.from('.trav',{x:184,y:18,duration:1.6,ease:'power1.inOut'});tl.from('.king',{opacity:0,y:-10,duration:.4});E();
+  tl.to('.pA',{opacity:0,duration:.4});tl.to('.pB',{opacity:1,duration:.4},'<');tl.from('.barge',{x:-280,duration:2,ease:'power1.out'});tl.fromTo('.bn',{y:10,opacity:0},{y:-24,opacity:1,stagger:.3,duration:1},'<.8');E();
+  tl.to('.pB',{opacity:0,duration:.4});tl.to('.pC',{opacity:1,duration:.4},'<');tl.from('.burst',{scale:0,opacity:0,transformOrigin:'50% 50%',stagger:.4,duration:.8,ease:'expo.out'});E();
+  tl.to('.pC',{opacity:0,duration:.4});tl.to('.pD',{opacity:1,duration:.4},'<');tl.from('.wk',{scaleY:0,transformOrigin:'50% 0%',stagger:.3,duration:.35});tl.from('.part',{x:-24,opacity:0,stagger:.3,duration:.4});E()},
+ qs:[{q:'¿Para qué se compuso la Música acuática?',ok:'Para un paseo en barco del rey Jorge I por el Támesis',no:['Para una misa en la catedral','Para unos fuegos artificiales','Para una ópera sobre el mar'],exp:'Música para amenizar el paseo del rey por el río.'},
+     {q:'¿Qué tipo de obra es El Mesías?',ok:'Un oratorio',no:['Una ópera','Una suite','Un concierto grosso'],exp:'Un oratorio religioso en tres partes.'}]},
+
+{id:'alemania',b:'Música',t:'Alemania: Pachelbel y Bach',
+ steps:[
+  '<b>Johann Pachelbel</b> (Núremberg, 1653-1706) fue organista. Su obra más popular es su <b>Canon</b>: varias voces tocan la <b>misma melodía</b>, una detrás de otra.',
+  '<b>Johann Sebastian Bach</b> nació en <b>Eisenach</b> (1685) y murió en <b>Leipzig</b> (1750). Se quedó huérfano a los nueve años y lo educó su hermano mayor.',
+  'Se casó dos veces y tuvo <b>20 hijos</b>; algunos también fueron músicos.',
+  'Fue organista y profesor. Sus obras principales: la <b>Pasión según san Mateo</b>, los seis <b>Conciertos de Brandeburgo</b> y la <b>Tocata y fuga</b> para órgano.'],
+ svg(){let s=PB;
+  s+=`<g class="pA">${T(200,28,'Pachelbel · Canon',{size:18,w:800})}`;
+  const mel=[0,-4,-8,-4,0,4],cols=[MAG,BLUE,GREEN];
+  [0,1,2].forEach(v=>{const y0=52+v*64;s+=staff(70,380,y0,6)+T(40,y0+16,'voz '+(v+1),{size:12,w:700,c:cols[v]});
+   mel.forEach((d,k)=>{const x=92+(k+2*v)*26,y=y0+12+d;s+=`<g class="cn" data-t="${k+2*v}"><ellipse cx="${x}" cy="${y}" rx="6" ry="4.5" transform="rotate(-20 ${x} ${y})" fill="${cols[v]}"/></g>`})});
+  s+=`</g>`;
+  s+=`<g class="pB">${T(200,36,'Johann Sebastian Bach',{size:19,w:800})}<line x1="70" y1="130" x2="330" y2="130" stroke="${MUT}" stroke-width="3"/><circle cx="70" cy="130" r="8" fill="${BLUE}"/><circle cx="330" cy="130" r="8" fill="${BLUE}"/>${T(70,160,'Eisenach',{size:14,w:700})}${T(70,176,'1685',{size:12,c:MUT})}${T(330,160,'Leipzig',{size:14,w:700})}${T(330,176,'1750',{size:12,c:MUT})}<circle class="bt" cx="330" cy="130" r="6" fill="${MAG}"/>${chip('orf',124,90,'huérfano a los 9 años',INK,12)}</g>`;
+  s+=`<g class="pC">${T(200,36,'20 hijos',{size:22,w:800,c:MAG})}`;for(let i=0;i<20;i++){const x=62+(i%10)*31,y=94+Math.floor(i/10)*58;s+=`<g class="kid">${person(x,y).replace(/#3a3a3a/g,i%3?BLUE:MAG)}</g>`}s+=`</g>`;
+  s+=`<g class="pD">`;[30,44,58,72,86,100,86,72,58,44,30].forEach((h,i)=>{s+=`<rect class="pipe" x="${118+i*15}" y="${128-h}" width="11" height="${h+12}" rx="5" fill="#d4a017" stroke="#8a6d1b" stroke-width="1.5"/>`});
+  s+=`<rect x="110" y="138" width="180" height="18" rx="3" fill="#6e4426"/>`+chip('obra',200,180,'Pasión según san Mateo',MAG,13)+chip('obra',112,218,'6 Conciertos de Brandeburgo',BLUE,12)+chip('obra',300,218,'Tocata y fuga (órgano)',GREEN,12)+`</g>`;
+  return s},
+ anim(tl,E){
+  gsap.set(['.pB','.pC','.pD'],{opacity:0});
+  tl.from('.cn',{scale:0,opacity:0,transformOrigin:'50% 50%',duration:.2,stagger:(i,el)=>+el.dataset.t*.32});E();
+  tl.to('.pA',{opacity:0,duration:.4});tl.to('.pB',{opacity:1,duration:.4},'<');tl.from('.bt',{x:-260,duration:2,ease:'none'});tl.from('.orf',{opacity:0,scale:.6,transformOrigin:'50% 50%',duration:.4},'-=1.3');E();
+  tl.to('.pB',{opacity:0,duration:.4});tl.to('.pC',{opacity:1,duration:.4},'<');tl.from('.kid',{scale:0,opacity:0,transformOrigin:'50% 100%',stagger:.08,duration:.25,ease:'back.out(2)'});E();
+  tl.to('.pC',{opacity:0,duration:.4});tl.to('.pD',{opacity:1,duration:.4},'<');tl.from('.pipe',{scaleY:0,transformOrigin:'50% 100%',stagger:.06,duration:.4,ease:'back.out(1.5)'});tl.from('.obra',{y:16,opacity:0,stagger:.3,duration:.4});E()},
+ qs:[{q:'¿Qué es un canon, como el de Pachelbel?',ok:'Varias voces tocan la misma melodía, una detrás de otra',no:['Una pieza para una sola voz','Una ópera muy corta','Un concierto para guitarra'],exp:'Cada voz entra un poco después con la misma melodía.'},
+     {q:'¿Cuál de estas obras es de Bach?',ok:'La Pasión según san Mateo',no:['El Mesías','La Música acuática','Las cuatro estaciones'],exp:'El Mesías y la Música acuática son de Haendel; Las cuatro estaciones, de Vivaldi.'}]},
+
+{id:'sanz',b:'Música',t:'España: Gaspar Sanz',
+ steps:[
+  '<b>Gaspar Sanz</b> nació en <b>Calanda (Teruel)</b>. Era <b>guitarrista</b> y compositor.',
+  'Estudió teología en <b>Salamanca</b>, trabajó en <b>Nápoles</b> y después fue <b>profesor de guitarra de don Juan de Austria</b>, hijo de Felipe IV.',
+  'Escribió un libro, <i>Instrucción de música para la guitarra española</i>, con consejos para tocar y canciones y danzas españolas. Con él <b>sentó las bases de la guitarra clásica moderna</b>.'],
+ svg(){let s=PB;
+  s+=`<g class="pA">${T(200,36,'Gaspar Sanz',{size:20,w:800})}${T(200,56,'Calanda (Teruel)',{size:13,c:MUT})}<g class="gtr">
+   <path d="M66 150 C 66 112, 106 108, 128 124 C 140 116, 160 116, 176 122 C 206 108, 240 120, 240 150 C 240 180, 206 192, 176 178 C 160 184, 140 184, 128 176 C 106 192, 66 188, 66 150 Z" fill="#d9a35b" stroke="#7a4b1e" stroke-width="2.5"/>
+   <circle cx="186" cy="150" r="15" fill="#3b2412"/><rect x="232" y="142" width="122" height="16" rx="2" fill="#6e4426"/><path d="M354 138 L384 134 L384 166 L354 162 Z" fill="#5a3a20"/>
+   ${[0,1,2,3,4,5].map(k=>`<line class="str" x1="92" y1="${143.5+k*2.6}" x2="370" y2="${143.5+k*2.6}" stroke="#f4efe4" stroke-width="1"/>`).join('')}<rect x="88" y="140" width="8" height="20" fill="#3b2412"/></g>
+   ${[[110,96],[280,100],[200,212]].map(([x,y],i)=>`<g class="gn">${T(x,y,i%2?'♫':'♪',{size:22,c:MAG})}</g>`).join('')}</g>`;
+  const P=[['Calanda',60,110],['Salamanca',150,200],['Nápoles',250,110],['don Juan de Austria',318,200]];
+  s+=`<g class="pB">${T(200,36,'Su vida, paso a paso',{size:18,w:800})}`;
+  for(let i=0;i<3;i++){const [,x1,y1]=P[i],[,x2,y2]=P[i+1];s+=`<line class="pth" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${MAG}" stroke-width="2.5" stroke-dasharray="6 5"/>`}
+  P.forEach(([n,x,y],i)=>s+=chip('pc',x,y,n,[INK,BLUE,GREEN,RED][i],i===3?12:13));
+  s+=T(150,228,'teología',{size:12,c:MUT,cls:'pc'})+T(318,228,'profesor de guitarra',{size:12,c:MUT,cls:'pc'})+`</g>`;
+  s+=`<g class="pC"><path d="M200 62 C 170 52, 100 52, 62 60 L62 214 C 100 206, 170 206, 200 216 Z" fill="#fbf6ea" stroke="#8a6d3b" stroke-width="2.5"/><path d="M200 62 C 230 52, 300 52, 338 60 L338 214 C 300 206, 230 206, 200 216 Z" fill="#fbf6ea" stroke="#8a6d3b" stroke-width="2.5"/>
+   ${T(131,96,'Instrucción',{size:15,w:800,ff:'Georgia,serif'})}${T(131,116,'de música para',{size:12,ff:'Georgia,serif'})}${T(131,134,'la guitarra',{size:12,ff:'Georgia,serif'})}${T(131,152,'española',{size:15,w:800,ff:'Georgia,serif'})}
+   ${staff(222,318,92,6)}${staff(222,318,140,6)}${[232,250,268,286,304].map((x,i)=>`<ellipse class="bkn" cx="${x}" cy="${98+(i%3)*4}" rx="4.5" ry="3.5" fill="${INK}"/><ellipse class="bkn" cx="${x}" cy="${146+((i+1)%3)*4}" rx="4.5" ry="3.5" fill="${INK}"/>`).join('')}
+   ${chip('base',200,236,'bases de la guitarra clásica moderna',MAG,13)}</g>`;
+  return s},
+ anim(tl,E){
+  gsap.set(['.pB','.pC'],{opacity:0});
+  tl.from('.gtr',{x:-300,rotation:-12,svgOrigin:'200 150',duration:1.2,ease:'power3.out'});
+  tl.to('.str',{y:1.4,duration:.05,yoyo:true,repeat:9,stagger:.03,ease:'none'});tl.fromTo('.gn',{y:10,opacity:0},{y:-12,opacity:1,stagger:.25,duration:.8},'<');E();
+  tl.to('.pA',{opacity:0,duration:.4});tl.to('.pB',{opacity:1,duration:.4},'<');tl.from('.pc',{scale:0,opacity:0,transformOrigin:'50% 50%',stagger:.45,duration:.4,ease:'back.out(2)'});tl.from('.pth',{opacity:0,stagger:.4,duration:.4},'<.3');E();
+  tl.to('.pB',{opacity:0,duration:.4});tl.to('.pC',{opacity:1,duration:.4},'<');tl.from('.bkn',{scale:0,transformOrigin:'50% 50%',stagger:.05,duration:.2});tl.from('.base',{y:16,opacity:0,duration:.45});E()},
+ qs:[{q:'¿Qué instrumento tocaba Gaspar Sanz?',ok:'La guitarra',no:['El órgano','El violín','La mandolina'],exp:'Fue guitarrista y profesor de guitarra de don Juan de Austria.'},
+     {q:'¿Por qué es tan importante su libro de guitarra?',ok:'Sentó las bases de la guitarra clásica moderna',no:['Fue la primera ópera española','Es un libro de canto gregoriano','Explica cómo construir órganos'],exp:'Su Instrucción de música para la guitarra española es la base de la técnica moderna.'}]}
+];
+
+/* =================== REPRODUCTOR =================== */
+const KEY='ham-t2-anim-v1';
+let DONE={};try{DONE=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+const saveDone=()=>{try{localStorage.setItem(KEY,JSON.stringify(DONE))}catch(e){}};
+const HAS=typeof window.gsap!=='undefined';
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage=$('#stage');
+const st={i:0,k:-1,tl:null,play:null};
+
+function renderPick(){
+  const groups=[['Arte','Todas las fichas · Arte: Megalitismo'],['Música','Música: Barroco']];
+  $('#pick').innerHTML=groups.map(([b,h])=>`<h2>${h}</h2><div class="chips">${SCENES.map((sc,i)=>sc.b===b?`<button data-i="${i}" class="${DONE[sc.id]?'done':''}" aria-current="${i===st.i}">${i+1}. ${sc.t.replace(/^Baleares: (.)/,(m,c)=>c.toUpperCase())}</button>`:'').join('')}</div>`).join('');
+  $('#pick').querySelectorAll('button').forEach(b=>b.onclick=()=>load(+b.dataset.i,true));
+}
+function dots(){const n=SCENES[st.i].steps.length;$('#dots').innerHTML=Array.from({length:n},(_,j)=>`<i class="${j===st.k?'on':j<st.k?'past':''}"></i>`).join('')}
+function caption(){const sc=SCENES[st.i],c=$('#cap');c.classList.remove('in');void c.offsetWidth;c.innerHTML=sc.steps[st.k]||'';c.classList.add('in');dots();
+  $('#bBack').disabled=st.k<=0;const last=st.k>=sc.steps.length-1;
+  $('#bNext').textContent=last?(st.i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera'):'Siguiente →';
+  if(last)showQuiz();}
+function load(i,scroll){
+  if(st.play)st.play.kill();if(st.tl)st.tl.kill();
+  st.i=i;st.k=-1;const sc=SCENES[i];
+  $('#kick').textContent=`Ficha ${i+1} de ${SCENES.length} · ${sc.b==='Arte'?'Historia del Arte':'Historia de la Música'}`;
+  $('#ttl').textContent=sc.t;stage.setAttribute('aria-label',sc.t);
+  $('#quiz').hidden=true;$('#quiz').innerHTML='';
+  renderPick();
+  if(!HAS){$('#stagebox').hidden=true;$('#cap').innerHTML=`<span class="nogsap" style="display:block">No se han podido cargar las animaciones (quizá no hay conexión). Aquí tienes el texto de la ficha:</span>`;
+    $('#cap').insertAdjacentHTML('beforeend',`<ol class="steps-list">${sc.steps.map(s=>`<li>${s}</li>`).join('')}</ol>`);$('#dots').innerHTML='';
+    ['bBack','bAgain'].forEach(id=>$('#'+id).hidden=true);st.k=sc.steps.length-1;$('#bNext').textContent=i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera';showQuiz();return}
+  stage.innerHTML=sc.svg();
+  const tl=gsap.timeline({paused:true});let n=0;sc.anim(tl,()=>tl.addLabel('e'+(n++)));
+  if(n!==sc.steps.length)console.warn('Pasos y etiquetas no cuadran en',sc.id,n,sc.steps.length);
+  st.tl=tl;tl.progress(0).pause();
+  if(scroll)$('#sheet').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});
+  next();
+}
+function playStep(k){const tl=st.tl,from=k>0?tl.labels['e'+(k-1)]:0,to=tl.labels['e'+k];
+  if(st.play)st.play.kill();
+  if(RM){tl.pause();tl.seek(to);return}
+  tl.pause();tl.seek(from);st.play=tl.tweenFromTo(from,to);}
+function next(){const sc=SCENES[st.i];
+  if(st.k>=sc.steps.length-1){load(st.i<SCENES.length-1?st.i+1:0,true);return}
+  if(st.k>=0&&st.play&&st.play.isActive()){st.play.kill();st.tl.seek(st.tl.labels['e'+st.k])}
+  st.k++;caption();playStep(st.k);}
+function back(){if(st.k<=0)return;if(st.play)st.play.kill();st.k--;st.tl.pause();st.tl.seek(st.tl.labels['e'+st.k]);caption();$('#quiz').hidden=true;}
+function again(){if(st.k<0)return;playStep(st.k);}
+$('#bNext').onclick=next;$('#bBack').onclick=back;$('#bAgain').onclick=again;
+document.addEventListener('keydown',e=>{if(e.target.closest('button.opt'))return;if(e.key==='ArrowRight'){next()}else if(e.key==='ArrowLeft'){back()}});
+
+/* =================== COMPRUEBA =================== */
+function showQuiz(){const sc=SCENES[st.i],q=$('#quiz');if(!q.hidden&&q.dataset.id===sc.id)return;
+  q.dataset.id=sc.id;q.hidden=false;let right=0,answered=0;
+  q.innerHTML=`<h3>Comprueba lo que has visto</h3>`+sc.qs.map((x,j)=>`<div class="qq" data-j="${j}"><p class="q">${j+1}. ${x.q}</p><div class="opts">${shuffle([x.ok,...x.no]).map(o=>`<button class="opt" data-ok="${o===x.ok}">${o}</button>`).join('')}</div><p class="exp" hidden></p></div>`).join('')+`<p class="exp" id="qend" hidden></p>`;
+  q.querySelectorAll('.qq').forEach(box=>{const x=sc.qs[+box.dataset.j];box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.ok==='true';box.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.ok==='true')o.classList.add('right')});if(!ok)b.classList.add('wrong');
+    const ex=box.querySelector('.exp');ex.hidden=false;ex.className='exp '+(ok?'b':'mm');ex.innerHTML=(ok?'<b>¡Bien!</b> ':'<b>Casi.</b> ')+x.exp;
+    answered++;if(ok)right++;
+    if(answered===sc.qs.length){const end=$('#qend');end.hidden=false;
+      if(right===sc.qs.length){DONE[sc.id]=1;saveDone();renderPick();end.className='exp b';end.innerHTML=`<span class="stamp">¡Ficha superada!</span>`}
+      else{end.className='exp mm';end.innerHTML='Repasa la ficha con «← Atrás» o vuelve a verla desde el principio, y prueba otra vez.';}}
+  })});
+}
+
+renderPick();load(0,false);
+</script>
+</body>
+</html>
