@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arte y Música: Temas 1 y 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Layout: misma familia que el repaso de Matemáticas (hoja cuadriculada, rotulador magenta); las ilustraciones van en paneles de roca o de pergamino */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1b2a4a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --parch:#f6efe0; --parch-line:#e2d5b8; --voice2:#c0127e;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --parch:#22283a; --parch-line:#3a4258; --voice2:#ff5fb9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --parch:#22283a; --parch-line:#3a4258; --voice2:#ff5fb9; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.back:hover{text-decoration:underline}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 6px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,select:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(20,30,60,.45);display:flex;flex-direction:column;gap:16px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:60px}
+.q{font-size:1.15rem;line-height:1.55;margin:0;font-weight:700}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center}
+.ill svg{width:100%;max-width:360px;height:auto;display:block;border-radius:10px}
+.ill.small svg{max-width:200px}
+.ill figcaption{font-size:.88rem;color:var(--muted);text-align:center}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1.02rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}
+.opt:disabled{cursor:default}
+.vf{flex-direction:row}
+.vf .opt{flex:1;text-align:center;font-weight:700}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;background:var(--chip);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px}
+.row.right{border-color:var(--ok)}
+.row.wrong{border-color:var(--marker)}
+.row span{min-width:0}
+.row small{display:block;color:var(--marker);font-weight:700;grid-column:1/-1}
+.row.right small{color:var(--ok)}
+select{font:400 1rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;width:100%;min-width:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 22px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 18px;cursor:pointer}
+.need{color:var(--marker);font-weight:700;margin:0}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}
+.stamp.b{color:var(--ok)} .stamp.mm{color:var(--marker)}
+.verdict{font-weight:700;font-size:1.05rem;margin:0}
+.verdict.b{color:var(--ok)} .verdict.mm{color:var(--marker)}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+/* Estudiar */
+.study{display:flex;flex-direction:column;gap:18px}
+.block-title{font:800 1.25rem var(--f-display);margin:8px 0 0}
+.card h2{font:800 1.3rem var(--f-display);margin:0;text-wrap:balance}
+.card .kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;max-width:62ch}
+.card li::marker{color:var(--marker)}
+.figs{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.figs .ill{flex:1 1 200px;min-width:0}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:420px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;background:var(--paper)}
+.tbl th{background:var(--chip);font-weight:700}
+.practice-link{align-self:flex-start}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}
+.progress h2,.summary h2{font:800 1.15rem var(--f-display);margin:0 0 10px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 110px 52px;gap:10px;align-items:center;font-size:.92rem;padding:5px 0}
+.bar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar i.low{background:var(--marker)}
+.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}
+.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.qlist li{display:flex;gap:10px;align-items:baseline}
+.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+/* textos dentro de los dibujos */
+.ink{fill:var(--ink)} .inks{stroke:var(--ink)} .mut{fill:var(--muted)} .v2{fill:var(--voice2)} .v2s{stroke:var(--voice2)} .parch{fill:var(--parch)} .parchs{stroke:var(--parch-line)}
+svg text{font-family:var(--f-body)}
+@media (max-width:420px){header h1{font-size:1.65rem}.prow{grid-template-columns:minmax(0,1fr) 70px 46px}.stamp{font-size:2.8rem}.row{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .25s ease-out}@keyframes pop{from{transform:rotate(-8deg) scale(1.6);opacity:0}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
+  <header>
+    <h1>Arte y Música <span>Ale</span></h1>
+    <p>Temas 1 y 2 de Historia del Arte y de la Música: arte del Paleolítico y megalitismo, música de la Edad Media y Barroco. Estudia con las fichas y después ponte a prueba.</p>
+  </header>
+  <div class="tabs" role="group" aria-label="Modo">
+    <button id="tStudy" aria-pressed="true">Estudiar</button>
+    <button id="tPractice" aria-pressed="false">Practicar</button>
+    <button id="tExam" aria-pressed="false">Prueba</button>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Bloque"></div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const BLOCKS={a1:'Tema 1 · Arte: Paleolítico',m1:'Tema 1 · Música: Edad Media',a2:'Tema 2 · Arte: Megalitismo',m2:'Tema 2 · Música: Barroco'};
+const SHORT={a1:'Paleolítico',m1:'Edad Media',a2:'Megalitismo',m2:'Barroco'};
+
+/* =================== DIBUJOS =================== */
+const ROCK=(w,h,c1='#d8b88e',c2='#c69f72')=>`<rect width="${w}" height="${h}" fill="${c1}"/><path d="M0 ${h*.7} C ${w*.2} ${h*.6}, ${w*.35} ${h*.85}, ${w*.6} ${h*.75} S ${w*.9} ${h*.6}, ${w} ${h*.7} L ${w} ${h} L 0 ${h} Z" fill="${c2}" opacity=".55"/><path d="M${w*.1} 0 C ${w*.25} ${h*.15}, ${w*.4} ${h*.05}, ${w*.55} ${h*.18} S ${w*.85} ${h*.1}, ${w} ${h*.2} L ${w} 0 Z" fill="${c2}" opacity=".4"/>`;
+const LAND=(w,h)=>`<rect width="${w}" height="${h}" fill="#dbe7ee"/><path d="M0 ${h-34} C ${w*.3} ${h-40}, ${w*.6} ${h-28}, ${w} ${h-36} L ${w} ${h} L 0 ${h} Z" fill="#b5c28c"/><path d="M0 ${h-20} C ${w*.4} ${h-26}, ${w*.7} ${h-14}, ${w} ${h-22} L ${w} ${h} L 0 ${h} Z" fill="#9fae76"/>`;
+const STONE='#8f8a80', STONE_D='#6f6a61', STONE_L='#a9a499';
+const person=(x,y)=>`<g fill="#3a3a3a" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round"><circle cx="${x}" cy="${y}" r="3.2" stroke="none"/><line x1="${x}" y1="${y+3}" x2="${x}" y2="${y+13}"/><line x1="${x}" y1="${y+13}" x2="${x-3}" y2="${y+21}"/><line x1="${x}" y1="${y+13}" x2="${x+3}" y2="${y+21}"/><line x1="${x-4}" y1="${y+7}" x2="${x+4}" y2="${y+7}"/></g>`;
+
+const ILL={
+bisonte:()=>({vb:'0 0 240 160',s:ROCK(240,160)+`
+ <path d="M200 80 C 214 86, 214 100, 207 112" fill="none" stroke="#241812" stroke-width="3" stroke-linecap="round"/>
+ <g stroke="#241812" stroke-width="3" stroke-linejoin="round" fill="#7d2c14">
+  <path d="M84 108 L79 140 L88 140 L94 110 Z"/><path d="M102 110 L101 141 L110 141 L113 110 Z"/>
+  <path d="M168 106 L171 140 L180 140 L182 104 Z"/><path d="M188 98 L195 137 L203 137 L199 96 Z"/>
+ </g>
+ <path d="M62 96 C 58 70, 80 46, 110 44 C 132 42, 152 52, 176 57 C 196 62, 206 76, 201 95 C 197 108, 181 112, 166 110 L 96 113 C 80 113, 67 108, 62 96 Z" fill="#a63d1e" stroke="#241812" stroke-width="3"/>
+ <path d="M66 92 C 70 64, 92 46, 118 46 C 108 58, 98 72, 92 100 C 82 104, 72 102, 66 92 Z" fill="#241812" opacity=".75"/>
+ <path d="M150 96 C 165 100, 182 98, 196 90" fill="none" stroke="#c27a2c" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+ <path d="M64 92 C 50 88, 40 98, 42 112 C 44 123, 57 125, 66 115 Z" fill="#7d2c14" stroke="#241812" stroke-width="3"/>
+ <path d="M47 118 L50 133 L57 120" fill="#241812" stroke="#241812" stroke-width="2"/>
+ <path d="M54 94 C 46 84, 50 76, 60 78" fill="none" stroke="#241812" stroke-width="3" stroke-linecap="round"/>
+ <circle cx="52" cy="102" r="2.2" fill="#241812"/>`}),
+levantina:()=>{const C='#9b2f1b';
+ const archer=(x,y,f=1)=>`<g fill="${C}" stroke="${C}" stroke-linecap="round"><circle cx="${x}" cy="${y-5}" r="4.2" stroke="none"/><path d="M${x-7} ${y} L${x+7} ${y} L${x+1.5} ${y+19} L${x-1.5} ${y+19} Z" stroke="none"/><line x1="${x}" y1="${y+19}" x2="${x-11*f}" y2="${y+42}" stroke-width="3.2"/><line x1="${x}" y1="${y+19}" x2="${x+10*f}" y2="${y+42}" stroke-width="3.2"/><line x1="${x+5*f}" y1="${y+2}" x2="${x+16*f}" y2="${y+6}" stroke-width="2.4"/><path d="M${x+16*f} ${y-8} Q ${x+25*f} ${y+6} ${x+16*f} ${y+20}" fill="none" stroke-width="2"/><line x1="${x+4*f}" y1="${y+6}" x2="${x+30*f}" y2="${y+6}" stroke-width="1.6"/></g>`;
+ return{vb:'0 0 240 160',s:ROCK(240,160,'#e2c49c','#d2ad80')+archer(40,62)+archer(82,74)+`
+ <g fill="${C}" stroke="${C}" stroke-linecap="round">
+  <path d="M160 78 C 170 70, 196 70, 204 78 C 206 86, 196 90, 182 90 C 170 90, 160 88, 160 78 Z" stroke="none"/>
+  <path d="M202 78 L212 62 L218 64 L210 80 Z" stroke="none"/><circle cx="214" cy="61" r="4" stroke="none"/>
+  <path d="M214 57 L210 44 M211 49 L204 44 M214 57 L222 44 M220 48 L227 44" fill="none" stroke-width="2"/>
+  <line x1="166" y1="88" x2="150" y2="110" stroke-width="3"/><line x1="172" y1="89" x2="162" y2="114" stroke-width="3"/>
+  <line x1="196" y1="88" x2="214" y2="108" stroke-width="3"/><line x1="190" y1="89" x2="200" y2="114" stroke-width="3"/>
+  <line x1="122" y1="70" x2="146" y2="72" stroke-width="1.6"/><path d="M146 72 l-5 -3 l1 6 Z" stroke="none"/>
+  <line x1="128" y1="86" x2="152" y2="84" stroke-width="1.6"/><path d="M152 84 l-5 -3 l0 6 Z" stroke="none"/>
+ </g>`}},
+pigmentos:()=>({vb:'0 0 300 150',s:ROCK(300,150,'#e6d2b2','#d6bc94')+[['#a63d1e','Rojo','hierro o sangre'],['#241812','Negro','carbón'],['#c98a2b','Ocre','tierra'],['#d8b23a','Amarillo','tierra y plantas']].map((c,i)=>{const x=40+i*73;return`<path d="M${x-22} 60 C ${x-26} 38, ${x-6} 26, ${x+8} 32 C ${x+26} 38, ${x+28} 62, ${x+16} 72 C ${x+4} 82, ${x-18} 78, ${x-22} 60 Z" fill="${c[0]}"/><text x="${x}" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#2e2117">${c[1]}</text><text x="${x}" y="122" text-anchor="middle" font-size="11" fill="#4a382a">${c[2]}</text>`}).join('')}),
+venus:()=>({vb:'0 0 160 200',s:`<rect width="160" height="200" fill="#e8dcc4"/><g fill="#b8925a" stroke="#6e5332" stroke-width="2.5" stroke-linejoin="round">
+ <path d="M68 160 L72 190 L79 190 L81 168 Z"/><path d="M92 160 L88 190 L81 190 L80 168 Z"/>
+ <path d="M50 100 C 38 130, 52 152, 70 162 L 90 162 C 108 152, 122 130, 110 100 Z"/>
+ <ellipse cx="80" cy="108" rx="30" ry="24"/>
+ <ellipse cx="68" cy="80" rx="14" ry="19"/><ellipse cx="92" cy="80" rx="14" ry="19"/>
+ <path d="M58 64 C 50 72, 48 88, 54 98" fill="none"/><path d="M102 64 C 110 72, 112 88, 106 98" fill="none"/>
+ <ellipse cx="80" cy="40" rx="18" ry="20"/></g>
+ <g fill="none" stroke="#6e5332" stroke-width="1.6">${[26,32,38,44,50].map(y=>`<path d="M${64+Math.abs(y-38)*.35} ${y} Q 80 ${y+4} ${96-Math.abs(y-38)*.35} ${y}"/>`).join('')}</g>
+ <circle cx="80" cy="112" r="2.4" fill="#6e5332"/>`}),
+baston:()=>({vb:'0 0 240 120',s:`<rect width="240" height="120" fill="#e8dcc4"/>
+ <path d="M24 78 C 80 72, 150 62, 216 40" fill="none" stroke="#7a6648" stroke-width="20" stroke-linecap="round"/>
+ <path d="M24 78 C 80 72, 150 62, 216 40" fill="none" stroke="#dcc9a4" stroke-width="15" stroke-linecap="round"/>
+ <path d="M30 70 C 18 60, 26 46, 40 52" fill="none" stroke="#7a6648" stroke-width="11" stroke-linecap="round"/>
+ <path d="M30 70 C 18 60, 26 46, 40 52" fill="none" stroke="#dcc9a4" stroke-width="7" stroke-linecap="round"/>
+ <circle cx="40" cy="77" r="6.5" fill="#e8dcc4" stroke="#7a6648" stroke-width="2"/>
+ <g stroke="#7a6648" stroke-width="1.6" fill="none">${Array.from({length:12},(_,i)=>{const x=70+i*12,y=76-i*3.2;return`<path d="M${x} ${y-4} l5 6 l5 -6"/>`}).join('')}</g>`}),
+menhir:()=>({vb:'0 0 240 160',s:LAND(240,160)+`<path d="M104 140 C 98 100, 101 60, 114 28 C 124 22, 135 32, 138 58 C 142 94, 140 120, 138 140 Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><path d="M114 30 C 108 60, 108 100, 112 138 L 104 140 C 98 100, 101 60, 114 28 Z" fill="${STONE_D}" opacity=".6"/>`+person(178,118)}),
+alineamiento:()=>{let s=LAND(240,160);for(let i=7;i>=0;i--){const t=i/7,x=24+t*190,y=140-t*36,h=56*(1-t*.55),w=13*(1-t*.5);s+=`<path d="M${x-w} ${y} C ${x-w-1} ${y-h*.6}, ${x-w*.4} ${y-h}, ${x} ${y-h} C ${x+w*.5} ${y-h}, ${x+w+1} ${y-h*.5}, ${x+w} ${y} Z" fill="${i%2?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="1.5"/>`}return{vb:'0 0 240 160',s}},
+cromlech:()=>{let s=LAND(240,160);const st=[];const n=16;for(let i=0;i<n;i++){const a=i/n*Math.PI*2,x=120+92*Math.cos(a),y=104+26*Math.sin(a),k=.7+.3*(Math.sin(a)+1)/2;st.push({x,y,k,i})}
+ st.sort((p,q)=>p.y-q.y).forEach(p=>{const h=40*p.k,w=8*p.k;s+=`<rect x="${p.x-w}" y="${p.y-h}" width="${w*2}" height="${h}" rx="2" fill="${p.i%2?STONE:STONE_L}" stroke="${STONE_D}" stroke-width="1.4"/>`});
+ const front=st.filter(p=>p.y>110).sort((p,q)=>p.x-q.x);for(let i=0;i+1<front.length;i+=2){const p=front[i],q=front[i+1];const h=40*Math.min(p.k,q.k);s+=`<rect x="${p.x-9}" y="${Math.min(p.y,q.y)-h-7}" width="${q.x-p.x+18}" height="8" rx="2" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="1.4"/>`}
+ return{vb:'0 0 240 160',s}},
+dolmen:()=>({vb:'0 0 240 160',s:LAND(240,160)+`<rect x="70" y="72" width="22" height="66" rx="4" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><rect x="150" y="70" width="24" height="68" rx="4" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><rect x="110" y="78" width="20" height="60" rx="4" fill="${STONE_D}" stroke="${STONE_D}" stroke-width="2" opacity=".85"/><path d="M50 74 C 60 56, 120 50, 196 58 C 204 62, 200 74, 190 76 C 140 80, 90 82, 56 82 C 48 82, 46 78, 50 74 Z" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="2"/>`+person(212,118)}),
+corredor:()=>{let s=`<rect width="240" height="160" class="parch"/><circle cx="150" cy="80" r="70" fill="none" class="inks" stroke-width="1.5" stroke-dasharray="5 5" opacity=".6"/>`;
+ const stones=[];for(let x=30;x<=122;x+=13){stones.push([x,62],[x,98])}for(let i=0;i<11;i++){const a=-Math.PI*.78+i*(Math.PI*1.56/10);stones.push([160+34*Math.cos(a),80+34*Math.sin(a)])}
+ s+=stones.map(([x,y])=>`<rect x="${x-6}" y="${y-6}" width="12" height="12" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="1.2"/>`).join('');
+ s+=`<text x="76" y="85" text-anchor="middle" font-size="12" font-weight="700" class="ink">pasillo</text><text x="162" y="85" text-anchor="middle" font-size="12" font-weight="700" class="ink">cámara</text><text x="196" y="150" text-anchor="middle" font-size="11" class="mut">túmulo de tierra</text><text x="10" y="20" font-size="11" class="mut">Vista desde arriba</text>`;return{vb:'0 0 240 160',s}},
+talayot:()=>{let s=LAND(240,160);const top=48,bot=140;s+=`<path d="M58 ${bot} L84 ${top} L156 ${top} L182 ${bot} Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/>`;
+ let r=0;for(let y=bot;y>top;y-=13,r++){const t=(bot-y)/(bot-top),l=58+26*t,rr=182-26*t;s+=`<line x1="${l}" y1="${y}" x2="${rr}" y2="${y}" stroke="${STONE_D}" stroke-width="1.3"/>`;if(y-13>=top-1)for(let x=l+(r%2?14:24);x<rr-6;x+=22)s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y-13}" stroke="${STONE_D}" stroke-width="1.3"/>`}
+ s+=`<path d="M112 ${bot} L112 118 L128 118 L128 ${bot} Z" fill="#3b3833"/>`+person(206,118);return{vb:'0 0 240 160',s}},
+naveta:()=>{let s=LAND(240,160);s+=`<path d="M34 140 L40 72 C 70 56, 168 52, 196 66 C 214 78, 216 118, 212 140 Z" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/>`;
+ for(let y=128,r=0;y>66;y-=14,r++){s+=`<path d="M${38+(128-y)*.05} ${y} L ${212-(128-y)*.15} ${y}" stroke="${STONE_D}" stroke-width="1.3"/>`;for(let x=50+(r%2?12:0);x<205;x+=26)s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+14}" stroke="${STONE_D}" stroke-width="1.3"/>`}
+ s+=`<path d="M48 140 L48 116 L62 116 L62 140 Z" fill="#3b3833"/>`+person(226,118);return{vb:'0 0 240 160',s}},
+taula:()=>{let s=LAND(240,160);for(let i=0;i<9;i++){const a=Math.PI*(1.1+i*0.1),x=120+80*Math.cos(a)*-1,y=120+18*Math.sin(a);s+=`<rect x="${x-10}" y="${y-32}" width="20" height="34" rx="3" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="1.2" opacity=".85"/>`}
+ s+=`<rect x="105" y="58" width="30" height="82" rx="3" fill="${STONE}" stroke="${STONE_D}" stroke-width="2"/><rect x="78" y="40" width="84" height="20" rx="3" fill="${STONE_L}" stroke="${STONE_D}" stroke-width="2"/>`+person(186,118);return{vb:'0 0 240 160',s}},
+tetragrama:()=>{let s=`<rect width="300" height="130" class="parch"/>`;const ys=[34,48,62,76];ys.forEach(y=>s+=`<line x1="18" y1="${y}" x2="284" y2="${y}" stroke="#b3261e" stroke-width="1.4"/>`);
+ s+=`<path d="M24 41 L32 41 L32 55 L24 55 Z M24 41 L24 55" fill="none" class="inks" stroke-width="3"/>`;
+ const notes=[[50,62],[72,55],[94,48],[104,41],[126,48],[148,55],[170,48],[192,55],[214,62],[236,62],[258,69]];notes.forEach(([x,y])=>s+=`<rect x="${x-5}" y="${y-5}" width="10" height="10" class="ink"/>`);
+ s+=`<line x1="104" y1="41" x2="104" y2="56" class="inks" stroke-width="1.6"/><text x="150" y="110" text-anchor="middle" font-size="15" font-style="italic" class="ink">Ky - ri - e    e - lé - i - son</text>`;return{vb:'0 0 300 130',s}},
+monodia:()=>{let s=`<rect width="300" height="120" class="parch"/>`;[30,42,54,66,78].forEach(y=>s+=`<line x1="14" y1="${y}" x2="286" y2="${y}" class="inks" stroke-width="1" opacity=".55"/>`);
+ [[40,60],[70,54],[100,48],[130,42],[160,48],[190,54],[220,48],[250,60]].forEach(([x,y])=>s+=`<ellipse cx="${x}" cy="${y}" rx="6.5" ry="5" class="ink" transform="rotate(-20 ${x} ${y})"/><line x1="${x+6}" y1="${y}" x2="${x+6}" y2="${y-26}" class="inks" stroke-width="1.6"/>`);
+ s+=`<text x="150" y="108" text-anchor="middle" font-size="13" class="mut">una sola melodía</text>`;return{vb:'0 0 300 120',s}},
+polifonia:()=>{let s=`<rect width="300" height="120" class="parch"/>`;[24,34,44,54,64,74,84].forEach(y=>s+=`<line x1="14" y1="${y}" x2="286" y2="${y}" class="inks" stroke-width="1" opacity=".55"/>`);
+ const v1=[[40,34],[80,29],[120,24],[160,29],[200,34],[240,29]],v2=[[40,74],[80,79],[120,69],[160,74],[200,64],[240,74]];
+ v1.forEach(([x,y])=>s+=`<ellipse cx="${x}" cy="${y}" rx="6.5" ry="5" class="ink" transform="rotate(-20 ${x} ${y})"/>`);v2.forEach(([x,y])=>s+=`<ellipse cx="${x+10}" cy="${y}" rx="6.5" ry="5" class="v2" transform="rotate(-20 ${x+10} ${y})"/>`);
+ s+=`<text x="150" y="108" text-anchor="middle" font-size="13" class="mut">varias melodías a la vez</text>`;return{vb:'0 0 300 120',s}},
+acordes:()=>{let s=`<rect width="300" height="120" class="parch"/>`;[30,42,54,66,78].forEach(y=>s+=`<line x1="14" y1="${y}" x2="286" y2="${y}" class="inks" stroke-width="1" opacity=".55"/>`);
+ [[50,[78,66,54]],[100,[72,60,48]],[150,[66,54,42]],[200,[72,60,48]],[250,[78,66,54]]].forEach(([x,ys])=>{ys.forEach(y=>s+=`<ellipse cx="${x}" cy="${y}" rx="6.5" ry="5" class="ink" transform="rotate(-20 ${x} ${y})"/>`);s+=`<line x1="${x+6}" y1="${ys[0]}" x2="${x+6}" y2="${ys[2]-28}" class="inks" stroke-width="1.6"/>`});
+ s+=`<path d="M290 104 L10 104" class="inks" stroke-width="0"/><text x="150" y="108" text-anchor="middle" font-size="13" class="mut">notas apiladas: acordes</text>`;return{vb:'0 0 300 120',s}},
+laud:()=>({vb:'0 0 160 160',s:`<rect width="160" height="160" class="parch"/><path d="M68 44 L56 18 L72 14 L86 44 Z" fill="#8a5a2b" class="inks" stroke-width="2"/><rect x="70" y="40" width="20" height="46" fill="#8a5a2b" class="inks" stroke-width="2"/><path d="M80 152 C 38 152, 28 110, 50 86 C 62 72, 98 72, 110 86 C 132 110, 122 152, 80 152 Z" fill="#c99a5b" class="inks" stroke-width="2.5"/><circle cx="80" cy="108" r="11" fill="none" class="inks" stroke-width="2"/><circle cx="80" cy="108" r="5" fill="none" class="inks" stroke-width="1"/><rect x="70" y="134" width="20" height="4" class="ink"/>${[74,78,82,86].map(x=>`<line x1="${x}" y1="42" x2="${x}" y2="136" class="inks" stroke-width=".8"/>`).join('')}`}),
+arpa:()=>{let s=`<rect width="160" height="160" class="parch"/>`;for(let x=50;x<=118;x+=8){const yt=32+(x-40)*.11,yb=148-(x-44)*1.27;s+=`<line x1="${x}" y1="${yt}" x2="${x}" y2="${yb}" class="inks" stroke-width=".9"/>`}
+ s+=`<path d="M44 148 L130 38" stroke="#8a5a2b" stroke-width="9" stroke-linecap="round"/><path d="M40 150 L40 30 C 70 22, 110 36, 132 36" fill="none" stroke="#6b4422" stroke-width="6" stroke-linecap="round"/>`;return{vb:'0 0 160 160',s}},
+pandero:()=>{let s=`<rect width="160" height="160" class="parch"/><circle cx="80" cy="80" r="56" fill="#ead9b6" stroke="#8a5a2b" stroke-width="9"/>`;for(let i=0;i<8;i++){const a=i/8*Math.PI*2,x=80+56*Math.cos(a),y=80+56*Math.sin(a);s+=`<circle cx="${x}" cy="${y}" r="6" fill="#d9b23a" class="inks" stroke-width="1.2"/>`}return{vb:'0 0 160 160',s}},
+gaita:()=>({vb:'0 0 160 160',s:`<rect width="160" height="160" class="parch"/><path d="M66 98 L52 150" stroke="#6b4422" stroke-width="7" stroke-linecap="round"/>${[112,122,132].map(y=>`<circle cx="${66-(y-98)*.27}" cy="${y}" r="1.8" fill="#ead9b6"/>`).join('')}<path d="M98 70 L130 14" stroke="#6b4422" stroke-width="7" stroke-linecap="round"/><path d="M90 66 L108 22" stroke="#6b4422" stroke-width="5" stroke-linecap="round"/><path d="M60 70 L30 40" stroke="#6b4422" stroke-width="4" stroke-linecap="round"/><path d="M58 84 C 50 60, 72 48, 96 58 C 120 68, 116 98, 92 104 C 74 108, 62 100, 58 84 Z" fill="#9b2f1b" class="inks" stroke-width="2"/>`}),
+organo:()=>{let s=`<rect width="160" height="160" class="parch"/>`;const hs=[88,80,72,64,56,50,44,38];hs.forEach((h,i)=>{const x=34+i*12;s+=`<rect x="${x}" y="${118-h}" width="9" height="${h}" rx="2" fill="#c9b27a" class="inks" stroke-width="1.5"/><path d="M${x+2} ${118-h+10} L${x+7} ${118-h+10}" class="inks" stroke-width="2"/>`});
+ s+=`<rect x="26" y="116" width="108" height="16" rx="2" fill="#8a5a2b" class="inks" stroke-width="2"/>`;for(let i=0;i<9;i++)s+=`<rect x="${32+i*11}" y="134" width="9" height="12" fill="#f5efe0" class="inks" stroke-width="1.2"/>`;return{vb:'0 0 160 160',s}},
+violin:()=>({vb:'0 0 160 170',s:`<rect width="160" height="170" class="parch"/><rect x="76" y="10" width="8" height="52" fill="#3b2a1a"/><circle cx="80" cy="10" r="6" fill="#8a5a2b" class="inks" stroke-width="1.5"/><path d="M80 52 C 58 52, 52 68, 58 82 C 61 90, 61 94, 55 100 C 46 114, 50 150, 80 152 C 110 150,114 114,105 100 C 99 94, 99 90, 102 82 C 108 68, 102 52, 80 52 Z" fill="#b5652a" class="inks" stroke-width="2.5"/><path d="M66 104 c -4 6, 4 14, 0 20 M94 104 c 4 6, -4 14, 0 20" fill="none" class="inks" stroke-width="2"/><rect x="70" y="118" width="20" height="3" class="ink"/>${[77,79,81,83].map(x=>`<line x1="${x}" y1="14" x2="${x}" y2="140" class="inks" stroke-width=".7"/>`).join('')}<rect x="74" y="138" width="12" height="10" rx="2" class="ink"/>`}),
+clave:()=>{let s=`<rect width="260" height="140" class="parch"/><path d="M24 34 L24 112 L70 112 C 150 112, 222 100, 236 82 L 236 70 C 186 44, 110 34, 24 34 Z" fill="#7b3f22" class="inks" stroke-width="2.5"/><path d="M48 44 L48 102 L 74 102 C 146 102, 210 92, 224 78 C 180 54, 110 44, 48 44 Z" fill="#d8b56c"/>`;
+ for(let y=50;y<=98;y+=6)s+=`<line x1="52" y1="${y}" x2="${120+ (98-y)*1.6}" y2="${y}" stroke="#6b4422" stroke-width=".8"/>`;
+ for(let i=0;i<12;i++)s+=`<rect x="26" y="${38+i*6}" width="20" height="5" fill="${i%3===1?'#222':'#f5efe0'}" stroke="#222" stroke-width=".6"/>`;return{vb:'0 0 260 140',s}},
+guitarra:()=>({vb:'0 0 160 180',s:`<rect width="160" height="180" class="parch"/><rect x="74" y="12" width="12" height="70" fill="#5a3a20"/>${[22,30,38,46,54,62,70].map(y=>`<line x1="74" y1="${y}" x2="86" y2="${y}" stroke="#d8c08a" stroke-width="1"/>`).join('')}<path d="M70 4 L90 4 L88 14 L72 14 Z" fill="#8a5a2b" class="inks" stroke-width="1.5"/><path d="M80 76 C 56 76, 50 92, 56 104 C 60 112, 60 116, 52 124 C 40 140, 48 172, 80 174 C 112 172,120 140,108 124 C 100 116, 100 112, 104 104 C 110 92, 104 76, 80 76 Z" fill="#d9a85e" class="inks" stroke-width="2.5"/><circle cx="80" cy="120" r="12" fill="#3b2a1a"/><circle cx="80" cy="120" r="15" fill="none" class="inks" stroke-width="1.2" stroke-dasharray="2 2"/><rect x="68" y="150" width="24" height="4" class="ink"/>${[76,78,80,82,84].map(x=>`<line x1="${x}" y1="12" x2="${x}" y2="152" stroke="#2a1a0e" stroke-width=".7"/>`).join('')}`}),
+vieira:()=>{let s=`<rect width="200" height="160" class="parch"/>`;
+ s+=`<path d="M100 18 l6 14 l15 -4 l-9 12 l12 9 l-15 1 l1 15 l-10 -11 l-10 11 l1 -15 l-15 -1 l12 -9 l-9 -12 l15 4 Z" fill="#d4a017" stroke="#8a6d10" stroke-width="1"/>`;
+ s+=`<path d="M100 146 L 44 82 C 52 58, 148 58, 156 82 Z" fill="#ecd9b0" stroke="#8a6d3b" stroke-width="2.5" stroke-linejoin="round"/>`;
+ for(let i=1;i<9;i++){const a=Math.PI*(1.12+i*0.084),x=100+70*Math.cos(a)*-1,y=146-78*Math.sin(-a+Math.PI*2)*-1;const tx=44+i*12.5,ty=74-Math.sin(i/9*Math.PI)*12;s+=`<line x1="100" y1="146" x2="${tx}" y2="${ty}" stroke="#8a6d3b" stroke-width="1.6"/>`}
+ s+=`<path d="M86 140 L 78 152 L 122 152 L 114 140 Z" fill="#ecd9b0" stroke="#8a6d3b" stroke-width="2"/>`;return{vb:'0 0 200 160',s}},
+codice:()=>{let s=`<rect width="280" height="170" fill="#c9b48a"/><path d="M140 26 C 110 16, 50 16, 22 24 L 22 156 C 50 148, 110 148, 140 158 Z" fill="#f4ead2" stroke="#8a6d3b" stroke-width="2"/><path d="M140 26 C 170 16, 230 16, 258 24 L 258 156 C 230 148, 170 148, 140 158 Z" fill="#f4ead2" stroke="#8a6d3b" stroke-width="2"/>`;
+ s+=`<rect x="34" y="34" width="30" height="30" fill="#2b4a8c"/><text x="49" y="58" text-anchor="middle" font-size="24" font-weight="700" fill="#d4a017" font-family="Georgia,serif">S</text>`;
+ const staff=(x,y,w)=>{let o='';for(let k=0;k<4;k++)o+=`<line x1="${x}" y1="${y+k*5}" x2="${x+w}" y2="${y+k*5}" stroke="#b3261e" stroke-width=".9"/>`;for(let n=0;n<w/14;n++)o+=`<rect x="${x+6+n*14}" y="${y+((n*7)%4)*5-3}" width="5" height="5" fill="#222"/>`;return o};
+ s+=staff(70,38,60)+staff(34,76,96)+staff(34,112,96)+staff(150,38,96)+staff(150,76,96);
+ s+=`<rect x="152" y="108" width="92" height="38" fill="#e6c98c" stroke="#8a6d3b" stroke-width="1.5"/>`+[166,184,202,220].map((x,i)=>`<g fill="${['#9b2f1b','#2b4a8c','#3c6b35','#9b2f1b'][i]}"><circle cx="${x+4}" cy="118" r="4"/><rect x="${x}" y="122" width="8" height="18" rx="2"/></g>`).join('');
+ for(let y=60;y<=66;y+=6)s+=`<line x1="70" y1="${y}" x2="130" y2="${y}" stroke="#7a6648" stroke-width="1.5" stroke-dasharray="6 3"/>`;return{vb:'0 0 280 170',s}},
+estaciones:()=>{let s=`<rect width="320" height="110" class="parch"/>`;const cx=[40,120,200,280];
+ s+=`<g transform="translate(40 50)">${Array.from({length:6},(_,i)=>`<ellipse cx="0" cy="-14" rx="7" ry="12" fill="#e58fb4" transform="rotate(${i*60})"/>`).join('')}<circle r="6" fill="#d9b23a"/></g>`;
+ s+=`<g transform="translate(120 50)"><circle r="14" fill="#e8a317"/>${Array.from({length:8},(_,i)=>`<line x1="0" y1="-19" x2="0" y2="-27" stroke="#e8a317" stroke-width="3" stroke-linecap="round" transform="rotate(${i*45})"/>`).join('')}</g>`;
+ s+=`<g transform="translate(200 50) rotate(-30)"><path d="M0 -26 C 18 -12, 18 12, 0 26 C -18 12, -18 -12, 0 -26 Z" fill="#c2561c"/><line x1="0" y1="-24" x2="0" y2="30" stroke="#7a3410" stroke-width="2"/></g>`;
+ s+=`<g transform="translate(280 50)" stroke="#5aa0d6" stroke-width="3" stroke-linecap="round">${[0,60,120].map(r=>`<g transform="rotate(${r})"><line x1="0" y1="-24" x2="0" y2="24"/><path d="M-6 -18 L0 -12 L6 -18 M-6 18 L0 12 L6 18" fill="none"/></g>`).join('')}</g>`;
+ ['primavera','verano','otoño','invierno'].forEach((t,i)=>s+=`<text x="${cx[i]}" y="98" text-anchor="middle" font-size="12" class="mut">${t}</text>`);return{vb:'0 0 320 110',s}},
+cronologia:()=>{const X=y=>80+(y-1630)*1.6;let s=`<rect width="320" height="210" class="parch"/>`;
+ s+=`<rect x="${X(1630)}" y="20" width="${X(1750)-X(1630)}" height="168" fill="var(--voice2)" opacity=".07"/>`;
+ [1650,1700,1750].forEach(y=>s+=`<line x1="${X(y)}" y1="20" x2="${X(y)}" y2="188" class="inks" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/><text x="${X(y)}" y="202" text-anchor="middle" font-size="11" class="mut">${y}</text>`);
+ const P=[['Gaspar Sanz',1640,1710,'ES'],['Pachelbel',1653,1706,'AL'],['Albinoni',1671,1751,'IT'],['Vivaldi',1678,1741,'IT'],['Haendel',1685,1759,'IN'],['Bach',1685,1750,'AL']];
+ const col={IT:'#3c7a4a',AL:'#2b4a8c',IN:'#9b2f1b',ES:'#c27a12'};
+ P.forEach((p,i)=>{const y=34+i*26;s+=`<rect x="${X(p[1])}" y="${y}" width="${X(p[2])-X(p[1])}" height="12" rx="6" fill="${col[p[3]]}"/><text x="${X(p[1])-4}" y="${y+10}" text-anchor="end" font-size="11" font-weight="700" class="ink">${p[0]}</text>`});
+ s+=`<text x="${X(1745)}" y="16" text-anchor="end" font-size="11" class="mut">1750: muere Bach, fin del Barroco</text>`;
+ return{vb:'0 0 320 210',s}},
+};
+function svg(key,label){const d=ILL[key]();return`<svg viewBox="${d.vb}" role="img" aria-label="${esc(label||'Ilustración')}" xmlns="http://www.w3.org/2000/svg">${d.s}</svg>`}
+function fig(key,cap,small){const w=+ILL[key]().vb.split(' ')[2];if(w<=200)small=true;return`<figure class="ill${small?' small':''}">${svg(key,cap)}${cap?`<figcaption>${cap}</figcaption>`:''}</figure>`}
+
+/* =================== FICHAS =================== */
+const FICHAS=[
+{b:'a1',t:'La pintura rupestre',figs:[['pigmentos','De dónde salían los colores']],p:[
+ 'Es la pintura que se hace sobre las <b>paredes y techos de las cuevas</b> o en abrigos naturales. También se llama <b>arte parietal</b>.',
+ 'Surge al final del Paleolítico, hace unos <b>40.000 años</b> (Paleolítico Superior). Junto con el arte mobiliar, son las primeras manifestaciones artísticas.',
+ 'Se pintaba con los <b>dedos</b>, con <b>pinceles de pelo de animal</b> o con <b>espátulas</b>.',
+ 'Colores: <b>rojo</b> del mineral de hierro o de la sangre; <b>negro</b> del carbón; <b>ocre y amarillo</b> de la tierra y de plantas.',
+ 'Temas: animales, figuras humanas y signos abstractos. Hay que distinguir la <b>zona cantábrica</b> y la <b>zona levantina</b>.']},
+{b:'a1',t:'Zona cantábrica: Altamira',figs:[['bisonte','Bisonte al estilo de Altamira (dibujo)']],p:[
+ 'Paleolítico Superior. Pintadas en las <b>paredes y techos de las cuevas</b>.',
+ 'Representan <b>animales aislados</b>, sin formar escenas: bisontes, mamuts, ciervos, caballos, jabalíes, linces.',
+ 'Gran <b>realismo</b>. Son <b>polícromas</b> (varios colores) y aprovechan los <b>salientes de la roca</b> para dar volumen.',
+ 'Significado <b>ritual mágico</b>: pintarlos ayudaría a tener éxito en la caza.',
+ '<b>Altamira</b>, en Santillana del Mar (Cantabria), la «Capilla Sixtina de la Prehistoria». Pintada hacia el 15.000 a. C. La descubrió <b>Marcelino Sanz de Sautuola</b>. Su techo tiene un centenar de animales; destacan los <b>bisontes</b>.']},
+{b:'a1',t:'Zona levantina',figs:[['levantina','Escena de caza al estilo levantino (dibujo)']],p:[
+ 'Se desarrolla en el <b>Neolítico</b>, entre el 8.000 y el 5.000 a. C.',
+ 'Está <b>al aire libre</b> o en abrigos rocosos poco profundos.',
+ '<b>Esquematismo</b>: solo se dibujan los rasgos generales de personas y animales.',
+ 'La <b>figura humana</b> es protagonista: escenas de caza, luchas de guerreros, danzas rituales, recolección de miel.',
+ '<b>Monócromas</b>: un solo color, normalmente rojo o negro. Algunas tenían sentido religioso (fertilidad de la tierra).',
+ 'Ejemplos: <i>Mujer cogiendo miel</i> (Valencia), <i>Escena de caza</i> de la cueva de Valltorta (Castellón), <i>Mujeres danzando</i> de Cogull (Lérida).'],
+ tabla:{h:['','Cantábrica','Levantina'],r:[['Época','Paleolítico Superior','Neolítico'],['Lugar','Fondo de cuevas','Aire libre y abrigos'],['Temas','Animales aislados','Escenas con personas'],['Estilo','Realista, con volumen','Esquemático'],['Color','Polícroma','Monócroma']]}},
+{b:'m1',t:'La música en la Edad Media y el canto gregoriano',figs:[['tetragrama','Notación gregoriana: cuatro líneas y notas cuadradas (dibujo)']],p:[
+ 'La música religiosa es <b>austera y puramente vocal</b>. Se adoptan himnos con texto litúrgico en forma de estrofa.',
+ 'El <b>canto gregoriano</b> es <b>canto llano</b>, <b>sin acompañamiento instrumental</b> y <b>monódico</b> (una sola melodía).',
+ 'La música está <b>supeditada al texto</b>: sigue sus acentos, frases y expresividad.',
+ 'El nombre viene de una <b>falsa atribución al Papa Gregorio I Magno</b> (535-604). No es obra de una persona: fue un proceso de muchas generaciones que Gregorio I impulsó.',
+ 'El papado recopiló las melodías en un libro, el <b>Antifonario</b>, y formó cantores en cada iglesia: la <b>Schola Cantorum</b>.']},
+{b:'m1',t:'Tropos y secuencias',p:[
+ 'Un <b>melisma</b> es un grupo de varias notas cantadas sobre una misma sílaba.',
+ '<b>Tropo</b>: consiste en <b>añadir palabras</b> a los melismas gregorianos.',
+ '<b>Secuencia</b>: composición en <b>prosa rítmica</b> que se añadía como melisma <b>al final del Aleluya</b>. Ejemplo: <i>Victimae paschali laudes</i>.']},
+{b:'m1',t:'El Camino de Santiago',figs:[['vieira','La concha de vieira y la estrella (dibujo)',true]],p:[
+ 'Según la leyenda, en el <b>siglo IX</b> unos pastores vieron una estrella fija sobre un campo y allí encontraron la <b>tumba del apóstol Santiago</b>.',
+ 'En el siglo X terminan las invasiones de vikingos, magiares y sarracenos y llegan <b>peregrinos de toda Europa</b>, que traen el latín, el <b>arte románico</b> y la <b>música románica</b>.',
+ 'El canto al apóstol se convierte en uno de los temas más usados. El Camino vive su mayor auge entre los <b>siglos XI y XV</b>.']},
+{b:'m1',t:'Juglares y trovadores',figs:[['laud','Laúd'],['pandero','Pandero'],['gaita','Gaita'],['arpa','Arpa']],p:[
+ '<b>Juglares</b>: artistas ambulantes que iban de aldea en aldea y de castillo en castillo. Mitad poetas, mitad saltimbanquis: declamación, malabares, música y sátira.',
+ 'Transmiten la música popular <b>no litúrgica</b>, cantan en <b>lengua vulgar</b> (poesía, canciones al vino, a la mujer o contra los eclesiásticos) y usan instrumentos <b>prohibidos por la Iglesia</b>.',
+ '<b>Trovadores</b>: de <b>clase social más elevada</b>; se consideraban superiores a los juglares. <b>Componían</b> las piezas que interpretaban: canciones heroicas, de amor, de política, morales, fúnebres…',
+ 'Los trovadores alcanzan su apogeo en la <b>segunda mitad del siglo XII</b>.']},
+{b:'m1',t:'Alfonso X y las Cantigas de Santa María',figs:[['codice','Un códice medieval con música (dibujo)']],p:[
+ 'Hijo de <b>Fernando III «el Santo»</b>, rey de Castilla y León. Muy culto y avanzado para su época.',
+ 'Los nobles apoyaron a su hijo <b>Sancho IV «el Bravo»</b>. <b>Sevilla</b> fue la única ciudad que siguió fiel a Alfonso; está enterrado en su catedral.',
+ 'Impulsó la <b>Escuela de Traductores de Toledo</b> y escribió una historia de España, un tratado de astronomía y las <b>Cantigas de Santa María</b>.',
+ 'Las Cantigas (mediados del <b>siglo XIII</b>) son un cancionero religioso de <b>427 composiciones</b> en honor a la Virgen, en <b>galaico-portugués</b>. La mayoría cuentan <b>milagros</b> de la Virgen.',
+ 'No las escribió todas el rey: al menos diez son suyas con seguridad (quizá un centenar); el resto, de los colaboradores de su corte.']},
+{b:'m1',t:'La polifonía',figs:[['monodia','Monodia'],['polifonia','Polifonía']],p:[
+ 'La <b>polifonía</b> es el arte de <b>combinar sonidos de forma simultánea</b>. Se desarrolla desde el <b>siglo IX</b> y culmina en el <b>siglo XVI</b>.',
+ '<b>Ars Antiqua</b>: la música de los <b>siglos XII y XIII</b>. Mejora la notación y la técnica, lo que facilita la polifonía.',
+ '<b>Ars Nova</b>: la música del <b>siglo XIV</b>. Más libertad para el compositor, ritmos y movimientos de voces más complejos; preocupación por la medida y el ritmo.',
+ 'En la Iglesia solo se admitía el <b>órgano</b>; después entran la viola y la flauta. Juglares y trovadores usan <b>laúdes, arpas, gaitas, panderos y tamboriles</b>.']},
+{b:'a2',t:'Arte mobiliar',figs:[['venus','Venus paleolítica (dibujo)',true],['baston','Bastón de mando (dibujo)']],p:[
+ 'Objetos que <b>se pueden mover</b> de un sitio a otro.',
+ 'Hechos de <b>piedra, hueso o marfil</b>, con relieves y grabados, a veces pintados.',
+ 'Destacan plaquetas con animales recortados, <b>bastones de mando</b> (instrumentos de caza o símbolos de autoridad), armas como los <b>propulsores</b> y colgantes.',
+ '<b>Venus paleolíticas</b>: estatuillas de mujeres con los atributos femeninos muy marcados, ligadas al <b>culto a la fertilidad y la maternidad</b>. La más famosa es la <b>Venus de Willendorf</b>.']},
+{b:'a2',t:'Arquitectura megalítica: el menhir',figs:[['menhir','Menhir'],['alineamiento','Alineamiento']],p:[
+ 'La arquitectura nace en el <b>Neolítico</b>, cuando el ser humano se hace <b>sedentario</b>, y dura hasta la <b>Edad del Bronce</b>.',
+ '<b>Megalito</b> viene de <i>megas</i> (grande) y <i>lithos</i> (piedra): construcciones con grandes bloques de piedra. Función <b>religiosa y funeraria</b>.',
+ '<b>Menhir</b> («piedra larga»): una piedra clavada en vertical. Es el elemento fundamental del megalitismo. Quizá servía para fijar las almas de los muertos, rendir culto al sol o marcar el territorio.',
+ 'Varios menhires en <b>hilera</b> forman un <b>alineamiento</b>.']},
+{b:'a2',t:'Crómlech y dolmen',figs:[['cromlech','Crómlech'],['dolmen','Dolmen'],['corredor','Dolmen de corredor, visto desde arriba']],p:[
+ '<b>Crómlech</b> («corona de piedras»): menhires colocados <b>en círculo</b>. Quizá un santuario para cultos agrarios o solares. El más conocido: <b>Stonehenge</b> (Gran Bretaña).',
+ '<b>Dolmen</b> («tablero de piedra»): piedras verticales cubiertas por otras <b>horizontales</b>. Se usaba como <b>enterramiento colectivo</b>.',
+ 'Si tiene un pasillo que lleva a una cámara es un <b>dolmen de corredor</b> o de galería.',
+ 'En <b>Antequera (Málaga)</b>: el <b>dolmen de El Romeral</b> (de corredor: pasillo y cámara sepulcral) y el <b>dolmen de Menga</b> (de galería: pasillo adintelado).']},
+{b:'a2',t:'Megalitos de las Islas Baleares',figs:[['talayot','Talayot'],['naveta','Naveta'],['taula','Taula']],p:[
+ 'Se construyen en la <b>Edad del Bronce</b>. Es una arquitectura <b>ciclópea</b>: grandes bloques de piedra.',
+ '<b>Talayot</b>: torre circular, cuadrada o escalonada. Se pensaba que era solo defensiva; quizá también ritual y almacén para guardar y repartir la carne.',
+ '<b>Naveta</b>: construcción alargada con forma de <b>barco invertido</b>. Sirvió de <b>vivienda</b> y de <b>enterramiento colectivo</b>.',
+ '<b>Taula</b>: dos bloques, uno <b>vertical</b> que sostiene otro <b>horizontal</b>, como una mesa. Ritual: cerca se han hallado restos de hogueras y ofrendas de animales.']},
+{b:'m2',t:'Características del Barroco musical',figs:[['acordes','Composición vertical: acordes'],['cronologia','Los compositores del tema en el tiempo']],p:[
+ 'Va de <b>1600 a 1750</b>, año en que muere <b>Johann Sebastian Bach</b>.',
+ 'La música <b>profana</b> prevalece sobre la religiosa.',
+ 'Composición <b>vertical</b>, a través de <b>acordes</b>. Mucha <b>ornamentación</b>, como en las otras artes.',
+ '<b>Ritmos muy marcados</b>, mecánicos. La música <b>instrumental y la vocal</b> tienen la misma importancia.',
+ 'Formas <b>instrumentales</b>: sonata, suite, concierto grosso, obertura, fuga. Formas <b>vocales</b>: ópera, oratorio, cantata, pasión.']},
+{b:'m2',t:'Italia: Albinoni y Vivaldi',figs:[['estaciones','Las cuatro estaciones'],['violin','Violín',true]],p:[
+ 'En Italia surgen las raíces del nuevo estilo. La <b>escuela veneciana</b> hace una música fastuosa y colorista.',
+ '<b>Tommaso Albinoni</b>: nació en <b>Venecia</b>. Maestro de canto, influyó en Bach. Era un <b>dilettante</b> (componía por componer). Ópera <i>Zenobia</i>; hoy se le recuerda por su música instrumental, como el <i>Adagio</i>.',
+ '<b>Antonio Vivaldi</b>: nació en <b>Venecia (1678)</b> y murió en <b>Viena (1741)</b>. Hijo de violinista. Le llamaban el <b>«Padre Rosso»</b> (cura rojo) por el color de su pelo y por ser sacerdote.',
+ 'Obra más popular: <b>Las cuatro estaciones</b>, cuatro <b>conciertos</b> que describen cada estación. También óperas (<i>Orlando</i>, <i>La olimpiada</i>) y conciertos de flauta y mandolina.']},
+{b:'m2',t:'Inglaterra: Haendel',p:[
+ 'Inglaterra iba algo atrasada en música. Su músico más notable fue de origen <b>alemán</b>: <b>Georg Friedrich Haendel</b>.',
+ 'Nació en <b>Halle (Alemania) en 1685</b>. Su padre quería que estudiara Derecho, pero de niño practicaba en secreto con un clavicordio en la buhardilla.',
+ 'Se quedó a vivir en <b>Inglaterra</b> bajo la protección del rey <b>Jorge I</b> y se nacionalizó inglés. Al final de su vida se quedó ciego.',
+ 'Obras: la ópera <i>Julio César</i>; las suites <b>Música acuática</b> (para un paseo del rey en barco por el <b>Támesis</b>) y <b>Música para los reales fuegos de artificio</b>; el oratorio <b>El Mesías</b>, escrito en <b>cuatro semanas</b>, con <b>tres partes</b>.']},
+{b:'m2',t:'Alemania: Pachelbel y Bach',figs:[['organo','Órgano',true],['clave','Clave (clavecín)']],p:[
+ 'Los alemanes llevan las formas italianas a su <b>máxima perfección</b>; de aquí saldrán las formas clásicas.',
+ '<b>Johann Pachelbel</b>: nació y murió en <b>Núremberg</b> (1653-1706). Impulsó el estilo de órgano y clave. Su obra más popular: el <b>Canon</b>.',
+ '<b>Johann Sebastian Bach</b>: nació en <b>Eisenach</b> y murió en <b>Leipzig</b> (1750). Familia pobre con gran tradición musical. Huérfano a los <b>nueve años</b>, lo educó su hermano mayor.',
+ 'Se casó dos veces (María Bárbara y Ana Magdalena) y tuvo <b>20 hijos</b>. Fue organista de la corte y profesor muy exigente.',
+ 'Obras: <b>La Pasión según san Mateo</b>, los seis <b>Conciertos de Brandemburgo</b> y mucha música para <b>órgano</b>, como la <b>Tocata y fuga</b>.']},
+{b:'m2',t:'España: Gaspar Sanz',figs:[['guitarra','Guitarra barroca (dibujo)',true]],p:[
+ '<b>Guitarrista</b> y compositor nacido en <b>Calanda (Teruel)</b>. Estudió Teología en Salamanca y estuvo en Nápoles.',
+ 'Fue profesor de guitarra de don Juan de Austria, hijo de Felipe IV.',
+ 'Obra principal: <b>Instrucción de música sobre la guitarra española</b>, con consejos técnicos y canciones y danzas españolas.',
+ 'Con ella sentó las <b>bases de la técnica de la guitarra clásica moderna</b>.']},
+];
+
+/* =================== PREGUNTAS =================== */
+/* t: test (ok, no[], img?) | vf (ok:true/false) | rel (pairs, n) | cla (cats, items[[texto, índice]], n) */
+const QS=[
+/* ---- Tema 1 Arte ---- */
+{b:'a1',t:'test',q:'¿Cuándo surge la pintura rupestre?',ok:'Al final del Paleolítico, hace unos 40.000 años',no:['En el Neolítico, hace unos 8.000 años','En la Edad del Bronce','En la Edad Media'],exp:'Surge en el Paleolítico Superior, hace unos 40.000 años.'},
+{b:'a1',t:'test',q:'¿Qué es la pintura rupestre o parietal?',ok:'La que se hace en paredes y techos de cuevas o en abrigos',no:['La que se hace sobre objetos que se pueden mover','La que se pinta sobre lienzo','La que se graba en huesos y marfil'],exp:'Rupestre o parietal: sobre las paredes de cuevas y abrigos. Los objetos que se pueden mover son arte mobiliar.'},
+{b:'a1',t:'test',q:'¿De dónde obtenían el color negro?',ok:'Del carbón',no:['De la sangre','Del mineral de hierro','De la tierra amarilla'],exp:'Negro: carbón. Rojo: mineral de hierro o sangre. Ocre y amarillo: tierra y plantas.'},
+{b:'a1',t:'test',q:'¿De dónde procedía el color rojo?',ok:'Del mineral de hierro o de la sangre',no:['Del carbón','De la ceniza','De la leche'],exp:'El rojo se sacaba del mineral de hierro o de la sangre.'},
+{b:'a1',t:'test',q:'¿Con qué aplicaban la pintura en las cuevas?',ok:'Con los dedos, pinceles de pelo de animal o espátulas',no:['Con brochas de cerdas y rodillos','Con plumas de ave mojadas en tinta','Solo soplando polvo de colores'],exp:'Usaban los dedos, pinceles hechos con pelo de animal o espátulas.'},
+{b:'a1',t:'test',q:'¿Qué temas aparecen en la pintura rupestre?',ok:'Animales, figuras humanas y signos abstractos',no:['Paisajes y retratos de reyes','Dioses y templos','Batallas de caballeros'],exp:'Animales, figuras humanas y signos abstractos.'},
+{b:'a1',t:'test',q:'¿Qué representa sobre todo la pintura de la zona cantábrica?',ok:'Animales aislados, sin formar escenas',no:['Escenas de caza con personas','Danzas rituales','Mujeres recogiendo miel'],exp:'En la zona cantábrica, animales aislados y muy realistas. Las escenas con personas son levantinas.'},
+{b:'a1',t:'test',q:'¿Por qué se cree que pintaban animales en las cuevas cantábricas?',ok:'Para tener más éxito en la caza (sentido mágico)',no:['Para decorar sus casas','Para enseñar a leer a los niños','Para marcar el camino de salida'],exp:'Tenían un significado ritual mágico: ayudarían a cazar.'},
+{b:'a1',t:'vf',q:'Las pinturas de la zona cantábrica son polícromas.',ok:true,exp:'Verdadero: usan varios colores. Las levantinas son monócromas.'},
+{b:'a1',t:'test',q:'¿Para qué pintaban sobre los salientes de la roca?',ok:'Para dar volumen y más realismo a las figuras',no:['Porque la roca era más blanda','Para que no se vieran desde fuera','Para gastar menos pintura'],exp:'Los salientes daban volumen a los animales.'},
+{b:'a1',t:'test',q:'¿Dónde está la cueva de Altamira?',ok:'Santillana del Mar (Cantabria)',no:['Antequera (Málaga)','Valltorta (Castellón)','Cogull (Lérida)'],exp:'Altamira está en Santillana del Mar, Cantabria.'},
+{b:'a1',t:'test',q:'¿Quién descubrió las pinturas de Altamira?',ok:'Marcelino Sanz de Sautuola',no:['Alfonso X el Sabio','Gaspar Sanz','El Papa Gregorio I'],exp:'Las descubrió Marcelino Sanz de Sautuola, que paseaba con su hija.'},
+{b:'a1',t:'test',q:'¿Cómo se conoce a la cueva de Altamira?',ok:'La «Capilla Sixtina de la Prehistoria»',no:['La «Catedral del Neolítico»','El «Stonehenge español»','La «Cueva de los caballos»'],exp:'Se la llama la Capilla Sixtina de la Prehistoria.'},
+{b:'a1',t:'test',q:'¿Qué animales destacan en el techo de Altamira?',ok:'Los bisontes',no:['Los mamuts','Los peces','Los osos'],exp:'Hay un centenar de animales y signos; destacan los bisontes.'},
+{b:'a1',t:'test',q:'Según los apuntes, ¿hacia cuándo se pintó Altamira?',ok:'Hacia el 15.000 a. C.',no:['Hacia el 1.500 a. C.','Hacia el 500 d. C.','Hacia el 5.000 a. C.'],exp:'Hacia el 15.000 a. C., en el Paleolítico Superior.'},
+{b:'a1',t:'test',q:'¿En qué época se desarrolla la pintura levantina?',ok:'En el Neolítico (8.000-5.000 a. C.)',no:['En el Paleolítico Superior','En la Edad del Bronce','En la Edad Media'],exp:'La levantina es del Neolítico, entre el 8.000 y el 5.000 a. C.'},
+{b:'a1',t:'test',q:'¿Dónde se encuentran las pinturas levantinas?',ok:'Al aire libre o en abrigos rocosos poco profundos',no:['En lo más profundo de las cuevas','Dentro de los dólmenes','En las paredes de las iglesias'],exp:'Están al aire libre o en abrigos poco profundos.'},
+{b:'a1',t:'test',q:'¿Qué rasgo define el estilo de la pintura levantina?',ok:'El esquematismo: solo los rasgos generales',no:['El realismo con volumen','El uso de muchos colores','La perspectiva'],exp:'Es esquemática: se dibujan solo los rasgos generales.'},
+{b:'a1',t:'vf',q:'Las pinturas levantinas son polícromas.',ok:false,exp:'Falso: son monócromas, normalmente rojas o negras.'},
+{b:'a1',t:'vf',q:'En la pintura levantina la figura humana es protagonista.',ok:true,exp:'Verdadero: caza, luchas, danzas, recolección de miel…'},
+{b:'a1',t:'test',q:'La pintura «Mujer cogiendo miel» pertenece a…',ok:'La zona levantina',no:['La zona cantábrica','El arte mobiliar','La arquitectura megalítica'],exp:'Es levantina: una escena con una figura humana.'},
+{b:'a1',t:'test',q:'¿Qué significado tenían algunas pinturas levantinas?',ok:'Religioso, ligado a ritos de fertilidad de la tierra',no:['Eran mapas para orientarse','Eran anuncios de mercado','Eran retratos de los jefes'],exp:'Se cree que algunas tenían sentido religioso, ligado a la fertilidad de la tierra.'},
+{b:'a1',t:'test',img:'bisonte',q:'¿De qué zona es esta pintura?',ok:'Zona cantábrica',no:['Zona levantina','Es arte mobiliar','Es arte gregoriano'],exp:'Un animal aislado, realista, de varios colores y con volumen: zona cantábrica.'},
+{b:'a1',t:'test',img:'levantina',q:'¿De qué zona es esta pintura?',ok:'Zona levantina',no:['Zona cantábrica','Es un megalito','Es arte mobiliar'],exp:'Escena de caza con figuras humanas esquemáticas y un solo color: zona levantina.'},
+{b:'a1',t:'rel',q:'Relaciona cada color con su origen.',pairs:[['Rojo','Mineral de hierro o sangre'],['Negro','Carbón'],['Ocre y amarillo','Tierra y plantas']],exp:'Rojo: hierro o sangre. Negro: carbón. Ocre y amarillo: tierra y plantas.'},
+{b:'a1',t:'cla',q:'¿Cantábrica o levantina?',cats:['Cantábrica','Levantina'],n:5,items:[['Animales aislados',0],['Escenas de caza con personas',1],['Polícroma',0],['Monócroma',1],['Paleolítico Superior',0],['Neolítico',1],['Fondo de las cuevas',0],['Al aire libre o en abrigos',1],['Gran realismo y volumen',0],['Esquematismo',1]],exp:'Cantábrica: Paleolítico, cuevas, animales aislados, realismo, varios colores. Levantina: Neolítico, aire libre, personas, esquemática, un color.'},
+/* ---- Tema 1 Música ---- */
+{b:'m1',t:'test',q:'¿Cómo era la música religiosa de la Edad Media?',ok:'Austera y puramente vocal',no:['Instrumental y muy alegre','Para orquesta y coro','Cantada en lengua vulgar'],exp:'Música austera, solo vocal y fiel a la idea religiosa.'},
+{b:'m1',t:'test',q:'¿Cómo es el canto gregoriano?',ok:'Canto llano, monódico y sin acompañamiento instrumental',no:['Polifónico y acompañado de órgano','Una danza para instrumentos','Canciones de juglares en lengua vulgar'],exp:'Canto llano, monódico, sin instrumentos.'},
+{b:'m1',t:'test',q:'¿Qué significa que una música sea monódica?',ok:'Que tiene una sola línea melódica',no:['Que suenan varias voces a la vez','Que es solo instrumental','Que no tiene texto'],exp:'Monódica: una sola melodía. Varias a la vez es polifonía.'},
+{b:'m1',t:'test',q:'En el canto gregoriano, ¿qué relación hay entre la música y el texto?',ok:'La música se subordina al texto',no:['El texto se subordina a la música','No tiene texto','Cada voz canta un texto distinto'],exp:'La música sigue los acentos, frases y expresividad del texto.'},
+{b:'m1',t:'test',q:'¿De dónde viene el nombre de canto gregoriano?',ok:'De una falsa atribución al Papa Gregorio I Magno',no:['De un monje llamado Gregorio que lo inventó','Del monasterio de San Gregorio','Del año en que se creó'],exp:'Se atribuyó por error a Gregorio I; él impulsó una reforma, pero no lo compuso.'},
+{b:'m1',t:'vf',q:'El Papa Gregorio I compuso él solo todo el canto gregoriano.',ok:false,exp:'Falso: fue un proceso de muchas generaciones que Gregorio I impulsó.'},
+{b:'m1',t:'test',q:'¿Cómo se llamaba el libro donde se recopilaban las melodías?',ok:'Antifonario',no:['Cantigas','Ars Nova','Schola Cantorum'],exp:'Las melodías se copiaron en un libro llamado Antifonario.'},
+{b:'m1',t:'test',q:'¿Qué era la Schola Cantorum?',ok:'Un grupo de cantores organizado en cada iglesia',no:['El libro de las melodías','Un instrumento de cuerda','La escuela de traductores de Toledo'],exp:'Para formar músicos se creó en cada iglesia un grupo de cantores: la Schola Cantorum.'},
+{b:'m1',t:'test',q:'¿Qué es un tropo?',ok:'Añadir palabras a los melismas gregorianos',no:['Una composición en prosa rítmica tras el Aleluya','Un instrumento de juglar','Un libro de cantos'],exp:'Tropo: añadir palabras a los melismas.'},
+{b:'m1',t:'test',q:'¿Qué es una secuencia?',ok:'Una composición en prosa rítmica añadida al final del Aleluya',no:['Añadir palabras a los melismas','Varias voces a la vez','Una canción de trovador'],exp:'Secuencia: prosa rítmica añadida como melisma al final del Aleluya.'},
+{b:'m1',t:'test',q:'¿Cuál de estas obras es un ejemplo de secuencia?',ok:'Victimae paschali laudes',no:['Las cuatro estaciones','El Mesías','Cantigas de Santa María'],exp:'Victimae paschali laudes es la secuencia de los apuntes.'},
+{b:'m1',t:'test',q:'¿Qué es un melisma?',ok:'Varias notas cantadas sobre una misma sílaba',no:['Una nota por cada sílaba','Un instrumento medieval','Una canción de amor'],exp:'Melisma: grupo de notas sobre una sola sílaba.'},
+{b:'m1',t:'test',q:'Según la leyenda, ¿en qué siglo se encontró la tumba del apóstol Santiago?',ok:'Siglo IX',no:['Siglo I','Siglo XV','Siglo XVII'],exp:'En el siglo IX, guiados por una estrella fija.'},
+{b:'m1',t:'test',q:'¿Qué trajeron los peregrinos del Camino de Santiago?',ok:'El latín, el arte románico y la música románica',no:['La imprenta y la ópera','El Barroco y la guitarra','La pintura rupestre'],exp:'Trajeron el latín, el arte románico y la música románica.'},
+{b:'m1',t:'test',q:'¿Cuándo vivió el Camino de Santiago su mayor auge?',ok:'Entre los siglos XI y XV',no:['Entre los siglos I y V','En el siglo XVIII','En el Paleolítico'],exp:'Del siglo XI al XV.'},
+{b:'m1',t:'test',img:'vieira',q:'¿Con qué se asocian estos símbolos?',ok:'Con el Camino de Santiago',no:['Con el canto gregoriano','Con los megalitos','Con Las cuatro estaciones'],exp:'La concha de vieira es el símbolo de los peregrinos; la estrella recuerda la leyenda del hallazgo.'},
+{b:'m1',t:'test',q:'¿Quiénes eran los juglares?',ok:'Artistas ambulantes, mitad poetas y mitad saltimbanquis',no:['Nobles que componían sus canciones','Monjes que cantaban gregoriano','Reyes músicos'],exp:'Iban de aldea en aldea y de castillo en castillo.'},
+{b:'m1',t:'test',q:'¿En qué lengua cantaban los juglares?',ok:'En lengua vulgar',no:['En latín','En griego','Solo en galaico-portugués'],exp:'Cantaban en lengua vulgar, la que hablaba la gente.'},
+{b:'m1',t:'cla',q:'¿Juglar o trovador?',cats:['Juglar','Trovador'],n:5,items:[['Iba de aldea en aldea y de castillo en castillo',0],['Era de una clase social más elevada',1],['Componía las piezas que interpretaba',1],['Mezclaba malabares, música y sátira',0],['Su apogeo fue en la segunda mitad del siglo XII',1],['Usaba instrumentos prohibidos por la Iglesia',0],['Se consideraba superior al otro',1]],exp:'Juglar: artista ambulante, popular. Trovador: más culto y de clase alta, compositor.'},
+{b:'m1',t:'test',q:'¿De quién era hijo Alfonso X?',ok:'De Fernando III «el Santo»',no:['De Sancho IV «el Bravo»','De Felipe IV','De Jorge I'],exp:'Hijo de Fernando III «el Santo». Sancho IV fue su hijo.'},
+{b:'m1',t:'test',q:'¿Qué ciudad siguió apoyando a Alfonso X y dónde está enterrado?',ok:'Sevilla',no:['Toledo','Santiago de Compostela','Burgos'],exp:'Sevilla le fue fiel; está enterrado en su catedral.'},
+{b:'m1',t:'test',q:'¿Qué escuela impulsó Alfonso X?',ok:'La Escuela de Traductores de Toledo',no:['La Schola Cantorum','La escuela veneciana','La Royal Academy'],exp:'Impulsó la Escuela de Traductores de Toledo.'},
+{b:'m1',t:'test',q:'¿En qué lengua están las Cantigas de Santa María?',ok:'En galaico-portugués',no:['En latín','En castellano','En árabe'],exp:'Son poemas en galaico-portugués con música.'},
+{b:'m1',t:'test',q:'¿Cuántas composiciones tienen las Cantigas de Santa María?',ok:'427',no:['40','100','1.000'],exp:'427 composiciones en honor a la Virgen María.'},
+{b:'m1',t:'test',q:'¿Qué cuentan la mayoría de las Cantigas?',ok:'Milagros en los que interviene la Virgen María',no:['Batallas contra los moros','Historias de amor de trovadores','La vida del apóstol Santiago'],exp:'La mayoría relatan milagros de la Virgen.'},
+{b:'m1',t:'vf',q:'Alfonso X compuso personalmente todas las Cantigas.',ok:false,exp:'Falso: al menos diez son suyas con seguridad (quizá unas cien); el resto, de su corte.'},
+{b:'m1',t:'test',img:'codice',q:'Un libro como este, con poemas a la Virgen y su música, recuerda a las…',ok:'Cantigas de Santa María',no:['Cuatro estaciones','Venus paleolíticas','Conciertos de Brandemburgo'],exp:'Las Cantigas se conservan en códices ilustrados con música.'},
+{b:'m1',t:'test',q:'¿Qué es la polifonía?',ok:'Combinar sonidos de forma simultánea',no:['Una sola melodía sin acompañamiento','Música solo instrumental','Cantar sin texto'],exp:'Polifonía: varias voces o sonidos a la vez.'},
+{b:'m1',t:'test',q:'¿Cuándo se desarrolla la polifonía?',ok:'Desde el siglo IX hasta culminar en el XVI',no:['Solo en el siglo XX','En el Paleolítico','Solo en el siglo XIII'],exp:'Empieza en el siglo IX y culmina en el XVI.'},
+{b:'m1',t:'test',img:'polifonia',q:'¿Qué representa este dibujo?',ok:'Polifonía',no:['Monodia','Canto llano','Un tropo'],exp:'Dos melodías sonando a la vez: polifonía.'},
+{b:'m1',t:'test',img:'monodia',q:'¿Qué representa este dibujo?',ok:'Monodia',no:['Polifonía','Acordes','Ars Nova'],exp:'Una sola melodía: monodia, como el canto gregoriano.'},
+{b:'m1',t:'test',img:'tetragrama',q:'¿Qué música se escribía así, con cuatro líneas y notas cuadradas?',ok:'El canto gregoriano',no:['Las cuatro estaciones','La música de guitarra barroca','La ópera'],exp:'Es la notación del canto gregoriano.'},
+{b:'m1',t:'cla',q:'¿Ars Antiqua o Ars Nova?',cats:['Ars Antiqua','Ars Nova'],n:4,items:[['Siglos XII y XIII',0],['Siglo XIV',1],['Más libertad para el compositor',1],['Ritmos más complejos',1],['Mejora la notación y facilita la polifonía',0]],exp:'Ars Antiqua: siglos XII-XIII. Ars Nova: siglo XIV, más libertad y ritmo.'},
+{b:'m1',t:'test',q:'¿Qué único instrumento se admitía al principio en la Iglesia?',ok:'El órgano',no:['El laúd','La gaita','El pandero'],exp:'En la Iglesia solo el órgano; luego entraron la viola y la flauta.'},
+{b:'m1',t:'test',img:'laud',q:'¿Qué instrumento es este?',ok:'Laúd',no:['Arpa','Gaita','Órgano'],exp:'El laúd: caja en forma de pera y el clavijero doblado hacia atrás.'},
+{b:'m1',t:'test',img:'arpa',q:'¿Qué instrumento es este?',ok:'Arpa',no:['Laúd','Pandero','Flauta'],exp:'El arpa: un marco triangular con cuerdas.'},
+{b:'m1',t:'test',img:'gaita',q:'¿Qué instrumento es este?',ok:'Gaita',no:['Órgano','Laúd','Tamboril'],exp:'La gaita: una bolsa de aire con tubos.'},
+{b:'m1',t:'test',img:'pandero',q:'¿Qué instrumento usaban los juglares?',ok:'Pandero',no:['Órgano','Clave','Violín'],exp:'El pandero, con sonajas alrededor.'},
+/* ---- Tema 2 Arte ---- */
+{b:'a2',t:'test',q:'¿Qué es el arte mobiliar?',ok:'Objetos que se pueden mover de un sitio a otro',no:['Pinturas en las paredes de las cuevas','Construcciones de grandes piedras','Muebles decorados'],exp:'Mobiliar: objetos que se pueden transportar.'},
+{b:'a2',t:'test',q:'¿De qué materiales es el arte mobiliar?',ok:'Piedra, hueso o marfil',no:['Bronce y oro','Barro cocido y vidrio','Madera pintada'],exp:'Piedra, hueso o marfil, con relieves y grabados.'},
+{b:'a2',t:'test',q:'¿Qué podrían ser los bastones de mando?',ok:'Instrumentos de caza o símbolos de autoridad',no:['Instrumentos musicales','Herramientas para pintar','Juguetes para niños'],exp:'Podían servir para cazar o como símbolo de autoridad.'},
+{b:'a2',t:'test',q:'¿Con qué se relacionan las venus paleolíticas?',ok:'Con el culto a la fertilidad y la maternidad',no:['Con la caza de bisontes','Con el culto al sol','Con la música'],exp:'Fertilidad y maternidad eran clave para la supervivencia del grupo.'},
+{b:'a2',t:'test',img:'venus',q:'¿Qué es esta figura?',ok:'Una venus paleolítica',no:['Un menhir','Una taula','Un bastón de mando'],exp:'Estatuilla de mujer con los atributos muy marcados, como la Venus de Willendorf.'},
+{b:'a2',t:'test',img:'baston',q:'¿Qué objeto de arte mobiliar es este?',ok:'Un bastón de mando',no:['Una venus','Un colgante','Una taula'],exp:'Bastón de mando: asta perforada y decorada con grabados.'},
+{b:'a2',t:'test',q:'¿Cuál es la venus paleolítica más conocida de los apuntes?',ok:'Venus de Willendorf',no:['Venus de Altamira','Venus de Menga','Venus de Stonehenge'],exp:'La Venus de Willendorf.'},
+{b:'a2',t:'cla',q:'¿Arte mobiliar o arte rupestre?',cats:['Mobiliar','Rupestre'],n:5,items:[['Venus de Willendorf',0],['Bisontes de Altamira',1],['Bastón de mando',0],['Escena de caza de Valltorta',1],['Colgantes y propulsores',0],['Mujeres danzando de Cogull',1]],exp:'Mobiliar: objetos que se mueven. Rupestre: pintado en la roca.'},
+{b:'a2',t:'test',q:'¿Cuándo nace la arquitectura?',ok:'En el Neolítico, cuando el ser humano se hace sedentario',no:['En el Paleolítico, por la caza','En la Edad Media, con las catedrales','En el Barroco'],exp:'Con la sedentarización del Neolítico.'},
+{b:'a2',t:'test',q:'¿Hasta cuándo dura la arquitectura megalítica?',ok:'Hasta la Edad del Bronce',no:['Hasta el Paleolítico','Hasta la Edad Media','Hasta hoy'],exp:'Del Neolítico a la Edad del Bronce.'},
+{b:'a2',t:'test',q:'¿Qué significa «megalito»?',ok:'Piedra grande',no:['Piedra larga','Corona de piedras','Tablero de piedra'],exp:'Megas: grande; lithos: piedra.'},
+{b:'a2',t:'test',q:'¿Qué función tenían los monumentos megalíticos?',ok:'Religiosa y funeraria',no:['Vivienda','Mercado','Defensa de ciudades'],exp:'Su función era religiosa y funeraria.'},
+{b:'a2',t:'rel',q:'Relaciona cada megalito con el significado de su nombre.',pairs:[['Menhir','Piedra larga'],['Crómlech','Corona de piedras'],['Dolmen','Tablero de piedra']],exp:'Menhir: piedra larga. Crómlech: corona de piedras. Dolmen: tablero de piedra.'},
+{b:'a2',t:'test',q:'¿Cuál es el elemento fundamental del megalitismo?',ok:'El menhir',no:['El dolmen','La taula','La naveta'],exp:'El menhir, una piedra clavada en vertical.'},
+{b:'a2',t:'test',q:'¿Cómo se llama una fila de menhires?',ok:'Alineamiento',no:['Crómlech','Dolmen','Talayot'],exp:'Menhires en hilera forman un alineamiento.'},
+{b:'a2',t:'test',q:'¿Cuál es el crómlech más conocido?',ok:'Stonehenge (Gran Bretaña)',no:['Altamira (Cantabria)','Menga (Antequera)','Willendorf (Austria)'],exp:'Stonehenge, en Gran Bretaña.'},
+{b:'a2',t:'test',q:'¿Para qué se usaba el dolmen?',ok:'Como enterramiento colectivo',no:['Como vivienda','Como torre de vigilancia','Como mesa para comer'],exp:'Era un enterramiento colectivo.'},
+{b:'a2',t:'test',q:'¿Dónde están los dólmenes de Menga y El Romeral?',ok:'En Antequera (Málaga)',no:['En Santillana del Mar (Cantabria)','En Menorca','En Stonehenge'],exp:'Los dos están en Antequera, Málaga.'},
+{b:'a2',t:'rel',q:'Relaciona cada dolmen con su tipo.',pairs:[['El Romeral','De corredor: pasillo y cámara sepulcral'],['Menga','De galería: pasillo adintelado']],exp:'El Romeral: de corredor. Menga: de galería.'},
+{b:'a2',t:'test',img:'menhir',q:'¿Qué megalito es este?',ok:'Menhir',no:['Dolmen','Crómlech','Taula'],exp:'Una sola piedra clavada en vertical: menhir.'},
+{b:'a2',t:'test',img:'alineamiento',q:'¿Qué representa este dibujo?',ok:'Un alineamiento',no:['Un crómlech','Un dolmen','Una naveta'],exp:'Menhires en fila: alineamiento.'},
+{b:'a2',t:'test',img:'cromlech',q:'¿Qué megalito es este?',ok:'Crómlech',no:['Alineamiento','Dolmen','Talayot'],exp:'Menhires en círculo: crómlech, como Stonehenge.'},
+{b:'a2',t:'test',img:'dolmen',q:'¿Qué megalito es este?',ok:'Dolmen',no:['Menhir','Taula','Crómlech'],exp:'Piedras verticales cubiertas por una horizontal: dolmen.'},
+{b:'a2',t:'test',img:'corredor',q:'¿Qué tipo de construcción muestra este plano?',ok:'Un dolmen de corredor',no:['Un crómlech','Un talayot','Una naveta'],exp:'Un pasillo que lleva a una cámara: dolmen de corredor, como El Romeral.'},
+{b:'a2',t:'test',q:'¿Cuándo se construyen los megalitos de las Islas Baleares?',ok:'En la Edad del Bronce',no:['En el Paleolítico','En el Neolítico antiguo','En la Edad Media'],exp:'En la Edad del Bronce.'},
+{b:'a2',t:'test',q:'¿Por qué se dice que la arquitectura balear es ciclópea?',ok:'Porque usa bloques de piedra enormes',no:['Porque tiene un solo ojo de buey','Porque es redonda','Porque es de madera'],exp:'Ciclópea: hecha con grandes bloques de piedra.'},
+{b:'a2',t:'test',q:'¿Qué forma tiene una naveta?',ok:'De barco invertido',no:['De mesa','De torre','De círculo de piedras'],exp:'Naveta: construcción alargada con forma de barco del revés.'},
+{b:'a2',t:'test',q:'¿Para qué servían las navetas?',ok:'Como vivienda y como enterramiento colectivo',no:['Solo como torre defensiva','Como observatorio del sol','Como mercado'],exp:'Sirvieron de vivienda y de enterramiento colectivo.'},
+{b:'a2',t:'test',q:'¿Cómo es una taula?',ok:'Un bloque vertical que sostiene otro horizontal',no:['Una torre de piedras','Un círculo de menhires','Un barco invertido'],exp:'Dos bloques en forma de T, como una mesa.'},
+{b:'a2',t:'test',q:'¿Por qué se cree que las taulas tenían un uso ritual?',ok:'Porque cerca hay restos de hogueras y ofrendas de animales',no:['Porque tienen pinturas de bisontes','Porque dentro hay tumbas','Porque están en cuevas'],exp:'Junto a ellas se han hallado restos de hogueras y ofrendas.'},
+{b:'a2',t:'test',q:'¿Qué función se atribuye hoy a los talayots?',ok:'Defensiva, quizá ritual y almacén de carne',no:['Solo funeraria','Observatorio de estrellas','Iglesia'],exp:'Antes se creía solo defensiva; hoy también ritual y de almacén.'},
+{b:'a2',t:'test',img:'talayot',q:'¿Qué construcción balear es esta?',ok:'Talayot',no:['Naveta','Taula','Dolmen'],exp:'Una torre de grandes piedras: talayot.'},
+{b:'a2',t:'test',img:'naveta',q:'¿Qué construcción balear es esta?',ok:'Naveta',no:['Talayot','Taula','Menhir'],exp:'Forma de barco invertido: naveta.'},
+{b:'a2',t:'test',img:'taula',q:'¿Qué construcción balear es esta?',ok:'Taula',no:['Dolmen','Talayot','Naveta'],exp:'Un bloque vertical y otro horizontal encima: taula.'},
+/* ---- Tema 2 Música (Barroco) ---- */
+{b:'m2',t:'test',q:'¿Entre qué años se sitúa el Barroco musical?',ok:'1600-1750',no:['1400-1600','1750-1820','800-1200'],exp:'De 1600 a 1750.'},
+{b:'m2',t:'test',q:'¿Qué ocurre en 1750, el año que cierra el Barroco?',ok:'Muere Johann Sebastian Bach',no:['Nace Vivaldi','Se estrena El Mesías','Muere Alfonso X'],exp:'1750 es el año de la muerte de Bach.'},
+{b:'m2',t:'vf',q:'En el Barroco prevalece la música religiosa sobre la profana.',ok:false,exp:'Falso: prevalece la profana.'},
+{b:'m2',t:'test',q:'¿Cómo se compone en el Barroco?',ok:'De forma vertical, mediante acordes',no:['Con una sola melodía, sin acompañamiento','Sin ritmo marcado','Solo para voces'],exp:'Composición vertical: acordes.'},
+{b:'m2',t:'vf',q:'En el Barroco, la música instrumental y la vocal tienen la misma importancia.',ok:true,exp:'Verdadero.'},
+{b:'m2',t:'test',q:'¿Cómo son los ritmos del Barroco?',ok:'Muy marcados, mecánicos',no:['Libres y sin compás','Muy lentos y sin pulso','Inexistentes'],exp:'Ritmos muy marcados y mecánicos.'},
+{b:'m2',t:'test',img:'acordes',q:'¿Qué rasgo del Barroco muestra este dibujo?',ok:'La composición vertical con acordes',no:['La monodia gregoriana','Los melismas','El canto llano'],exp:'Notas apiladas: acordes, composición vertical.'},
+{b:'m2',t:'cla',q:'¿Forma instrumental o vocal?',cats:['Instrumental','Vocal'],n:6,items:[['Sonata',0],['Suite',0],['Concierto grosso',0],['Obertura',0],['Fuga',0],['Ópera',1],['Oratorio',1],['Cantata',1],['Pasión',1]],exp:'Instrumentales: sonata, suite, concierto grosso, obertura, fuga. Vocales: ópera, oratorio, cantata, pasión.'},
+{b:'m2',t:'test',q:'¿En qué país surgen las raíces del Barroco musical?',ok:'Italia',no:['Inglaterra','España','Alemania'],exp:'En Italia, con la escuela veneciana.'},
+{b:'m2',t:'rel',q:'Relaciona cada compositor con su país.',n:4,pairs:[['Vivaldi','Italia'],['Albinoni','Italia'],['Haendel','Inglaterra'],['Bach','Alemania'],['Pachelbel','Alemania'],['Gaspar Sanz','España']],exp:'Italia: Vivaldi y Albinoni. Inglaterra: Haendel (de origen alemán). Alemania: Bach y Pachelbel. España: Gaspar Sanz.'},
+{b:'m2',t:'rel',q:'Relaciona cada obra con su compositor.',n:4,pairs:[['Las cuatro estaciones','Vivaldi'],['El Mesías','Haendel'],['Música acuática','Haendel'],['Canon','Pachelbel'],['La Pasión según san Mateo','Bach'],['Conciertos de Brandemburgo','Bach'],['Instrucción de música sobre la guitarra española','Gaspar Sanz'],['Zenobia','Albinoni']],exp:'Vivaldi: Las cuatro estaciones. Haendel: El Mesías y Música acuática. Pachelbel: Canon. Bach: Pasión según san Mateo y Brandemburgo. Sanz: Instrucción… Albinoni: Zenobia.'},
+{b:'m2',t:'test',q:'¿Por qué llamaban a Vivaldi el «Padre Rosso»?',ok:'Por su pelo rojo y por ser sacerdote',no:['Por vestir de rojo en los conciertos','Porque era de Rusia','Por su ópera Orlando'],exp:'Por el color de su pelo y porque se ordenó sacerdote.'},
+{b:'m2',t:'test',q:'¿Dónde nació y dónde murió Vivaldi?',ok:'Nació en Venecia y murió en Viena',no:['Nació en Viena y murió en Venecia','Nació en Halle y murió en Londres','Nació en Eisenach y murió en Leipzig'],exp:'Venecia (1678) y Viena (1741).'},
+{b:'m2',t:'test',q:'¿Qué son Las cuatro estaciones de Vivaldi?',ok:'Cuatro conciertos',no:['Cuatro óperas','Cuatro misas','Cuatro oratorios'],exp:'Cuatro conciertos que describen cada estación.'},
+{b:'m2',t:'test',img:'estaciones',q:'¿Qué obra barroca te recuerdan estos dibujos?',ok:'Las cuatro estaciones, de Vivaldi',no:['El Mesías, de Haendel','El Canon, de Pachelbel','Música acuática, de Haendel'],exp:'Primavera, verano, otoño e invierno: Vivaldi.'},
+{b:'m2',t:'test',q:'¿Dónde nació Albinoni?',ok:'En Venecia',no:['En Halle','En Calanda','En Núremberg'],exp:'Albinoni era veneciano.'},
+{b:'m2',t:'test',q:'¿Qué eran los «dilettantes», como Albinoni?',ok:'Compositores que componían por el gusto de componer',no:['Músicos ciegos','Cantores de iglesia','Juglares ambulantes'],exp:'Componían por componer, por afición.'},
+{b:'m2',t:'test',q:'¿De qué origen era Haendel, el gran músico del Barroco en Inglaterra?',ok:'Alemán',no:['Inglés','Italiano','Español'],exp:'Nació en Halle (Alemania) en 1685 y se nacionalizó inglés.'},
+{b:'m2',t:'test',q:'¿Para qué se compuso la Música acuática de Haendel?',ok:'Para un paseo del rey Jorge I en barco por el Támesis',no:['Para una misa en la catedral','Para la boda de Bach','Para unos fuegos artificiales en Venecia'],exp:'Para amenizar un paseo del rey en barco por el Támesis.'},
+{b:'m2',t:'test',q:'¿Qué tipo de obra es El Mesías?',ok:'Un oratorio',no:['Una ópera','Una suite','Un concierto grosso'],exp:'Es un oratorio en tres partes.'},
+{b:'m2',t:'test',q:'¿Cuánto tardó Haendel en escribir El Mesías?',ok:'Cuatro semanas',no:['Cuatro años','Cuatro días','Diez años'],exp:'Lo escribió en cuatro semanas.'},
+{b:'m2',t:'test',q:'¿Cuántas partes tiene El Mesías?',ok:'Tres',no:['Dos','Cuatro','Seis'],exp:'Tres: el anuncio del Mesías, la vida y sufrimientos de Jesús, y la Resurrección.'},
+{b:'m2',t:'test',q:'¿Qué hacía Haendel de niño en la buhardilla?',ok:'Tocaba a escondidas un clavicordio',no:['Copiaba partituras a la luz de la luna','Tocaba el violín con su padre','Estudiaba Derecho'],exp:'Su madre y su tía le pusieron un clavicordio en secreto. Copiar partituras a la luz de la luna es la historia de Bach.'},
+{b:'m2',t:'test',q:'¿Qué país lleva las formas barrocas a su máxima perfección?',ok:'Alemania',no:['Italia','Inglaterra','España'],exp:'Alemania, de donde saldrán las formas clásicas.'},
+{b:'m2',t:'test',q:'¿Cuál es la obra más popular de Pachelbel?',ok:'Su Canon',no:['El Mesías','Zenobia','Orlando'],exp:'El Canon.'},
+{b:'m2',t:'test',q:'¿Dónde nació y murió Pachelbel?',ok:'En Núremberg',no:['En Venecia','En Leipzig','En Halle'],exp:'Nació y murió en Núremberg.'},
+{b:'m2',t:'test',q:'¿Dónde nació y dónde murió Bach?',ok:'Nació en Eisenach y murió en Leipzig',no:['Nació en Leipzig y murió en Eisenach','Nació en Venecia y murió en Viena','Nació en Halle y murió en Londres'],exp:'Eisenach y Leipzig.'},
+{b:'m2',t:'test',q:'¿Quién educó a Bach cuando quedó huérfano a los nueve años?',ok:'Su hermano mayor',no:['Vivaldi','Su tía','El rey Jorge I'],exp:'Su hermano mayor, con quien aprendió órgano y clave.'},
+{b:'m2',t:'test',q:'¿Cuántos hijos tuvo Bach?',ok:'20',no:['2','9','12'],exp:'Tuvo 20 hijos, algunos músicos.'},
+{b:'m2',t:'test',img:'organo',q:'Bach escribió mucha música para este instrumento, como la Tocata y fuga. ¿Cuál es?',ok:'El órgano',no:['El laúd','La guitarra','La gaita'],exp:'El órgano.'},
+{b:'m2',t:'test',img:'clave',q:'¿Qué instrumento de teclado es este, muy usado en el Barroco?',ok:'El clave (clavecín)',no:['El órgano','El arpa','El pandero'],exp:'El clave o clavecín.'},
+{b:'m2',t:'test',q:'¿Qué instrumento tocaba Gaspar Sanz?',ok:'La guitarra',no:['El violín','El órgano','La gaita'],exp:'Era guitarrista (y también organista).'},
+{b:'m2',t:'test',q:'¿Dónde nació Gaspar Sanz?',ok:'En Calanda (Teruel)',no:['En Sevilla','En Toledo','En Nápoles'],exp:'En Calanda, Teruel.'},
+{b:'m2',t:'test',img:'guitarra',q:'¿Qué compositor barroco español sentó las bases de la técnica de este instrumento?',ok:'Gaspar Sanz',no:['Alfonso X','Vivaldi','Pachelbel'],exp:'Gaspar Sanz, con su Instrucción de música sobre la guitarra española.'},
+];
+QS.forEach((q,i)=>q.id=q.b+i);
+
+/* =================== ESTADO =================== */
+const KEY='ham-t1t2-v1';
+let S={q:{},b:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.q&&r.b)S=r}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={mode:'study',block:'all',cur:null,answered:false,recent:[],exam:null,confirm:false,sel:{}};
+
+function pool(){return QS.filter(q=>st.block==='all'||q.b===st.block)}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function nextQ(){const p=pool().filter(q=>!st.recent.includes(q.id));const list=p.length?p:pool();let r=Math.random()*list.reduce((a,q)=>a+weight(q),0);for(const q of list){r-=weight(q);if(r<=0)return q}return list[list.length-1]}
+
+/* =================== RENDER =================== */
+function renderChips(){const opts=[['all','Todo'],...Object.entries(SHORT).map(([k,v])=>[k,(k[1]==='1'?'T1 · ':'T2 · ')+v])];
+ $('#chips').innerHTML=opts.map(([k,v])=>`<button type="button" data-k="${k}" aria-pressed="${st.block===k}">${v}</button>`).join('');
+ $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{st.block=b.dataset.k;renderChips();go()})}
+
+function renderStudy(){const bl=st.block==='all'?Object.keys(BLOCKS):[st.block];
+ $('#main').innerHTML=`<div class="study">${bl.map(b=>`<h2 class="block-title">${BLOCKS[b]}</h2>`+FICHAS.filter(f=>f.b===b).map(f=>`<article class="sheet card"><span class="kicker">${BLOCKS[f.b]}</span><h2>${f.t}</h2>${f.figs?`<div class="figs">${f.figs.map(g=>fig(g[0],g[1],g[2])).join('')}</div>`:''}<ul>${f.p.map(x=>`<li>${x}</li>`).join('')}</ul>${f.tabla?`<div class="tbl"><table><thead><tr>${f.tabla.h.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${f.tabla.r.map(r=>`<tr>${r.map((c,i)=>i?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`:''}</article>`).join('')).join('')}
+ <button class="primary practice-link" id="toPractice" type="button">Ponerme a prueba con estas preguntas</button></div>`;
+ $('#toPractice').onclick=()=>setMode('practice')}
+
+function prepare(q){const p={q};if(q.t==='test')p.opts=shuffle([q.ok,...q.no]);
+ if(q.t==='vf')p.opts=['Verdadero','Falso'];
+ if(q.t==='rel'){p.pairs=shuffle(q.pairs).slice(0,q.n||q.pairs.length);p.right=shuffle([...new Set(p.pairs.map(x=>x[1]))])}
+ if(q.t==='cla')p.items=shuffle(q.items).slice(0,q.n||q.items.length);return p}
+
+function renderQ(){const P=st.cur,q=P.q;st.answered=false;st.sel={};
+ const meta=st.mode==='exam'?`<span>Pregunta ${st.exam.idx+1} de ${st.exam.list.length}</span>`:'';
+ let body='';
+ if(q.t==='test'||q.t==='vf')body=`<div class="opts${q.t==='vf'?' vf':''}" id="opts">${P.opts.map((o,i)=>`<button type="button" class="opt" data-i="${i}" aria-pressed="false">${esc(o)}</button>`).join('')}</div>`;
+ if(q.t==='rel')body=`<div class="rows">${P.pairs.map((p,i)=>`<div class="row" id="r${i}"><span><b>${esc(p[0])}</b></span><select id="s${i}" aria-label="${esc(p[0])}"><option value="">Elige…</option>${P.right.map(r=>`<option>${esc(r)}</option>`).join('')}</select></div>`).join('')}</div>`;
+ if(q.t==='cla')body=`<div class="rows">${P.items.map((it,i)=>`<div class="row" id="r${i}"><span>${esc(it[0])}</span><select id="s${i}" aria-label="${esc(it[0])}"><option value="">Elige…</option>${q.cats.map((c,k)=>`<option value="${k}">${esc(c)}</option>`).join('')}</select></div>`).join('')}</div>`;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${BLOCKS[q.b]}</span>${meta}</div>
+ ${q.img?fig(q.img,''):''}<p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p>${body}
+ <p class="need" id="need" hidden>Responde antes de comprobar.</p>
+ <div class="actions" id="acts"><button class="primary" id="check" type="button">Comprobar</button></div>
+ <div class="stamp" id="stamp" hidden></div><div id="res" hidden></div></div>`;
+ const o=$('#opts');if(o)o.addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||st.answered)return;st.sel.i=+b.dataset.i;o.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'))});
+ $('#check').onclick=check}
+
+function check(){if(st.answered)return;const P=st.cur,q=P.q;let score=0,done=false;
+ if(q.t==='test'||q.t==='vf'){if(st.sel.i===undefined){$('#need').hidden=false;return}
+  const okIdx=q.t==='test'?P.opts.indexOf(q.ok):(q.ok?0:1);score=st.sel.i===okIdx?1:0;
+  document.querySelectorAll('#opts .opt').forEach((b,i)=>{b.disabled=true;if(i===okIdx)b.classList.add('right');else if(i===st.sel.i)b.classList.add('wrong')});done=true}
+ else{const n=q.t==='rel'?P.pairs.length:P.items.length;const vals=Array.from({length:n},(_,i)=>$('#s'+i).value);if(vals.some(v=>v==='')){$('#need').hidden=false;$('#need').textContent='Completa todas las filas antes de comprobar.';return}
+  let good=0;vals.forEach((v,i)=>{const right=q.t==='rel'?P.pairs[i][1]:q.cats[P.items[i][1]];const ok=q.t==='rel'?v===right:+v===P.items[i][1];if(ok)good++;const r=$('#r'+i);r.classList.add(ok?'right':'wrong');r.insertAdjacentHTML('beforeend',`<small>${ok?'Bien':'Era: '+esc(right)}</small>`);$('#s'+i).disabled=true});
+  score=good/n;done=true}
+ if(!done)return;st.answered=true;$('#need').hidden=true;const all=score===1;
+ const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(all?'b':'mm');sp.textContent=all?'B':'M';
+ if(st.mode==='practice'){const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(all)s.ok++;const b=S.b[q.b]||(S.b[q.b]={ok:0,n:0});b.n++;if(all)b.ok++;save();renderProgress();st.recent.push(q.id);if(st.recent.length>12)st.recent.shift()}
+ else st.exam.res.push({b:q.b,score,q:q.q});
+ const res=$('#res');res.hidden=false;res.innerHTML=`<p class="verdict ${all?'b':'mm'}">${all?'¡Bien!':score>0?'Casi: revisa las filas marcadas.':'No es correcto.'}</p><p class="exp">${q.exp}</p>`;
+ const last=st.mode==='exam'&&st.exam.idx===st.exam.list.length-1;
+ $('#acts').innerHTML=`<button class="primary" id="next" type="button">${last?'Ver nota':'Siguiente'}</button>`;$('#next').onclick=advance;$('#next').focus({preventScroll:true})}
+
+function advance(){if(st.mode==='exam'){st.exam.idx++;if(st.exam.idx>=st.exam.list.length)return renderSummary();st.cur=prepare(st.exam.list[st.exam.idx])}else st.cur=prepare(nextQ());renderQ();$('#main').scrollIntoView({block:'nearest'})}
+
+function startExam(){const p=shuffle(pool());let list;if(st.block==='all'){list=[];Object.keys(BLOCKS).forEach(b=>list.push(...shuffle(QS.filter(q=>q.b===b)).slice(0,3)));list=shuffle(list).slice(0,12)}else list=p.slice(0,10);
+ st.exam={list,idx:0,res:[]};st.cur=prepare(list[0]);renderQ()}
+
+function renderSummary(){const r=st.exam.res;const nota=Math.round(r.reduce((a,x)=>a+x.score,0)/r.length*100)/10;
+ $('#main').innerHTML=`<div class="sheet summary"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+ <ul class="qlist">${r.map(x=>`<li><b style="color:var(${x.score===1?'--ok':'--marker'})">${x.score===1?'B':'M'}</b><span>${esc(x.q)}</span></li>`).join('')}</ul>
+ <p>${nota>=5?'¡Aprobado! Cada prueba sale con preguntas distintas.':'Repasa las fichas de lo que está marcado con M y vuelve a intentarlo.'}</p>
+ <div class="actions"><button class="primary" id="again" type="button">Otra prueba</button><button class="ghost" id="toS" type="button">Ir a las fichas</button></div></div>`;
+ $('#again').onclick=startExam;$('#toS').onclick=()=>setMode('study')}
+
+function renderProgress(){const tot=Object.values(S.b).reduce((a,x)=>a+x.n,0);
+ $('#progress').innerHTML=`<h2>Tu progreso</h2>${Object.keys(BLOCKS).map(k=>{const s=S.b[k]||{ok:0,n:0};const p=s.n?Math.round(s.ok/s.n*100):0;return`<div class="prow"><span>${BLOCKS[k]}</span><div class="bar"><i class="${s.n&&p<60?'low':''}" style="width:${p}%"></i></div><span class="num">${s.ok}/${s.n}</span></div>`}).join('')}
+ <div class="pfoot"><span>${tot?`${tot} preguntas respondidas. Las que fallas vuelven a salir más a menudo.`:'Todavía no has respondido preguntas en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${tot?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};
+ if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={q:{},b:{}};save();st.confirm=false;renderProgress()}}
+
+function setMode(m){st.mode=m;['tStudy','tPractice','tExam'].forEach((id,i)=>$('#'+id).setAttribute('aria-pressed',['study','practice','exam'][i]===m));go();window.scrollTo({top:0})}
+function go(){if(st.mode==='study')renderStudy();else if(st.mode==='practice'){st.cur=prepare(nextQ());renderQ()}else startExam()}
+$('#tStudy').onclick=()=>setMode('study');$('#tPractice').onclick=()=>setMode('practice');$('#tExam').onclick=()=>setMode('exam');
+renderChips();renderProgress();go();
+</script>
+
+</body>
+</html>

@@ -11,6 +11,9 @@ window.CATALOGO = {
       { id: 'matematicas', nombre: 'Matemáticas', tono: 215, apps: [
         { titulo: 'Repaso de Matemáticas', descripcion: 'Potencias, divisibilidad, m.c.d. y m.c.m., fracciones, porcentajes, reglas de tres y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
       ]},
+      { id: 'ham', nombre: 'Historia del Arte y de la Música', tono: 300, apps: [
+        { titulo: 'Arte y Música: Temas 1 y 2', descripcion: 'Arte del Paleolítico y megalitismo; música de la Edad Media y Barroco. Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' }
+      ]},
       { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
       { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
       { id: 'geografia-historia', nombre: 'Geografía e Historia', tono: 30, apps: [] },

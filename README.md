@@ -10,6 +10,8 @@ catalogo.js           Lista de niñas, asignaturas y apps (lo único que hay que
 ale/
   matematicas/
     tema1-repaso/     Repaso de Matemáticas (potencias, divisibilidad, fracciones, porcentajes, reglas de tres, problemas)
+  ham/
+    temas-1-2/        Historia del Arte y de la Música, temas 1 y 2 (Paleolítico, megalitismo, Edad Media, Barroco)
 carla/
 ```
 
