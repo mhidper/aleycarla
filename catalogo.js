@@ -18,7 +18,9 @@ window.CATALOGO = {
       ]},
       { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
       { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
-      { id: 'geografia-historia', nombre: 'Geografía e Historia', tono: 30, apps: [] },
+      { id: 'geografia-historia', nombre: 'Geografía e Historia', tono: 30, apps: [
+        { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' }
+      ]},
       { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [] },
       { id: 'frances', nombre: 'Francés', tono: 190, apps: [] }
     ]
