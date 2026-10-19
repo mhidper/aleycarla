@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audiciones de Música</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Layout: misma familia que las otras apps (hoja cuadriculada, rotulador magenta). El botón redondo de escucha con su anillo de cuenta atrás es el centro de cada pantalla */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1b2a4a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --med:#8a5a2b; --ren:#2b6a8c;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --med:#e0a46a; --ren:#7cc0e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --med:#e0a46a; --ren:#7cc0e6; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 6px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,select:focus-visible,textarea:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(20,30,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.3rem var(--f-display);margin:0;text-wrap:balance}
+.era{display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:999px;border:1.5px solid currentColor}
+.era.med{color:var(--med)} .era.ren{color:var(--ren)}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;margin:0}
+.facts dt{color:var(--muted);font-weight:700;font-size:.9rem}
+.facts dd{margin:0}
+.cues{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:5px}
+.cues li::marker{color:var(--marker)}
+.lyric{font-style:italic;border-left:3px solid var(--marker);padding:2px 0 2px 10px;margin:0;color:var(--ink)}
+.sub{font:800 .85rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:4px 0 -6px}
+audio{width:100%}
+textarea{width:100%;min-height:64px;font:400 1rem var(--f-hand);font-size:1.35rem;line-height:1.2;color:var(--marker);background:var(--paper);border:1.5px dashed var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.miss{background:var(--marker-soft);border-radius:8px;padding:8px 10px;font-size:.92rem;margin:0}
+/* Reproductor del juego */
+.player{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.big{position:relative;width:96px;height:96px;border-radius:50%;border:0;background:var(--btn);color:var(--btn-fg);cursor:pointer;display:grid;place-items:center;flex:none}
+.big svg.ring{position:absolute;inset:-6px;width:108px;height:108px;transform:rotate(-90deg)}
+.big svg.ring circle{fill:none;stroke-width:5}
+.big .ico{width:34px;height:34px;fill:currentColor}
+.pbtns{display:flex;flex-direction:column;gap:8px}
+.small{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .92rem var(--f-body);padding:8px 12px;cursor:pointer}
+.small:disabled{opacity:.45;cursor:default}
+.q{font-size:1.12rem;font-weight:700;margin:0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}
+.opt:disabled{cursor:default}
+.steps{display:flex;gap:6px}
+.steps i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--ink)}
+.steps i.okk{background:var(--ok)} .steps i.ko{background:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}
+.stamp.b{color:var(--ok)} .stamp.mm{color:var(--marker)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 22px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 18px;cursor:pointer}
+.reveal{border-top:2px solid var(--ink);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.reveal p{margin:0}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:90px minmax(0,1fr);gap:10px;align-items:center}
+.row label{font-weight:700;color:var(--muted);font-size:.92rem}
+.row.right select{border-color:var(--ok)} .row.wrong select{border-color:var(--marker)}
+.row small{grid-column:2;color:var(--marker);font-weight:700}
+.row.right small{color:var(--ok)}
+select{font:400 1rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:8px;width:100%;min-width:0}
+/* Carga */
+.load ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+.status{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.status li{display:flex;gap:8px;align-items:baseline;font-size:.95rem;min-width:0}
+.status b{font-family:var(--f-hand);font-size:1.4rem;line-height:1;width:1em;flex:none}
+.status .y{color:var(--ok)} .status .n{color:var(--muted)}
+.filebtn{position:relative;overflow:hidden;display:inline-block}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.loadbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}
+.progress h2{font-size:1.15rem;margin:0 0 10px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 100px 46px;gap:10px;align-items:center;font-size:.9rem;padding:4px 0}
+.bar{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar i.low{background:var(--marker)}
+.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}
+.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.qlist li{display:flex;gap:10px;align-items:baseline}
+.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts{grid-template-columns:1fr}.status{grid-template-columns:1fr}.prow{grid-template-columns:minmax(0,1fr) 70px 42px}.stamp{font-size:2.8rem}.row{grid-template-columns:1fr}.row small{grid-column:1}}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .25s ease-out}@keyframes pop{from{transform:rotate(-8deg) scale(1.6);opacity:0}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
+  <header>
+    <h1>Audiciones de Música <span>Ale</span></h1>
+    <p>Las diez audiciones de los temas 1 y 2: escúchalas con su ficha y después juega a reconocerlas con fragmentos cortos tomados al azar.</p>
+  </header>
+  <div class="tabs" role="group" aria-label="Modo">
+    <button id="tFichas" aria-pressed="true">Escuchar</button>
+    <button id="tJuego" aria-pressed="false">¿Qué suena?</button>
+    <button id="tPrueba" aria-pressed="false">Prueba</button>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Tema"></div>
+  <main id="main"></main>
+  <section class="sheet load" id="load"></section>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mmss=s=>`${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
+
+/* ============ LAS PIEZAS ============
+   lead/trail: segundos de silencio al principio y al final de las grabaciones de clase (para no sacar fragmentos mudos) */
+const P=[
+{id:'calabaza',tema:1,re:/calabaza/,titulo:'La Calabaza',autor:'Anónimo (popular)',epoca:'Edad Media',tipo:'Música popular profana',dur:96,lead:1,trail:1,
+ datos:['Pieza <b>popular y anónima</b>: música del pueblo, no de la Iglesia.','Es la más corta del Tema 1 (alrededor de un minuto y medio).'],
+ pistas:['Suena seguida, sin pausas, con el volumen siempre arriba.','Escúchala varias veces y apunta en «Mi pista» qué te ayuda a reconocerla.']},
+{id:'paterfamilias',tema:1,re:/paterfamilias|calixtin|dum pater/,titulo:'Dum Paterfamilias',autor:'Anónimo (Códice Calixtino)',epoca:'Edad Media',tipo:'Himno de peregrinos a Santiago',dur:368,lead:8,trail:6,
+ datos:['Himno de los <b>peregrinos del Camino de Santiago</b>, recogido en el <b>Códice Calixtino</b> (siglo XII).','La versión de clase es del grupo <b>Ars Combinatoria</b>.','Es la audición más larga: más de seis minutos.'],
+ pistas:['Debajo de las voces hay una <b>nota grave que se mantiene</b> mucho rato (un bordón).','Busca el estribillo con «<b>E ultreia, e suseia</b>», el saludo de los peregrinos («¡más allá, más arriba!»).'],
+ letra:'Herru Sanctiagu, Got Sanctiagu, E ultreia, e suseia, Deus adiuva nos.'},
+{id:'veni',tema:1,re:/veni|creator/,titulo:'Veni Creator Spiritus',autor:'Anónimo (canto gregoriano)',epoca:'Edad Media',tipo:'Himno gregoriano (siglo IX)',dur:205,lead:3,trail:2,
+ datos:['<b>Canto gregoriano</b>: himno del siglo IX.','<b>Monódico</b> (una sola melodía), en <b>latín</b> y <b>sin instrumentos</b>.'],
+ pistas:['Solo voces cantando la misma melodía, sin ningún instrumento.','Va por estrofas, con <b>pausas</b> entre una y otra.','Empieza con las palabras «Veni, Creator Spiritus».'],
+ letra:'Veni, Creator Spiritus, mentes tuorum visita…'},
+{id:'cantiga',tema:1,re:/cantiga/,titulo:'Cantiga de Santa María n.º 100',autor:'Alfonso X el Sabio',epoca:'Edad Media',tipo:'Cantiga en honor a la Virgen (siglo XIII)',dur:204,lead:1,trail:3,
+ datos:['De las <b>Cantigas de Santa María</b> de <b>Alfonso X</b>, en <b>galaico-portugués</b>.','La 100 es una cantiga de alabanza a la Virgen: «Santa Maria, strela do dia».'],
+ pistas:['Voces con instrumentos y un <b>tambor que marca el ritmo</b> con golpes regulares.','El estribillo empieza «Santa Maria, strela do dia».'],
+ letra:'Santa Maria, strela do dia, mostra-nos via pera Deus e nos guia.'},
+{id:'ave',tema:2,re:/ave ?maria|victoria/,titulo:'Ave María',autor:'Atribuida a Tomás Luis de Victoria',epoca:'Renacimiento',tipo:'Motete religioso a varias voces',dur:137,lead:6,trail:8,
+ datos:['Durante mucho tiempo se atribuyó a <b>Tomás Luis de Victoria</b>, pero hoy se sabe que la atribución es <b>errónea</b>.','<b>Polifonía religiosa</b> en <b>latín</b>.'],
+ pistas:['Un <b>coro sin instrumentos</b>, tranquilo, con notas largas.','A diferencia del gregoriano, aquí suenan <b>varias voces distintas a la vez</b> (polifonía).','Empieza «Ave Maria, gratia plena».'],
+ letra:'Ave Maria, gratia plena, Dominus tecum…'},
+{id:'cabezon',tema:2,re:/cabezon|diferencia/,titulo:'Diferencias sobre el Canto llano del Caballero',autor:'Antonio de Cabezón',epoca:'Renacimiento',tipo:'Música instrumental para tecla',dur:204,lead:2,trail:17,
+ datos:['<b>Antonio de Cabezón</b> fue un organista ciego al servicio de Carlos V y Felipe II.','Las <b>diferencias</b> son <b>variaciones</b>: una melodía conocida que se repite cambiándola cada vez.'],
+ pistas:['<b>Sin voces</b>: un instrumento de <b>teclado</b> con notas que se sostienen, como un órgano.','Oirás la misma melodía varias veces, cada vez adornada de otra forma.']},
+{id:'mudarra',tema:2,re:/mudarra|fantasia/,titulo:'Fantasía X',autor:'Alonso Mudarra',epoca:'Renacimiento',tipo:'Música instrumental para vihuela',dur:139,lead:1,trail:6,
+ datos:['<b>Alonso Mudarra</b> la publicó en 1546 para <b>vihuela</b>, un instrumento de cuerda parecido a la guitarra.','Es la fantasía que «imita al arpa».'],
+ pistas:['<b>Un solo instrumento de cuerda pulsada</b>: cada nota suena y se va apagando.','Sin voces. Hacia el final aparecen unos choques de notas raros, muy famosos.']},
+{id:'ojos',tema:2,re:/ojos|cetina/,titulo:'Ojos claros, serenos',autor:'Gutierre de Cetina',epoca:'Renacimiento',tipo:'Madrigal',dur:148,lead:1,trail:1,
+ datos:['Poema de <b>Gutierre de Cetina</b>, poeta sevillano del siglo XVI.','Convertido en <b>madrigal</b> (canción profana a varias voces). La música más conocida es de Francisco Guerrero.'],
+ pistas:['Canción en <b>castellano</b>, sobre unos ojos.','Fíjate en las primeras palabras: «Ojos claros, serenos».'],
+ letra:'Ojos claros, serenos, si de un dulce mirar sois alabados, ¿por qué, si me miráis, miráis airados?'},
+{id:'riu',tema:2,re:/\briu\b|riu riu/,titulo:'Riu, riu, chiu',autor:'Anónimo (Cancionero de Upsala)',epoca:'Renacimiento',tipo:'Villancico de Navidad',dur:147,lead:2,trail:12,
+ datos:['<b>Villancico</b> de Navidad del <b>Cancionero de Upsala</b> (publicado en 1556).','Anónimo; a veces se ha atribuido a <b>Mateo Flecha</b>.'],
+ pistas:['Ritmo muy marcado y alegre.','El estribillo repite «<b>Riu, riu, chiu</b>»: lo canta todo el grupo, y las estrofas un solista.'],
+ letra:'Riu, riu, chiu, la guarda ribera; Dios guardó el lobo de nuestra cordera.'},
+{id:'baldres',tema:2,re:/baldres|encina/,titulo:'Si abrá en este baldrés',autor:'Juan del Encina',epoca:'Renacimiento',tipo:'Villancico profano',dur:72,lead:2,trail:2,
+ datos:['De <b>Juan del Encina</b>, músico y poeta de finales del siglo XV.','Canción profana y desenfadada en <b>castellano</b>.'],
+ pistas:['Es la audición <b>más corta</b> de todas (poco más de un minuto).','Voces en castellano, con ritmo vivo.']},
+];
+const TEMAS={1:'Tema 1 · Edad Media',2:'Tema 2 · Renacimiento'};
+const AUTORES=[...new Set(P.map(p=>p.autor))];
+
+/* ============ ALMACÉN DE AUDIO (IndexedDB, solo en este dispositivo) ============ */
+const DB={db:null,
+ open(){return new Promise(res=>{try{const r=indexedDB.open('audiciones-ham',1);r.onupgradeneeded=()=>r.result.createObjectStore('a');r.onsuccess=()=>{DB.db=r.result;res(true)};r.onerror=()=>res(false)}catch(e){res(false)}})},
+ tx(mode){return DB.db.transaction('a',mode).objectStore('a')},
+ put(id,v){return new Promise(res=>{try{const r=DB.tx('readwrite').put(v,id);r.onsuccess=()=>res(true);r.onerror=()=>res(false)}catch(e){res(false)}})},
+ all(){return new Promise(res=>{const out={};try{const r=DB.tx('readonly').openCursor();r.onsuccess=()=>{const c=r.result;if(c){out[c.key]=c.value;c.continue()}else res(out)};r.onerror=()=>res(out)}catch(e){res(out)}})},
+ clear(){return new Promise(res=>{try{const r=DB.tx('readwrite').clear();r.onsuccess=()=>res(true);r.onerror=()=>res(false)}catch(e){res(false)}})}};
+const URLS={};
+function setUrl(id,buf,type){if(URLS[id])URL.revokeObjectURL(URLS[id]);URLS[id]=URL.createObjectURL(new Blob([buf],{type:type||'audio/mpeg'}))}
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[_\-.]+/g,' ');
+function matchFile(name){const n=norm(name);return P.find(p=>p.re.test(n))}
+
+/* ============ ESTADO ============ */
+const KEY='audiciones-ham-v1';
+let S={p:{},pista:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.p)S={p:r.p,pista:r.pista||{}}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={mode:'fichas',tema:'all',loadMsg:'',confirm:false,confirmAudio:false,round:null,exam:null};
+const pool=()=>P.filter(p=>st.tema==='all'||p.tema===+st.tema);
+const loaded=()=>pool().filter(p=>URLS[p.id]);
+
+/* ============ REPRODUCTOR DE FRAGMENTOS ============ */
+const CLIP=10;
+const au=new Audio();au.preload='auto';
+let clip={end:null,start:0,id:null,onTick:null,pendingSeek:null};
+au.addEventListener('loadedmetadata',()=>{if(clip.pendingSeek!=null){au.currentTime=clip.pendingSeek;clip.pendingSeek=null}});
+au.addEventListener('seeked',()=>{au.muted=false});
+au.addEventListener('timeupdate',()=>{if(clip.end!=null){if(au.currentTime>=clip.end){au.pause();clip.end=null}clip.onTick&&clip.onTick()}});
+au.addEventListener('pause',()=>clip.onTick&&clip.onTick());
+function randomStart(p){const d=isFinite(au.duration)&&clip.id===p.id?au.duration:p.dur;const a=p.lead+1,b=Math.max(a,d-p.trail-CLIP-1);return a+Math.random()*(b-a)}
+function playClip(p,start){stopAll();clip.start=start;clip.end=start+CLIP;
+ if(clip.id!==p.id){clip.id=p.id;au.src=URLS[p.id]}
+ au.muted=true;
+ if(au.readyState>=1){au.currentTime=start}else clip.pendingSeek=start;
+ const pr=au.play();if(pr&&pr.catch)pr.catch(()=>{});
+ setTimeout(()=>{au.muted=false},400)}
+function stopAll(){au.pause();document.querySelectorAll('audio').forEach(a=>{if(a!==au)a.pause()})}
+function clipFrac(){if(au.paused||clip.end==null)return 0;return Math.min(1,Math.max(0,(au.currentTime-clip.start)/CLIP))}
+
+const ICON_PLAY='<svg class="ico" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>';
+const ICON_PAUSE='<svg class="ico" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1"/><rect x="14" y="4.5" width="4" height="15" rx="1"/></svg>';
+const C=2*Math.PI*48;
+function bigBtn(){return`<button class="big" id="big" type="button" aria-label="Escuchar el fragmento"><svg class="ring" viewBox="0 0 108 108"><circle cx="54" cy="54" r="48" stroke="var(--line)"/><circle id="arc" cx="54" cy="54" r="48" stroke="var(--marker)" stroke-dasharray="${C}" stroke-dashoffset="${C}" stroke-linecap="round"/></svg><span id="bigIco">${ICON_PLAY}</span></button>`}
+function wirePlayer(getPiece,getStart,setStart){
+ const upd=()=>{const arc=$('#arc');if(!arc)return;const playing=!au.paused&&clip.end!=null;arc.setAttribute('stroke-dashoffset',C*(1-clipFrac()));$('#bigIco').innerHTML=playing?ICON_PAUSE:ICON_PLAY;$('#big').setAttribute('aria-label',playing?'Parar':'Escuchar el fragmento')};
+ clip.onTick=upd;
+ $('#big').onclick=()=>{if(!au.paused&&clip.end!=null){au.pause();clip.end=null;upd();return}playClip(getPiece(),getStart());upd()};
+ $('#other').onclick=()=>{setStart(randomStart(getPiece()));playClip(getPiece(),getStart());upd()};
+ upd()}
+
+/* ============ PANTALLAS ============ */
+function renderChips(){const o=[['all','Todo'],['1','Tema 1 · Edad Media'],['2','Tema 2 · Renacimiento']];
+ $('#chips').innerHTML=o.map(([k,v])=>`<button type="button" data-k="${k}" aria-pressed="${st.tema===k}">${v}</button>`).join('');
+ $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{st.tema=b.dataset.k;renderChips();go()})}
+const eraTag=p=>`<span class="era ${p.tema===1?'med':'ren'}">${p.epoca}</span>`;
+
+function renderFichas(){stopAll();clip.onTick=null;
+ $('#main').innerHTML=pool().map(p=>`<article class="sheet"><div class="meta"><span>${TEMAS[p.tema]}</span><span>${mmss(p.dur)}</span></div>
+ <h2>${esc(p.titulo)}</h2>
+ <dl class="facts"><dt>Autor</dt><dd>${esc(p.autor)}</dd><dt>Época</dt><dd>${eraTag(p)}</dd><dt>Qué es</dt><dd>${esc(p.tipo)}</dd></dl>
+ ${URLS[p.id]?`<audio controls preload="none" src="${URLS[p.id]}"></audio>`:`<p class="miss">Esta audición todavía no está cargada en este dispositivo. Cárgala abajo, en «Tus audiciones».</p>`}
+ <p class="sub">Para saber</p><ul class="cues">${p.datos.map(d=>`<li>${d}</li>`).join('')}</ul>
+ <p class="sub">Cómo reconocerla</p><ul class="cues">${p.pistas.map(d=>`<li>${d}</li>`).join('')}</ul>
+ ${p.letra?`<p class="lyric">${esc(p.letra)}</p>`:''}
+ <p class="sub"><label for="pista-${p.id}">Mi pista</label></p><textarea id="pista-${p.id}" data-id="${p.id}" placeholder="Escribe con tus palabras cómo la reconoces…">${esc(S.pista[p.id]||'')}</textarea>
+ </article>`).join('');
+ document.querySelectorAll('#main audio').forEach(a=>a.addEventListener('play',()=>{au.pause();document.querySelectorAll('#main audio').forEach(b=>{if(b!==a)b.pause()})}));
+ document.querySelectorAll('#main textarea').forEach(t=>t.addEventListener('input',()=>{S.pista[t.dataset.id]=t.value;save()}))}
+
+function weight(p){const s=S.p[p.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function pickPiece(){const L=loaded();const avoid=st.round&&st.round.p.id;const list=L.length>1?L.filter(p=>p.id!==avoid):L;let r=Math.random()*list.reduce((a,p)=>a+weight(p),0);for(const p of list){r-=weight(p);if(r<=0)return p}return list[list.length-1]}
+function optionsFor(field,p){const all=field==='titulo'?P.map(x=>x.titulo):field==='autor'?AUTORES:['Edad Media','Renacimiento'];if(field==='epoca')return all;return shuffle([p[field],...shuffle(all.filter(x=>x!==p[field])).slice(0,3)])}
+const needAudio=()=>`<div class="sheet"><h2>Primero carga las audiciones</h2><p class="note">Para jugar hace falta tener las grabaciones en este dispositivo. Sigue los pasos de «Tus audiciones», aquí debajo.</p></div>`;
+
+function renderJuego(){if(!loaded().length){$('#main').innerHTML=needAudio();return}
+ const p=pickPiece();st.round={p,step:0,res:[],start:randomStart(p)};drawRound()}
+function drawRound(){const R=st.round,p=R.p;const fields=[['titulo','¿Qué pieza es?'],['autor','¿Quién es el autor?'],['epoca','¿De qué época es?']];
+ const done=R.step>=3;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Fragmento de ${CLIP} segundos</span></div>
+ <div class="steps">${[0,1,2].map(i=>`<i class="${i<R.res.length?(R.res[i]?'okk':'ko'):i===R.step?'on':''}"></i>`).join('')}</div>
+ <div class="player">${bigBtn()}<div class="pbtns"><button class="small" id="other" type="button">Otro trozo de la misma pieza</button></div></div>
+ ${done?'':`<p class="q">${fields[R.step][1]}</p><div class="opts" id="opts">${(R.opts||(R.opts=optionsFor(fields[R.step][0],p))).map(o=>`<button class="opt" type="button">${esc(o)}</button>`).join('')}</div>`}
+ <div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ wirePlayer(()=>p,()=>R.start,v=>R.start=v);
+ if(!done)$('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b.textContent));
+ else finishRound()}
+function answer(v){const R=st.round,p=R.p;const f=['titulo','autor','epoca'][R.step];const ok=v===p[f];
+ $('#opts').querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent===p[f])b.classList.add('right');else if(b.textContent===v)b.classList.add('wrong')});
+ R.res.push(ok);if(R.step===0){const s=S.p[p.id]||(S.p[p.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();renderProgress()}
+ $('#after').innerHTML=`<div class="actions"><button class="primary" id="cont" type="button">${R.step<2?'Seguir':'Ver la ficha'}</button></div>`;$('#cont').onclick=()=>{R.step++;R.opts=null;drawRound()};$('#cont').focus({preventScroll:true})}
+function finishRound(){const R=st.round,p=R.p;const n=R.res.filter(Boolean).length;
+ const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(n===3?'b':'mm');sp.textContent=n===3?'B':'M';
+ $('#after').innerHTML=`<div class="reveal"><p><b>${esc(p.titulo)}</b> · ${esc(p.autor)} · ${eraTag(p)}</p><ul class="cues">${p.pistas.map(d=>`<li>${d}</li>`).join('')}</ul>${S.pista[p.id]?`<p class="lyric">Tu pista: ${esc(S.pista[p.id])}</p>`:''}</div>
+ <div class="actions"><button class="primary" id="nextR" type="button">Otra audición</button></div>`;
+ $('#nextR').onclick=()=>{stopAll();renderJuego()};$('#nextR').focus({preventScroll:true})}
+
+function renderPrueba(){const L=shuffle(loaded());if(!L.length){$('#main').innerHTML=needAudio();return}
+ st.exam={list:L,idx:0,res:[]};drawExam()}
+function drawExam(){const E=st.exam;if(E.idx>=E.list.length)return examSummary();const p=E.list[E.idx];E.start=randomStart(p);
+ const sel=(id,label,opts)=>`<div class="row" id="row-${id}"><label for="e-${id}">${label}</label><select id="e-${id}"><option value="">Elige…</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select></div>`;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Audición ${E.idx+1} de ${E.list.length}</span></div>
+ <div class="player">${bigBtn()}<div class="pbtns"><button class="small" id="other" type="button">Otro trozo</button></div></div>
+ <div class="rows">${sel('titulo','Título',[...P.map(x=>x.titulo)].sort((a,b)=>a.localeCompare(b,'es')))}${sel('autor','Autor',[...AUTORES].sort((a,b)=>a.localeCompare(b,'es')))}${sel('epoca','Época',['Edad Media','Renacimiento'])}</div>
+ <p class="note" id="need" hidden>Completa las tres respuestas.</p>
+ <div class="actions" id="acts"><button class="primary" id="chk" type="button">Comprobar</button></div><div class="stamp" id="stamp" hidden></div></div>`;
+ wirePlayer(()=>p,()=>E.start,v=>E.start=v);
+ $('#chk').onclick=()=>{const v={titulo:$('#e-titulo').value,autor:$('#e-autor').value,epoca:$('#e-epoca').value};if(!v.titulo||!v.autor||!v.epoca){$('#need').hidden=false;return}
+  let good=0;['titulo','autor','epoca'].forEach(f=>{const ok=v[f]===p[f];if(ok)good++;const r=$('#row-'+f);r.classList.add(ok?'right':'wrong');r.insertAdjacentHTML('beforeend',`<small>${ok?'Bien':'Era: '+esc(p[f])}</small>`);$('#e-'+f).disabled=true});
+  const s=S.p[p.id]||(S.p[p.id]={ok:0,n:0});s.n++;if(v.titulo===p.titulo)s.ok++;save();renderProgress();
+  E.res.push({p,score:good/3});const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(good===3?'b':'mm');sp.textContent=good===3?'B':'M';$('#need').hidden=true;
+  $('#acts').innerHTML=`<button class="primary" id="nx" type="button">${E.idx===E.list.length-1?'Ver nota':'Siguiente'}</button>`;$('#nx').onclick=()=>{stopAll();E.idx++;drawExam()};$('#nx').focus({preventScroll:true})}}
+function examSummary(){stopAll();clip.onTick=null;const r=st.exam.res;const nota=Math.round(r.reduce((a,x)=>a+x.score,0)/r.length*100)/10;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+ <ul class="qlist">${r.map(x=>`<li><b style="color:var(${x.score===1?'--ok':'--marker'})">${x.score===1?'B':'M'}</b><span>${esc(x.p.titulo)}${x.score>0&&x.score<1?' (a medias)':''}</span></li>`).join('')}</ul>
+ <p class="note">Cuenta título, autor y época de cada audición.${r.length<P.length&&st.tema==='all'?` Solo había ${r.length} audiciones cargadas.`:''}</p>
+ <div class="actions"><button class="primary" id="again" type="button">Otra prueba</button><button class="ghost" id="toF" type="button">Volver a escuchar</button></div></div>`;
+ $('#again').onclick=renderPrueba;$('#toF').onclick=()=>setMode('fichas')}
+
+/* ============ CARGA DE ARCHIVOS ============ */
+function renderLoad(){const n=P.filter(p=>URLS[p.id]).length;
+ $('#load').innerHTML=`<h2>Tus audiciones</h2>
+ <p class="note">Las grabaciones de clase no están en la web: se guardan solo en este dispositivo. Hay que cargarlas una vez.</p>
+ ${n<P.length?`<ol><li>Descarga los MP3 de la plataforma del cole y guárdalos en la app <b>Archivos</b>.</li><li>Pulsa «Cargar audiciones» y elígelos (puedes seleccionar varios a la vez).</li><li>La app reconoce cada pieza por el nombre del archivo.</li></ol>`:''}
+ <ul class="status">${P.map(p=>`<li><b class="${URLS[p.id]?'y':'n'}">${URLS[p.id]?'✓':'·'}</b><span>${esc(p.titulo)}</span></li>`).join('')}</ul>
+ <div class="loadbar"><span class="filebtn primary"><span>${n?'Cargar más audiciones':'Cargar audiciones'}</span><input id="files" type="file" accept="audio/*,.mp3,.m4a" multiple aria-label="Cargar audiciones"></span>
+ ${n?(st.confirmAudio?`<span class="rconf">¿Quitar las ${n} audiciones de este dispositivo? <button class="rbtn danger" id="aYes" type="button">Sí, quitar</button><button class="rbtn" id="aNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="aDel" type="button">Quitar audiciones</button>`):''}</div>
+ ${st.loadMsg?`<p class="note" role="status">${st.loadMsg}</p>`:''}`;
+ $('#files').onchange=e=>loadFiles([...e.target.files]);
+ if($('#aDel'))$('#aDel').onclick=()=>{st.confirmAudio=true;renderLoad()};
+ if($('#aNo'))$('#aNo').onclick=()=>{st.confirmAudio=false;renderLoad()};
+ if($('#aYes'))$('#aYes').onclick=async()=>{await DB.clear();Object.keys(URLS).forEach(k=>{URL.revokeObjectURL(URLS[k]);delete URLS[k]});clip.id=null;st.confirmAudio=false;st.loadMsg='Audiciones quitadas de este dispositivo.';renderLoad();go()}}
+async function loadFiles(files){const ok=[],bad=[];st.loadMsg='Cargando…';renderLoad();
+ for(const f of files){const p=matchFile(f.name);if(!p){bad.push(f.name);continue}
+  const buf=await f.arrayBuffer();setUrl(p.id,buf,f.type);if(DB.db)await DB.put(p.id,{buf,type:f.type||'audio/mpeg',name:f.name});ok.push(p.titulo)}
+ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+ st.loadMsg=(ok.length?`Cargadas: ${ok.map(esc).join(', ')}.`:'')+(bad.length?` No he reconocido: ${bad.map(esc).join(', ')}. Comprueba que el nombre del archivo incluye el título.`:'');
+ renderLoad();go()}
+
+/* ============ PROGRESO ============ */
+function renderProgress(){const tot=Object.values(S.p).reduce((a,x)=>a+x.n,0);
+ $('#progress').innerHTML=`<h2>Qué tal las reconoces</h2>${P.map(p=>{const s=S.p[p.id]||{ok:0,n:0};const pc=s.n?Math.round(s.ok/s.n*100):0;return`<div class="prow"><span>${esc(p.titulo)}</span><div class="bar"><i class="${s.n&&pc<60?'low':''}" style="width:${pc}%"></i></div><span class="num">${s.ok}/${s.n}</span></div>`}).join('')}
+ <div class="pfoot"><span>${tot?'Cuenta si aciertas el título. Las que fallas salen más a menudo.':'Aún no has jugado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${tot?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};
+ if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S.p={};save();st.confirm=false;renderProgress()}}
+
+function setMode(m){st.mode=m;[['tFichas','fichas'],['tJuego','juego'],['tPrueba','prueba']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===m));go();window.scrollTo({top:0})}
+function go(){stopAll();if(st.mode==='fichas')renderFichas();else if(st.mode==='juego')renderJuego();else renderPrueba()}
+$('#tFichas').onclick=()=>setMode('fichas');$('#tJuego').onclick=()=>setMode('juego');$('#tPrueba').onclick=()=>setMode('prueba');
+
+(async()=>{renderChips();renderProgress();renderLoad();go();
+ if(await DB.open()){const all=await DB.all();let n=0;for(const id in all){if(P.find(p=>p.id===id)&&all[id]&&all[id].buf){setUrl(id,all[id].buf,all[id].type);n++}}if(n){renderLoad();go()}}})();
+</script>
+
+</body>
+</html>
