@@ -14,8 +14,10 @@ ale/
     temas-1-2/        Historia del Arte y de la Música, temas 1 y 2 (Paleolítico, megalitismo, Edad Media, Barroco)
     tema2-animado/    Fichas animadas del Tema 2 (megalitismo y Barroco), hechas con GSAP
     audiciones/       Audiciones de los temas 1 y 2. Los MP3 NO están en el repo: se cargan desde el dispositivo
-  geografia-historia/
+  geografia-historia/   (asignatura «Historia»)
     temas-1-2/        Expedición Historia: La Prehistoria y La Tierra y el Universo
+  mapas-geografia/
+    tema2/            Viaje por España: comunidades, provincias, pueblos y patrimonio (mapa del IGN vía es-atlas)
 carla/
 ```
 
