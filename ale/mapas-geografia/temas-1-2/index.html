@@ -61,6 +61,21 @@ h3{font:800 1.05rem var(--f-display);margin:0}
 .stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
 .st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
 .card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;max-width:64ch}.card li::marker{color:var(--marker)}
+.idea{margin:0;background:var(--paper);border:2px solid var(--geo);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--geo);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0;color:var(--ink)}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.4}
+.bx>b{font:800 1.02rem var(--f-display);color:var(--ink)}
+.nums{display:flex;flex-wrap:wrap;gap:8px}.num{flex:1 1 150px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column}
+.num b{font:800 1.5rem var(--f-display);color:var(--geo);font-variant-numeric:tabular-nums}.num span{font-size:.9rem;color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}.ej small{color:var(--muted);display:block;margin-top:4px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--geo);border-radius:999px;padding:4px 12px;font-size:.92rem;font-weight:700}
+.bars{display:flex;flex-direction:column;gap:7px}.br{display:grid;grid-template-columns:8.5em 1fr;column-gap:10px;align-items:center}
+.bn{font-weight:700;font-size:.95rem}.bt{height:14px;background:var(--grid);border-radius:7px;overflow:hidden}.bt i{display:block;height:100%;border-radius:7px}
+.br small{grid-column:2;color:var(--muted);font-size:.82rem}
 .truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
 .ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
 .ill svg{width:100%;max-width:440px;height:auto;display:block;border-radius:12px}
@@ -219,58 +234,97 @@ function pisosLabels(can){const d=DR.pisos(can);const ys=[185,135,87,44];return 
 const mapaLabels=`<text class="lbl" x="276" y="226" text-anchor="end">← Escala</text>`;
 
 /* =================== ESTACIONES =================== */
+/* Cada ficha: idea (frase resumen), figura y bloques en cajas.
+   Bloques: {k:'cards',h,it:[[título,texto,color]]} · {k:'nums',h,it:[[cifra,texto]]} · {k:'ej',h,t} · {k:'bars',h,it:[[nombre,valor,etiqueta,color]]} · {k:'chips',h,it:[..]} */
+const C={az:'#1e6fd9',ve:'#2f9e5c',ro:'#c0127e',na:'#d9822b',ma:'#a0522d',mo:'#7b4fc4',gr:'#5b6b82'};
 const ST=[
-{id:'g1',t:1,n:'Coordenadas geográficas',s:'Ecuador, paralelos, meridianos, latitud y longitud',fig:()=>physMap({id:'f1',grat:true,peninsula:true,city:'madrid',cityLabel:true,aria:'Red de paralelos y meridianos sobre la Península'}),cap:'Paralelos y meridianos sobre España. Madrid está entre los 40º y 41º N y los 3º y 4º O.',p:[
- 'La <b>geografía</b> estudia las características de la Tierra y la relación de los seres humanos con ella.',
- 'El <b>Ecuador</b> divide la Tierra en dos hemisferios: <b>Norte o septentrional</b> (con más continentes) y <b>Sur o meridional</b> (con más océanos).',
- '<b>Paralelos</b>: líneas circulares paralelas entre sí. <b>Meridianos</b>: líneas que van de polo a polo.',
- 'Las <b>coordenadas geográficas</b> se miden en grados (º), minutos (\') y segundos (").',
- '<b>Latitud</b>: distancia angular entre el Ecuador (paralelo 0) y un punto. <b>Longitud</b>: distancia angular entre el meridiano de <b>Greenwich</b> (meridiano 0) y un punto.',
- 'Ejemplo: <b>Madrid</b> está entre los paralelos <b>40º y 41º de latitud Norte</b> y los meridianos <b>3º y 4º de longitud Oeste</b>.'],
- truco:'La <b>lat</b>itud sube y baja como una escalera (Norte o Sur). La <b>longitud</b> va a lo largo, hacia los lados (Este u Oeste).'},
-{id:'g2',t:1,n:'Forma de la Tierra y proyecciones',s:'Esferoide, planisferios y tipos de proyección',fig:()=>`<figure class="ill">${svgOf('proyec',null,'Tipos de proyección')}<figcaption>Tipos de proyección</figcaption></figure>`,p:[
- 'La Tierra es un <b>esferoide</b>: achatada por los polos y ensanchada por el Ecuador por su <b>rotación</b>. Radio polar: <b>6.357 km</b>; radio ecuatorial: <b>6.378 km</b>.',
- 'Representarla en un plano (<b>planisferio</b>) sin deformarla es imposible, así que se usan <b>proyecciones cartográficas</b>.',
- 'Según lo que conservan: <b>conforme</b> (ángulos y formas), <b>equivalente</b> (superficies, aunque deforma formas y ángulos) y <b>equidistante</b> (distancias reales).',
- 'Según el tipo: <b>cilíndrica</b> (sobre un cilindro; meridianos y paralelos perpendiculares; buena para zonas intertropicales, deforma los polos), <b>cónica</b> (sobre un cono; latitudes medias) y <b>plana o cenital</b> (sobre un plano tangente a un punto; zonas polares).'],
+{id:'g1',t:1,n:'Coordenadas geográficas',s:'Ecuador, paralelos, meridianos, latitud y longitud',
+ idea:'Para encontrar cualquier lugar de la Tierra usamos una <b>cuadrícula imaginaria</b> de líneas: los <b>paralelos</b> y los <b>meridianos</b>.',
+ fig:()=>physMap({id:'f1',grat:true,peninsula:true,city:'madrid',cityLabel:true,aria:'Red de paralelos y meridianos sobre la Península'}),cap:'Paralelos y meridianos sobre España, con Madrid marcado',
+ b:[{k:'cards',h:'¿Qué es la geografía?',it:[['Geografía','Estudia cómo es la Tierra y cómo vivimos las personas en ella.',C.gr]]},
+ {k:'cards',h:'Las líneas imaginarias',it:[
+  ['Ecuador','Es la línea 0. Parte la Tierra en dos mitades: <b>Norte</b> o septentrional (más continentes) y <b>Sur</b> o meridional (más océanos).',C.ro],
+  ['Paralelos','Círculos paralelos al Ecuador. Van de este a oeste.',C.az],
+  ['Meridianos','Líneas que van de polo a polo. El meridiano 0 es el de <b>Greenwich</b> (Londres).',C.ve]]},
+ {k:'cards',h:'Las coordenadas',it:[
+  ['Latitud','¿Cuánto está al <b>norte o al sur</b> del Ecuador? Se escribe con <b>N</b> o <b>S</b>.',C.az],
+  ['Longitud','¿Cuánto está al <b>este o al oeste</b> de Greenwich? Se escribe con <b>E</b> u <b>O</b>.',C.ve],
+  ['Unidades','Grados (º), minutos (\') y segundos (").',C.gr]]},
+ {k:'ej',h:'Ejemplo: Madrid',t:'Latitud: entre <b>40º y 41º N</b>.<br>Longitud: entre <b>3º y 4º O</b> (está a la izquierda de Greenwich).'}],
+ truco:'La <b>lat</b>itud sube y baja como una escalera (Norte o Sur). La <b>long</b>itud va a lo largo, hacia los lados (Este u Oeste).'},
+{id:'g2',t:1,n:'Forma de la Tierra y proyecciones',s:'Esferoide, planisferios y tipos de proyección',
+ idea:'La Tierra no es una bola perfecta y no se puede aplanar sin deformarla. Por eso hay distintas maneras de dibujarla en un papel: las <b>proyecciones</b>.',
+ fig:()=>`<figure class="ill">${svgOf('proyec',null,'Tipos de proyección')}<figcaption>Tipos de proyección según la figura sobre la que se proyecta</figcaption></figure>`,
+ b:[{k:'nums',h:'La forma de la Tierra: un esferoide',it:[['6.357 km','radio polar (de polo al centro)'],['6.378 km','radio ecuatorial (más ancho)']]},
+ {k:'cards',h:'',it:[['¿Por qué?','Al girar (<b>rotación</b>), la Tierra se achata por los polos y se ensancha por el Ecuador.',C.gr],['Planisferio','Mapa de toda la Tierra en un plano. Siempre deforma algo.',C.gr]]},
+ {k:'cards',h:'¿Qué conserva cada proyección?',it:[
+  ['Conforme','Conserva las <b>formas</b> y los ángulos.',C.ro],
+  ['Equivalente','Conserva las <b>superficies</b> (los tamaños), aunque deforma las formas.',C.na],
+  ['Equidistante','Conserva las <b>distancias</b> reales.',C.az]]},
+ {k:'cards',h:'¿Sobre qué figura se proyecta?',it:[
+  ['Cilíndrica','Sobre un cilindro. Las líneas forman una cuadrícula. Buena para el <b>Ecuador</b>; deforma mucho los polos.',C.ve],
+  ['Cónica','Sobre un cono. Ideal para <b>latitudes medias</b>, como España.',C.na],
+  ['Plana o cenital','Sobre un plano que toca un punto. Se usa para los <b>polos</b>.',C.az]]}],
  truco:'Con<b>forme</b>: guarda la <b>forma</b>. Equi<b>valente</b>: guarda la superficie. Equi<b>distante</b>: guarda la <b>distancia</b>.'},
-{id:'g3',t:1,n:'Cómo se lee un mapa',s:'Tipos, elementos y escalas',fig:()=>`<figure class="ill">${svgOf('mapa',null,'Un mapa de ejemplo con sus elementos')}<figcaption>Un mapa inventado con sus elementos: título, orientación, toponimia, leyenda, coordenadas y escala</figcaption></figure>`,p:[
- 'Un <b>mapa</b> es una representación convencional, simplificada y selectiva de un espacio en dos dimensiones.',
- '<b>Mapas topográficos</b>: elementos físicos (relieve, ríos). <b>Mapas temáticos</b>: un tema concreto (clima, política, economía, población).',
- 'Herramientas digitales: globos virtuales (Google Earth), <b>SIG</b>, <b>GPS</b>, <b>teledetección</b> por satélite y atlas digitales.',
- 'Elementos de un mapa: <b>título</b>, <b>orientación</b> (flecha o rosa de los vientos, normalmente al Norte), <b>toponimia</b> (nombres de lugares), <b>leyenda</b> (símbolos y colores), <b>coordenadas</b> y <b>escala</b>.',
- '<b>Escala numérica</b>: una fracción. En <b>1:25.000</b>, 1 cm del mapa son <b>25.000 cm = 250 m</b> reales. <b>Escala gráfica</b>: lo mismo con una línea dividida en tramos iguales.'],
- truco:'Para pasar cm a metros, quita <b>dos ceros</b>; para pasar a km, quita <b>cinco</b>. 25.000 cm = 250 m = 0,25 km.'},
-{id:'g4',t:2,n:'El relieve de España',s:'Meseta, cordilleras, depresiones e islas',fig:()=>physMap({id:'f4',montes:'lab',zonas:true,picos:'lab',aria:'Relieve de España'}),cap:'Las grandes unidades del relieve (posición aproximada)',p:[
- 'Altitud media de la Península: <b>660 m</b>, solo superada en Europa por <b>Suiza</b>, por la gran <b>Meseta</b> y las altas cordilleras.',
- '<b>Meseta Central</b>: bloque aplanado inclinado hacia el Atlántico. El <b>Sistema Central</b> la divide en <b>Submeseta Norte</b> (cuenca del Duero) y <b>Submeseta Sur</b> (cuencas del Tajo y el Guadiana, con los <b>Montes de Toledo</b>).',
- '<b>Rebordes de la Meseta</b>: <b>Macizo Galaico-Leonés</b> (NO, montañas antiguas y redondeadas), <b>Cordillera Cantábrica</b> (con los <b>Picos de Europa</b>, más de 2.500 m), <b>Sistema Ibérico</b> (al este) y <b>Sierra Morena</b> (escalón hacia el Guadalquivir).',
- '<b>Cordilleras exteriores</b>: <b>Pirineos</b> (más de 3.000 m; <b>Aneto, 3.404 m</b>), <b>Montes Vascos</b>, <b>Cordilleras Costero-Catalanas</b> y <b>Cordilleras Béticas</b> (Subbética y Penibética, con el <b>Mulhacén, 3.479 m</b>, el más alto de la Península).',
- '<b>Depresiones</b>: la del <b>Ebro</b> (NE, unos 250 m) y la del <b>Guadalquivir</b> (SO, llanura baja abierta al mar).',
- '<b>Islas</b>: <b>Canarias</b> son volcánicas, con el <b>Teide (3.715 m)</b>, el pico más alto de España. <b>Baleares</b> prolongan las Béticas y las Costero-Catalanas.'],
+{id:'g3',t:1,n:'Cómo se lee un mapa',s:'Tipos, elementos y escalas',
+ idea:'Un mapa es un <b>dibujo simplificado</b> de un lugar: no lo enseña todo, solo lo que interesa.',
+ fig:()=>`<figure class="ill">${svgOf('mapa',null,'Un mapa de ejemplo con sus elementos')}<figcaption>Un mapa inventado con sus seis elementos</figcaption></figure>`,
+ b:[{k:'cards',h:'Dos tipos de mapas',it:[['Topográfico','Muestra lo <b>físico</b>: montañas, ríos, costas…',C.ma],['Temático','Trata <b>un tema</b>: clima, población, economía, política…',C.mo]]},
+ {k:'cards',h:'Los 6 elementos de un mapa',it:[
+  ['1. Título','Dice de qué trata el mapa.',C.ro],['2. Orientación','Flecha o rosa de los vientos que señala el <b>Norte</b>.',C.ro],
+  ['3. Toponimia','Los <b>nombres</b> de los lugares.',C.ro],['4. Leyenda','Explica qué significa cada <b>símbolo y color</b>.',C.ro],
+  ['5. Coordenadas','La red de paralelos y meridianos.',C.ro],['6. Escala','Cuántas veces se ha <b>reducido</b> la realidad.',C.ro]]},
+ {k:'ej',h:'Cómo funciona la escala 1:25.000',t:'<b>1 cm</b> en el mapa = <b>25.000 cm</b> en la realidad<br>25.000 cm = <b>250 m</b> = 0,25 km<br><small>La escala <b>numérica</b> es esta fracción; la <b>gráfica</b> es una regla dibujada con tramos iguales.</small>'},
+ {k:'chips',h:'Mapas en el ordenador',it:['Google Earth','SIG','GPS','Teledetección (satélites)','Atlas digitales']}],
+ truco:'De centímetros a metros, quita <b>dos ceros</b>; a kilómetros, quita <b>cinco</b>. 25.000 cm = 250 m = 0,25 km.'},
+{id:'g4',t:2,n:'El relieve de España',s:'Meseta, cordilleras, depresiones e islas',
+ idea:'España es un país <b>alto</b>: 660 m de media (en Europa solo la supera Suiza). En el centro hay una gran <b>meseta</b> rodeada de montañas.',
+ fig:()=>physMap({id:'f4',montes:'lab',zonas:true,picos:'lab',aria:'Relieve de España'}),cap:'Las grandes unidades del relieve (posición aproximada)',
+ b:[{k:'cards',h:'En el centro',it:[['Meseta Central','Una gran llanura alta, inclinada hacia el Atlántico.',C.na],['Sistema Central','La parte en dos: <b>Submeseta Norte</b> (río Duero) y <b>Submeseta Sur</b> (Tajo y Guadiana, con los Montes de Toledo).',C.ma]]},
+ {k:'cards',h:'Montañas que rodean la Meseta',it:[['Macizo Galaico-Leonés','Noroeste. Montañas viejas y redondeadas.',C.ma],['Cordillera Cantábrica','Norte. Tiene los <b>Picos de Europa</b> (más de 2.500 m).',C.ma],['Sistema Ibérico','Este.',C.ma],['Sierra Morena','Sur. Un gran escalón que baja al Guadalquivir.',C.ma]]},
+ {k:'cards',h:'Montañas fuera de la Meseta',it:[['Pirineos','Separan España de Francia. Pico <b>Aneto</b>.',C.mo],['Montes Vascos','Unen Pirineos y Cantábrica.',C.mo],['Costero-Catalanas','Junto al Mediterráneo, en Cataluña.',C.mo],['Cordilleras Béticas','Sur. Subbética y Penibética, con el <b>Mulhacén</b>.',C.mo]]},
+ {k:'cards',h:'Llanuras bajas e islas',it:[['Depresión del Ebro','Nordeste, unos 250 m.',C.ve],['Depresión del Guadalquivir','Suroeste, muy baja y abierta al mar.',C.ve],['Canarias','Islas <b>volcánicas</b>. Tienen el Teide.',C.az],['Baleares','Continúan las Béticas y las Costero-Catalanas.',C.az]]},
+ {k:'bars',h:'Los picos más altos',it:[['Teide (Canarias)',3715,'3.715 m · el más alto de España',C.ro],['Mulhacén (Béticas)',3479,'3.479 m · el más alto de la Península',C.ma],['Aneto (Pirineos)',3404,'3.404 m',C.mo]]}],
  truco:'Picos de mayor a menor: <b>T</b>eide, <b>M</b>ulhacén, <b>A</b>neto («<b>T</b>res <b>M</b>ontañas <b>A</b>ltas»).'},
-{id:'g5',t:2,n:'Costas y ríos',s:'Tres costas y tres vertientes',fig:()=>physMap({id:'f5',rios:'lab',aria:'Ríos de España'}),cap:'Los ríos del tema (trazado aproximado)',p:[
- '<b>Costa cantábrica</b>: alta, rocosa, con acantilados y rías cortas (Avilés).',
- '<b>Costa atlántica</b>: en Galicia, alta y recortada con grandes <b>rías</b>; en el golfo de Cádiz, baja, arenosa y con <b>dunas</b>.',
- '<b>Costa mediterránea</b>: la más extensa; alterna playas bajas y arenosas con zonas altas y rocosas (cabo de Creus).',
- '<b>Vertiente cantábrica</b>: ríos cortos, caudalosos y de fuerte corriente (Nalón, Nervión).',
- '<b>Vertiente atlántica</b>: ríos largos, con muchos afluentes y caudal: <b>Tajo</b> (el más largo, <b>1.007 km</b>), <b>Duero</b> (895 km), <b>Guadiana</b> (780 km), <b>Guadalquivir</b> (657 km) y <b>Miño</b> (310 km).',
- '<b>Vertiente mediterránea</b>: ríos cortos e irregulares, con <b>estiaje</b> en verano, salvo el <b>Ebro</b> (910 km).'],
+{id:'g5',t:2,n:'Costas y ríos',s:'Tres costas y tres vertientes',
+ idea:'España tiene <b>tres mares</b>. Cada uno tiene su tipo de <b>costa</b> y su <b>vertiente</b> (los ríos que desembocan en él).',
+ fig:()=>physMap({id:'f5',rios:'lab',aria:'Ríos de España'}),cap:'Los ríos del tema (trazado aproximado)',
+ b:[{k:'cards',h:'Mar Cantábrico (norte)',it:[['Costa','<b>Alta y rocosa</b>, con acantilados y rías cortas (Avilés).',C.az],['Ríos','<b>Cortos</b>, con mucha agua y fuerza (Nalón, Nervión).',C.az]]},
+ {k:'cards',h:'Océano Atlántico (oeste y suroeste)',it:[['Costa','En Galicia, <b>alta</b> con grandes <b>rías</b>. En el golfo de Cádiz, <b>baja y de arena</b>, con dunas.',C.ve],['Ríos','<b>Largos</b>, con muchos afluentes y mucha agua: Tajo, Duero, Guadiana, Guadalquivir, Miño.',C.ve]]},
+ {k:'cards',h:'Mar Mediterráneo (este)',it:[['Costa','La <b>más larga</b>. Mezcla playas de arena y zonas de rocas (cabo de Creus).',C.na],['Ríos','<b>Cortos e irregulares</b>; en verano llevan poca agua (<b>estiaje</b>). La excepción es el <b>Ebro</b>.',C.na]]},
+ {k:'bars',h:'Los ríos más largos',it:[['Tajo',1007,'1.007 km · el más largo',C.ve],['Ebro',910,'910 km · Mediterráneo',C.na],['Duero',895,'895 km',C.ve],['Guadiana',780,'780 km',C.ve],['Guadalquivir',657,'657 km',C.ve],['Miño',310,'310 km',C.ve]]}],
  truco:'Ríos de más largo a más corto: «<b>T</b>odos <b>E</b>mpiezan <b>D</b>e <b>G</b>rande <b>G</b>anando <b>M</b>etros»: Tajo, Ebro, Duero, Guadiana, Guadalquivir, Miño.'},
-{id:'g6',t:2,n:'Climas y paisajes',s:'Climas, bioclimas y pisos de vegetación',fig:()=>`<figure class="ill">${svgOf('pisos',false,'Pisos de vegetación de montaña',pisosLabels(false))}<figcaption>Pisos de vegetación en la montaña</figcaption></figure>`,p:[
- 'El clima depende de la <b>latitud</b>, el <b>relieve</b> y la <b>cercanía al mar</b>.',
- '<b>Oceánico o atlántico</b> (norte): suave y con lluvias todo el año. <b>Mediterráneo</b>, el más extendido: <b>continentalizado</b> (interior: inviernos fríos y veranos calurosos), <b>costero</b> (veranos cálidos, inviernos suaves, pocas lluvias) y <b>árido</b> (sureste, Almería: casi sin lluvia). <b>De montaña</b>: frío, con mucha precipitación y nieve. <b>Subtropical</b> (Canarias): cálido todo el año y muy seco.',
- '<b>Bioclima oceánico</b>: paisaje verde, bosques de hoja caduca (<b>roble, haya, castaño</b>) y prados. Ganadería, pesca, madera, turismo; maíz, patata y manzanos.',
- '<b>Mediterráneo de costa</b>: muy humanizado (turismo, industria). <b>Encinas, alcornoques y pinos</b>; matorral (tomillo, romero). Invernaderos, regadío y secano (<b>vid, olivo, cereal</b>).',
- '<b>Mediterráneo continental</b>: sequía, <b>dehesas</b> y secano extensivo; ciudades grandes; energías <b>eólica y solar</b>.',
- '<b>Montaña</b>: pisos de vegetación: encinas (menos de 1.000 m), robles y hayas (1.000-1.600 m), pinos y abetos (1.600-2.400 m) y matorral y roca (más de 2.400 m). Turismo de esquí y madera.',
- '<b>Subtropical (Canarias)</b>: cardonal y tabaibal en la costa, <b>laurisilva</b> (600-1.200 m) y <b>pino canario</b> (1.200-2.400 m). Terrazas, plátano y aguacate.']},
-{id:'g7',t:2,n:'Espacios protegidos y riesgos',s:'Parques nacionales y problemas ambientales',fig:()=>physMap({id:'f7',parques:'lab',aria:'Parques nacionales del tema'}),cap:'Parques nacionales que aparecen en el tema',p:[
- 'España tiene una red de <b>Parques Nacionales</b>: <b>Doñana</b>, <b>Picos de Europa</b>, <b>Teide</b>, <b>Sierra de Guadarrama</b> o <b>Sierra de las Nieves</b> (Málaga), entre otros.',
- 'Riesgos: <b>incendios forestales</b> (pérdida de biodiversidad y del suelo), <b>inundaciones</b> (lluvias torrenciales), <b>desertización</b> (clima y erosión) y <b>contaminación</b> del aire (gases de efecto invernadero), del agua (vertidos) y del suelo (residuos).',
- '<b>Aznalcóllar (1998)</b>: se rompió una balsa minera y los lodos tóxicos contaminaron el entorno de <b>Doñana</b>.',
- 'Paisajes diversos: Lugo (Galicia), Consuegra (Castilla-La Mancha), Cerler (Aragón), Puerto Rico (Canarias) o Santanyí (Baleares).']},
+{id:'g6',t:2,n:'Climas y paisajes',s:'Climas, bioclimas y pisos de vegetación',
+ idea:'El clima cambia según la <b>latitud</b>, el <b>relieve</b> y lo <b>cerca del mar</b> que esté un lugar. Y cada clima tiene su paisaje.',
+ fig:()=>`<figure class="ill">${svgOf('pisos',false,'Pisos de vegetación de montaña',pisosLabels(false))}<figcaption>Pisos de vegetación en la montaña: cuanto más alto, otras plantas</figcaption></figure>`,
+ b:[{k:'cards',h:'Los climas',it:[
+  ['Oceánico','Norte. Suave y con <b>lluvia todo el año</b>.',C.az],
+  ['Mediterráneo','El más extendido. Tres tipos: <b>continentalizado</b> (interior: inviernos fríos y veranos calurosos), <b>costero</b> (suave, poca lluvia) y <b>árido</b> (sureste, Almería: casi no llueve).',C.na],
+  ['De montaña','Frío, con mucha lluvia y nieve.',C.mo],
+  ['Subtropical','Canarias. <b>Cálido</b> todo el año y muy seco.',C.ro]]},
+ {k:'cards',h:'Los paisajes (bioclimas)',it:[
+  ['Oceánico','<b>Verde</b>: robles, hayas, castaños y prados. Vacas, pesca, madera; maíz, patata y manzanas.',C.az],
+  ['Mediterráneo de costa','Encinas, alcornoques, pinos, tomillo y romero. Turismo e industria; invernaderos, vid, olivo y cereal.',C.na],
+  ['Mediterráneo de interior','Sequía y <b>dehesas</b>. Cereal de secano, grandes ciudades, molinos de viento y placas solares.',C.na],
+  ['Montaña','Pisos de vegetación (dibujo de arriba). Esquí y madera.',C.mo],
+  ['Subtropical (Canarias)','Cardón y tabaiba en la costa, <b>laurisilva</b> (600-1.200 m) y <b>pino canario</b> (1.200-2.400 m). Plátanos y aguacates en terrazas.',C.ro]]}]},
+{id:'g7',t:2,n:'Espacios protegidos y riesgos',s:'Parques nacionales y problemas ambientales',
+ idea:'Los paisajes más valiosos se protegen como <b>Parques Nacionales</b>, porque la naturaleza también corre <b>peligros</b>.',
+ fig:()=>physMap({id:'f7',parques:'lab',aria:'Parques nacionales del tema'}),cap:'Parques nacionales que aparecen en el tema',
+ b:[{k:'chips',h:'Parques Nacionales del tema',it:['Doñana','Picos de Europa','Teide','Sierra de Guadarrama','Sierra de las Nieves (Málaga)']},
+ {k:'cards',h:'Los riesgos',it:[
+  ['Incendios','Se pierden plantas, animales y suelo.',C.ro],['Inundaciones','Por lluvias torrenciales.',C.az],
+  ['Desertización','El suelo se vuelve pobre y seco por el clima y la erosión.',C.na],['Contaminación','Del aire (gases de efecto invernadero), del agua (vertidos) y del suelo (basuras).',C.gr]]},
+ {k:'ej',h:'Un caso real: Aznalcóllar (1998)',t:'Se rompió una <b>balsa de una mina</b> y salieron <b>lodos tóxicos</b> que contaminaron el entorno de <b>Doñana</b>.'},
+ {k:'chips',h:'España es muy variada: algunos paisajes del tema',it:['Lugo (Galicia)','Consuegra (Castilla-La Mancha)','Cerler (Aragón)','Puerto Rico (Canarias)','Santanyí (Baleares)']}]},
 ];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='nums')return`<section class="blk">${h}<div class="nums">${B.it.map(([n,d])=>`<div class="num"><b>${n}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ if(B.k==='bars'){const mx=Math.max(...B.it.map(x=>x[1]));return`<section class="blk">${h}<div class="bars">${B.it.map(([n,v,l,c])=>`<div class="br"><span class="bn">${n}</span><span class="bt"><i style="width:${v/mx*100}%;background:${c}"></i></span><small>${l}</small></div>`).join('')}</div></section>`}
+ return''}).join('')}
 const QB={
 g1:[['t','¿Qué línea divide la Tierra en hemisferio Norte y Sur?','El Ecuador',['El meridiano de Greenwich','El trópico de Cáncer','La línea de cambio de fecha'],'El Ecuador es el paralelo 0.'],
  ['t','¿Cómo se llama también el hemisferio Norte?','Septentrional',['Meridional','Occidental','Oriental'],'El Sur es el meridional.'],
@@ -366,8 +420,9 @@ function renderEst(){const T=[[1,'Tema 1 · Conceptos geográficos'],[2,'Tema 2 
  $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
 function openSt(id){const s=stOf(id);const f=s.fig();
  $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>${s.t===1?'Tema 1':'Tema 2'}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>
  ${f.startsWith('<figure')?f:`<figure class="ill" style="max-width:none">${f}<figcaption>${s.cap||''}</figcaption></figure>`}
- <ul>${s.p.map(x=>`<li>${x}</li>`).join('')}</ul>${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
+ ${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
  <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button><button class="ghost" id="volver" type="button">Volver</button></div></article>`;
  $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();window.scrollTo({top:0})}
 let V=null;
@@ -518,6 +573,5 @@ function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru',
 $('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
 renderScore();renderProgress();setTab('est');
 </script>
-
 </body>
 </html>
