@@ -24,7 +24,6 @@
   --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
   --sea:#13233b; --ls:30%; --ll:36%; --mapline:#0e1524; --okfill:#3aa86a; --kofill:#d0457c; --hlfill:#ff5fb9; --dim:#222c40; color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0}[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
 .wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
 .back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
@@ -66,11 +65,23 @@ h3{font:800 1.02rem var(--f-display);margin:0}
 .pin{fill:var(--ink);stroke:var(--paper);stroke-width:1.5;pointer-events:none}
 @media (prefers-reduced-motion:no-preference){.rg.flash{animation:fl .5s ease-in-out 3}@keyframes fl{50%{fill:var(--hlfill)}}}
 /* Ficha */
+.idea{margin:0;background:var(--paper);border:2px solid var(--marker);border-radius:12px;padding:10px 14px;font-size:1.06rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1;margin-bottom:3px}
+.quick{display:flex;flex-wrap:wrap;gap:8px}
+.quick span{flex:1 1 130px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:6px 12px;display:flex;flex-direction:column}
+.quick small{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}.quick b{font:800 1.05rem var(--f-display)}
+.ptags{display:flex;flex-wrap:wrap;gap:6px}.ptags span{background:var(--chip);border:1.5px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.92rem;font-weight:700}.ptags small{font-weight:400;color:var(--muted)}
+.ptags.per span{border-color:#7b4fc4}
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.fc{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px 10px;font-size:.97rem;line-height:1.42}
+.fc h4,.bh{display:flex;align-items:center;gap:7px;font:800 1rem var(--f-display);margin:0 0 4px}.fc h4 svg,.bh svg{width:20px;height:20px;color:var(--c,#7b4fc4);flex:none}
+.fc p{margin:0}.fc ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:3px}.fc li::marker{color:var(--c)}
+.blk{display:flex;flex-direction:column;gap:6px}
 .ficha dl{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:8px 14px;margin:0}
 .ficha dt{font-weight:700;color:var(--muted);font-size:.9rem}
 .ficha dd{margin:0}
 .provs{display:flex;flex-direction:column;gap:10px}
-.prov{border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--chip)}
+.prov{border:1.5px solid var(--line);border-left:5px solid var(--marker);border-radius:10px;padding:10px 12px;background:var(--chip)}
 .prov h3 small{font:400 .88rem var(--f-body);color:var(--muted);margin-left:6px}
 .prov p{margin:4px 0 0}
 .towns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
@@ -117,10 +128,11 @@ h3{font:800 1.02rem var(--f-display);margin:0}
 .qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
 .toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--btn);color:var(--btn-fg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);z-index:5;max-width:calc(100% - 32px);text-align:center}
 @media (max-width:460px){header h1{font-size:1.65rem}.opts{grid-template-columns:1fr}.ficha dl{grid-template-columns:1fr;gap:2px}.ficha dd{margin-bottom:8px}.stamp{font-size:2.6rem}}
+body{margin:0}[hidden]{display:none!important}
 </style>
+
 </head>
 <body>
-
 <div class="wrap">
   <a class="back" href="../../../#ale/mapas-geografia">← Mapas y Geografía de Ale</a>
   <header>
@@ -277,6 +289,23 @@ const RELQ=[
 ['¿Qué comunidad tiene la depresión del Segura y es de las más secas de España?','14','Murcia.'],['¿Dónde está el Mar Menor?','14','En Murcia.'],['¿Dónde está la Sierra de Tramuntana?','04','En Mallorca, Islas Baleares.'],['¿Qué comunidad no tiene ríos, solo torrentes?','04','Las Islas Baleares.']];
 const COSTUMBRES=[['Hórreo','Casa típica','12'],['Caserío','Casa típica','16'],['Masía','Casa típica','09'],['Barraca','Casa típica','10'],['Cortijo','Casa típica','01'],['Muñeira','Baile','12'],['Sardana','Baile','09'],['Jota','Baile','02'],['Sevillanas','Baile','01'],['Euskera','Lengua','16'],['Gallego','Lengua','12'],['Catalán','Lengua','09'],['Valenciano','Lengua','10']];
 
+/* Resumen de cada comunidad en una frase (sale arriba de la ficha) */
+const IDEA={
+'12':'En el rincón noroeste, mirando al Atlántico: tierra verde y lluviosa de rías, hórreos y el Camino de Santiago.',
+'03':'Entre el mar Cantábrico y los Picos de Europa: verde y lluviosa, de vacas, minas de carbón y arte prerrománico.',
+'06':'Pequeña y verde, junto al Cantábrico. Aquí nace el Ebro y están las Cuevas de Altamira.',
+'16':'Junto a Francia y el golfo de Vizcaya: muy poblada, muy industrial y con el Museo Guggenheim. Se habla castellano y euskera.',
+'15':'Entre los Pirineos y el Ebro: industria, vinos, parques eólicos y los Sanfermines de Pamplona.',
+'17':'La comunidad menos poblada, a orillas del Ebro: tierra de vino y cuna del primer texto escrito en español (San Millán).',
+'01':'La comunidad más poblada de España, en el sur: Sierra Morena, el valle del Guadalquivir y las Béticas, con la Alhambra, la Mezquita y la Giralda.',
+'18':'Ciudad española en el norte de África, junto al estrecho de Gibraltar. Vive del comercio y del puerto.',
+'19':'Ciudad española en el norte de África, frente a Andalucía. Tiene la población más joven y con más nacimientos de España.',
+'02':'Del Pirineo al Sistema Ibérico, con el Ebro en medio. Zaragoza reúne a la mitad de su gente y tiene la Basílica del Pilar.',
+'09':'En el noreste, entre los Pirineos y el Mediterráneo: la segunda comunidad más poblada, muy industrial, con Barcelona y Gaudí.',
+'10':'Mirando al Mediterráneo: costa llena de gente y de turismo, huertas, la Albufera y fiestas como las Hogueras.',
+'14':'En el sureste y de las más secas de España: huertas junto al río Segura y el Mar Menor.',
+'04':'Islas del Mediterráneo (Mallorca, Menorca, Ibiza, Formentera y Cabrera) que viven sobre todo del turismo.'};
+
 const $=s=>document.querySelector(s);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -324,13 +353,18 @@ function renderExp(){
  <div class="chips" id="cclist">${CCLIST.map(c=>`<button type="button" data-c="${c}" class="${inNotes(c)?'':'off'}" aria-pressed="${st.sel===c}">${cName(c)}</button>`).join('')}</div>
  <p class="note">Las de borde discontinuo no vienen en tus apuntes del Tema 2.</p></div><div id="ficha"></div>`;
  wireMap('emap',id=>openFicha(id));$('#cclist').querySelectorAll('button').forEach(b=>b.onclick=()=>openFicha(b.dataset.c));if(st.sel)openFicha(st.sel,true)}
+const ICO=p=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICON={loc:ICO('<path d="M12 21s-6-6.2-6-11a6 6 0 0 1 12 0c0 4.8-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>'),rel:ICO('<path d="M2 20l7-12 4 6 3-4 6 10z"/>'),rio:ICO('<path d="M3 8c3-2 5 2 9 0s6 2 9 0M3 14c3-2 5 2 9 0s6 2 9 0"/>'),cli:ICO('<circle cx="8" cy="9" r="3"/><path d="M8 2v1.5M2.5 9H1M3.8 4.8l1 1M12.2 4.8l-1 1"/><path d="M10 19h8a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.5 1.5A3 3 0 0 0 10 19z"/>'),pob:ICO('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.8 6 5.5"/>'),eco:ICO('<path d="M3 21V10l5 3V10l5 3V6h4v15z"/><path d="M3 21h18"/>'),pat:ICO('<path d="M3 21h18M5 21V10M9.5 21V10M14.5 21V10M19 21V10M2 10l10-6 10 6z"/>'),per:ICO('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>')};
+function frases(t){const L=t.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ¿«])|;\s+/).map(x=>x.trim()).filter(Boolean);return L.length>1?`<ul>${L.map(x=>`<li>${x.charAt(0).toUpperCase()+x.slice(1)}</li>`).join('')}</ul>`:`<p>${t}</p>`}
 function openFicha(c,noScroll){st.sel=c;document.querySelectorAll('#emap .rg').forEach(el=>el.classList.toggle('sel',el.dataset.id===c));$('#cclist').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===c));
  const F=FICHA[c];const ps=provsOf(c);
  let h=`<article class="sheet ficha"><div class="meta"><span>${inNotes(c)?'Ficha de tus apuntes':'Datos básicos'}</span></div><h2>${cName(c)}</h2>
  ${mapHTML({level:'prov',id:'fmap',only:ps,labels:ps.map(p=>[p,pName(p),true]),aria:`Mapa de ${cName(c)} y sus provincias`})}
- <dl><dt>Capital</dt><dd><b>${CC[c][1]}</b></dd><dt>Provincias</dt><dd>${ps.length===1&&!['18','19'].includes(c)?'Uniprovincial':ps.map(p=>`${pName(p)}${PROV[p][1]!==pName(p)?` (capital: ${PROV[p][1]})`:''}`).join(', ')}</dd>`;
- if(F){[['Localización',F.loc],['Relieve',F.relieve],['Ríos',F.rios],['Clima y vegetación',F.clima],['Población',F.pob],['Economía',F.eco],['Patrimonio',F.patr]].forEach(([k,v])=>{if(v)h+=`<dt>${k}</dt><dd>${v}</dd>`});(F.extra||[]).forEach(([k,v])=>h+=`<dt>${k}</dt><dd>${v}</dd>`);if(F.pers)h+=`<dt>Personajes</dt><dd>${F.pers}</dd>`}
- h+=`</dl>`;
+ ${IDEA[c]?`<p class="idea"><span>En una frase</span>${IDEA[c]}</p>`:''}
+ <div class="quick"><span><small>Capital</small><b>${CC[c][1]}</b></span>${ps.length>1?`<span><small>Provincias</small><b>${ps.length}</b></span>`:`<span><small>Provincias</small><b>${['18','19'].includes(c)?'Ciudad autónoma':'Solo una'}</b></span>`}${F?(F.extra||[]).map(([k,v])=>`<span><small>${k}</small><b>${v}</b></span>`).join(''):''}</div>
+ ${ps.length>1?`<div class="ptags">${ps.map(p=>`<span>${pName(p)}${PROV[p][1]!==pName(p)?` <small>(capital: ${PROV[p][1]})</small>`:''}</span>`).join('')}</div>`:''}`;
+ if(F){h+=`<div class="fcards">${[['loc','Dónde está',F.loc,'#c0127e'],['rel','Relieve',F.relieve,'#a0522d'],['rio','Ríos',F.rios,'#1e6fd9'],['cli','Clima y vegetación',F.clima,'#2f9e5c'],['pob','Población',F.pob,'#7b4fc4'],['eco','Economía',F.eco,'#d9822b'],['pat','Patrimonio',F.patr,'#b8860b']].filter(x=>x[2]).map(([ic,t,v,col])=>`<div class="fc" style="--c:${col}"><h4>${ICON[ic]}${t}</h4>${ic==='pat'&&!/\.\s/.test(v)&&v.includes(', ')?`<ul>${v.replace(/\.$/,'').split(', ').map(x=>`<li>${x}</li>`).join('')}</ul>`:frases(v)}</div>`).join('')}</div>`;
+  if(F.pers)h+=`<div class="blk"><h4 class="bh">${ICON.per}Personajes</h4><div class="ptags per">${F.pers.replace(/\.$/,'').split(/, /).map(x=>`<span>${x}</span>`).join('')}</div></div>`}
  if(F){const withTowns=ps.filter(p=>(F.prov&&F.prov[p])||PUEBLOS.some(t=>t[1]===p));if(withTowns.length)h+=`<span class="tag">${ps.length>1?'Provincias y pueblos':'Pueblos destacados'}</span><div class="provs">${withTowns.map(p=>`<div class="prov">${ps.length>1?`<h3>${pName(p)}<small>capital: ${PROV[p][1]}</small></h3>`:''}${(F.prov&&F.prov[p]||[]).map(x=>`<p>${x}</p>`).join('')}<div class="towns">${PUEBLOS.filter(t=>t[1]===p).map(t=>`<span><b>${t[0]}</b>: ${t[2]}</span>`).join('')}</div></div>`).join('')}</div>`}
  else h+=`<p class="missing">${cName(c)} no viene en el PDF del Tema 2 que tenemos. Si te dan sus apuntes, se añadirá aquí.</p>`;
  h+=`<div class="actions"><button class="primary" id="playcc" type="button">Jugar con ${ps.length>1?'sus provincias':'esta comunidad'}</button></div></article>`;
