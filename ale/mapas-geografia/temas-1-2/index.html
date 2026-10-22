@@ -492,11 +492,14 @@ function gMontes(){const ks=Object.keys(GEO.montes);const pk=Object.keys(GEO.pic
  const ps=shuffle(pk).slice(0,3).map(k=>{const p=GEO.picos[k];return{kind:'tap',type:'k',ans:[k],q:`¿Dónde está <b>${p.n}</b>?<small>Toca el triángulo</small>`,draw:()=>mapIn({montes:true,picos:true,tap:'k'}),nameOf:x=>GEO.picos[x].n,exp:`${p.n}: ${p.h}.`}});
  runRounds('montes','Cordilleras y picos',shuffle([...rs,...ps]),gMontes,'Teide (3.715 m), Mulhacén (3.479 m) y Aneto (3.404 m).')}
 function coordTxt(la,lo){const a=Math.floor(la),b=Math.floor(Math.abs(lo));return`${a}º-${a+1}º N y ${b}º-${b+1}º ${lo<0?'O':'E'}`}
-function gCoord(){const ks=shuffle(Object.keys(GEO.ciud).filter(k=>k!=='palma'||true)).slice(0,8);
+/* Solo ciudades claramente dentro de su cuadro (no pegadas a una línea), para que se pueda leer en el mapa */
+const clear=c=>{const f=x=>Math.min(x%1,1-x%1);return f(c.la)>=.1&&f(Math.abs(c.lo))>=.1};
+const cell=c=>coordTxt(c.la,c.lo);
+function gCoord(){const ks=shuffle(Object.keys(GEO.ciud).filter(k=>clear(GEO.ciud[k]))).slice(0,8);
  const rounds=ks.map((k,i)=>{const c=GEO.ciud[k];const right=coordTxt(c.la,c.lo);const a=Math.floor(c.la),b=Math.floor(Math.abs(c.lo));const E=c.lo<0?'O':'E',W=c.lo<0?'E':'O';
   const wrong=[`${a}º-${a+1}º N y ${b}º-${b+1}º ${W}`,`${a-1}º-${a}º N y ${b}º-${b+1}º ${E}`,`${a+1}º-${a+2}º N y ${b}º-${b+1}º ${E}`,`${a}º-${a+1}º N y ${b+1}º-${b+2}º ${E}`].filter(x=>x!==right);
   return i%2===0?{kind:'choose',cols:'opts',q:`¿Entre qué paralelos y meridianos está <b>${c.n}</b>?`,draw:()=>physMap({id:'board-map',grat:true,peninsula:c.lo<3.5,city:k}),ans:right,opts:shuffle([right,...shuffle(wrong).slice(0,3)]),tip:t=>t.endsWith(W)?`Mira si está a la izquierda (O) o a la derecha (E) del meridiano 0.`:'Cuenta las líneas desde la etiqueta más cercana.',exp:`${c.n}: ${right}.`}
-  :{kind:'choose',cols:'grid',q:`¿Qué ciudad está entre <b>${right}</b>?<small>El punto rosa marca la ciudad que buscas</small>`,draw:()=>physMap({id:'board-map',grat:true,peninsula:true,city:k}),ans:c.n,opts:shuffle([c.n,...shuffle(Object.keys(GEO.ciud).filter(x=>x!==k)).slice(0,3).map(x=>GEO.ciud[x].n)]),exp:`${c.n}: ${right}.`}});
+  :{kind:'choose',cols:'grid',q:`¿Qué ciudad está entre <b>${right}</b>?<small>El punto rosa marca la ciudad que buscas</small>`,draw:()=>physMap({id:'board-map',grat:true,peninsula:true,city:k}),ans:c.n,opts:shuffle([c.n,...shuffle(Object.keys(GEO.ciud).filter(x=>x!==k&&cell(GEO.ciud[x])!==right)).slice(0,3).map(x=>GEO.ciud[x].n)]),exp:`${c.n}: ${right}.`}});
  runRounds('coord','Cazadora de coordenadas',rounds,gCoord,'Primero la latitud (N), luego la longitud (O si está a la izquierda de Greenwich, E si está a la derecha).')}
 function parseNum(s){s=s.replace(/\s/g,'');if(!s)return null;if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return /^-?\d+(\.\d+)?$/.test(s)?parseFloat(s):NaN}
 function escQ(){const E=pick([10000,20000,25000,50000,100000,200000]);const t=pick(['m','km','m','cm']);const cm=pick([1,2,3,4,5,6,8,10,12]);
