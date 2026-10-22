@@ -18,6 +18,7 @@ ale/
     temas-1-2/        Expedición Historia: La Prehistoria y La Tierra y el Universo
   mapas-geografia/
     tema2/            Viaje por España: comunidades, provincias, pueblos y patrimonio (mapa del IGN vía es-atlas)
+    temas-1-2/        Atlas de Geografía: conceptos geográficos y medio físico de España (temas 1 y 2)
   biologia/
     celulas/          Laboratorio de células: «Formados por células»
 carla/

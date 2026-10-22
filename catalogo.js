@@ -22,7 +22,8 @@ window.CATALOGO = {
         { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' }
       ]},
       { id: 'mapas-geografia', nombre: 'Mapas y Geografía', tono: 175, apps: [
-        { titulo: 'Viaje por España: Tema 2', descripcion: 'Comunidades, provincias, pueblos, ríos, monumentos y personajes en un mapa interactivo, con juegos, prueba y pasaporte de sellos', ruta: 'ale/mapas-geografia/tema2/' }
+        { titulo: 'Viaje por España: Tema 2', descripcion: 'Comunidades, provincias, pueblos, ríos, monumentos y personajes en un mapa interactivo, con juegos, prueba y pasaporte de sellos', ruta: 'ale/mapas-geografia/tema2/' },
+        { titulo: 'Atlas de Geografía: Temas 1 y 2', descripcion: 'Coordenadas, proyecciones y escalas; relieve, ríos, costas, climas y paisajes de España. Fichas con mapa físico, 8 juegos y prueba', ruta: 'ale/mapas-geografia/temas-1-2/' }
       ]},
       { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [
         { titulo: 'Laboratorio de células', descripcion: 'Formados por células: el microscopio, partes de la célula, procariotas y eucariotas, célula animal y vegetal y tejidos. Fichas, 8 juegos y prueba', ruta: 'ale/biologia/celulas/' }
