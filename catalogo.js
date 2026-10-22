@@ -24,7 +24,9 @@ window.CATALOGO = {
       { id: 'mapas-geografia', nombre: 'Mapas y Geografía', tono: 175, apps: [
         { titulo: 'Viaje por España: Tema 2', descripcion: 'Comunidades, provincias, pueblos, ríos, monumentos y personajes en un mapa interactivo, con juegos, prueba y pasaporte de sellos', ruta: 'ale/mapas-geografia/tema2/' }
       ]},
-      { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [] },
+      { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [
+        { titulo: 'Laboratorio de células', descripcion: 'Formados por células: el microscopio, partes de la célula, procariotas y eucariotas, célula animal y vegetal y tejidos. Fichas, 8 juegos y prueba', ruta: 'ale/biologia/celulas/' }
+      ]},
       { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] }
     ]
   },

@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio de células</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Layout: cuaderno de laboratorio. Misma familia que las otras apps; los dibujos de células y del microscopio se pueden tocar y son el centro de los juegos */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1b2a4a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --lab:#1f7a5c; --slide:#eef4ea; --hl:#c0127e;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --star:#ffd23f; --lab:#5fd3a6; --slide:#1b2b2a; --hl:#ff5fb9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --star:#ffd23f; --lab:#5fd3a6; --slide:#1b2b2a; --hl:#ff5fb9; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:740px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}
+.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,select:focus-visible,input:focus-visible,.card3d:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(20,30,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+/* Estaciones */
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}
+.stop b{font:800 1.05rem var(--f-display);display:block}
+.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--lab);color:var(--lab)}
+.dot.done{background:var(--lab);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+.card ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;max-width:64ch}
+.card li::marker{color:var(--marker)}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}
+.truco b{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:380px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+.figs{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}.figs .ill{flex:1 1 220px}
+.tbl{overflow-x:auto}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:420px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;background:var(--paper)}
+.tbl th{background:var(--chip)}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.25rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}
+.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}
+.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Dibujos tocables */
+.scope{border-radius:14px;overflow:hidden;background:var(--slide);display:flex;justify-content:center}
+.scope svg{width:100%;max-width:420px;height:auto;display:block}
+.tap [data-k]{cursor:pointer}
+.tap [data-k]:hover{filter:brightness(1.08)}
+.hit-ok{fill:var(--ok)!important;stroke:var(--ok)!important}
+.hit-ko{fill:var(--marker)!important;stroke:var(--marker)!important}
+.ghost,.ghost.hit-ok,.ghost.hit-ko{fill:transparent!important;stroke:transparent!important}
+@media (prefers-reduced-motion:no-preference){[data-k].blink{animation:blink .5s ease-in-out 3}@keyframes blink{50%{opacity:.25}}}
+.lbl{font:700 11px var(--f-body);fill:#14213a;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}
+.gcard svg{width:46px;height:46px}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.5rem var(--f-display);text-align:center;min-height:3em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.numrow input{font:400 1.2rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:10px 12px;width:12em;max-width:100%;font-variant-numeric:tabular-nums}
+.numrow .unit{font-weight:700;color:var(--muted)}
+.numrow input.ok{border-color:var(--ok)}.numrow input.ko{border-color:var(--marker)}
+.pool{display:flex;flex-wrap:wrap;gap:8px}
+.ev{border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:9px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:l}
+.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px;font-weight:700}
+.ladder li small{font-weight:400;color:var(--muted);margin-left:6px}
+.cloze{line-height:2.4;margin:0;font-size:1.05rem}
+.cloze select{font:400 1rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:4px 6px;max-width:100%}
+.cloze select.ok{border-color:var(--ok);background:var(--ok-soft)}.cloze select.ko{border-color:var(--marker);background:var(--marker-soft)}
+.mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.card3d{display:block;position:relative;width:100%;aspect-ratio:3/4;border:0;padding:0;background:none;cursor:pointer;perspective:600px;font:inherit;color:var(--ink);min-width:0}
+.card3d .in{display:block;position:absolute;inset:0;transition:transform .35s;transform-style:preserve-3d}
+.card3d.up .in,.card3d.done .in{transform:rotateY(180deg)}
+.card3d .f,.card3d .b{position:absolute;inset:0;border-radius:10px;display:grid;place-items:center;padding:6px;backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;font-size:.82rem;line-height:1.2;overflow:hidden;overflow-wrap:anywhere;hyphens:auto}
+.card3d .f{background:var(--lab);color:var(--paper);font-family:var(--f-hand);font-size:2rem}
+.card3d .b{background:var(--paper);border:2px solid var(--line);transform:rotateY(180deg)}
+.card3d .b.sp{font-weight:700}
+.card3d.done .b{border-color:var(--ok);background:var(--ok-soft)}
+@media (prefers-reduced-motion:reduce){.card3d .in{transition:none}}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}
+.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}
+.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--btn);color:var(--btn-fg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);z-index:5;max-width:calc(100% - 32px);text-align:center}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid{grid-template-columns:1fr}.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.mem{gap:6px}.card3d .b{font-size:.74rem}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="../../../#ale/biologia">← Biología y Geología de Ale</a>
+  <header>
+    <div><h1>Laboratorio de células <span>Ale</span></h1>
+    <p>Biología y Geología: «Formados por células». El microscopio, las partes de la célula, procariotas y eucariotas, células animales y vegetales y los tejidos.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Laboratorio</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const nf=n=>n.toLocaleString('es-ES',{maximumFractionDigits:6});
+
+/* =================== DIBUJOS (tocables por data-k) =================== */
+const PARTS={ocular:'Ocular',objetivo:'Objetivo (en el revólver)',platina:'Platina',condensador:'Condensador',tornillos:'Tornillos de enfoque',luz:'Fuente de luz (bombilla)',
+ membrana:'Membrana plasmática',citoplasma:'Citoplasma',nucleo:'Núcleo',material:'Material genético',organulos:'Orgánulos',pared:'Pared celular',cloroplastos:'Cloroplastos',vacuola:'Vacuola',apendice:'Apéndice móvil (flagelo)',paredb:'Pared bacteriana',cilios:'Apéndices móviles (cilios)'};
+const DR={
+micro:()=>({vb:'0 0 280 300',s:`<rect width="280" height="300" fill="#eef4ea"/>
+ <rect x="50" y="268" width="180" height="20" rx="8" fill="#34495e"/>
+ <path d="M86 270 C 64 222, 66 130, 112 72 L 134 86 C 98 128, 96 216, 116 270 Z" fill="#3f5a70"/>
+ <g data-k="luz"><rect x="146" y="248" width="44" height="20" rx="4" fill="#5d7488"/><circle cx="168" cy="252" r="10" fill="#ffd34d" stroke="#b8860b" stroke-width="2"/><path d="M168 236 l0 -8 M156 240 l-5 -5 M180 240 l5 -5" stroke="#e8a317" stroke-width="2.5" stroke-linecap="round"/></g>
+ <g data-k="condensador"><rect x="150" y="206" width="36" height="16" rx="3" fill="#8fa2b4" stroke="#4a5d70" stroke-width="1.5"/><rect x="186" y="210" width="16" height="5" rx="2" fill="#4a5d70"/></g>
+ <g data-k="platina"><rect x="112" y="190" width="112" height="12" rx="3" fill="#2c3e50"/><rect x="150" y="186" width="34" height="4" fill="#a9b7c5"/><path d="M128 186 h18 M190 186 h18" stroke="#c0ccd8" stroke-width="3" stroke-linecap="round"/></g>
+ <path d="M130 96 L 166 146 L 178 138 L 142 88 Z" fill="#4a6580"/>
+ <g data-k="objetivo"><path d="M150 140 L196 140 L188 156 L158 156 Z" fill="#7b8fa3"/><rect x="160" y="156" width="9" height="24" rx="2" fill="#c9d3dd" stroke="#5d7488" stroke-width="1.2"/><rect x="174" y="156" width="8" height="17" rx="2" fill="#c9d3dd" stroke="#5d7488" stroke-width="1.2"/><rect x="186" y="154" width="7" height="12" rx="2" fill="#c9d3dd" stroke="#5d7488" stroke-width="1.2"/></g>
+ <g data-k="ocular"><path d="M118 56 L138 44 L152 66 L132 78 Z" fill="#7b8fa3"/><rect x="113" y="34" width="26" height="14" rx="3" transform="rotate(-32 126 41)" fill="#2c3e50"/></g>
+ <g data-k="tornillos"><circle cx="96" cy="204" r="15" fill="#7b8fa3" stroke="#34495e" stroke-width="2"/><circle cx="96" cy="204" r="5" fill="#34495e"/><circle cx="98" cy="238" r="9" fill="#9fb0c0" stroke="#34495e" stroke-width="2"/></g>`}),
+animal:(o={})=>({vb:'0 0 260 210',s:`<rect width="260" height="210" fill="#eef4ea"/>
+ <path data-k="membrana" d="M130 14 C 196 10, 246 54, 240 110 C 236 166, 186 200, 126 196 C 64 194, 18 160, 20 104 C 22 50, 70 18, 130 14 Z" fill="#e48aa8"/>
+ <path data-k="citoplasma" d="M130 24 C 190 21, 232 60, 228 110 C 224 160, 180 186, 126 184 C 72 182, 32 152, 32 104 C 34 56, 76 27, 130 24 Z" fill="#fbd9e2"/>
+ <g data-k="organulos">${[[70,70,-20],[190,72,25],[80,150,10],[186,150,-30],[150,166,0]].map(([x,y,r])=>`<g transform="rotate(${r} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="15" ry="8" fill="#f2a65a" stroke="#b5651d" stroke-width="1.5"/><path d="M${x-10} ${y} q3 -5 6 0 t6 0 t6 0" fill="none" stroke="#b5651d" stroke-width="1.2"/></g>`).join('')}</g>
+ <g data-k="nucleo"><circle cx="132" cy="106" r="34" fill="#9b6fd0" stroke="#5e3a91" stroke-width="3"/><circle cx="140" cy="100" r="10" fill="#5e3a91"/></g>`}),
+vegetal:()=>({vb:'0 0 260 210',s:`<rect width="260" height="210" fill="#eef4ea"/>
+ <rect data-k="pared" x="14" y="12" width="232" height="186" rx="12" fill="#8fbf5a" stroke="#4e7a2a" stroke-width="2"/>
+ <rect data-k="membrana" x="25" y="23" width="210" height="164" rx="8" fill="#5f9a3a"/>
+ <rect data-k="citoplasma" x="31" y="29" width="198" height="152" rx="6" fill="#e5f3cf"/>
+ <path data-k="vacuola" d="M78 52 C 140 40, 206 52, 206 104 C 206 156, 150 166, 100 158 C 70 152, 60 120, 62 96 C 64 70, 66 56, 78 52 Z" fill="#bfe3f2" stroke="#5a9ab5" stroke-width="2"/>
+ <g data-k="cloroplastos">${[[50,60],[48,150],[214,60],[214,150],[130,170],[150,40],[52,104],[214,106]].map(([x,y],i)=>`<g transform="rotate(${i*23} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="12" ry="7" fill="#2f8f3a" stroke="#1d5e24" stroke-width="1.2"/><path d="M${x-7} ${y} h14" stroke="#9fd98f" stroke-width="1.2"/></g>`).join('')}</g>
+ <g data-k="nucleo"><circle cx="70" cy="128" r="18" fill="#9b6fd0" stroke="#5e3a91" stroke-width="2.5"/><circle cx="74" cy="124" r="5" fill="#5e3a91"/></g>`}),
+bacteria:()=>({vb:'0 0 260 170',s:`<rect width="260" height="170" fill="#eef4ea"/>
+ <path data-k="apendice" d="M232 86 C 246 70, 252 104, 256 88" fill="none" stroke="#7a5230" stroke-width="5" stroke-linecap="round"/>
+ <rect data-k="paredb" x="22" y="40" width="214" height="92" rx="46" fill="#c9a66b" stroke="#7a5230" stroke-width="2"/>
+ <rect data-k="membrana" x="32" y="50" width="194" height="72" rx="36" fill="#e07a5f"/>
+ <rect data-k="citoplasma" x="38" y="56" width="182" height="60" rx="30" fill="#fde2cf"/>
+ <path data-k="material" d="M70 86 C 90 64, 104 108, 124 84 C 140 64, 152 108, 172 84 C 186 70, 196 98, 206 88" fill="none" stroke="#4a2f8a" stroke-width="5" stroke-linecap="round"/>
+ <path data-k="material" d="M70 86 C 90 64, 104 108, 124 84 C 140 64, 152 108, 172 84 C 186 70, 196 98, 206 88" class="ghost" fill="none" stroke="transparent" stroke-width="22"/>`}),
+protozoo:()=>{let cil='';for(let i=0;i<44;i++){const a=i/44*Math.PI*2,x=130+104*Math.cos(a),y=88+54*Math.sin(a),x2=130+116*Math.cos(a),y2=88+64*Math.sin(a);cil+=`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="#4a7a9a" stroke-width="2"/>`}
+ return{vb:'0 0 260 176',s:`<rect width="260" height="176" fill="#eef4ea"/><g data-k="cilios">${cil}<ellipse class="ghost" cx="130" cy="88" rx="118" ry="68" fill="transparent"/></g><path data-k="membrana" d="M30 90 C 30 40, 110 28, 160 34 C 220 40, 236 70, 234 92 C 232 120, 210 146, 150 144 C 120 143, 112 128, 90 130 C 60 134, 30 124, 30 90 Z" fill="#7fb0cc"/>
+ <path data-k="citoplasma" d="M40 90 C 40 48, 112 38, 158 43 C 214 48, 224 74, 222 92 C 220 116, 202 134, 150 133 C 122 132, 112 118, 88 120 C 62 123, 40 116, 40 90 Z" fill="#dcedf6"/>
+ <g data-k="organulos"><circle cx="78" cy="80" r="10" fill="#fff" stroke="#4a7a9a" stroke-width="2"/><circle cx="196" cy="88" r="9" fill="#fff" stroke="#4a7a9a" stroke-width="2"/><circle cx="110" cy="108" r="6" fill="#b9d6e8"/><circle cx="170" cy="62" r="6" fill="#b9d6e8"/></g>
+ <g data-k="nucleo"><ellipse cx="140" cy="86" rx="24" ry="16" fill="#9b6fd0" stroke="#5e3a91" stroke-width="2.5"/></g>`}},
+alga:()=>({vb:'0 0 260 200',s:`<rect width="260" height="200" fill="#eef4ea"/>
+ <path data-k="apendice" d="M118 40 C 96 14, 70 26, 60 6 M142 40 C 164 14, 190 26, 200 6" fill="none" stroke="#2f6b3a" stroke-width="4" stroke-linecap="round"/>
+ <path data-k="apendice" d="M118 40 C 96 14, 70 26, 60 6 M142 40 C 164 14, 190 26, 200 6" class="ghost" fill="none" stroke="transparent" stroke-width="18"/>
+ <ellipse data-k="pared" cx="130" cy="114" rx="74" ry="78" fill="#a8d08d" stroke="#4e7a2a" stroke-width="2"/>
+ <ellipse data-k="membrana" cx="130" cy="114" rx="64" ry="68" fill="#6aa84f"/>
+ <ellipse data-k="citoplasma" cx="130" cy="114" rx="58" ry="62" fill="#e5f3cf"/>
+ <path data-k="cloroplastos" d="M80 100 C 80 160, 180 160, 180 100 C 180 150, 80 150, 80 100 Z M80 100 C 82 172, 178 172, 180 100 L 166 104 C 162 150, 98 150, 94 104 Z" fill="#2f8f3a" stroke="#1d5e24" stroke-width="1.5"/>
+ <g data-k="nucleo"><circle cx="130" cy="96" r="17" fill="#9b6fd0" stroke="#5e3a91" stroke-width="2.5"/></g>`}),
+levadura:()=>({vb:'0 0 260 190',s:`<rect width="260" height="190" fill="#eef4ea"/>
+ <ellipse data-k="pared" cx="110" cy="100" rx="78" ry="64" fill="#e3cfa0" stroke="#8a6d3b" stroke-width="2"/><ellipse data-k="pared" cx="200" cy="64" rx="34" ry="28" fill="#e3cfa0" stroke="#8a6d3b" stroke-width="2"/>
+ <ellipse data-k="membrana" cx="110" cy="100" rx="70" ry="56" fill="#c8a96a"/><ellipse data-k="citoplasma" cx="110" cy="100" rx="64" ry="50" fill="#f7ecd2"/>
+ <ellipse data-k="membrana" cx="200" cy="64" rx="27" ry="21" fill="#c8a96a"/><ellipse data-k="citoplasma" cx="200" cy="64" rx="22" ry="16" fill="#f7ecd2"/>
+ <g data-k="vacuola"><circle cx="138" cy="112" r="20" fill="#d5e9f2" stroke="#7aa6bd" stroke-width="2"/></g>
+ <g data-k="nucleo"><circle cx="92" cy="90" r="16" fill="#9b6fd0" stroke="#5e3a91" stroke-width="2.5"/></g>`}),
+niveles:()=>{const it=[['Célula','<circle cx="0" cy="0" r="14" fill="#fbd9e2" stroke="#e48aa8" stroke-width="3"/><circle cx="2" cy="0" r="5" fill="#9b6fd0"/>'],['Tejido',[[-12,-8],[0,-8],[12,-8],[-12,4],[0,4],[12,4],[-6,16],[6,16]].map(([x,y])=>`<rect x="${x-6}" y="${y-6}" width="12" height="12" rx="3" fill="#fbd9e2" stroke="#e48aa8" stroke-width="1.5"/>`).join('')],['Órgano','<path d="M0 16 C -26 -2, -14 -22, 0 -8 C 14 -22, 26 -2, 0 16 Z" fill="#d9534f"/>'],['Aparato o sistema','<path d="M-4 -20 C -20 -18, -18 10, -6 18 M4 -20 C 20 -18, 18 10, 6 18" fill="none" stroke="#d9534f" stroke-width="3"/><path d="M0 -6 C -9 -14, -16 -2, 0 8 C 16 -2, 9 -14, 0 -6 Z" fill="#d9534f"/>'],['Organismo','<circle cx="0" cy="-14" r="7" fill="#8a6d3b"/><path d="M0 -6 V10 M-12 0 H12 M0 10 L-8 22 M0 10 L8 22" stroke="#8a6d3b" stroke-width="4" stroke-linecap="round"/>']];
+ let s=`<rect width="420" height="110" fill="#eef4ea"/>`;it.forEach(([t,g],i)=>{const x=42+i*84;s+=`<g transform="translate(${x} 46)">${g}</g><text x="${x}" y="96" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b2a4a">${t==='Aparato o sistema'?'<tspan x="'+x+'" dy="-6">Aparato</tspan><tspan x="'+x+'" dy="12">o sistema</tspan>':t}</text>${i<4?`<path d="M${x+24} 46 h30" stroke="#1b2a4a" stroke-width="2" marker-end="url(#ar)"/>`:''}`});
+ return{vb:'0 0 420 110',s:`<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1b2a4a"/></marker></defs>`+s}},
+};
+function svgOf(key,label,labels){const d=DR[key]();let s=d.s;if(labels)s+=labels;return`<svg viewBox="${d.vb}" role="img" aria-label="${esc(label||'Dibujo')}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`}
+const LBL={
+micro:[['ocular',150,30],['objetivo',206,170],['platina',232,184],['condensador',208,228],['tornillos',30,200],['luz',200,262]],
+animal:[['membrana',200,22],['citoplasma',180,120],['nucleo',112,148],['organulos',30,190]],
+vegetal:[['pared',150,10],['membrana',30,200],['vacuola',120,104],['cloroplastos',172,190],['nucleo',40,128],['citoplasma',176,84]],
+bacteria:[['paredb',40,30],['membrana',120,150],['material',100,74],['apendice',200,30]]};
+const LBLTXT={ocular:'Ocular',objetivo:'Objetivos',platina:'Platina',condensador:'Condensador',tornillos:'Tornillos',luz:'Luz',membrana:'Membrana',citoplasma:'Citoplasma',nucleo:'Núcleo',organulos:'Orgánulos',pared:'Pared celular',vacuola:'Vacuola',cloroplastos:'Cloroplastos',paredb:'Pared bacteriana',material:'Material genético',apendice:'Flagelo'};
+const labels=key=>(LBL[key]||[]).map(([k,x,y])=>`<text class="lbl" x="${x}" y="${y}" text-anchor="${x>200?'end':'start'}">${LBLTXT[k]}</text>`).join('');
+const fig=(k,cap,lab=true)=>`<figure class="ill">${svgOf(k,cap,lab?labels(k):'')}${cap?`<figcaption>${cap}</figcaption>`:''}</figure>`;
+
+/* =================== ESTACIONES =================== */
+const ST=[
+{id:'s1',n:'El microscopio',s:'Para ver lo que el ojo no ve',figs:[['micro','Las partes del microscopio óptico']],p:[
+ 'El <b>microscopio óptico</b> permite ver cosas <b>mil veces más pequeñas</b> que las que vemos a simple vista. Es un sistema de <b>lentes</b> con piezas mecánicas.',
+ '<b>Ocular</b>: la lente que ponemos delante del ojo. Aumenta la imagen entre <b>5 y 15 veces</b>.',
+ '<b>Objetivo</b>: lente que forma una primera imagen aumentada y la envía al ocular. Aumenta entre <b>4 y 40 veces</b>. Suele haber varios en una pieza giratoria: el <b>revólver</b>.',
+ '<b>Platina</b>: la plataforma donde se pone la muestra. Tiene un agujero para que pase la luz.',
+ '<b>Condensador</b>: concentra la luz sobre la muestra. Tiene un <b>diafragma</b> que regula la cantidad de luz.',
+ '<b>Tornillos de enfoque</b>: suben y bajan la platina. El grande hace movimientos grandes; el pequeño, movimientos precisos.',
+ '<b>Fuente de luz</b>: normalmente una bombilla. La luz atraviesa la muestra y las lentes hasta el ojo.',
+ 'Las muestras se <b>tiñen</b> con colorantes para que se vean con más contraste.'],
+ truco:'El <b>oc</b>ular está junto al <b>o</b>jo; el <b>obj</b>etivo, junto al <b>obj</b>eto que observas.'},
+{id:'s2',n:'La célula, unidad de vida',s:'Uni, pluri y las micras',p:[
+ 'Todos los seres vivos están formados por <b>células</b>. Dentro de ellas ocurren las reacciones químicas de la vida. La célula es la <b>unidad mínima de vida</b>.',
+ 'La <b>materia inerte</b> (papel, cristales de azúcar, piedras…) no está formada por células.',
+ '<b>Unicelulares</b>: una sola célula (protozoos, bacterias, algunas algas). <b>Pluricelulares</b>: muchas células (plantas, hongos y animales).',
+ 'Un ser humano adulto tiene unos <b>100 billones</b> de células.',
+ 'Las células se miden en <b>micrómetros o micras</b> (<b>µm</b>): <b>1 µm = 0,001 mm</b> y <b>1.000 µm = 1 mm</b>. La mayoría mide entre <b>1 y 100 µm</b>.',
+ 'Un elefante es más grande que un ratón porque tiene <b>más células</b>, no células más grandes. Al crecer aumenta el <b>número</b> de células, no su tamaño.'],
+ truco:'De mm a µm, <b>multiplica por 1.000</b>; de µm a mm, <b>divide entre 1.000</b>. 0,055 mm = 55 µm.'},
+{id:'s3',n:'Las partes de la célula',s:'Membrana, citoplasma y material genético',figs:[['animal','Partes de una célula (animal)']],p:[
+ 'Todas las células, sean como sean, tienen tres partes:',
+ '<b>Membrana plasmática</b>: rodea la célula. Es flexible y funciona como un <b>filtro</b> que regula lo que entra y sale.',
+ '<b>Citoplasma</b>: el medio interno, sobre todo <b>agua</b> con sustancias disueltas. En algunas células tiene <b>orgánulos</b> (compartimentos rodeados de membrana).',
+ '<b>Material genético</b>: <b>regula</b> los procesos de la célula. En unas células está dentro de un <b>núcleo</b>; en otras, libre en el citoplasma.'],
+ truco:'La membrana es la <b>puerta</b>, el citoplasma la <b>casa</b> y el material genético el <b>director</b>.'},
+{id:'s4',n:'Procariotas y eucariotas',s:'Con núcleo o sin núcleo',figs:[['bacteria','Célula procariota (bacteria)']],p:[
+ 'Las células se dividen en dos grupos según tengan o no <b>núcleo</b>.',
+ '<b>Procariotas</b> («antes del núcleo»): <b>sin núcleo</b> ni orgánulos; el material genético está libre en el citoplasma. Tienen <b>pared bacteriana</b> alrededor de la membrana.',
+ 'Las procariotas suelen medir <b>1 µm</b>, tienen formas simples (esfera, bastón, tirabuzón, judía) y algunas tienen <b>filamentos</b> para moverse. No forman seres pluricelulares complejos. Son las <b>bacterias</b>.',
+ '<b>Eucariotas</b> («auténtico núcleo»): <b>con núcleo</b> y con <b>orgánulos</b>. Miden de <b>10 a 150 µm</b>.',
+ 'Son eucariotas los <b>pluricelulares</b> (animales, plantas y hongos) y algunos unicelulares: <b>protozoos, algas unicelulares y levaduras</b>.'],
+ truco:'<b>Pro</b> = antes, <b>karyon</b> = núcleo: las procariotas son de «antes del núcleo». <b>Eu</b> = auténtico: las eucariotas tienen núcleo de verdad.'},
+{id:'s5',n:'Célula animal y vegetal',s:'Lo que tienen las plantas',figs:[['animal','Célula animal'],['vegetal','Célula vegetal']],p:[
+ 'Animales y plantas tienen células <b>eucariotas</b>: núcleo, membrana, citoplasma y orgánulos.',
+ 'Las células <b>vegetales</b> tienen además:',
+ '<b>Pared celular</b> rígida alrededor de la membrana; por eso suelen tener forma <b>poligonal</b>.',
+ '<b>Cloroplastos</b> en las partes verdes: allí se hace la <b>fotosíntesis</b>. Son verdes por la <b>clorofila</b>.',
+ '<b>Vacuolas muy grandes</b> que almacenan agua y sustancias disueltas.'],
+ tabla:{h:['','Animal','Vegetal'],r:[['Núcleo, membrana, citoplasma','Sí','Sí'],['Pared celular','No','Sí'],['Cloroplastos','No','Sí'],['Vacuolas grandes','No','Sí'],['Forma','Redondeada, variable','Poligonal']]},
+ truco:'Las plantas tienen las «<b>3 extras</b>»: <b>P</b>ared, <b>C</b>loroplastos y <b>V</b>acuola grande.'},
+{id:'s6',n:'Diversidad y tejidos',s:'Células especializadas y niveles',figs:[['niveles','Niveles de organización'],['protozoo','Un protozoo (sin cloroplastos)'],['alga','Un alga unicelular (con cloroplastos)']],p:[
+ 'Los pluricelulares tienen <b>distintos tipos de células</b>; su forma depende de su <b>función</b>.',
+ '<b>Neuronas</b>: alargadas y con muchos apéndices; transmiten estímulos. Los <b>espermatozoides</b> se mueven con un <b>flagelo</b>. En las hojas hay células llenas de <b>cloroplastos</b>. Los <b>vasos conductores</b> llevan la savia. Las células del <b>oído</b> detectan las vibraciones del sonido.',
+ 'Las células de un mismo tipo forman <b>tejidos</b>. Varios tejidos forman <b>órganos</b> (hoja, raíz, flor; piel, corazón, cerebro). Varios órganos forman <b>aparatos o sistemas</b>.',
+ '<b>Eucariotas unicelulares</b>: <b>protozoos</b>, <b>algas unicelulares</b> y <b>levaduras</b> (hongos unicelulares). Pueden tener pared celular y apéndices móviles.',
+ 'Las <b>algas</b> tienen cloroplastos; los <b>protozoos</b> y las <b>levaduras</b>, no.'],
+ truco:'Célula → tejido → órgano → aparato → organismo: de lo más <b>pequeño</b> a lo más <b>grande</b>.'},
+];
+const QB={
+s1:[['t','¿Qué lente está junto al ojo?','El ocular',['El objetivo','El condensador','La platina'],'El ocular aumenta entre 5 y 15 veces.'],
+ ['t','¿Cuánto aumenta el ocular?','Entre 5 y 15 veces',['Entre 4 y 40 veces','Mil veces','Entre 100 y 1.000 veces'],'Los objetivos aumentan entre 4 y 40 veces.'],
+ ['t','¿Cómo se llama la pieza giratoria donde están los objetivos?','Revólver',['Platina','Diafragma','Condensador'],'El revólver permite cambiar de objetivo.'],
+ ['t','¿Dónde se coloca la muestra?','En la platina',['En el ocular','En el revólver','En el condensador'],'La platina tiene un agujero para que pase la luz.'],
+ ['t','¿Qué parte concentra la luz sobre la muestra?','El condensador',['El ocular','La platina','El tornillo pequeño'],'Incluye un diafragma que regula la luz.'],
+ ['t','¿Para qué sirve el diafragma?','Para regular la cantidad de luz',['Para enfocar','Para aumentar la imagen','Para sujetar la muestra'],'Se abre o se cierra como la pupila.'],
+ ['t','¿Qué hacen los tornillos de enfoque?','Suben y bajan la platina para enfocar',['Cambian el objetivo','Encienden la luz','Tiñen la muestra'],'El grande hace movimientos grandes; el pequeño, precisos.'],
+ ['t','¿Por qué se tiñen las muestras?','Para que tengan más contraste',['Porque las células son de colores','Para matar los microbios','Para que pese menos'],'Los colores que vemos son del tinte.'],
+ ['t','¿Cuántas veces más pequeño puede ser lo que vemos con un microscopio óptico?','Unas mil veces',['Unas diez veces','Un millón de veces','Dos veces'],'Mil veces más pequeño que lo que vemos a simple vista.'],
+ ['v','El objetivo es la lente que está más cerca de la muestra.',true,'Verdadero: forma la primera imagen y la proyecta al ocular.']],
+s2:[['t','¿Cuál es la unidad mínima de vida?','La célula',['El órgano','El tejido','El átomo'],'Todos los seres vivos están formados por células.'],
+ ['t','¿Cuál de estos NO está formado por células?','Un cristal de azúcar',['Una cebolla','Un paramecio','Un ratón'],'La materia inerte no tiene células.'],
+ ['t','¿Qué es un ser unicelular?','Un ser formado por una sola célula',['Un ser con un solo órgano','Un ser que vive solo','Una célula sin núcleo'],'Por ejemplo, protozoos y bacterias.'],
+ ['t','¿Cuál de estos es pluricelular?','Un hongo',['Una bacteria','Un protozoo','Una levadura'],'Plantas, hongos y animales son pluricelulares (la levadura es un hongo unicelular).'],
+ ['t','¿Cuántas células tiene aproximadamente una persona adulta?','100 billones',['100','100 millones','Mil'],'Unos 100 billones.'],
+ ['t','¿Cuántos micrómetros hay en un milímetro?','1.000',['10','100','1.000.000'],'1 mm = 1.000 µm.'],
+ ['t','¿Cuál es el símbolo del micrómetro?','µm',['mm','cm','m²'],'También se llama micra.'],
+ ['t','¿Cuánto miden la mayoría de las células?','Entre 1 y 100 µm',['Entre 1 y 100 mm','Entre 1 y 100 cm','Menos de 0,001 µm'],'Por eso necesitamos el microscopio.'],
+ ['t','¿Por qué un elefante es más grande que un ratón?','Porque tiene más células',['Porque sus células son más grandes','Porque come más','Porque sus células tienen más núcleos'],'Las células de una pulga, un ratón y un elefante tienen tamaños parecidos.'],
+ ['v','Cuando un organismo crece, sus células se hacen más grandes.',false,'Falso: aumenta el número de células, no su tamaño.'],
+ ['v','Todos los seres vivos están formados por miles o millones de células.',false,'Falso: hay seres unicelulares, de una sola célula.']],
+s3:[['t','¿Qué parte de la célula funciona como un filtro?','La membrana plasmática',['El citoplasma','El núcleo','El material genético'],'Regula el paso de sustancias.'],
+ ['t','¿De qué está compuesto sobre todo el citoplasma?','De agua',['De aire','De grasa','De material genético'],'Agua con sustancias disueltas.'],
+ ['t','¿Qué parte regula los procesos vitales de la célula?','El material genético',['La membrana','El citoplasma','La pared celular'],'Es el «director» de la célula.'],
+ ['t','¿Cómo se llama el compartimento donde está el material genético en algunas células?','Núcleo',['Vacuola','Cloroplasto','Revólver'],'En otras células está libre en el citoplasma.'],
+ ['t','¿Qué son los orgánulos?','Compartimentos rodeados de membrana dentro del citoplasma',['Órganos pequeños del cuerpo','Células muy pequeñas','Partes del microscopio'],'Solo están en algunas células.'],
+ ['t','¿Cuál de estas partes tienen TODAS las células?','Membrana plasmática',['Núcleo','Cloroplastos','Pared celular'],'Membrana, citoplasma y material genético están en todas.'],
+ ['v','Todas las células tienen núcleo.',false,'Falso: las procariotas no tienen núcleo.'],
+ ['v','La membrana plasmática es rígida.',false,'Falso: es flexible. La pared celular es la rígida.']],
+s4:[['t','¿Qué diferencia a las células procariotas de las eucariotas?','Las procariotas no tienen núcleo',['Las procariotas no tienen membrana','Las procariotas son más grandes','Las procariotas tienen cloroplastos'],'El material genético está libre en el citoplasma.'],
+ ['t','¿Qué seres tienen células procariotas?','Las bacterias',['Los protozoos','Las algas unicelulares','Los hongos'],'Son el grupo más abundante y diverso.'],
+ ['t','¿Qué significa «procariota»?','Antes del núcleo',['Auténtico núcleo','Sin membrana','Célula pequeña'],'Pro = antes; karyon = núcleo.'],
+ ['t','¿Qué significa «eucariota»?','Auténtico núcleo',['Antes del núcleo','Muchas células','Célula verde'],'Eu = auténtico.'],
+ ['t','¿Cuánto miden la mayoría de las células procariotas?','Alrededor de 1 µm',['Entre 10 y 150 µm','Alrededor de 1 mm','Unos 100 µm'],'Las eucariotas miden de 10 a 150 µm.'],
+ ['t','¿Qué tienen las procariotas alrededor de la membrana?','Una pared bacteriana',['Un núcleo','Cloroplastos','Una vacuola'],'Les da rigidez y resistencia.'],
+ ['t','¿Cuál de estas formas NO es típica de las bacterias?','Estrella',['Esfera','Bastón','Tirabuzón'],'Esfera, bastón, tirabuzón o judía.'],
+ ['t','¿Para qué usan algunas bacterias sus filamentos?','Para desplazarse',['Para hacer la fotosíntesis','Para guardar agua','Para dividirse'],'Son apéndices para moverse.'],
+ ['t','¿Cuál de estos seres es eucariota unicelular?','Un protozoo',['Una bacteria','Un perro','Un pino'],'Protozoos, algas unicelulares y levaduras.'],
+ ['v','Las células procariotas forman seres pluricelulares complejos como los animales.',false,'Falso: animales, plantas y hongos son eucariotas.'],
+ ['v','Las células eucariotas tienen orgánulos en el citoplasma.',true,'Verdadero.']],
+s5:[['t','¿Qué tienen las células vegetales que no tienen las animales?','Pared celular, cloroplastos y vacuolas grandes',['Núcleo y membrana','Citoplasma','Material genético'],'Las tres «extras» de las plantas.'],
+ ['t','¿Dónde se hace la fotosíntesis?','En los cloroplastos',['En el núcleo','En la vacuola','En la membrana'],'Por eso las partes verdes de las plantas tienen cloroplastos.'],
+ ['t','¿Por qué los cloroplastos son verdes?','Por la clorofila',['Por el agua','Por el tinte del microscopio','Por la pared celular'],'Tienen mucha clorofila.'],
+ ['t','¿Qué guardan las vacuolas?','Agua y sustancias disueltas',['El material genético','La luz del sol','Aire'],'En las vegetales son muy grandes.'],
+ ['t','¿Por qué las células vegetales suelen ser poligonales?','Por su pared celular rígida',['Porque no tienen núcleo','Por los cloroplastos','Porque son procariotas'],'La pared las hace rígidas.'],
+ ['t','¿Qué tipo de célula es la de una planta?','Eucariota',['Procariota','Bacteriana','Inerte'],'Animales y plantas son eucariotas.'],
+ ['v','Las células animales tienen pared celular.',false,'Falso: solo la membrana.'],
+ ['v','Las células de las raíces, que no son verdes, no suelen tener cloroplastos.',true,'Verdadero: los cloroplastos están en las partes verdes.']],
+s6:[['t','¿Qué célula transmite estímulos y respuestas?','La neurona',['El espermatozoide','La célula de la hoja','El glóbulo rojo'],'Es alargada y con muchos apéndices.'],
+ ['t','¿Cómo se mueve un espermatozoide?','Con un flagelo',['Con cilios por todo el cuerpo','Con la pared celular','No se mueve'],'Le permite desplazarse en un medio líquido.'],
+ ['t','¿Qué es un tejido?','Un conjunto de células del mismo tipo que hacen una función',['Un órgano grande','Una célula muy larga','La pared de la célula'],'Varios tejidos forman un órgano.'],
+ ['t','¿Cuál de estos es un órgano vegetal?','La hoja',['La célula','El cloroplasto','La savia'],'Hojas, raíces y flores son órganos.'],
+ ['t','¿Cuál de estos es un órgano animal?','El corazón',['La neurona','La sangre','El núcleo'],'Piel, corazón y cerebro son órganos.'],
+ ['t','¿Cómo se llama un grupo de órganos que trabajan juntos?','Aparato o sistema',['Tejido','Célula','Organismo unicelular'],'Por ejemplo, el aparato digestivo.'],
+ ['t','¿Qué son las levaduras?','Hongos unicelulares',['Bacterias','Algas','Protozoos'],'Son eucariotas unicelulares.'],
+ ['t','¿Cuál de estos unicelulares tiene cloroplastos?','Un alga unicelular',['Un protozoo','Una levadura','Ninguno'],'Las algas hacen la fotosíntesis.'],
+ ['t','¿Qué circula por los vasos conductores de las plantas?','La savia',['La sangre','La luz','El aire'],'Pasa por los poros de sus paredes.'],
+ ['v','La forma de cada tipo de célula está relacionada con su función.',true,'Verdadero.'],
+ ['v','Los protozoos son animales en miniatura con cabeza y patas.',false,'Falso: son una sola célula, sin órganos.']]};
+const QS=[];Object.entries(QB).forEach(([st,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st,id:st+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st,id:st+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='lab-celulas-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function toast(m){const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){$('#main').innerHTML=`<ol class="path">${ST.map((s,i)=>{const n=S.stars[s.id]||0;return`<li><span class="dot ${n?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n} estrellas">${[1,2,3].map(k=>star(k<=n)).join('')}</span></button></li>`}).join('')}</ol><p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Formados por células</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ ${s.figs?`<div class="figs">${s.figs.map(f=>fig(f[0],f[1])).join('')}</div>`:''}<ul>${s.p.map(x=>`<li>${x}</li>`).join('')}</ul>
+ ${s.tabla?`<div class="tbl"><table><thead><tr>${s.tabla.h.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${s.tabla.r.map(r=>`<tr>${r.map((c,i)=>i?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`:''}
+ ${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button><button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba'}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i))}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente!':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba del tema</h2><p>12 preguntas de todas las fichas. Al final, nota sobre 10.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),2)));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== LABORATORIO (juegos) =================== */
+const GICO={
+mic:'<svg viewBox="0 0 46 46"><path d="M16 40 h20 M22 40 C 12 30, 14 14, 22 8" stroke="var(--lab)" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M20 10 l10 14" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/><path d="M18 30 h20" stroke="var(--ink)" stroke-width="3"/></svg>',
+par:'<svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="18" fill="#fbd9e2" stroke="#e48aa8" stroke-width="3"/><circle cx="23" cy="23" r="7" fill="#9b6fd0"/></svg>',
+det:'<svg viewBox="0 0 46 46"><circle cx="19" cy="19" r="12" fill="none" stroke="var(--ink)" stroke-width="4"/><path d="M28 28 l12 12" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/><circle cx="19" cy="19" r="4" fill="var(--lab)"/></svg>',
+cla:'<svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="17" fill="none" stroke="var(--ink)" stroke-width="3"/><path d="M23 12 V23 L30 28" stroke="var(--marker)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+num:'<svg viewBox="0 0 46 46"><text x="23" y="30" text-anchor="middle" font-size="18" font-weight="800" fill="var(--lab)">µm</text></svg>',
+niv:'<svg viewBox="0 0 46 46"><rect x="4" y="30" width="38" height="8" rx="2" fill="var(--lab)"/><rect x="10" y="20" width="26" height="8" rx="2" fill="var(--lab)" opacity=".75"/><rect x="16" y="10" width="14" height="8" rx="2" fill="var(--lab)" opacity=".5"/></svg>',
+clo:'<svg viewBox="0 0 46 46"><path d="M6 14 h34 M6 24 h12 M30 24 h10 M6 34 h28" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><rect x="18" y="19" width="12" height="10" rx="2" fill="var(--marker)"/></svg>',
+mem:'<svg viewBox="0 0 46 46"><rect x="4" y="8" width="16" height="22" rx="3" fill="var(--lab)"/><rect x="24" y="14" width="16" height="22" rx="3" fill="var(--ok-soft)" stroke="var(--ok)" stroke-width="2"/></svg>',
+};
+const GAMES=[
+{id:'mic',n:'Monta el microscopio',d:'Toca cada parte del microscopio en el dibujo.'},
+{id:'par',n:'Partes de la célula',d:'Toca el núcleo, la pared, los cloroplastos… en células distintas.'},
+{id:'det',n:'Detective de células',d:'Mira la muestra al microscopio y descubre qué tipo de célula es.'},
+{id:'cla',n:'Clasifica contra reloj',d:'¿Vegetal o animal? ¿Procariota o eucariota? ¿Vivo o inerte?'},
+{id:'num',n:'Calculadora de micras',d:'Pasa de mm a µm, cuenta células y pon protozoos en fila.'},
+{id:'niv',n:'Escalera de la vida',d:'Ordena los niveles: de la célula al organismo.'},
+{id:'clo',n:'Completa el texto',d:'Rellena los huecos sobre las partes de la célula.'},
+{id:'mem',n:'Parejas de células',d:'Cada célula especializada con su función.'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}">${GICO[g.id]}<b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.id==='mem'?S.games[g.id]+' intentos':g.id==='cla'?S.games[g.id]+' puntos':S.games[g.id]+' de 8'}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({mic:gTap,par:gTap,det:gDet,cla:gCla,num:gNum,niv:gNiv,clo:gClo,mem:gMem})[b.dataset.g](b.dataset.g);window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+
+/* Tocar partes (microscopio y células) */
+const TAPQ={
+mic:[['micro','ocular','Toca el ocular: la lente junto al ojo.'],['micro','objetivo','Toca los objetivos, en el revólver.'],['micro','platina','Toca la platina, donde va la muestra.'],['micro','condensador','Toca el condensador, que concentra la luz.'],['micro','tornillos','Toca los tornillos de enfoque.'],['micro','luz','Toca la fuente de luz.'],
+ ['micro','ocular','¿Qué parte aumenta la imagen entre 5 y 15 veces?'],['micro','objetivo','¿Qué parte aumenta entre 4 y 40 veces?'],['micro','tornillos','¿Qué parte sube y baja la platina para enfocar?'],['micro','condensador','¿Qué parte tiene el diafragma que regula la luz?'],['micro','platina','¿Qué parte tiene un agujero para que pase la luz?']],
+par:[['animal','nucleo','Célula animal: toca el núcleo.'],['animal','membrana','Célula animal: toca la membrana plasmática.'],['animal','citoplasma','Célula animal: toca el citoplasma.'],['animal','organulos','Célula animal: toca los orgánulos.'],
+ ['vegetal','pared','Célula vegetal: toca la pared celular.'],['vegetal','cloroplastos','Célula vegetal: toca los cloroplastos.'],['vegetal','vacuola','Célula vegetal: toca la gran vacuola.'],['vegetal','nucleo','Célula vegetal: toca el núcleo.'],['vegetal','membrana','Célula vegetal: toca la membrana (está dentro de la pared).'],
+ ['bacteria','material','Bacteria: toca el material genético, libre en el citoplasma.'],['bacteria','paredb','Bacteria: toca la pared bacteriana.'],['bacteria','apendice','Bacteria: toca el filamento que usa para moverse.'],['bacteria','membrana','Bacteria: toca la membrana plasmática.'],
+ ['vegetal','cloroplastos','¿Dónde se hace la fotosíntesis? Tócalo.'],['animal','membrana','¿Qué parte funciona como un filtro? Tócala.'],['vegetal','vacuola','¿Qué parte almacena agua? Tócala.']]};
+function gTap(gid){const qs=shuffle(TAPQ[gid]).slice(0,8);let k=0,good=0;const res=[];
+ const draw=()=>{if(k>=qs.length){const better=setBest(gid,good,false);$('#draw').innerHTML='';$('#q').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${better?'¡Nueva mejor marca! ':''}${gid==='mic'?'El ocular, junto al ojo; el objetivo, junto al objeto.':'Recuerda: las plantas tienen pared, cloroplastos y vacuola grande.'}`,()=>gTap(gid));return}
+  const [fig,ans,txt]=qs[k];$('#pb').innerHTML=pbar(8,res,k);$('#q').textContent=txt;$('#fb').textContent='';$('#fb').className='fb';
+  $('#draw').innerHTML=svgOf(fig,'Dibujo: toca la parte que se pide');let tries=0,done=false;
+  $('#draw').querySelectorAll('[data-k]').forEach(el=>{el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',PARTS[el.dataset.k]||el.dataset.k);
+   const act=e=>{if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();e.stopPropagation();if(done)return;tries++;const kk=el.dataset.k;const ok=kk===ans;
+    const mark=(key,cls)=>$('#draw').querySelectorAll(`[data-k="${key}"]`).forEach(x=>{x.classList.remove('hit-ok','hit-ko','blink');if(cls)cls.split(' ').forEach(c=>x.classList.add(c));x.querySelectorAll&&x.querySelectorAll('*').forEach(ch=>{ch.classList.remove('hit-ok','hit-ko');if(cls)ch.classList.add(cls.split(' ')[0])})});
+    if(ok){done=true;mark(ans,'hit-ok');if(tries===1)good++;res.push(tries===1);$('#fb').className='fb okk';$('#fb').textContent=`¡Bien! ${PARTS[ans]}.`;k++;setTimeout(draw,1100)}
+    else{mark(kk,'hit-ko');setTimeout(()=>mark(kk,''),700);$('#fb').className='fb ko';$('#fb').textContent=`Eso es: ${PARTS[kk]||kk}.${tries>=2?' Mira dónde está.':' Prueba otra vez.'}`;if(tries>=2){done=true;res.push(false);setTimeout(()=>mark(ans,'hit-ok blink'),720);k++;setTimeout(draw,2600)}}};
+   el.addEventListener('click',act);el.addEventListener('keydown',act)})};
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${GAMES.find(g=>g.id===gid).n}</span></div><div id="pb"></div><p class="prompt" id="q"></p><div class="scope tap" id="draw"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();draw()}
+
+/* Detective */
+const TYPES=[['bacteria','Bacteria','procariota'],['animal','Célula animal','eucariota'],['vegetal','Célula vegetal','eucariota'],['protozoo','Protozoo','eucariota'],['alga','Alga unicelular','eucariota'],['levadura','Levadura','eucariota']];
+const CLUE={bacteria:'No tiene núcleo: el material genético está suelto. Tiene pared bacteriana y un flagelo.',animal:'Tiene núcleo y orgánulos, sin pared ni cloroplastos, y forma redondeada.',vegetal:'Tiene pared celular, cloroplastos y una gran vacuola, y forma poligonal.',protozoo:'Una sola célula con núcleo y apéndices móviles (cilios), sin cloroplastos.',alga:'Una sola célula con núcleo, pared, cloroplastos y flagelos.',levadura:'Hongo unicelular: tiene núcleo y pared, sin cloroplastos. Se reproduce por gemación (la «yema»).'};
+function gDet(){const list=shuffle([...TYPES,...shuffle(TYPES).slice(0,2)]);let k=0,good=0;const res=[];
+ const draw=()=>{if(k>=list.length){const better=setBest('det',good,false);$('#draw').innerHTML='';$('#q').textContent='';$('#opts').innerHTML='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${better?'¡Nueva mejor marca! ':''}Primero busca el núcleo; luego, pared y cloroplastos.`,gDet);return}
+  const [key,name,kind]=list[k];$('#pb').innerHTML=pbar(8,res,k);let step=1,ok1=true;$('#fb').textContent='';
+  const rot=pick([0,0,-12,12,180]);$('#draw').innerHTML=`<div style="transform:rotate(${rot}deg);max-width:340px;margin:0 auto">${svgOf(key,'Muestra al microscopio')}</div>`;
+  const ask1=()=>{$('#q').textContent='Paso 1: ¿es una célula procariota o eucariota?';$('#opts').className='opts two';$('#opts').innerHTML=['Procariota','Eucariota'].map(o=>`<button class="opt" type="button">${o}</button>`).join('');
+   $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const ok=b.textContent.toLowerCase()===kind;if(!ok){ok1=false;b.classList.add('wrong');b.disabled=true;$('#fb').className='fb ko';$('#fb').textContent=kind==='eucariota'?'Fíjate: ¿hay un núcleo?':'Fíjate: ¿hay un núcleo o el material genético está suelto?';return}b.classList.add('right');$('#fb').textContent='';setTimeout(ask2,450)})};
+  const ask2=()=>{$('#q').textContent='Paso 2: ¿qué es exactamente?';$('#opts').className='opts grid';$('#opts').innerHTML=TYPES.map(t=>`<button class="opt" type="button">${t[1]}</button>`).join('');let tries=0;
+   $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{tries++;const ok=b.textContent===name;if(!ok){b.classList.add('wrong');b.disabled=true;$('#fb').className='fb ko';$('#fb').textContent='Busca pistas: pared, cloroplastos, vacuola, cilios o flagelos.';if(tries<2)return}
+    $('#opts').querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===name)x.classList.add('right')});const win=ok&&tries===1&&ok1;if(win)good++;res.push(win);
+    $('#fb').className='fb '+(win?'okk':'ko');$('#fb').innerHTML=`${win?'¡Caso resuelto!':'Era: '+name+'.'} ${CLUE[key]}`;
+    $('#opts').insertAdjacentHTML('afterend','<div class="actions" id="nxw" style="margin-top:4px"><button class="primary" id="nx" type="button">Siguiente muestra</button></div>');$('#nx').onclick=()=>{$('#nxw').remove();k++;draw()}})};ask1()};
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Detective de células</span></div><div id="pb"></div><div class="scope" id="draw"></div><p class="prompt" id="q"></p><div class="opts" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();draw()}
+
+/* Clasifica contra reloj */
+const DECKS={
+va:{n:'¿Vegetal, animal o las dos?',c:['Vegetal','Animal','Las dos'],it:[['Pared celular',0],['Cloroplastos',0],['Vacuolas muy grandes',0],['Forma poligonal',0],['Clorofila',0],['Hace la fotosíntesis',0],['Núcleo',2],['Membrana plasmática',2],['Citoplasma',2],['Material genético',2],['Orgánulos',2],['Es eucariota',2],['Neurona',1],['Espermatozoide',1],['Células del oído',1],['Célula del corazón',1]]},
+pe:{n:'¿Procariota o eucariota?',c:['Procariota','Eucariota'],it:[['Bacteria',0],['Sin núcleo',0],['Pared bacteriana',0],['Mide alrededor de 1 µm',0],['Material genético libre en el citoplasma',0],['Sin orgánulos',0],['Forma de bastón o tirabuzón',0],['Protozoo',1],['Alga unicelular',1],['Levadura',1],['Célula de cebolla',1],['Neurona',1],['Tiene núcleo',1],['Tiene orgánulos',1],['Mide de 10 a 150 µm',1],['Forma animales y plantas',1]]},
+vi:{n:'¿Tiene células?',c:['Sí, es un ser vivo','No, es inerte'],it:[['Paramecio',0],['Ameba',0],['Bacteria',0],['Levadura',0],['Seta',0],['Musgo',0],['Mosquito',0],['Bulbo de cebolla',0],['Raíz de una planta',0],['Ballena',0],['Cristal de azúcar',1],['Piedra',1],['Sal de mesa',1],['Una moneda',1],['Agua del grifo sin seres vivos',1],['Un trozo de vidrio',1],['Un clavo de hierro',1]]}};
+function gCla(){let deckK='va';
+ const setup=()=>{const D=DECKS[deckK];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===deckK}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length===3?'three':'two'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();deckK=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;
+   if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];
+   endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> (${D.c[m[1]]})`).join(', ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* Calculadora de micras */
+function parseNum(s){s=s.replace(/\s/g,'');if(!s)return null;if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return /^-?\d+(\.\d+)?$/.test(s)?parseFloat(s):NaN}
+function numQ(){const t=pick(['mm2um','mm2um','um2mm','cells','fila','fila2']);
+ if(t==='mm2um'){const um=pick([R(2,9),R(10,99),R(100,500)]);const mm=um/1000;return{q:`Un microorganismo mide <b>${nf(mm)} mm</b>. ¿Cuántos micrómetros son?`,ans:um,unit:'µm',exp:`${nf(mm)} mm × 1.000 = ${nf(um)} µm.`}}
+ if(t==='um2mm'){const um=pick([R(2,9),R(10,99),R(100,900)]);return{q:`Una célula mide <b>${nf(um)} µm</b>. ¿Cuántos milímetros son?`,ans:um/1000,unit:'mm',exp:`${nf(um)} µm : 1.000 = ${nf(um/1000)} mm.`}}
+ if(t==='cells'){const kg=pick([10,15,20,25,30,40,45,50,60,70,75,80,100]);const an=pick(['un perro','una persona','un cerdo','un niño','una oveja']);return{q:`En <b>5 kg</b> de masa animal hay unos <b>10 billones</b> de células. ¿Cuántos billones de células tiene ${an} de <b>${kg} kg</b>?`,ans:kg*2,unit:'billones',exp:`${kg} : 5 = ${kg/5} grupos de 5 kg; ${kg/5} × 10 = ${kg*2} billones.`}}
+ if(t==='fila'){const L=pick([50,100,125,200,250]);const n=pick([100,200,400,800,1000,2000]);return{q:`Un protozoo mide <b>${L} µm</b>. Si ponemos <b>${nf(n)}</b> en fila, ¿cuántos milímetros miden en total?`,ans:L*n/1000,unit:'mm',exp:`${L} × ${nf(n)} = ${nf(L*n)} µm = ${nf(L*n/1000)} mm.`}}
+ const L=pick([50,100,125,200,250,500]);const mm=pick([1,2,5,10,25,50,100]);return{q:`Un protozoo mide <b>${L} µm</b>. ¿Cuántos hacen falta en fila para llegar a <b>${mm} mm</b>?`,ans:mm*1000/L,unit:'protozoos',exp:`${mm} mm = ${nf(mm*1000)} µm; ${nf(mm*1000)} : ${L} = ${nf(mm*1000/L)}.`}}
+function gNum(){let k=0,good=0;const res=[];let q;
+ const draw=()=>{if(k>=8){const better=setBest('num',good,false);$('#body').innerHTML='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${better?'¡Nueva mejor marca! ':''}De mm a µm se multiplica por 1.000; de µm a mm se divide.`,gNum);return}
+  do{q=numQ()}while(!Number.isFinite(q.ans)||(q.unit==='protozoos'&&!Number.isInteger(q.ans)));$('#pb').innerHTML=pbar(8,res,k);let tries=0;
+  $('#body').innerHTML=`<p class="q">${q.q}</p><div class="numrow"><input id="ans" inputmode="decimal" autocomplete="off" aria-label="Respuesta"><span class="unit">${q.unit}</span><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p>`;
+  const inp=$('#ans');if(window.matchMedia('(hover:hover)').matches)inp.focus();
+  const check=()=>{const v=parseNum(inp.value);if(v===null||Number.isNaN(v)){$('#fb').className='fb ko';$('#fb').textContent='Escribe un número (puedes usar coma para los decimales).';return}tries++;const ok=Math.abs(v-q.ans)<1e-9*Math.max(1,q.ans)+1e-9;
+   if(ok||tries>=2){inp.disabled=true;inp.className=ok?'ok':'ko';const win=ok&&tries===1;if(win)good++;res.push(win);$('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Bien!':'La respuesta era '+nf(q.ans)+' '+q.unit+'.'} ${q.exp}`;
+    $('#chk').outerHTML=`<button class="primary" id="nx" type="button">Siguiente</button>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})}
+   else{inp.className='ko';$('#fb').className='fb ko';$('#fb').textContent=(v===q.ans*1000||v===q.ans/1000)?'Te has equivocado al multiplicar o dividir por 1.000: ¿la cifra tiene que salir mayor o menor?':'No es correcto. Inténtalo otra vez.'}};
+  $('#chk').onclick=check;inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#chk'))check()})};
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Calculadora de micras</span></div><div id="pb"></div><p class="note">1 mm = 1.000 µm</p><div id="body"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();draw()}
+
+/* Escalera de la vida: ordenar niveles y clasificar ejemplos */
+const LEVELS=['Célula','Tejido','Órgano','Aparato o sistema','Organismo'];
+const LEVEX=[['Neurona',0],['Espermatozoide',0],['Paramecio',4],['Ser humano',4],['Rosal',4],['Corazón',2],['Hoja',2],['Raíz',2],['Flor',2],['Piel',2],['Cerebro',2],['Aparato digestivo',3],['Sistema nervioso',3],['Conjunto de células de la epidermis',1],['Tejido de los vasos conductores',1],['Célula de la hoja con cloroplastos',0]];
+function gNiv(){let placed=0,err=0;const sh=shuffle(LEVELS);
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Escalera de la vida</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q">Toca los niveles en orden, del más sencillo al más complejo.</p>
+ <div class="pool" id="pool">${sh.map(l=>`<button class="ev" type="button">${l}</button>`).join('')}</div><ol class="ladder" id="lad"></ol><div id="part2"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ $('#pool').querySelectorAll('.ev').forEach(b=>b.onclick=()=>{if(b.textContent===LEVELS[placed]){placed++;b.remove();$('#lad').insertAdjacentHTML('beforeend',`<li>${placed}. ${b.textContent}</li>`);if(placed===5)part2()}else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}});
+ function part2(){const ex=shuffle(LEVEX).slice(0,6);let k=0;
+  const ask=()=>{if(k>=ex.length){const sc=Math.max(0,8-err);const better=setBest('niv',sc,false);gameEnd2(sc,better);return}const [t,l]=ex[k];
+   $('#q').innerHTML=`Segunda parte: ¿qué nivel es <b>${t}</b>?`;$('#part2').innerHTML=`<div class="opts grid">${LEVELS.map((L,i)=>`<button class="opt" type="button" data-i="${i}">${L}</button>`).join('')}</div>`;
+   $('#part2').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(+b.dataset.i!==l){err++;$('#hud').textContent='Errores: '+err;b.classList.add('wrong');b.disabled=true;return}b.classList.add('right');k++;setTimeout(ask,450)})};ask()}
+ function gameEnd2(sc,better){$('#part2').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${better?'¡Nueva mejor marca! ':''}Célula → tejido → órgano → aparato o sistema → organismo. Un paramecio es célula y organismo a la vez: es unicelular.`,gNiv)}}
+
+/* Completa el texto */
+const CLOZES=[
+{t:'Las células están delimitadas por una {membrana} plasmática, que funciona como un filtro. El medio interno se llama {citoplasma} y es sobre todo {agua}. La actividad de la célula la controla el {material genético}, que en algunas células está dentro de un {núcleo}.',o:['membrana','pared','citoplasma','vacuola','agua','aire','material genético','cloroplasto','núcleo','revólver']},
+{t:'Las células {procariotas} no tienen núcleo y su material genético está libre en el {citoplasma}. Tienen una pared {bacteriana} y miden alrededor de {1 µm}. Las {bacterias} son procariotas.',o:['procariotas','eucariotas','citoplasma','núcleo','bacteriana','celular','1 µm','100 µm','bacterias','levaduras']},
+{t:'Las células vegetales tienen una {pared} celular rígida, por eso son {poligonales}. En los {cloroplastos} se hace la {fotosíntesis}, y las {vacuolas} guardan agua.',o:['pared','membrana','poligonales','redondas','cloroplastos','núcleos','fotosíntesis','digestión','vacuolas','neuronas']},
+{t:'En el microscopio, el {ocular} está junto al ojo y el {objetivo} junto a la muestra. La muestra se pone en la {platina}, el {condensador} concentra la luz y los {tornillos} sirven para enfocar.',o:['ocular','objetivo','platina','revólver','condensador','diafragma','tornillos','espejo']},
+{t:'Las células de un mismo tipo forman {tejidos}. Varios tejidos forman un {órgano}, como el corazón o la {hoja}. Varios órganos forman un {aparato} o sistema.',o:['tejidos','órganos','órgano','tejido','hoja','neurona','aparato','orgánulo']}];
+function gClo(){const C=pick(CLOZES);const blanks=[];const html=C.t.replace(/\{([^}]+)\}/g,(m,w)=>{const i=blanks.push(w)-1;return`<select id="b${i}" aria-label="Hueco ${i+1}"><option value="">…</option>${shuffle(C.o).map(o=>`<option>${o}</option>`).join('')}</select>`});
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Completa el texto</span></div><p class="cloze">${html}</p><p class="fb" id="fb" role="status"></p><div class="actions" id="acts"><button class="primary" id="chk" type="button">Comprobar</button>${backB()}</div><div id="gend"></div></div>`;wireBack();
+ $('#chk').onclick=()=>{let good=0,empty=0;blanks.forEach((w,i)=>{const s=$('#b'+i);if(!s.value)empty++;const ok=s.value===w;s.className=s.value?(ok?'ok':'ko'):'';if(ok)good++});
+  if(empty){$('#fb').className='fb ko';$('#fb').textContent='Te quedan huecos por rellenar.';return}
+  if(good===blanks.length){blanks.forEach((_,i)=>$('#b'+i).disabled=true);$('#fb').className='fb okk';$('#fb').textContent='¡Texto perfecto!';$('#acts').innerHTML='';endG('¡Completado!','Cada vez sale un texto distinto.',gClo)}
+  else{$('#fb').className='fb ko';$('#fb').textContent=`${good} de ${blanks.length} bien. Cambia los que están en rosa.`}}}
+
+/* Parejas */
+const PAIRS=[['Neurona','Transmite estímulos y respuestas'],['Espermatozoide','Se mueve con un flagelo'],['Célula de la hoja','Hace la fotosíntesis'],['Vasos conductores','Llevan la savia'],['Células del oído','Detectan el sonido'],['Bacteria','Célula sin núcleo'],['Levadura','Hongo unicelular'],['Alga unicelular','Una célula con cloroplastos']];
+function gMem(){const pairs=shuffle(PAIRS).slice(0,6);const cards=shuffle(pairs.flatMap((p,i)=>[{i,txt:p[0],sp:true},{i,txt:p[1]}]));let open=[],tries=0,done=0,lock=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Parejas de células</span><span id="hud">Intentos: 0</span></div><p class="q">Une cada célula con lo que hace o lo que la caracteriza.</p>
+ <div class="mem" id="mem">${cards.map((c,k)=>`<button class="card3d" type="button" data-k="${k}" aria-label="Carta ${k+1}"><span class="in"><span class="f">?</span><span class="b ${c.sp?'sp':''}">${c.txt}</span></span></button>`).join('')}</div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ $('#mem').querySelectorAll('.card3d').forEach(b=>b.onclick=()=>{if(lock||b.classList.contains('up')||b.classList.contains('done'))return;b.classList.add('up');b.setAttribute('aria-label',cards[+b.dataset.k].txt);open.push(b);
+  if(open.length===2){tries++;$('#hud').textContent='Intentos: '+tries;const[a,c]=open;const A=cards[+a.dataset.k],C=cards[+c.dataset.k];
+   if(A.i===C.i&&A.sp!==C.sp){a.classList.add('done');c.classList.add('done');open=[];done++;if(done===pairs.length){const better=setBest('mem',tries,true);endG(`¡Completado en ${tries} intentos!`,`${better?'¡Es tu mejor marca! ':''}El mínimo posible es 6.`,gMem)}}
+   else{lock=true;setTimeout(()=>{a.classList.remove('up');c.classList.remove('up');open=[];lock=false},1100)}}})}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Bióloga experta',()=>ST.every(s=>S.stars[s.id]===3)],['Ojo de microscopio',()=>(S.games.mic||0)>=8],['Anatomista',()=>(S.games.par||0)>=7],['Detective',()=>(S.games.det||0)>=7],['Rápida como una bacteria',()=>(S.games.cla||0)>=25],['Reina de las micras',()=>(S.games.num||0)>=7],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+
+</body>
+</html>
