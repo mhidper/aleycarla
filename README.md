@@ -16,6 +16,7 @@ ale/
     audiciones/       Audiciones de los temas 1 y 2. Los MP3 NO están en el repo: se cargan desde el dispositivo
   literatura/
     temas-1-2/        Taller de Literatura: géneros, narración, lírica, teatro y literatura griega
+    animado/          Literatura animada: fichas paso a paso hechas con GSAP
   geografia-historia/   (asignatura «Historia»)
     temas-1-2/        Expedición Historia: La Prehistoria y La Tierra y el Universo
   mapas-geografia/

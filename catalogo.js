@@ -18,7 +18,8 @@ window.CATALOGO = {
       ]},
       { id: 'lengua', nombre: 'Lengua', tono: 0, apps: [] },
       { id: 'literatura', nombre: 'Literatura', tono: 320, apps: [
-        { titulo: 'Taller de Literatura: Temas 1 y 2', descripcion: 'Géneros literarios, narración, poesía y teatro; Homero, Esopo, la tragedia griega y Jenofonte. Fichas resumidas, 6 juegos y prueba', ruta: 'ale/literatura/temas-1-2/' }
+        { titulo: 'Taller de Literatura: Temas 1 y 2', descripcion: 'Géneros literarios, narración, poesía y teatro; Homero, Esopo, la tragedia griega y Jenofonte. Fichas resumidas, 6 juegos y prueba', ruta: 'ale/literatura/temas-1-2/' },
+        { titulo: 'Literatura animada', descripcion: 'Once fichas animadas paso a paso: géneros, narrador, fábula, poesía, la Ilíada y la Odisea, el teatro y la tragedia griega', ruta: 'ale/literatura/animado/' }
       ]},
       { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
       { id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [

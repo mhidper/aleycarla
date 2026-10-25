@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Literatura animada</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Misma familia visual que el Taller de Literatura. El escenario de la animación es una lámina clara fija en ambos temas. */
+:root{
+  --bg:#eaeff7; --paper:#fdfdfb; --grid:#e2e9f4; --ink:#1b2a4a; --muted:#56637d; --line:#cfd8e7;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1b2a4a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --parch:#f6efe0; --parch-line:#e2d5b8; --voice2:#c0127e;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --parch:#22283a; --parch-line:#3a4258; --voice2:#ff5fb9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --paper:#151f36; --grid:#1d2a46; --ink:#e4eaf6; --muted:#9ba8c3; --line:#2a3856;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e4eaf6; --btn-fg:#0e1524; --chip:#18233d;
+  --parch:#22283a; --parch-line:#3a4258; --voice2:#ff5fb9; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.back:hover{text-decoration:underline}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick h2{font:700 .78rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:4px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .88rem var(--f-body);padding:6px 11px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{border-color:var(--ink);background:var(--btn);color:var(--btn-fg);font-weight:700}
+.chips button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+.chips button.done[aria-current="true"]::after{color:var(--btn-fg)}
+button:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:18px 16px 20px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(20,30,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0}
+.sheet h2.t{font:800 1.4rem var(--f-display);margin:-6px 0 0;text-wrap:balance}
+.stage{border-radius:12px;overflow:hidden;border:1px solid var(--parch-line);background:#f6efe0;line-height:0}
+.stage>svg{width:100%;height:auto;display:block}
+.stage svg text{font-family:var(--f-body)}
+.cap{font-size:1.15rem;line-height:1.5;margin:0;min-height:4.5em;max-width:62ch}
+.cap b{color:var(--marker)}
+@media (prefers-reduced-motion:no-preference){.cap.in{animation:capin .35s ease-out}@keyframes capin{from{opacity:0;transform:translateY(4px)}}}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--marker)}
+.dots i.past{background:var(--muted)}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctrl .sp{flex:1}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 22px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.ghost:disabled,.primary:disabled{opacity:.4;cursor:default}
+.nogsap{background:var(--marker-soft);border:1.5px solid var(--marker);border-radius:10px;padding:10px 14px;margin:0}
+.steps-list{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+/* Comprobación */
+.quiz{display:flex;flex-direction:column;gap:16px;border-top:2px solid var(--ink);padding-top:14px}
+.quiz h3{font:800 1.15rem var(--f-display);margin:0}
+.qq{display:flex;flex-direction:column;gap:8px}
+.qq p.q{font-weight:700;margin:0;font-size:1.05rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:0;font-size:.95rem}
+.exp.b{color:var(--ok)} .exp.mm{color:var(--marker)}
+.exp b{color:var(--ink)}
+.stamp{font-family:var(--f-hand);font-size:2.4rem;line-height:1;color:var(--ok);transform:rotate(-6deg);display:inline-block}
+@media (max-width:420px){header h1{font-size:1.65rem}.cap{font-size:1.05rem}.primary{padding:12px 16px}.ghost{padding:11px 12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/literatura">← Literatura de Ale</a>
+  <header>
+    <h1>Literatura animada <span>Temas 1 y 2</span></h1>
+    <p>Los géneros, la narración, la poesía, Homero y el teatro griego, paso a paso. Pulsa «Siguiente» para ver cada parte y, al final de cada ficha, comprueba lo que has aprendido.</p>
+  </header>
+  <section class="sheet" id="sheet" aria-labelledby="ttl">
+    <p class="kicker" id="kick"></p>
+    <h2 class="t" id="ttl"></h2>
+    <div class="stage" id="stagebox"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <div class="ctrl">
+      <button class="ghost" id="bBack">← Atrás</button>
+      <button class="ghost" id="bAgain">↻ Repetir</button>
+      <span class="sp"></span>
+      <button class="primary" id="bNext">Siguiente →</button>
+    </div>
+    <div class="quiz" id="quiz" hidden></div>
+  </section>
+  <nav class="pick" id="pick" aria-label="Todas las fichas"></nav>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* =================== PIEZAS =================== */
+const INK='#1f1d3a',MUT='#5d5a7a',MAG='#c0127e',PUR='#6a2fa0',BLUE='#1e6fd9',GREEN='#2f9e5c',RED='#b3261e',ORANGE='#d9822b',BROWN='#a0522d',SKY='#dbe7ee',SEA='#cfe3f1',SAND='#efe3c6';
+const PB=`<rect width="400" height="250" fill="#f6efe0"/>`;
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||14}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" fill="${o.c||INK}"${o.cls?` class="${o.cls}"`:''}${o.it?' font-style="italic"':''}>${s}</text>`;
+const tw=(s,size)=>Math.round([...s].length*size*.55+22);
+const chip=(cls,x,y,s,c=MAG,size=13)=>{const w=tw(s,size),h=size+13;return`<g class="${cls}"><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="#fff" stroke="${c}" stroke-width="2"/>${T(x,y+size*.36,s,{size,c,w:700})}</g>`};
+/* bocadillo: texto en una o dos líneas, con piquito hacia (px,py) */
+const bub=(cls,x,y,lines,px,py,c=INK,size=12)=>{lines=[].concat(lines);const w=Math.max(...lines.map(l=>tw(l,size))),h=lines.length*(size+5)+12;
+ return`<g class="${cls}"><path d="M${x-10} ${y+h/2-2} L${px} ${py} L${x+10} ${y+h/2-2}" fill="#fff" stroke="${c}" stroke-width="1.6"/><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="10" fill="#fff" stroke="${c}" stroke-width="1.6"/><rect x="${x-14}" y="${y+h/2-4}" width="28" height="5" fill="#fff"/>${lines.map((l,i)=>T(x,y-h/2+size+4+i*(size+5),l,{size,c})).join('')}</g>`};
+/* personaje sencillo: cabeza, cuerpo y brazos; base en (0,0) */
+const guy=(c,skin='#f2c9a0',extra='')=>`<path d="M-13 0 Q-13 -30 0 -30 Q13 -30 13 0 Z" fill="${c}"/><circle cx="0" cy="-40" r="10" fill="${skin}"/>${extra}`;
+const hair=c=>`<path d="M-10 -42 Q0 -56 10 -42 Q6 -48 0 -48 Q-6 -48 -10 -42Z" fill="${c}"/>`;
+const at=(x,y,inner,cls='',sc=1)=>`<g transform="translate(${x} ${y})${sc!==1?` scale(${sc})`:''}"><g class="${cls}">${inner}</g></g>`;
+const helmet=c=>`<path d="M-11 -42 Q0 -58 11 -42 Z" fill="#c9a227"/><path d="M0 -54 Q14 -60 16 -46" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round"/>`;
+const warrior=(c,crest)=>guy(c,'#f2c9a0',helmet(crest)+`<circle cx="-14" cy="-14" r="10" fill="#c9a227" stroke="#8a6d10" stroke-width="2"/><line x1="16" y1="-50" x2="16" y2="0" stroke="#6e5332" stroke-width="3"/><path d="M12 -50 L16 -60 L20 -50Z" fill="#999"/>`);
+const flame=`<path d="M0 0 C-10 -6 -8 -18 0 -28 C2 -20 10 -18 8 -8 C8 -2 4 0 0 0Z" fill="#ff8c1a"/><path d="M0 0 C-4 -4 -3 -10 0 -15 C2 -10 5 -8 3 -3 C3 -1 2 0 0 0Z" fill="#ffd23f"/>`;
+const sea=`<rect width="400" height="250" fill="${SEA}"/>`;
+const curtainBox=(id)=>`<defs><clipPath id="${id}"><rect x="20" y="20" width="360" height="160"/></clipPath></defs>`;
+
+/* =================== ESCENAS ===================
+   svg() dibuja el estado final; anim(tl,E) monta la línea de tiempo. E() cierra cada paso. */
+const SCENES=[
+/* ---------- GÉNEROS Y NARRACIÓN ---------- */
+{id:'generos',b:'Narrativa',t:'Los tres géneros literarios',
+ steps:['Hay tres <b>géneros literarios</b>: tres maneras distintas de crear literatura.',
+  '<b>Narrativo</b>: un <b>narrador</b> cuenta una historia. Cuentos, novelas, fábulas, cantares de gesta…',
+  '<b>Lírico</b>: expresa <b>sentimientos</b>, emociones o reflexiones. Suele ir en verso: poemas, canciones, odas.',
+  '<b>Dramático</b>: se escribe para <b>representarse</b> en un escenario con actores. Tragedias y comedias.'],
+ svg(){let s=PB;
+  [[12,BLUE],[142,MAG],[272,GREEN]].forEach(([x,c],i)=>s+=`<g class="pan"><rect x="${x}" y="22" width="116" height="168" rx="12" fill="#fff" stroke="${c}" stroke-width="2.5"/></g>`);
+  s+=`<g class="pgL"><path d="M70 70 Q48 60 26 70 L26 140 Q48 130 70 140Z" fill="#eef4ff" stroke="${BLUE}" stroke-width="2.5"/>${[84,96,108,120].map(y=>`<line x1="34" y1="${y}" x2="62" y2="${y-3}" stroke="#9ab" stroke-width="2"/>`).join('')}</g>`;
+  s+=`<g class="pgR"><path d="M70 70 Q92 60 114 70 L114 140 Q92 130 70 140Z" fill="#eef4ff" stroke="${BLUE}" stroke-width="2.5"/>${[84,96,108,120].map(y=>`<line x1="78" y1="${y-3}" x2="106" y2="${y}" stroke="#9ab" stroke-width="2"/>`).join('')}</g>`;
+  s+=T(70,170,'«Érase una vez…»',{size:12,c:BLUE,it:true,cls:'tx1'});
+  s+=at(200,105,`<path d="M0 22 C-34 0 -30 -26 -14 -26 C-6 -26 -1 -20 0 -14 C1 -20 6 -26 14 -26 C30 -26 34 0 0 22Z" fill="${MAG}"/>`,'heart');
+  s+=[[168,70],[226,62],[236,92],[160,100]].map(([x,y],i)=>`<g class="nt"><ellipse cx="${x}" cy="${y}" rx="6" ry="4.5" transform="rotate(-20 ${x} ${y})" fill="${MAG}"/><line x1="${x+5.5}" y1="${y-1}" x2="${x+5.5}" y2="${y-20}" stroke="${MAG}" stroke-width="2"/></g>`).join('');
+  s+=T(200,170,'«Mi corazón…»',{size:12,c:MAG,it:true,cls:'tx2'});
+  s+=`<defs><clipPath id="cpT"><rect x="272" y="22" width="116" height="168" rx="12"/></clipPath></defs><g clip-path="url(#cpT)">`;
+  s+=`<g class="masks">${at(312,100,`<path d="M-20 -22 Q0 -30 20 -22 Q24 8 0 26 Q-24 8 -20 -22Z" fill="${GREEN}"/><path d="M-10 -8 q4 -5 8 0 M2 -8 q4 -5 8 0" stroke="#fff" stroke-width="2.5" fill="none"/><path d="M-9 6 q9 9 18 0" stroke="#fff" stroke-width="2.5" fill="none"/>`)}${at(350,112,`<path d="M-20 -22 Q0 -30 20 -22 Q24 8 0 26 Q-24 8 -20 -22Z" fill="${BROWN}"/><path d="M-10 -10 q4 5 8 0 M2 -10 q4 5 8 0" stroke="#fff" stroke-width="2.5" fill="none"/><path d="M-9 12 q9 -9 18 0" stroke="#fff" stroke-width="2.5" fill="none"/>`)}</g>`;
+  s+=`<rect class="curL" x="272" y="22" width="58" height="168" fill="#b3263e"/><rect class="curR" x="330" y="22" width="58" height="168" fill="#c0274f"/></g>`;
+  s+=T(330,170,'¡Se abre el telón!',{size:12,c:GREEN,it:true,cls:'tx3'});
+  s+=T(70,215,'Narrativo',{size:16,w:800,c:BLUE,cls:'lab1'})+T(70,234,'contar',{size:12,c:MUT,cls:'lab1'});
+  s+=T(200,215,'Lírico',{size:16,w:800,c:MAG,cls:'lab2'})+T(200,234,'sentir',{size:12,c:MUT,cls:'lab2'});
+  s+=T(330,215,'Dramático',{size:16,w:800,c:GREEN,cls:'lab3'})+T(330,234,'representar',{size:12,c:MUT,cls:'lab3'});
+  return s},
+ anim(tl,E){gsap.set(['.pgL','.pgR','.tx1','.heart','.nt','.tx2','.masks','.tx3','.lab1','.lab2','.lab3'],{opacity:0});tl.from('.pan',{y:30,opacity:0,stagger:.2,duration:.5,ease:'back.out(1.6)'});E();
+  tl.to(['.pgL','.pgR'],{opacity:1,duration:.01});tl.from('.pgL',{scaleX:0,transformOrigin:'100% 50%',duration:.5});tl.from('.pgR',{scaleX:0,transformOrigin:'0% 50%',duration:.5},'<');tl.to('.tx1',{opacity:1,duration:.4});tl.to('.lab1',{opacity:1,duration:.3});E();
+  tl.to('.heart',{opacity:1,duration:.01});tl.to('.heart',{scale:1.25,transformOrigin:'50% 50%',yoyo:true,repeat:3,duration:.25});tl.to('.nt',{opacity:1,duration:.3,stagger:.15},'<');tl.from('.nt',{y:16,stagger:.15,duration:.6},'<');tl.to('.tx2',{opacity:1,duration:.3});tl.to('.lab2',{opacity:1,duration:.3});E();
+  tl.to('.masks',{opacity:1,duration:.01});tl.to('.curL',{x:-58,duration:.9,ease:'power2.inOut'});tl.to('.curR',{x:58,duration:.9,ease:'power2.inOut'},'<');tl.to('.tx3',{opacity:1,duration:.3});tl.to('.lab3',{opacity:1,duration:.3});E()},
+ qs:[{q:'¿Qué género expresa sobre todo sentimientos?',ok:'El lírico',no:['El narrativo','El dramático','Ninguno'],exp:'La lírica (la poesía) expresa sentimientos, emociones o reflexiones.'},
+     {q:'¿Qué género está pensado para representarse con actores?',ok:'El dramático',no:['El lírico','El narrativo','El épico'],exp:'Es el teatro: tragedias, comedias…'}]},
+
+{id:'estructura',b:'Narrativa',t:'Planteamiento, nudo y desenlace',
+ steps:['Toda narración tiene <b>narrador</b>, <b>personajes</b>, <b>acción</b>, <b>tiempo</b> y <b>espacio</b>.',
+  '<b>Planteamiento</b>: se presentan los personajes, el lugar y el problema. Ana encuentra un perro perdido en el parque.',
+  '<b>Nudo</b>: el problema se complica. Ana busca al dueño por todo el barrio, pero nadie lo reconoce.',
+  '<b>Desenlace</b>: el problema se resuelve. Ana ve un cartel con la foto del perro y lo devuelve a su familia.'],
+ svg(){let s=PB;
+  s+=chip('el',72,40,'narrador',PUR)+chip('el',178,40,'personajes',MAG)+chip('el',282,40,'acción',BLUE)+chip('el',120,80,'tiempo',ORANGE)+chip('el',230,80,'espacio',GREEN);
+  s+=`<path class="seg1" pathLength="1" stroke-dasharray="1" d="M30 196 C70 196 100 192 130 168" fill="none" stroke="${BLUE}" stroke-width="5" stroke-linecap="round"/>`;
+  s+=`<path class="seg2" pathLength="1" stroke-dasharray="1" d="M130 168 C170 132 186 92 214 84" fill="none" stroke="${MAG}" stroke-width="5" stroke-linecap="round"/>`;
+  s+=`<path class="seg3" pathLength="1" stroke-dasharray="1" d="M214 84 C250 76 280 176 372 190" fill="none" stroke="${GREEN}" stroke-width="5" stroke-linecap="round"/>`;
+  s+=T(205,58,'?',{size:26,w:800,c:MAG,cls:'qm'})+T(232,62,'?',{size:20,w:800,c:MAG,cls:'qm'})+T(184,68,'?',{size:18,w:800,c:MAG,cls:'qm'});
+  s+=at(352,186,`<path d="M-24 0 V-26 L0 -46 L24 -26 V0Z" fill="#f2d6a2" stroke="${BROWN}" stroke-width="2.5"/><rect x="-6" y="-16" width="12" height="16" fill="${BROWN}"/>`,'house');
+  s+=at(352,120,`<path d="M0 12 C-20 0 -18 -14 -8 -14 C-4 -14 -1 -11 0 -8 C1 -11 4 -14 8 -14 C18 -14 20 0 0 12Z" fill="${MAG}"/>`,'love');
+  s+=`<g transform="translate(50 194)"><g class="walk">${guy(MAG,'#f2c9a0',hair('#5a3a20'))}<g transform="translate(22 0)"><ellipse cx="0" cy="-8" rx="12" ry="7" fill="${ORANGE}"/><circle cx="12" cy="-14" r="6" fill="${ORANGE}"/><path d="M14 -20 l4 -6 l1 7z" fill="${ORANGE}"/><line x1="-8" y1="-3" x2="-8" y2="0" stroke="${ORANGE}" stroke-width="3"/><line x1="7" y1="-3" x2="7" y2="0" stroke="${ORANGE}" stroke-width="3"/></g></g></g>`;
+  s+=chip('p1',80,232,'Planteamiento',BLUE)+chip('p2',200,232,'Nudo',MAG)+chip('p3',320,232,'Desenlace',GREEN);
+  return s},
+ anim(tl,E){gsap.set(['.walk','.house','.love','.qm','.p1','.p2','.p3'],{opacity:0});gsap.set(['.seg1','.seg2','.seg3'],{strokeDashoffset:1});
+  tl.from('.el',{scale:0,opacity:0,transformOrigin:'50% 50%',stagger:.18,duration:.45,ease:'back.out(2)'});E();
+  tl.to('.el',{opacity:.25,duration:.4});tl.to('.seg1',{strokeDashoffset:0,duration:.8});tl.to('.walk',{opacity:1,duration:.4});tl.from('.walk',{x:-30,duration:.6},'<');tl.to('.p1',{opacity:1,duration:.3});E();
+  tl.to('.seg2',{strokeDashoffset:0,duration:.9});tl.to('.walk',{x:155,y:-108,duration:1.2,ease:'power1.inOut'},'<');tl.to('.qm',{opacity:1,stagger:.15,duration:.3});tl.to('.qm',{y:-6,yoyo:true,repeat:3,duration:.2});tl.to('.p2',{opacity:1,duration:.3},'<');E();
+  tl.to('.qm',{opacity:0,duration:.3});tl.to('.seg3',{strokeDashoffset:0,duration:.9});tl.to('.walk',{x:240,y:-6,duration:1.2,ease:'power1.inOut'},'<');tl.to('.house',{opacity:1,duration:.4});tl.to('.love',{opacity:1,duration:.3});tl.from('.love',{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(3)'},'<');tl.to('.p3',{opacity:1,duration:.3});E()},
+ qs:[{q:'¿En qué parte de la historia aparece y crece el problema?',ok:'En el nudo',no:['En el planteamiento','En el desenlace','En el título'],exp:'El nudo o desarrollo es la parte central, donde el conflicto se complica.'},
+     {q:'¿Qué ocurre en el desenlace?',ok:'El conflicto se resuelve y la historia termina',no:['Se presentan los personajes','Aparece el problema','Habla el autor'],exp:'Planteamiento → nudo → desenlace.'}]},
+
+{id:'narrador',b:'Narrativa',t:'¿Quién cuenta la historia?',
+ steps:['El <b>autor</b> es la persona real que escribe el libro. El <b>narrador</b> es la <b>voz</b> que cuenta la historia: no son lo mismo.',
+  'Narrador <b>interno</b>: está <b>dentro</b> de la historia y habla en primera persona: «Aquella tarde <b>encontré</b> una llave».',
+  'Narrador <b>externo</b>: está <b>fuera</b> y habla en tercera persona: «Aquella tarde, Ana <b>encontró</b> una llave».',
+  'Narrador <b>omnisciente</b>: es externo, pero <b>lo sabe todo</b>, hasta lo que piensan y sienten los personajes.'],
+ svg(){let s=PB;
+  s+=`<g class="writer"><rect x="14" y="150" width="104" height="10" fill="${BROWN}"/><rect x="22" y="160" width="6" height="40" fill="${BROWN}"/><rect x="104" y="160" width="6" height="40" fill="${BROWN}"/><rect x="58" y="140" width="34" height="10" fill="#fff" stroke="${MUT}"/>${at(46,150,guy('#4a5d7a','#f2c9a0',hair('#333')))}<line x1="64" y1="132" x2="76" y2="142" stroke="${INK}" stroke-width="2.5"/>${T(66,222,'el autor',{size:13,w:800,c:'#4a5d7a'})}${T(66,238,'(persona real)',{size:11,c:MUT})}</g>`;
+  s+=`<g class="voice">${[0,1,2].map(i=>`<path d="M${120+i*10} ${110-i*4} q8 ${-10-i*2} 0 ${-20-i*4}" fill="none" stroke="${PUR}" stroke-width="2.5" stroke-linecap="round" transform="translate(${i*8} ${i*-2})"/>`).join('')}</g>`;
+  s+=`<g class="box"><rect x="162" y="30" width="170" height="168" rx="12" fill="#fff" stroke="${PUR}" stroke-width="2" stroke-dasharray="7 5"/>${T(247,50,'LA HISTORIA',{size:11,w:800,c:PUR})}</g>`;
+  s+=at(220,180,guy(MAG,'#f2c9a0',hair('#5a3a20'))+`<g transform="translate(18 -24)"><circle r="5" fill="none" stroke="#c9a227" stroke-width="3"/><line x1="5" y1="0" x2="16" y2="0" stroke="#c9a227" stroke-width="3"/><line x1="13" y1="0" x2="13" y2="5" stroke="#c9a227" stroke-width="3"/></g>`+T(0,16,'Ana',{size:12,w:800,c:MAG}),'ana');
+  s+=bub('think',225,88,['«¡Será la llave','del desván!»'],225,124,MAG,11);
+  s+=`<g transform="translate(366 180)"><g class="nar">${guy(PUR,'#e8d4f5')}<g class="eye"><circle cx="0" cy="-74" r="16" fill="#fff" stroke="${PUR}" stroke-width="2.5"/><circle cx="-3" cy="-74" r="7" fill="${PUR}"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-96" x2="0" y2="-102" stroke="${ORANGE}" stroke-width="2.5" transform="rotate(${a} 0 -74)"/>`).join('')}</g>${T(0,16,'narrador',{size:12,w:800,c:PUR})}</g></g>`;
+  s+=bub('b1',200,228,'«Aquella tarde encontré una llave.»',200,200,PUR,12);
+  s+=bub('b2',200,228,'«Aquella tarde, Ana encontró una llave.»',330,200,PUR,12);
+  s+=bub('b3',200,228,'«…y Ana pensó que era la del desván.»',330,200,PUR,12);
+  return s},
+ anim(tl,E){gsap.set(['.box','.ana','.think','.eye','.b1','.b2','.b3'],{opacity:0});
+  tl.from('.writer',{opacity:0,x:-20,duration:.5});tl.from('.voice',{opacity:0,scale:.3,transformOrigin:'0% 100%',duration:.5});tl.from('.nar',{opacity:0,y:20,duration:.5});E();
+  tl.to('.box',{opacity:1,duration:.4});tl.to('.writer',{opacity:.3,duration:.3},'<');tl.to('.voice',{opacity:0,duration:.3},'<');tl.to('.nar',{x:-116,duration:1,ease:'power2.inOut'});tl.to('.b1',{opacity:1,duration:.4});tl.from('.b1',{scale:.6,transformOrigin:'50% 100%',duration:.4},'<');E();
+  tl.to('.b1',{opacity:0,duration:.3});tl.to('.nar',{x:0,duration:1,ease:'power2.inOut'});tl.to('.ana',{opacity:1,duration:.4});tl.from('.ana',{y:20,duration:.4},'<');tl.to('.b2',{opacity:1,duration:.4});E();
+  tl.to('.b2',{opacity:0,duration:.3});tl.to('.eye',{opacity:1,duration:.4});tl.from('.eye',{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(2)'},'<');tl.to('.think',{opacity:1,duration:.4});tl.from('.think',{scale:.4,transformOrigin:'50% 100%',duration:.5},'<');tl.to('.b3',{opacity:1,duration:.4});E()},
+ qs:[{q:'«Corrí hasta la estación, pero el tren ya se había ido». ¿Qué narrador es?',ok:'Interno',no:['Externo','Omnisciente','No tiene narrador'],exp:'Habla en primera persona («corrí»): participa en la historia.'},
+     {q:'¿Qué narrador conoce lo que piensan y sienten los personajes?',ok:'El omnisciente',no:['El interno','El autor','El antagonista'],exp:'Es un narrador externo que lo sabe todo.'}]},
+
+{id:'fabula',b:'Narrativa',t:'Esopo y la fábula',
+ steps:['La <b>fábula</b> es una historia breve con <b>animales</b> que hablan y actúan como personas. Eso se llama <b>personificación</b>.',
+  'En «La zorra y la leona», de <b>Esopo</b>, la zorra se burla de la leona porque solo tiene <b>un cachorro</b>.',
+  'La leona responde destacando lo que vale su hijo. <b>Moraleja</b>: la calidad puede importar más que la cantidad.',
+  '<b>Esopo</b> (siglo VI a. C., según la tradición) inspiró a otros fabulistas: <b>La Fontaine</b> en Francia y <b>Samaniego</b> e <b>Iriarte</b> en España.'],
+ svg(){let s=`<rect width="400" height="250" fill="#eaf1dc"/><path d="M0 196 Q200 176 400 196 V250 H0Z" fill="#b8cf94"/>`;
+  s+=at(110,190,`<g class="foxb"><path d="M-36 0 Q-40 -34 -12 -40 L26 -38 Q40 -22 34 0 Z" fill="${ORANGE}"/><path d="M18 -40 l12 -30 l7 26 z M30 -38 l16 -24 l2 26 z" fill="${ORANGE}"/><path d="M32 -38 q24 7 26 16 q-16 5 -30 -2" fill="${ORANGE}"/><circle cx="36" cy="-32" r="3" fill="${INK}"/><path d="M-36 -14 q-30 -4 -36 -28 q16 12 36 12" fill="${ORANGE}"/><path d="M-70 -40 q5 7 12 5" stroke="#fff" stroke-width="3.5" fill="none"/></g>`,'fox');
+  s+=at(300,190,`<ellipse cx="0" cy="-22" rx="46" ry="24" fill="#c9a26b"/><circle cx="40" cy="-50" r="21" fill="#c9a26b"/><circle cx="31" cy="-68" r="6" fill="#c9a26b"/><circle cx="48" cy="-54" r="3" fill="${INK}"/><path d="M56 -45 q5 2 0 6" stroke="${INK}" stroke-width="1.8" fill="none"/>`,'lion');
+  s+=at(250,190,`<ellipse cx="0" cy="-10" rx="15" ry="10" fill="#dcbb8a"/><circle cx="-12" cy="-20" r="9" fill="#dcbb8a"/><circle cx="-15" cy="-22" r="1.8" fill="${INK}"/>`,'cub');
+  s+=bub('bf',120,64,['¿Solo tienes','un cachorro?'],120,106,ORANGE,13);
+  s+=bub('bl',300,58,['Solo uno…','¡pero es un león!'],320,108,BROWN,13);
+  s+=`<g class="scroll"><rect x="60" y="200" width="280" height="40" rx="6" fill="#fff8e2" stroke="${BROWN}" stroke-width="2"/><circle cx="60" cy="220" r="10" fill="#e8d4a8" stroke="${BROWN}" stroke-width="2"/><circle cx="340" cy="220" r="10" fill="#e8d4a8" stroke="${BROWN}" stroke-width="2"/>${T(200,225,'Moraleja: calidad mejor que cantidad',{size:13.5,w:800,c:BROWN})}</g>`;
+  s+=`<g class="aut">${chip('',200,60,'ESOPO · siglo VI a. C.',PUR,15)}${chip('',90,120,'La Fontaine (Francia)',BLUE)}${chip('',310,120,'Samaniego (España)',RED)}${chip('',200,170,'Iriarte (España)',RED)}</g>`;
+  return s},
+ anim(tl,E){gsap.set(['.lion','.cub','.bf','.bl','.scroll','.aut'],{opacity:0});
+  tl.from('.fox',{x:-180,duration:1.2,ease:'power2.out'});tl.to('.fox',{y:-6,yoyo:true,repeat:3,duration:.15},'<');E();
+  tl.to(['.lion','.cub'],{opacity:1,duration:.5});tl.from('.lion',{x:80,duration:.8},'<');tl.to('.bf',{opacity:1,duration:.4});tl.from('.bf',{scale:.5,transformOrigin:'50% 100%',duration:.4},'<');tl.to('.foxb',{rotation:-6,transformOrigin:'50% 100%',yoyo:true,repeat:3,duration:.15});E();
+  tl.to('.bf',{opacity:0,duration:.3});tl.to('.bl',{opacity:1,duration:.4});tl.from('.bl',{scale:.5,transformOrigin:'50% 100%',duration:.4},'<');tl.to('.cub',{y:-10,yoyo:true,repeat:1,duration:.2});tl.to('.scroll',{opacity:1,duration:.3});tl.from('.scroll',{scaleX:0,transformOrigin:'50% 50%',duration:.7,ease:'power2.out'},'<');E();
+  tl.to(['.fox','.lion','.cub','.bl','.scroll'],{opacity:0,duration:.5});tl.to('.aut',{opacity:1,duration:.3});tl.from('.aut g',{y:-30,opacity:0,stagger:.3,duration:.5,ease:'bounce.out'},'<');E()},
+ qs:[{q:'¿Cómo se llama la enseñanza de una fábula?',ok:'Moraleja',no:['Acotación','Rima','Desenlace'],exp:'Puede aparecer escrita al final o deducirse de la historia.'},
+     {q:'¿Qué escritores españoles siguieron la tradición de la fábula?',ok:'Samaniego e Iriarte',no:['Esquilo y Sófocles','Safo y Alceo','La Fontaine y Esopo'],exp:'La Fontaine era francés y Esopo, griego.'}]},
+
+/* ---------- POESÍA Y ÉPICA ---------- */
+{id:'lirica',b:'Poesía y épica',t:'Versos, rima y ritmo',
+ steps:['La <b>lírica</b> expresa lo que siente o piensa una voz. Cada línea de un poema es un <b>verso</b>.',
+  'La <b>rima</b> es la coincidencia de sonidos al final de los versos: <i>día</i> con <i>alegría</i>, <i>prisa</i> con <i>risa</i>.',
+  'Lo más importante es el <b>ritmo</b>: la musicalidad que nace de repeticiones y pausas. (También existe la <b>prosa poética</b>: prosa muy musical.)',
+  'En Grecia, <b>Alceo</b> (siglo VII a. C.) escribió sobre la guerra, la política, los banquetes y los dioses; <b>Safo</b>, de la isla de <b>Lesbos</b>, sobre sus sentimientos y el amor.'],
+ svg(){let s=PB;const V=[['Por la ventana entra el ','día',',','A'],['suave, dorado y sin ','prisa',';','B'],['la casa se llena de ','risa','','B'],['y el corazón, de ','alegría','.','A']];
+  s+=`<g class="poem">`+V.map((v,i)=>`<text class="v" x="290" y="${58+i*40}" text-anchor="end" font-size="19" fill="${INK}">${v[0]}<tspan class="r${v[3]}" font-weight="700">${v[1]}</tspan>${v[2]}</text>`).join('')+`</g>`;
+  s+=`<path class="arcA" pathLength="1" stroke-dasharray="1" d="M298 52 C340 52 340 172 298 172" fill="none" stroke="${MAG}" stroke-width="3"/><path class="arcB" pathLength="1" stroke-dasharray="1" d="M298 92 C322 92 322 132 298 132" fill="none" stroke="${BLUE}" stroke-width="3"/>`;
+  s+=T(352,118,'A',{size:20,w:800,c:MAG,cls:'lA'})+T(330,118,'B',{size:20,w:800,c:BLUE,cls:'lB'});
+  s+=`<path class="wave" pathLength="1" stroke-dasharray="1" d="M20 210 q20 -18 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="${PUR}" stroke-width="3"/>`+T(200,238,'ritmo = música del poema',{size:13,w:700,c:PUR,cls:'wl'});
+  s+=`<g class="gre">${at(110,150,guy(BROWN,'#f2c9a0',`<path d="M-12 -46 q12 -12 24 0" stroke="#4f7a3a" stroke-width="4" fill="none"/>`)+`<g transform="translate(24 -20)"><path d="M-8 -16 C-14 0 -10 12 -4 14 L4 14 C10 12 14 0 8 -16" fill="none" stroke="#c9a227" stroke-width="3"/><path d="M-6 -10 h12" stroke="#c9a227" stroke-width="3"/></g>`)}${T(110,182,'Alceo',{size:16,w:800,c:BROWN})}${T(110,200,'guerra · política · banquetes',{size:11,c:MUT})}
+   ${at(290,150,guy(MAG,'#f2c9a0',hair('#2a1a10')+`<path d="M-12 -46 q12 -12 24 0" stroke="#4f7a3a" stroke-width="4" fill="none"/>`)+`<path d="M22 -30 C14 -38 16 -48 22 -48 C25 -48 26 -45 26 -44 C26 -45 27 -48 30 -48 C36 -48 38 -38 26 -30Z" fill="${MAG}"/>`)}${T(290,182,'Safo',{size:16,w:800,c:MAG})}${T(290,200,'isla de Lesbos · sentimientos',{size:11,c:MUT})}</g>`;
+  return s},
+ anim(tl,E){gsap.set(['.arcA','.arcB','.wave'],{strokeDashoffset:1});gsap.set(['.lA','.lB','.wl','.gre'],{opacity:0});
+  tl.from('.v',{opacity:0,x:-30,stagger:.5,duration:.5});E();
+  tl.to('.rA',{fill:MAG,duration:.4});tl.to('.arcA',{strokeDashoffset:0,duration:.7});tl.to('.lA',{opacity:1,duration:.3});tl.to('.rB',{fill:BLUE,duration:.4});tl.to('.arcB',{strokeDashoffset:0,duration:.6});tl.to('.lB',{opacity:1,duration:.3});E();
+  tl.to('.wave',{strokeDashoffset:0,duration:1.4,ease:'none'});tl.to('.v',{y:-4,yoyo:true,repeat:3,stagger:.12,duration:.2},'<');tl.to('.wl',{opacity:1,duration:.4});E();
+  tl.to(['.poem','.arcA','.arcB','.lA','.lB','.wave','.wl'],{opacity:0,duration:.5});tl.to('.gre',{opacity:1,duration:.4});tl.from('.gre',{y:30,duration:.7,ease:'back.out(1.6)'},'<');E()},
+ qs:[{q:'¿Qué es la rima?',ok:'La coincidencia de sonidos al final de los versos',no:['Cada línea del poema','El tema del poema','Un tipo de narrador'],exp:'Día rima con alegría; prisa, con risa.'},
+     {q:'¿De qué isla era la poetisa Safo?',ok:'De Lesbos',no:['De Ítaca','De Creta','De Troya'],exp:'Su poesía expresa sentimientos y pasión amorosa.'}]},
+
+{id:'iliada',b:'Poesía y épica',t:'La Ilíada: la cólera de Aquiles',
+ steps:['La <b>Ilíada</b>, atribuida a <b>Homero</b>, cuenta el último año de la <b>guerra de Troya</b>. Es <b>épica</b>: hazañas de héroes.',
+  '<b>Aquiles</b>, el gran héroe griego, se enfada con <b>Agamenón</b> y deja de luchar: es la famosa <b>cólera de Aquiles</b>.',
+  'Su amigo <b>Patroclo</b> muere en la batalla. Aquiles, lleno de dolor, vuelve al combate.',
+  'Aquiles se enfrenta a <b>Héctor</b>, el gran héroe troyano, y lo mata. La obra muestra también el <b>dolor</b> que causa la guerra.'],
+ svg(){let s=`<rect width="400" height="250" fill="#f3e7cf"/><path d="M0 210 H400 V250 H0Z" fill="#d9c08f"/>`;
+  s+=`<g class="troy"><rect x="320" y="90" width="80" height="120" fill="#c8a978" stroke="${BROWN}" stroke-width="2"/>${[320,340,360,380].map(x=>`<rect x="${x}" y="78" width="12" height="14" fill="#c8a978" stroke="${BROWN}" stroke-width="2"/>`).join('')}<path d="M336 210 V170 Q348 156 360 170 V210Z" fill="#6e5332"/>${T(360,130,'TROYA',{size:14,w:800,c:BROWN})}</g>`;
+  s+=`<g class="ships">${[[26,200],[62,206]].map(([x,y])=>`<path d="M${x-26} ${y} h52 l-8 10 h-36z" fill="${BROWN}"/><line x1="${x}" y1="${y}" x2="${x}" y2="${y-36}" stroke="${BROWN}" stroke-width="2.5"/><path d="M${x} ${y-34} l20 16 h-20z" fill="#fff" stroke="${BROWN}"/>`).join('')}</g>`;
+  s+=at(100,210,`<path d="M-30 0 L0 -50 L30 0Z" fill="#e2d2b0" stroke="${BROWN}" stroke-width="2"/><path d="M0 -50 L-6 0 H6Z" fill="#b89a6a"/>`,'tent');
+  s+=at(178,210,warrior('#7a2b2b',RED)+`<path d="M-9 -54 l4 -8 l5 6 l5 -6 l4 8z" fill="#ffd23f"/>`+T(0,20,'Agamenón',{size:11,w:800,c:'#7a2b2b'}),'agam');
+  s+=at(262,210,warrior('#6a8a9a',BLUE)+T(0,20,'Patroclo',{size:11,w:800,c:'#4a6a7a'}),'pat');
+  s+=at(228,210,warrior(BLUE,MAG)+`<g class="anger">${[[-22,-62],[22,-62],[0,-72]].map(([x,y])=>`<path d="M${x-5} ${y} l5 -8 l5 8" stroke="${RED}" stroke-width="3" fill="none"/>`).join('')}</g>`+T(0,20,'Aquiles',{size:12,w:800,c:BLUE}),'aq');
+  s+=at(338,210,warrior(GREEN,ORANGE)+T(0,20,'Héctor',{size:12,w:800,c:GREEN}),'hec');
+  s+=at(312,166,`<path d="M0 -18 L5 -5 L18 -6 L8 3 L13 16 L0 8 L-13 16 L-8 3 L-18 -6 L-5 -5Z" fill="#ffd23f" stroke="${ORANGE}" stroke-width="2"/>`,'spark');
+  return s},
+ anim(tl,E){gsap.set(['.agam','.pat','.aq','.hec','.spark','.tent','.anger'],{opacity:0});
+  tl.from('.troy',{y:120,duration:.9,ease:'power2.out'});tl.from('.ships',{x:-120,duration:.9,ease:'power2.out'},'<');E();
+  tl.to(['.aq','.agam','.tent'],{opacity:1,duration:.5});tl.to('.anger',{opacity:1,duration:.2});tl.to('.aq',{x:4,yoyo:true,repeat:5,duration:.06});tl.to('.aq',{x:-128,duration:1,ease:'power2.inOut'});tl.to('.agam',{opacity:.35,duration:.4},'<');E();
+  tl.to('.pat',{opacity:1,duration:.4});tl.from('.pat',{x:40,duration:.6},'<');tl.to('.pat',{rotation:-90,transformOrigin:'50% 100%',opacity:.45,duration:.6,ease:'power2.in'});tl.to('.aq',{x:20,duration:1,ease:'power2.inOut'});tl.to('.anger',{scale:1.3,transformOrigin:'50% 50%',yoyo:true,repeat:3,duration:.15},'<.5');E();
+  tl.to('.pat',{opacity:0,duration:.3});tl.to('.hec',{opacity:1,duration:.3});tl.from('.hec',{x:30,duration:.7},'<');tl.to('.aq',{x:56,duration:.6});tl.to('.spark',{opacity:1,duration:.1});tl.from('.spark',{scale:0,rotation:-90,transformOrigin:'50% 50%',duration:.4,ease:'back.out(3)'},'<');tl.to('.hec',{rotation:60,transformOrigin:'50% 100%',opacity:.5,duration:.6,ease:'power2.in'});tl.to('.spark',{opacity:0,duration:.4});E()},
+ qs:[{q:'¿Con quién se enfada Aquiles al principio de la Ilíada?',ok:'Con Agamenón',no:['Con Héctor','Con Patroclo','Con Odiseo'],exp:'Por eso deja de luchar.'},
+     {q:'¿Por qué vuelve Aquiles al combate?',ok:'Porque muere su amigo Patroclo',no:['Porque se lo ordena Zeus','Porque quiere volver a Ítaca','Porque Héctor le roba el escudo'],exp:'Y entonces mata a Héctor, el héroe troyano.'}]},
+
+{id:'odisea',b:'Poesía y épica',t:'La Odisea: el viaje a casa',
+ steps:['La <b>Odisea</b>, también atribuida a <b>Homero</b>, cuenta el <b>viaje de regreso</b> de <b>Odiseo</b> (Ulises) a su isla, <b>Ítaca</b>, tras la guerra de Troya.',
+  'Por el camino se enfrenta a <b>monstruos</b>, <b>tormentas</b> y <b>hechiceras</b>…',
+  '…y los supera gracias a su <b>inteligencia</b> y su <b>valentía</b>, con la ayuda de algunos dioses y humanos.',
+  'En Ítaca lo esperan su esposa <b>Penélope</b> y su hijo <b>Telémaco</b>. ¡Por fin en casa!'],
+ svg(){let s=sea;
+  s+=`<path d="M0 130 C30 110 80 120 100 150 C110 180 60 200 0 196Z" fill="${SAND}" stroke="#c9b48a" stroke-width="2"/>${T(44,186,'ÍTACA',{size:13,w:800,c:BROWN})}`;
+  s+=`<path d="M330 0 H400 V130 C370 120 340 90 330 0Z" fill="${SAND}" stroke="#c9b48a" stroke-width="2"/><g transform="translate(370 60)"><rect x="-16" y="-10" width="32" height="20" fill="#c8a978" stroke="${BROWN}" stroke-width="1.5"/></g>${T(370,96,'TROYA',{size:12,w:800,c:BROWN})}`;
+  s+=`<path class="route" pathLength="1" stroke-dasharray="1" d="M340 110 C300 150 260 60 220 110 S150 190 110 150" fill="none" stroke="${MAG}" stroke-width="2.5" stroke-dasharray="6 5"/>`;
+  s+=`<g class="storm"><path d="M210 40 q-24 0 -20 -16 q4 -16 22 -10 q8 -16 26 -8 q20 -4 20 14 q12 4 6 16Z" fill="#7d8a99"/><path class="bolt" d="M228 42 l-10 20 h10 l-8 20 l22 -28 h-10 l8 -12z" fill="#ffd23f"/></g>`;
+  s+=`<g class="mon"><path d="M150 210 q12 -26 24 0 q12 -22 24 0 q12 -18 24 0" fill="#3c8a5a" stroke="#2a6a42" stroke-width="2"/><circle cx="148" cy="200" r="11" fill="#3c8a5a"/><circle cx="144" cy="197" r="3" fill="#fff"/><path d="M137 206 l6 3 l-6 3" stroke="#fff" stroke-width="2" fill="none"/></g>`;
+  s+=at(110,90,guy(PUR,'#f2c9a0',`<path d="M-11 -46 Q0 -60 11 -46Z" fill="${PUR}"/>`)+`<line x1="14" y1="-30" x2="28" y2="-48" stroke="${BROWN}" stroke-width="2.5"/><circle cx="28" cy="-50" r="4" fill="#ffd23f"/>`+T(0,16,'hechicera',{size:10,w:700,c:PUR}),'witch',.8);
+  s+=at(250,150,`<circle r="16" fill="#fff6c8" stroke="${ORANGE}" stroke-width="2"/><path d="M-6 -2 q6 -12 12 0 q-2 4 -3 8 h-6 q-1 -4 -3 -8z" fill="#ffd23f"/>${T(0,34,'¡astucia!',{size:12,w:800,c:ORANGE})}`,'idea');
+  s+=at(40,140,guy(MAG,'#f2c9a0',hair('#2a1a10'))+T(0,-56,'Penélope',{size:11,w:800,c:MAG}),'fam',.9)+at(72,146,guy(GREEN,'#f2c9a0',hair('#5a3a20'))+T(0,-56,'Telémaco',{size:11,w:800,c:GREEN}),'fam',.75);
+  s+=`<g transform="translate(340 112)"><g class="ship"><path d="M-22 0 h44 l-8 9 h-28z" fill="${BROWN}"/><line x1="0" y1="0" x2="0" y2="-30" stroke="${BROWN}" stroke-width="2.5"/><path d="M0 -28 l16 14 h-16z" fill="#fff" stroke="${BROWN}"/></g></g>`;
+  return s},
+ anim(tl,E){gsap.set(['.storm','.mon','.witch','.idea','.fam'],{opacity:0});gsap.set('.route',{strokeDashoffset:1});
+  tl.from('.ship',{scale:0,transformOrigin:'50% 100%',duration:.5,ease:'back.out(2)'});tl.to('.ship',{rotation:6,yoyo:true,repeat:3,transformOrigin:'50% 100%',duration:.25});E();
+  tl.to('.route',{strokeDashoffset:.55,duration:1});tl.to('.ship',{x:-120,y:0,duration:1.4,ease:'sine.inOut'},'<');tl.to('.storm',{opacity:1,duration:.4});tl.from('.bolt',{opacity:0,repeat:3,yoyo:true,duration:.1});tl.to('.mon',{opacity:1,duration:.3});tl.from('.mon',{y:30,duration:.6,ease:'back.out(2)'},'<');tl.to('.witch',{opacity:1,duration:.4});E();
+  tl.to('.idea',{opacity:1,duration:.2});tl.from('.idea',{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(3)'},'<');tl.to('.mon',{y:40,opacity:0,duration:.6});tl.to('.storm',{opacity:0,x:60,duration:.6},'<');tl.to('.witch',{opacity:.25,duration:.5},'<');tl.to('.route',{strokeDashoffset:0,duration:1});tl.to('.ship',{x:-218,y:46,duration:1.4,ease:'sine.inOut'},'<');tl.to('.idea',{opacity:0,duration:.4});E();
+  tl.to('.fam',{opacity:1,stagger:.3,duration:.5});tl.to('.fam',{y:-8,yoyo:true,repeat:3,duration:.18});E()},
+ qs:[{q:'¿Adónde quiere volver Odiseo?',ok:'A Ítaca',no:['A Troya','A Esparta','A Lesbos'],exp:'Es su isla, donde lo esperan Penélope y Telémaco.'},
+     {q:'¿Cómo supera Odiseo los peligros?',ok:'Con inteligencia, valentía y ayuda de dioses y humanos',no:['Solo con fuerza bruta','Escondiéndose en Troya','Gracias a un ejército persa'],exp:'Su astucia es famosa.'}]},
+
+/* ---------- TEATRO Y GRECIA ---------- */
+{id:'teatro',b:'Teatro',t:'Se abre el telón',
+ steps:['El teatro se escribe para ser <b>representado</b> por actores ante un <b>público</b>. Normalmente no hay narrador.',
+  'Los personajes hablan entre sí: es el <b>diálogo</b>, la forma básica del teatro.',
+  'Las <b>acotaciones</b> son indicaciones del autor sobre gestos, movimientos, voz o decorado. Van entre paréntesis y <b>no se dicen</b>.',
+  'En un <b>aparte</b>, un personaje habla al <b>público</b> y los demás no lo oyen. En un <b>monólogo</b>, un personaje habla largo rato, solo, en voz alta.'],
+ svg(){let s=`<rect width="400" height="250" fill="#2a2140"/><rect x="20" y="20" width="360" height="160" fill="#3a3058"/><path d="M20 160 H380 L396 190 H4Z" fill="${BROWN}"/>`;
+  s+=`<rect x="300" y="70" width="40" height="90" fill="#6e5332" class="door"/><circle cx="332" cy="118" r="3" fill="#ffd23f" class="door"/>`;
+  s+=`<path class="spot" d="M200 0 L150 170 H250Z" fill="#fff6c8" opacity=".22"/>`;
+  s+=at(120,166,guy(MAG,'#f2c9a0',hair('#2a1a10'))+T(0,-56,'ANA',{size:11,w:800,c:'#fff'}),'ana');
+  s+=at(200,166,guy(BLUE,'#f2c9a0',hair('#5a3a20'))+T(0,-56,'LUIS',{size:11,w:800,c:'#fff'}),'luis');
+  s+=`<g class="curL"><rect x="20" y="20" width="180" height="160" fill="#b3263e"/>${[50,90,130,170].map(x=>`<line x1="${x}" y1="20" x2="${x}" y2="180" stroke="#8a1b2f" stroke-width="3"/>`).join('')}</g><g class="curR"><rect x="200" y="20" width="180" height="160" fill="#c0274f"/>${[230,270,310,350].map(x=>`<line x1="${x}" y1="20" x2="${x}" y2="180" stroke="#8a1b2f" stroke-width="3"/>`).join('')}</g><rect x="10" y="10" width="380" height="16" fill="#8a1b2f"/>`;
+    s+=bub('d1',100,56,'¿Has oído ese ruido?',118,96,MAG,12)+bub('d2',270,56,['Sí. Parece que alguien','intenta entrar.'],208,96,BLUE,12);
+  s+=`<g class="pub">${[40,80,120,160,200,240,280,320,360].map((x,i)=>`<circle cx="${x}" cy="${222+(i%2)*6}" r="12" fill="#17122a"/>`).join('')}</g>`;
+  s+=`<g class="acot"><rect x="40" y="196" width="320" height="44" rx="6" fill="#fff" stroke="${MUT}"/>${T(200,214,'ANA. (Mira hacia la puerta con inquietud.)',{size:12,c:INK})}${T(200,232,'↑ acotación: el actor lo hace, pero no lo dice',{size:11,w:700,c:MAG})}</g>`;
+  s+=bub('ap',200,56,['(Aparte.) ¡Seguro que es','mi hermano con el balón!'],200,96,ORANGE,12);
+return s},
+ anim(tl,E){gsap.set(['.d1','.d2','.acot','.ap','.door'],{opacity:0});
+  tl.from('.pub',{y:40,duration:.6});tl.to('.curL',{x:-178,duration:1.1,ease:'power2.inOut'});tl.to('.curR',{x:178,duration:1.1,ease:'power2.inOut'},'<');E();
+  tl.to('.d1',{opacity:1,duration:.3});tl.from('.d1',{scale:.5,transformOrigin:'50% 100%',duration:.35},'<');tl.to('.d2',{opacity:1,duration:.3},'+=.6');tl.from('.d2',{scale:.5,transformOrigin:'50% 100%',duration:.35},'<');E();
+  tl.to(['.d1','.d2'],{opacity:0,duration:.3});tl.to('.acot',{opacity:1,duration:.3});tl.from('.acot',{y:30,duration:.5},'<');tl.to('.door',{opacity:1,duration:.4});tl.to('.ana',{x:165,duration:1.2,ease:'power1.inOut'});E();
+  tl.to('.acot',{opacity:0,duration:.3});tl.to('.ana',{opacity:.35,duration:.4});tl.to('.luis',{y:-6,duration:.3});tl.to('.ap',{opacity:1,duration:.3});tl.from('.ap',{scale:.5,transformOrigin:'50% 100%',duration:.35},'<');tl.to('.pub',{y:-4,yoyo:true,repeat:3,duration:.15});E()},
+ qs:[{q:'¿Qué es una acotación?',ok:'Una indicación del autor que los actores no dicen',no:['Lo que el público oye pero los personajes no','Una conversación entre personajes','El final de la obra'],exp:'Va entre paréntesis o en cursiva.'},
+     {q:'En un aparte…',ok:'el público oye al personaje, pero los demás personajes no',no:['habla el narrador','se cambia el decorado','todos los personajes hablan a la vez'],exp:'Es una convención del teatro.'}]},
+
+{id:'tragedia',b:'Teatro',t:'Tragedia, comedia y drama',
+ steps:['Tres grandes tipos de obras: la <b>tragedia</b> (conflictos graves, final desgraciado), la <b>comedia</b> (humor y final feliz) y el <b>drama</b> (mezcla los dos).',
+  'La tragedia triunfó en la antigua <b>Grecia</b>. Sus historias venían de los <b>mitos</b> y un <b>coro</b> intervenía comentando lo que pasaba.',
+  'El héroe trágico intenta escapar de un <b>destino</b> desgraciado… pero sus errores lo llevan a la desgracia, y el público reflexiona.',
+  'Los tres grandes autores: <b>Esquilo</b> (los dioses y la justicia), <b>Sófocles</b> (los límites humanos) y <b>Eurípides</b> (los sentimientos).'],
+ svg(){let s=PB;const mask=(c,mouth,eyes)=>`<path d="M-30 -32 Q0 -44 30 -32 Q36 12 0 40 Q-36 12 -30 -32Z" fill="${c}"/><path d="${eyes}" stroke="#fff" stroke-width="3.5" fill="none"/><path d="${mouth}" stroke="#fff" stroke-width="3.5" fill="none"/>`;
+  s+=`<g class="m3">${at(80,100,mask(BROWN,'M-14 22 q14 -14 28 0','M-16 -10 q6 7 12 0 M4 -10 q6 7 12 0'),'mk')}${T(80,170,'Tragedia',{size:15,w:800,c:BROWN})}${T(80,188,'final desgraciado',{size:11,c:MUT})}
+   ${at(200,100,mask(GREEN,'M-14 12 q14 14 28 0','M-16 -6 q6 -7 12 0 M4 -6 q6 -7 12 0'),'mk')}${T(200,170,'Comedia',{size:15,w:800,c:GREEN})}${T(200,188,'humor, final feliz',{size:11,c:MUT})}
+   ${at(320,100,mask(PUR,'M-14 18 q7 -8 14 0 q7 8 14 0','M-16 -8 q6 7 12 0 M4 -6 q6 -7 12 0'),'mk')}${T(320,170,'Drama',{size:15,w:800,c:PUR})}${T(320,188,'mezcla dolor y humor',{size:11,c:MUT})}</g>`;
+  s+=`<g class="gr"><path d="M40 200 A160 120 0 0 1 360 200" fill="none" stroke="#c9b48a" stroke-width="14"/><path d="M70 200 A130 96 0 0 1 330 200" fill="none" stroke="#d8c6a0" stroke-width="12"/><ellipse cx="200" cy="205" rx="80" ry="22" fill="#e8dcc0" stroke="#c9b48a" stroke-width="2"/>${T(200,240,'teatro griego',{size:12,w:700,c:BROWN})}</g>`;
+  s+=`<g class="coro">${[160,180,200,220,240].map(x=>at(x,212,guy('#e0e0e0','#f2c9a0'),'cm',.55)).join('')}${T(200,150,'el CORO comenta',{size:13,w:800,c:PUR})}</g>`;
+  s+=`<g class="dest"><path class="dpath" pathLength="1" stroke-dasharray="1" d="M60 200 C140 200 200 150 280 120 C330 100 340 60 300 50 C250 40 220 80 200 120" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="6 5"/>${T(320,42,'DESTINO',{size:14,w:800,c:RED})}</g>`;
+  s+=`<g transform="translate(60 200)"><g class="hero">${guy(BLUE,'#f2c9a0',hair('#333'))}</g></g>`;
+  s+=`<g class="tres">${chip('',200,60,'Esquilo → dioses y justicia',BROWN,14)}${chip('',200,115,'Sófocles → límites humanos',BLUE,14)}${chip('',200,170,'Eurípides → sentimientos',MAG,14)}</g>`;
+  return s},
+ anim(tl,E){gsap.set(['.gr','.coro','.dest','.hero','.tres'],{opacity:0});gsap.set('.dpath',{strokeDashoffset:1});
+  tl.from('.mk',{scale:0,rotation:-20,transformOrigin:'50% 50%',stagger:.3,duration:.6,ease:'back.out(2)'});E();
+  tl.to('.m3',{opacity:0,duration:.4});tl.to('.gr',{opacity:1,duration:.5});tl.to('.coro',{opacity:1,duration:.4});tl.from('.cm',{y:20,opacity:0,stagger:.12,duration:.4},'<');tl.to('.cm',{y:-5,yoyo:true,repeat:3,stagger:.08,duration:.2});E();
+  tl.to(['.coro','.gr'],{opacity:0,duration:.4});tl.to(['.dest','.hero'],{opacity:1,duration:.3});tl.to('.dpath',{strokeDashoffset:0,duration:1.2});tl.to('.hero',{x:220,y:-80,duration:1.2,ease:'power1.inOut'},'<');tl.to('.hero',{x:140,y:-80,duration:.6});tl.to('.hero',{rotation:-80,transformOrigin:'50% 100%',opacity:.5,duration:.5});E();
+  tl.to(['.dest','.hero'],{opacity:0,duration:.4});tl.to('.tres',{opacity:1,duration:.2});tl.from('.tres g',{x:-300,stagger:.35,duration:.6,ease:'power3.out'},'<');E()},
+ qs:[{q:'¿Qué era el coro en la tragedia griega?',ok:'Un grupo que intervenía y comentaba los hechos',no:['El decorado','El protagonista','El público'],exp:'Era un elemento fundamental.'},
+     {q:'¿Qué tipo de obra tiene humor y suele acabar bien?',ok:'La comedia',no:['La tragedia','El drama','La épica'],exp:'La tragedia acaba de forma desgraciada.'}]},
+
+{id:'obras',b:'Teatro',t:'Prometeo, Edipo y Medea',
+ steps:['<b>Esquilo</b>: el orgullo desmedido (<b>hybris</b>) ciega al ser humano (<b>ate</b>) y lo lleva al <b>castigo</b>. La justicia de Zeus pone orden.',
+  'En <b>Prometeo encadenado</b> (Esquilo), Prometeo desafía a Zeus y da el <b>fuego</b> a la humanidad. Zeus lo castiga encadenándolo.',
+  'En <b>Edipo rey</b> (Sófocles), un <b>oráculo</b> anuncia que Edipo matará a su padre y se casará con su madre. Huye para evitarlo… pero se cumple.',
+  'Edipo llega a ser rey de Tebas y, al investigar, descubre quién es. El público ya lo sabía: es la <b>ironía trágica</b>.',
+  '<b>Eurípides</b> habla de sentimientos: <b>Medea</b> se venga de Jasón; en <b>Hipólito</b>, Fedra ama a su hijastro; en <b>Las bacantes</b>, el rey Penteo se enfrenta al dios Dioniso.'],
+ svg(){let s=PB;
+  s+=`<g class="pA">${chip('h1',80,120,'hybris',RED,16)}${chip('h2',200,120,'ate',PUR,16)}${chip('h3',320,120,'castigo',INK,16)}<g class="ar">${T(140,126,'→',{size:24,w:800,c:MUT})}${T(260,126,'→',{size:24,w:800,c:MUT})}</g>${T(80,160,'orgullo desmedido',{size:11,c:MUT,cls:'hs'})}${T(200,160,'ceguera',{size:11,c:MUT,cls:'hs'})}${T(320,160,'de Zeus',{size:11,c:MUT,cls:'hs'})}</g>`;
+  s+=`<g class="pB"><path d="M250 210 L280 120 L330 100 L370 140 L380 210Z" fill="#9a9488" stroke="#6f6a61" stroke-width="2"/>${at(320,96,`<path d="M-24 -10 q-10 -20 6 -26 q6 -16 22 -8 q16 -8 22 8 q14 6 4 26Z" fill="#7d8a99"/><path d="M4 -4 l-8 16 h8 l-6 16 l18 -22 h-8 l6 -10z" fill="#ffd23f"/>`,'zeus')}${T(320,60,'Zeus',{size:12,w:800,c:'#4a5d7a'})}
+   ${at(200,200,guy(ORANGE,'#f2c9a0',hair('#5a3a20'))+T(0,20,'Prometeo',{size:12,w:800,c:ORANGE}),'prom')}
+   ${at(222,152,flame,'fire',1.1)}${[60,95,130].map(x=>at(x,200,guy('#8a8a8a','#f2c9a0'),'hum',.8)).join('')}${T(95,232,'la humanidad',{size:11,w:700,c:MUT})}
+   <g class="chain">${[0,1,2,3].map(i=>`<ellipse cx="${292+i*10}" cy="${150+i*6}" rx="6" ry="4" fill="none" stroke="#555" stroke-width="2.5"/>`).join('')}</g></g>`;
+  s+=`<g class="pC"><g transform="translate(320 120)"><rect x="-40" y="-10" width="80" height="80" fill="#e8dcc0" stroke="#c9b48a" stroke-width="2"/>${[-30,-10,10,30].map(x=>`<rect x="${x-4}" y="-6" width="8" height="74" fill="#d8c6a0"/>`).join('')}<path d="M-48 -10 L0 -40 L48 -10Z" fill="#d8c6a0" stroke="#c9b48a" stroke-width="2"/></g>${T(320,214,'oráculo',{size:12,w:800,c:BROWN})}
+   ${bub('pro',190,46,['«Matarás a tu padre y','te casarás con tu madre»'],280,90,BROWN,12)}
+   <path class="loop" pathLength="1" stroke-dasharray="1" d="M270 200 C200 210 120 200 80 170 C40 140 80 110 130 130 C180 150 200 190 240 196" fill="none" stroke="${RED}" stroke-width="3" stroke-dasharray="6 5"/>
+   <g transform="translate(270 200)"><g class="ed">${guy(BLUE,'#f2c9a0',hair('#333'))}<path class="crown" d="M-9 -52 l4 -9 l5 7 l5 -7 l4 9z" fill="#ffd23f"/>${T(0,18,'Edipo',{size:12,w:800,c:BLUE})}</g></g>
+   <g class="iron"><circle cx="60" cy="60" r="22" fill="#fff" stroke="${MAG}" stroke-width="2.5"/><circle cx="56" cy="60" r="9" fill="${MAG}"/>${T(60,100,'el público',{size:12,w:800,c:MAG})}${T(60,114,'ya lo sabía',{size:11,c:MAG})}</g></g>`;
+  s+=`<g class="pD">${[[70,'Medea','venganza contra Jasón',MAG],[200,'Hipólito','el amor de Fedra',RED],[330,'Las bacantes','Penteo contra Dioniso',PUR]].map(([x,t,d,c])=>`<g class="card"><rect x="${x-58}" y="60" width="116" height="120" rx="12" fill="#fff" stroke="${c}" stroke-width="2.5"/>${at(x,128,`<path d="M0 22 C-26 4 -22 -18 -10 -18 C-4 -18 -1 -14 0 -10 C1 -14 4 -18 10 -18 C22 -18 26 4 0 22Z" fill="${c}"/>`)}${T(x,84,t,{size:14,w:800,c})}${T(x,172,d,{size:10,c:MUT})}</g>`).join('')}${T(200,40,'EURÍPIDES',{size:16,w:800,c:MAG})}</g>`;
+  return s},
+ anim(tl,E){gsap.set(['.pB','.pC','.pD','.chain','.iron','.crown','.pro'],{opacity:0});gsap.set('.loop',{strokeDashoffset:1});
+  tl.from(['.h1','.h2','.h3'],{scale:0,transformOrigin:'50% 50%',stagger:.45,duration:.45,ease:'back.out(2)'});tl.from('.ar text',{opacity:0,stagger:.45,duration:.3},'<.3');tl.from('.hs',{opacity:0,stagger:.3,duration:.3});E();
+  tl.to('.pA',{opacity:0,duration:.4});tl.to('.pB',{opacity:1,duration:.4});tl.to('.fire',{x:-120,y:30,duration:1.2,ease:'power1.inOut'});tl.from('.zeus',{y:-40,opacity:0,duration:.5});tl.to('.prom',{x:110,y:-20,duration:.8,ease:'power2.in'});tl.to('.chain',{opacity:1,duration:.4});E();
+  tl.to('.pB',{opacity:0,duration:.4});tl.to('.pC',{opacity:1,duration:.4});tl.to('.pro',{opacity:1,duration:.4});tl.from('.pro',{scale:.4,transformOrigin:'90% 100%',duration:.5},'<');tl.to('.loop',{strokeDashoffset:0,duration:1.6,ease:'none'});tl.to('.ed',{keyframes:[{x:-70,y:6,duration:.4},{x:-160,y:-10,duration:.4},{x:-170,y:-55,duration:.3},{x:-110,y:-65,duration:.3},{x:-40,y:-4,duration:.4}],ease:'none'},'<');E();
+  tl.to('.pro',{opacity:.3,duration:.3});tl.to('.crown',{opacity:1,duration:.3});tl.from('.crown',{y:-30,duration:.5,ease:'bounce.out'},'<');tl.to('.ed',{x:-46,yoyo:true,repeat:3,duration:.08});tl.to('.iron',{opacity:1,duration:.4});tl.from('.iron',{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(2)'},'<');E();
+  tl.to('.pC',{opacity:0,duration:.4});tl.to('.pD',{opacity:1,duration:.2});tl.from('.card',{y:60,opacity:0,stagger:.3,duration:.6,ease:'back.out(1.4)'},'<');E()},
+ qs:[{q:'¿Qué hizo Prometeo para que Zeus lo castigara?',ok:'Dio el fuego a la humanidad',no:['Mató a su padre','Se vengó de Jasón','No volvió a Ítaca'],exp:'Es la tragedia Prometeo encadenado, de Esquilo.'},
+     {q:'¿Qué es la ironía trágica?',ok:'Que el público sabe algo que el personaje ignora',no:['Que la tragedia tiene chistes','Que el final es feliz','Que habla un narrador'],exp:'Es típica de Sófocles, como en Edipo rey.'}]},
+
+{id:'jenofonte',b:'Teatro',t:'Jenofonte: contar la historia',
+ steps:['<b>Jenofonte</b> fue un escritor e historiador griego: nació en Atenas, estuvo muy unido a Esparta, fue discípulo de <b>Sócrates</b> y participó en expediciones militares.',
+  'En la <b>Anábasis</b> cuenta cómo unos soldados griegos, en territorio <b>persa</b>, consiguen <b>regresar</b> tras muchos peligros.',
+  'La narración <b>histórica</b> quiere explicar hechos del pasado; la <b>literaria</b> puede inventar. Pero el historiador también elige y ordena desde su punto de vista.'],
+ svg(){let s=PB;
+  s+=`<g class="j1">${at(200,170,guy('#4a5d7a','#f2c9a0',hair('#888')+`<path d="M-8 -34 q8 10 16 0 v6 q-8 8 -16 0z" fill="#ddd"/>`)+`<rect x="14" y="-34" width="22" height="28" rx="2" fill="#fff8e2" stroke="${BROWN}" stroke-width="1.5"/>`)}${T(200,196,'Jenofonte',{size:15,w:800,c:'#4a5d7a'})}${chip('jc',80,70,'Atenas',BLUE)}${chip('jc',320,70,'Esparta',RED)}${chip('jc',90,130,'discípulo de Sócrates',PUR,12)}${chip('jc',310,130,'soldado',BROWN,12)}</g>`;
+  s+=`<g class="j2"><rect width="400" height="250" fill="${SEA}"/><path d="M0 120 C60 100 100 140 140 120 L140 250 H0Z" fill="${SAND}"/><path d="M190 0 H400 V250 H220 C240 200 200 120 220 60Z" fill="#e7d3a8"/>${T(60,200,'Grecia',{size:15,w:800,c:INK})}${T(310,210,'territorio persa',{size:15,w:800,c:BROWN})}
+   <path class="mp" pathLength="1" stroke-dasharray="1" d="M330 170 C300 120 280 80 240 60 S160 70 110 120" fill="none" stroke="${PUR}" stroke-width="3" stroke-dasharray="7 5"/>
+   <g transform="translate(330 170)"><g class="army">${[0,1,2,3].map(i=>`<g transform="translate(${i*12-18} ${i%2*6})"><circle r="6" fill="${BROWN}"/><path d="M-5 -6 q5 -8 10 0z" fill="#c9a227"/></g>`).join('')}</g></g>${T(250,34,'ANÁBASIS: el regreso',{size:14,w:800,c:PUR})}</g>`;
+  s+=`<g class="j3"><rect width="400" height="250" fill="#f6efe0"/><rect x="196" y="110" width="8" height="110" fill="#8a6d3b"/><path d="M168 230 L232 230 L222 218 L178 218 Z" fill="#8a6d3b"/><g class="beam"><rect x="80" y="104" width="240" height="8" rx="4" fill="#6e5332"/>
+   <rect x="20" y="130" width="140" height="62" rx="10" fill="#fff" stroke="${MAG}" stroke-width="2.5"/>${T(90,154,'Literaria',{size:15,w:800,c:MAG})}${T(90,174,'puede inventar',{size:12,c:MUT})}
+   <rect x="240" y="130" width="140" height="62" rx="10" fill="#fff" stroke="${GREEN}" stroke-width="2.5"/>${T(310,154,'Histórica',{size:15,w:800,c:GREEN})}${T(310,174,'explica el pasado',{size:12,c:MUT})}
+   <line x1="90" y1="112" x2="90" y2="130" stroke="#6e5332" stroke-width="2"/><line x1="310" y1="112" x2="310" y2="130" stroke="#6e5332" stroke-width="2"/></g>
+   ${chip('pv',200,60,'las dos usan personajes, acciones, tiempo y espacio',INK,12)}</g>`;
+  return s},
+ anim(tl,E){gsap.set(['.j2','.j3'],{opacity:0});gsap.set('.mp',{strokeDashoffset:1});
+  tl.from('.j1',{opacity:0,duration:.6});tl.from('.jc',{scale:0,transformOrigin:'50% 50%',stagger:.3,duration:.4,ease:'back.out(2)'});E();
+  tl.to('.j1',{opacity:0,duration:.4});tl.to('.j2',{opacity:1,duration:.5});tl.to('.mp',{strokeDashoffset:0,duration:2,ease:'none'});tl.to('.army',{keyframes:[{x:-40,y:-60,duration:.6},{x:-100,y:-110,duration:.6},{x:-220,y:-50,duration:.8}],ease:'none'},'<');E();
+  tl.to('.j2',{opacity:0,duration:.4});tl.to('.j3',{opacity:1,duration:.5});tl.from('.beam',{rotation:-12,transformOrigin:'50% 6%',duration:.4});tl.to('.beam',{rotation:8,transformOrigin:'50% 6%',yoyo:true,repeat:1,duration:.4});tl.from('.pv',{opacity:0,y:-10,duration:.4});E()},
+ qs:[{q:'¿Qué cuenta la Anábasis?',ok:'El regreso de unos soldados griegos desde territorio persa',no:['La guerra de Troya','La vida de Edipo','El viaje de Odiseo'],exp:'Jenofonte vivió en persona muchos de esos hechos.'},
+     {q:'¿De quién fue discípulo Jenofonte?',ok:'De Sócrates',no:['De Homero','De Esopo','De Esquilo'],exp:'Lo defendió en sus escritos.'}]}
+];
+
+/* =================== REPRODUCTOR =================== */
+const KEY='lit-anim-v1';
+let DONE={};try{DONE=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+const saveDone=()=>{try{localStorage.setItem(KEY,JSON.stringify(DONE))}catch(e){}};
+const HAS=typeof window.gsap!=='undefined';
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage=$('#stage');
+const st={i:0,k:-1,tl:null,play:null};
+
+function renderPick(){
+  const groups=[['Narrativa','Todas las fichas · Los géneros y la narración'],['Poesía y épica','Poesía y épica'],['Teatro','El teatro y Grecia']];
+  $('#pick').innerHTML=groups.map(([b,h])=>`<h2>${h}</h2><div class="chips">${SCENES.map((sc,i)=>sc.b===b?`<button data-i="${i}" class="${DONE[sc.id]?'done':''}" aria-current="${i===st.i}">${i+1}. ${sc.t}</button>`:'').join('')}</div>`).join('');
+  $('#pick').querySelectorAll('button').forEach(b=>b.onclick=()=>load(+b.dataset.i,true));
+}
+function dots(){const n=SCENES[st.i].steps.length;$('#dots').innerHTML=Array.from({length:n},(_,j)=>`<i class="${j===st.k?'on':j<st.k?'past':''}"></i>`).join('')}
+function caption(){const sc=SCENES[st.i],c=$('#cap');c.classList.remove('in');void c.offsetWidth;c.innerHTML=sc.steps[st.k]||'';c.classList.add('in');dots();
+  $('#bBack').disabled=st.k<=0;const last=st.k>=sc.steps.length-1;
+  $('#bNext').textContent=last?(st.i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera'):'Siguiente →';
+  if(last)showQuiz();}
+function load(i,scroll){
+  if(st.play)st.play.kill();if(st.tl)st.tl.kill();
+  st.i=i;st.k=-1;const sc=SCENES[i];
+  $('#kick').textContent=`Ficha ${i+1} de ${SCENES.length} · ${sc.b}`;
+  $('#ttl').textContent=sc.t;stage.setAttribute('aria-label',sc.t);
+  $('#quiz').hidden=true;$('#quiz').innerHTML='';
+  renderPick();
+  if(!HAS){$('#stagebox').hidden=true;$('#cap').innerHTML=`<span class="nogsap" style="display:block">No se han podido cargar las animaciones (quizá no hay conexión). Aquí tienes el texto de la ficha:</span>`;
+    $('#cap').insertAdjacentHTML('beforeend',`<ol class="steps-list">${sc.steps.map(s=>`<li>${s}</li>`).join('')}</ol>`);$('#dots').innerHTML='';
+    ['bBack','bAgain'].forEach(id=>$('#'+id).hidden=true);st.k=sc.steps.length-1;$('#bNext').textContent=i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera';showQuiz();return}
+  stage.innerHTML=sc.svg();
+  const tl=gsap.timeline({paused:true});let n=0;sc.anim(tl,()=>tl.addLabel('e'+(n++)));
+  if(n!==sc.steps.length)console.warn('Pasos y etiquetas no cuadran en',sc.id,n,sc.steps.length);
+  st.tl=tl;tl.progress(0).pause();
+  if(scroll)$('#sheet').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});
+  next();
+}
+function playStep(k){const tl=st.tl,from=k>0?tl.labels['e'+(k-1)]:0,to=tl.labels['e'+k];
+  if(st.play)st.play.kill();
+  if(RM){tl.pause();tl.seek(to);return}
+  tl.pause();tl.seek(from);st.play=tl.tweenFromTo(from,to);}
+function next(){const sc=SCENES[st.i];
+  if(st.k>=sc.steps.length-1){load(st.i<SCENES.length-1?st.i+1:0,true);return}
+  if(st.k>=0&&st.play&&st.play.isActive()){st.play.kill();st.tl.seek(st.tl.labels['e'+st.k])}
+  st.k++;caption();playStep(st.k);}
+function back(){if(st.k<=0)return;if(st.play)st.play.kill();st.k--;st.tl.pause();st.tl.seek(st.tl.labels['e'+st.k]);caption();$('#quiz').hidden=true;}
+function again(){if(st.k<0)return;playStep(st.k);}
+$('#bNext').onclick=next;$('#bBack').onclick=back;$('#bAgain').onclick=again;
+document.addEventListener('keydown',e=>{if(e.target.closest('button.opt'))return;if(e.key==='ArrowRight'){next()}else if(e.key==='ArrowLeft'){back()}});
+
+/* =================== COMPRUEBA =================== */
+function showQuiz(){const sc=SCENES[st.i],q=$('#quiz');if(!q.hidden&&q.dataset.id===sc.id)return;
+  q.dataset.id=sc.id;q.hidden=false;let right=0,answered=0;
+  q.innerHTML=`<h3>Comprueba lo que has visto</h3>`+sc.qs.map((x,j)=>`<div class="qq" data-j="${j}"><p class="q">${j+1}. ${x.q}</p><div class="opts">${shuffle([x.ok,...x.no]).map(o=>`<button class="opt" data-ok="${o===x.ok}">${o}</button>`).join('')}</div><p class="exp" hidden></p></div>`).join('')+`<p class="exp" id="qend" hidden></p>`;
+  q.querySelectorAll('.qq').forEach(box=>{const x=sc.qs[+box.dataset.j];box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.ok==='true';box.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.ok==='true')o.classList.add('right')});if(!ok)b.classList.add('wrong');
+    const ex=box.querySelector('.exp');ex.hidden=false;ex.className='exp '+(ok?'b':'mm');ex.innerHTML=(ok?'<b>¡Bien!</b> ':'<b>Casi.</b> ')+x.exp;
+    answered++;if(ok)right++;
+    if(answered===sc.qs.length){const end=$('#qend');end.hidden=false;
+      if(right===sc.qs.length){DONE[sc.id]=1;saveDone();renderPick();end.className='exp b';end.innerHTML=`<span class="stamp">¡Ficha superada!</span>`}
+      else{end.className='exp mm';end.innerHTML='Repasa la ficha con «← Atrás» o vuelve a verla desde el principio, y prueba otra vez.';}}
+  })});
+}
+
+renderPick();load(0,false);
+</script>
+</body>
+</html>
