@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taller de Literatura</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Taller de Literatura: misma familia que las otras apps (cuaderno cuadriculado, sellos B/M, estrellas). Acento morado de tinta. */
+:root{
+  --bg:#eeecf6; --paper:#fdfdfb; --grid:#e6e3f1; --ink:#1f1d3a; --muted:#5d5a7a; --line:#d6d2e6;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --lit:#6a2fa0;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#c39bf0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#c39bf0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--lit)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--lit);color:var(--lit)}
+.dot.done{background:var(--lit);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+/* Chuleta */
+.chuleta{border:2px solid var(--lit)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--lit);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+/* Fichas en cajas */
+.idea{margin:0;background:var(--paper);border:2px solid var(--lit);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--lit);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--lit);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--lit);color:var(--paper);font:800 .9rem var(--f-display);display:grid;place-items:center}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+/* Textos de ejemplo */
+.txt{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;font-size:1.05rem;line-height:1.7;margin:0;width:100%}
+.txt .hl{border-radius:4px;padding:1px 3px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem;color:var(--muted);justify-content:center}.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px}
+.poem{font-size:1.1rem;line-height:1.8}.poem .r{font-weight:700;border-bottom:3px solid var(--c)}.poem small{color:var(--muted);font-size:.8rem;margin-left:8px;font-weight:700}
+.stage .pn{font-weight:800;letter-spacing:.04em}.stage .ac{font-style:italic;color:var(--muted)}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.quote{font:400 1.12rem var(--f-body);background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;margin:0;font-style:italic}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.scene{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 14px;line-height:2;font-size:1.05rem}
+.scene [data-k]{cursor:pointer;border-radius:5px;padding:1px 2px}.scene [data-k]:hover{background:var(--grid)}
+.scene .pn{font-weight:800;letter-spacing:.04em}.scene .ac{font-style:italic;color:var(--muted)}
+.scene .okk{background:var(--ok-soft)!important;outline:2px solid var(--ok)}.scene .ko{background:var(--marker-soft)!important}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--lit);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+body{margin:0}[hidden]{display:none!important}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/literatura">← Literatura de Ale</a>
+  <header>
+    <div><h1>Taller de Literatura <span>Ale</span></h1>
+    <p>Temas 1 y 2: los géneros literarios, la narración, la poesía, el teatro y los grandes autores griegos.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',ma:'#a0522d'};
+
+/* =================== DIBUJOS =================== */
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+const DR={
+generos:()=>({vb:'0 0 360 170',s:`<rect width="360" height="170" fill="#f6f1e6"/>
+ <g transform="translate(60 70)"><path d="M-40 -28 Q-20 -36 0 -26 L0 30 Q-20 20 -40 28 Z" fill="#fff" stroke="#1e6fd9" stroke-width="2.5"/><path d="M40 -28 Q20 -36 0 -26 L0 30 Q20 20 40 28 Z" fill="#fff" stroke="#1e6fd9" stroke-width="2.5"/><path d="M-32 -14 h22 M-32 -4 h22 M-32 6 h22 M10 -14 h22 M10 -4 h22 M10 6 h22" stroke="#9ab" stroke-width="2"/></g>
+ <g transform="translate(180 70)"><path d="M-26 -34 C-40 -10 -30 20 -12 30 L12 30 C30 20 40 -10 26 -34" fill="none" stroke="#c0127e" stroke-width="4" stroke-linecap="round"/><path d="M-22 -22 h44" stroke="#c0127e" stroke-width="4" stroke-linecap="round"/><path d="M-10 -22 v50 M0 -22 v50 M10 -22 v50" stroke="#c0127e" stroke-width="1.5"/><path d="M30 -40 q6 -8 12 0 q6 8 12 0" fill="none" stroke="#c0127e" stroke-width="2"/></g>
+ <g transform="translate(300 70)"><circle cx="-14" cy="-6" r="22" fill="#fff" stroke="#2f9e5c" stroke-width="2.5"/><circle cx="-21" cy="-12" r="3" fill="#2f9e5c"/><circle cx="-7" cy="-12" r="3" fill="#2f9e5c"/><path d="M-24 2 q10 10 20 0" fill="none" stroke="#2f9e5c" stroke-width="2.5"/>
+  <circle cx="16" cy="8" r="22" fill="#2f9e5c"/><circle cx="9" cy="2" r="3" fill="#fff"/><circle cx="23" cy="2" r="3" fill="#fff"/><path d="M6 20 q10 -10 20 0" fill="none" stroke="#fff" stroke-width="2.5"/></g>
+ ${T(60,128,'Narrativo','font-size="14" font-weight="800" fill="#1e6fd9"')}${T(60,146,'contar','font-size="11" fill="#5d5a7a"')}
+ ${T(180,128,'Lírico','font-size="14" font-weight="800" fill="#c0127e"')}${T(180,146,'sentir','font-size="11" fill="#5d5a7a"')}
+ ${T(300,128,'Dramático','font-size="14" font-weight="800" fill="#2f9e5c"')}${T(300,146,'representar','font-size="11" fill="#5d5a7a"')}`}),
+arco:()=>({vb:'0 0 360 170',s:`<rect width="360" height="170" fill="#f6f1e6"/>
+ <rect x="10" y="20" width="110" height="115" fill="#1e6fd9" opacity=".08"/><rect x="120" y="20" width="120" height="115" fill="#c0127e" opacity=".08"/><rect x="240" y="20" width="110" height="115" fill="#2f9e5c" opacity=".08"/>
+ <path d="M18 120 C70 120 90 110 120 95 S210 30 235 32 S280 110 342 118" fill="none" stroke="#6a2fa0" stroke-width="4" stroke-linecap="round"/>
+ <circle cx="235" cy="32" r="6" fill="#c0127e"/>${T(235,18,'¡momento de más tensión!','font-size="10.5" fill="#c0127e" font-weight="700"')}
+ ${T(65,152,'Planteamiento','font-size="13" font-weight="800" fill="#1e6fd9"')}${T(65,165,'se presenta todo','font-size="10" fill="#5d5a7a"')}
+ ${T(180,152,'Nudo','font-size="13" font-weight="800" fill="#c0127e"')}${T(180,165,'crece el problema','font-size="10" fill="#5d5a7a"')}
+ ${T(295,152,'Desenlace','font-size="13" font-weight="800" fill="#2f9e5c"')}${T(295,165,'se resuelve','font-size="10" fill="#5d5a7a"')}`}),
+narrador:()=>{const fig=(x,y,c)=>`<circle cx="${x}" cy="${y}" r="9" fill="${c}"/><path d="M${x-12} ${y+30} q12 -26 24 0 z" fill="${c}"/>`;
+ return{vb:'0 0 360 190',s:`<rect width="360" height="190" fill="#f6f1e6"/>
+ <rect x="110" y="40" width="140" height="110" rx="10" fill="#fff" stroke="#6a2fa0" stroke-width="2" stroke-dasharray="6 4"/>${T(180,58,'LA HISTORIA','font-size="10" font-weight="800" fill="#6a2fa0" letter-spacing="1"')}
+ ${fig(180,95,'#1e6fd9')}<rect x="132" y="128" width="96" height="18" rx="9" fill="#1e6fd9"/>${T(180,141,'«Yo encontré…»','font-size="10" fill="#fff" font-weight="700"')}
+ ${fig(50,95,'#d9822b')}<rect x="8" y="128" width="96" height="18" rx="9" fill="#d9822b"/>${T(56,141,'«Ana encontró…»','font-size="10" fill="#fff" font-weight="700"')}
+ ${fig(310,95,'#c0127e')}<ellipse cx="310" cy="64" rx="34" ry="14" fill="#fff" stroke="#c0127e" stroke-width="1.5"/>${T(310,68,'¡lo sabe todo!','font-size="9" fill="#c0127e" font-weight="700"')}<rect x="256" y="128" width="100" height="18" rx="9" fill="#c0127e"/>${T(306,141,'«…y Ana pensaba…»','font-size="9.5" fill="#fff" font-weight="700"')}
+ ${T(180,172,'Interno: está dentro','font-size="12" font-weight="800" fill="#1e6fd9"')}${T(56,172,'Externo: fuera','font-size="12" font-weight="800" fill="#d9822b"')}${T(306,172,'Omnisciente','font-size="12" font-weight="800" fill="#c0127e"')}`}},
+fabula:()=>({vb:'0 0 360 180',s:`<rect width="360" height="180" fill="#f6f1e6"/><path d="M0 140 Q180 120 360 140 V180 H0Z" fill="#cfe2b8"/>
+ <g transform="translate(95 105)"><path d="M-30 30 Q-34 0 -10 -6 L22 -4 Q34 10 28 30 Z" fill="#d9822b"/><path d="M14 -6 l10 -26 l6 22 z M24 -4 l14 -20 l2 22 z" fill="#d9822b"/><path d="M26 -4 q20 6 22 14 q-14 4 -26 -2" fill="#d9822b"/><circle cx="30" cy="0" r="2.5" fill="#1f1d3a"/><path d="M-30 18 q-26 -4 -30 -24 q14 10 30 10" fill="#d9822b"/><path d="M-60 -6 q4 6 10 4" stroke="#fff" stroke-width="3" fill="none"/></g>
+ <g transform="translate(260 100)"><ellipse cx="0" cy="18" rx="40" ry="22" fill="#c9a26b"/><circle cx="34" cy="-8" r="18" fill="#c9a26b"/><circle cx="26" cy="-24" r="5" fill="#c9a26b"/><circle cx="41" cy="-11" r="2.5" fill="#1f1d3a"/><path d="M48 -4 q4 2 0 5" stroke="#1f1d3a" stroke-width="1.5" fill="none"/>
+  <ellipse cx="-36" cy="30" rx="13" ry="9" fill="#d9b884"/><circle cx="-26" cy="22" r="8" fill="#d9b884"/></g>
+ <rect x="40" y="16" width="130" height="38" rx="10" fill="#fff" stroke="#d9822b" stroke-width="1.5"/>${T(105,32,'¿Solo tienes','font-size="11" fill="#1f1d3a"')}${T(105,46,'un cachorro?','font-size="11" fill="#1f1d3a"')}
+ <rect x="196" y="12" width="140" height="38" rx="10" fill="#fff" stroke="#a0522d" stroke-width="1.5"/>${T(266,28,'Solo uno,','font-size="11" fill="#1f1d3a"')}${T(266,42,'¡pero es un león!','font-size="11" font-weight="700" fill="#1f1d3a"')}
+ ${T(95,172,'la zorra','font-size="12" font-weight="800" fill="#1f1d3a"')}${T(260,172,'la leona','font-size="12" font-weight="800" fill="#1f1d3a"')}`}),
+homero:()=>({vb:'0 0 360 200',s:`<rect width="360" height="200" fill="#cfe3f1"/>
+ <path d="M0 0 H120 C110 40 130 60 100 90 C120 120 90 150 110 200 H0Z" fill="#efe3c6"/><path d="M280 0 H360 V200 H300 C320 160 290 120 310 90 C290 60 300 30 280 0Z" fill="#efe3c6"/>
+ <circle cx="62" cy="122" r="6" fill="#2f9e5c"/>${T(62,142,'Ítaca','font-size="12" font-weight="800" fill="#1f1d3a"')}
+ <g transform="translate(318 70)"><rect x="-14" y="-8" width="28" height="18" fill="#a0522d"/><path d="M-14 -8 v-6 h5 v4 h4 v-4 h5 v4 h4 v-4 h5 v6" fill="#a0522d"/></g>${T(318,100,'Troya','font-size="12" font-weight="800" fill="#1f1d3a"')}
+ <path d="M300 78 C260 40 230 150 200 120 S150 40 170 70 S120 170 90 140 S80 130 68 124" fill="none" stroke="#c0127e" stroke-width="2.5" stroke-dasharray="6 5"/>
+ <g transform="translate(200 120)"><path d="M-14 0 h28 l-6 8 h-16z" fill="#6a2fa0"/><path d="M0 0 v-18 l12 12 h-12" fill="#fff" stroke="#6a2fa0"/></g>
+ <path d="M300 40 l14 14 M314 40 l-14 14" stroke="#1f1d3a" stroke-width="3" stroke-linecap="round"/>
+ <rect x="226" y="10" width="76" height="22" rx="6" fill="#fff"/>${T(264,25,'ILÍADA: la guerra','font-size="9.5" font-weight="800" fill="#a0522d"')}
+ <rect x="128" y="168" width="104" height="22" rx="6" fill="#fff"/>${T(180,183,'ODISEA: el viaje a casa','font-size="9.5" font-weight="800" fill="#c0127e"')}`}),
+teatro:()=>({vb:'0 0 360 170',s:`<rect width="360" height="170" fill="#2a2140"/>
+ <path d="M0 0 H360 V22 Q180 34 0 22Z" fill="#9b1d3a"/><path d="M0 0 H50 C40 60 60 120 30 170 H0Z" fill="#c0274f"/><path d="M360 0 H310 C320 60 300 120 330 170 H360Z" fill="#c0274f"/>
+ <path d="M40 140 H320 L340 170 H20Z" fill="#a0522d"/><path d="M120 22 L90 140 H190 Z" fill="#fff6c8" opacity=".25"/><path d="M240 22 L180 140 H280 Z" fill="#fff6c8" opacity=".25"/>
+ <circle cx="140" cy="92" r="10" fill="#f5c9a0"/><path d="M126 140 q14 -44 28 0z" fill="#1e6fd9"/><circle cx="230" cy="92" r="10" fill="#f5c9a0"/><path d="M216 140 q14 -44 28 0z" fill="#2f9e5c"/>
+ <rect x="104" y="48" width="70" height="22" rx="10" fill="#fff"/>${T(139,63,'¿Has oído…?','font-size="10" fill="#1f1d3a"')}
+ ${T(180,162,'público','font-size="10" fill="#fff" opacity=".7"')}`}),
+mascaras:()=>{const m=(x,c,n,d,sad)=>`<g transform="translate(${x} 62)"><path d="M-28 -30 Q0 -42 28 -30 Q32 10 0 36 Q-32 10 -28 -30Z" fill="${c}"/><path d="M-16 -12 q6 ${sad?6:-6} 12 0 M4 -12 q6 ${sad?6:-6} 12 0" stroke="#fff" stroke-width="3" fill="none"/><path d="M-12 ${sad?18:12} q12 ${sad?-10:10} 24 0" stroke="#fff" stroke-width="3" fill="none"/></g>${T(x,124,n,`font-size="14" font-weight="800" fill="${c}"`)}${T(x,142,d,'font-size="10.5" fill="#5d5a7a"')}`;
+ return{vb:'0 0 360 160',s:`<rect width="360" height="160" fill="#f6f1e6"/>${m(60,'#a0522d','Esquilo','dioses y justicia',true)}${m(180,'#1e6fd9','Sófocles','límites humanos',true)}${m(300,'#c0127e','Eurípides','sentimientos',true)}`}},
+anabasis:()=>({vb:'0 0 360 160',s:`<rect width="360" height="160" fill="#cfe3f1"/><path d="M0 60 C60 40 90 80 130 60 L130 160 H0Z" fill="#efe3c6"/><path d="M170 0 H360 V160 H200 C220 120 180 80 200 40Z" fill="#e7d3a8"/>
+ ${T(60,110,'Grecia','font-size="13" font-weight="800" fill="#1f1d3a"')}${T(290,120,'territorio persa','font-size="13" font-weight="800" fill="#a0522d"')}
+ <path d="M300 92 C260 60 240 40 200 30 S140 50 100 80" fill="none" stroke="#6a2fa0" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#ar)"/>
+ <defs><marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#6a2fa0"/></marker></defs>
+ ${[[270,70],[245,55],[220,40],[190,32],[160,40]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="#a0522d"/>`).join('')}
+ ${T(220,18,'ANÁBASIS: el difícil regreso','font-size="11" font-weight="800" fill="#6a2fa0"')}`}),
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg><figcaption>${label}</figcaption></figure>`}
+const FIG_CLARA=`<figure class="ill" style="width:100%"><p class="txt">
+ <span class="hl" style="background:#d9822b33">Al amanecer</span>, Clara <span class="hl" style="background:#1e6fd933">entró</span> en una casa abandonada. <span class="hl" style="background:#2f9e5c33">El pasillo era oscuro.</span> <span class="hl" style="background:#c0127e33">«¿Hay alguien?»</span>, preguntó.</p>
+ <div class="legend"><span style="--c:#d9822b">marcador temporal</span><span style="--c:#1e6fd9">acción</span><span style="--c:#2f9e5c">descripción</span><span style="--c:#c0127e">diálogo</span></div></figure>`;
+const FIG_POEMA=`<figure class="ill" style="width:100%"><div class="txt poem">
+ Por la ventana entra el <span class="r" style="--c:#c0127e">día</span>,<small>verso 1 · A</small><br>
+ suave, dorado y sin <span class="r" style="--c:#1e6fd9">prisa</span>;<small>verso 2 · B</small><br>
+ la casa se llena de <span class="r" style="--c:#1e6fd9">risa</span><small>verso 3 · B</small><br>
+ y el corazón, de <span class="r" style="--c:#c0127e">alegría</span>.<small>verso 4 · A</small></div>
+ <figcaption>Un poema inventado: cada línea es un <b>verso</b>; los finales del mismo color <b>riman</b>.</figcaption></figure>`;
+const FIG_TEATRO=`${svgOf('teatro','El teatro se hace para un público')}<div class="txt stage" style="margin-top:8px">
+ <span class="pn">ANA.</span> <span class="ac">(Mira hacia la puerta con inquietud.)</span> ¿Has oído ese ruido?<br>
+ <span class="pn">LUIS.</span> Sí. Parece que alguien intenta entrar.</div>
+ <div class="legend" style="margin-top:6px"><span style="--c:#1f1d3a">NOMBRE del personaje</span><span style="--c:#5d5a7a">(acotación, en cursiva)</span><span style="--c:#6a2fa0">lo demás: diálogo</span></div>`;
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'l1',t:1,n:'Los géneros literarios',s:'Narrativo, lírico y dramático',
+ idea:'Hay tres grandes maneras de hacer literatura: <b>contar</b> una historia, <b>expresar</b> sentimientos o <b>representar</b> una acción ante un público.',
+ fig:()=>svgOf('generos','Los tres géneros literarios'),
+ b:[{k:'cards',h:'Los tres géneros',it:[
+  ['Narrativo','Un <b>narrador</b> cuenta hechos que les pasan a unos personajes en un tiempo y un lugar. <i>Cuento, novela, fábula, cantar de gesta.</i>',C.az],
+  ['Lírico','Expresa <b>sentimientos</b>, emociones o reflexiones. Suele ir en <b>verso</b>. <i>Poema, canción, oda.</i>',C.ro],
+  ['Dramático','Pensado para <b>representarse</b> en un escenario con actores. <i>Tragedia, comedia, obra de teatro.</i>',C.ve]]}],
+ truco:'Narrar = <b>contar</b>. Lírica = <b>sentir</b>. Teatro = <b>representar</b>.'},
+{id:'l2',t:1,n:'La narración y su estructura',s:'Elementos, partes, acción y trama',
+ idea:'Una narración cuenta <b>hechos</b> que les pasan a unos <b>personajes</b>, en un <b>tiempo</b> y un <b>espacio</b>. Y alguien los cuenta: el <b>narrador</b>.',
+ fig:()=>svgOf('arco','Las tres partes de una historia'),
+ b:[{k:'cards',h:'Los 5 elementos',it:[['Narrador','La voz que cuenta la historia. ¡No siempre es el autor!',C.mo],['Personajes','Seres reales o imaginarios que participan en los hechos.',C.ro],['Acción','Todos los acontecimientos que forman la historia.',C.az],['Tiempo','Cuándo pasa.',C.na],['Espacio','Dónde pasa.',C.ve]]},
+ {k:'cards',h:'Las 3 partes',it:[['1. Planteamiento','Se presentan los personajes, el lugar, el tiempo y el problema inicial.',C.az],['2. Nudo o desarrollo','El problema (conflicto) avanza y se complica.',C.ro],['3. Desenlace','El problema se resuelve y la historia termina.',C.ve]]},
+ {k:'ej',h:'Acción y trama',t:'La <b>acción</b> son los hechos. La <b>trama</b> es cómo se ordenan y se relacionan esos hechos.<br>Las narraciones suelen ir en <b>prosa</b>, aunque también hay narraciones en <b>verso</b>, como los poemas épicos.'}],
+ truco:'Para analizar un cuento, pregúntate: ¿<b>quién</b> lo cuenta?, ¿a <b>quién</b> le pasa?, ¿<b>qué</b> pasa?, ¿<b>cuándo</b>? y ¿<b>dónde</b>?'},
+{id:'l3',t:1,n:'Narrador, personajes, tiempo y espacio',s:'Tipos de narrador y de personajes',
+ idea:'El <b>autor</b> es la persona real que escribe el libro. El <b>narrador</b> es la voz que cuenta la historia: pueden no coincidir.',
+ fig:()=>svgOf('narrador','Tres tipos de narrador'),
+ b:[{k:'cards',h:'Tipos de narrador',it:[['Interno','<b>Participa</b> en la historia. Habla en 1.ª persona: «Aquella tarde <b>encontré</b> una llave».',C.az],['Externo','<b>No participa</b>. Habla en 3.ª persona: «Aquella tarde, Ana <b>encontró</b> una llave».',C.na],['Omnisciente','Es un narrador externo que <b>lo sabe todo</b>, incluso lo que piensan y sienten los personajes.',C.ro]]},
+ {k:'cards',h:'Tipos de personajes',it:[['Protagonista','El personaje central de la historia.',C.mo],['Secundarios','Lo acompañan o salen menos.',C.gr],['Antagonista','Se opone a lo que quiere el protagonista. ¡No tiene por qué ser malvado!',C.ro]]},
+ {k:'cards',h:'Espacio y tiempo',it:[['Espacio','El lugar: puede ser <b>real</b> o <b>inventado</b>.',C.ve],['Tiempo externo','La <b>época</b> en que pasa: por ejemplo, la Edad Media.',C.na],['Tiempo interno','Cuánto <b>duran</b> los hechos: unas horas, días o años.',C.na]]},
+ {k:'ej',h:'El orden',t:'Una historia puede contarse en orden o con <b>saltos</b> al pasado y al futuro.'}],
+ truco:'<b>In</b>terno: está <b>dentro</b> de la historia (yo). <b>Ex</b>terno: está <b>fuera</b> (él, ella). Omni-<b>sciente</b> = lo <b>sabe</b> todo.'},
+{id:'l4',t:1,n:'Formas y tipos de relatos',s:'Descripción, diálogo y subgéneros narrativos',
+ idea:'Dentro de un relato se mezclan <b>narración, descripción y diálogo</b>. Y hay muchos tipos de relatos: novela, cuento, fábula, leyenda, poema épico…',
+ fig:()=>FIG_CLARA,
+ b:[{k:'cards',h:'Las formas de contar',it:[['Narración','Cuenta lo que hacen los personajes, con <b>verbos de acción</b>.',C.az],['Descripción','Explica cómo son los lugares, los objetos y los personajes.',C.ve],['Diálogo','Reproduce lo que dicen los personajes entre sí.',C.ro],['Monólogo','Las palabras o pensamientos de un solo personaje.',C.mo],['Marcadores temporales','«Después», «al día siguiente», «años antes»: ordenan los hechos.',C.na]]},
+ {k:'cards',h:'Los subgéneros narrativos',it:[['Novela','En prosa. <b>Larga</b>: desarrolla a fondo personajes y ambientes. De aventuras, amor, histórica, realista, ciencia ficción, intriga…',C.az],['Cuento','En prosa. <b>Breve</b>, con pocos personajes y desenlace rápido. Muchos vienen de la tradición oral.',C.ve],['Fábula','Breve, en verso o prosa, con <b>animales</b> y una <b>moraleja</b>.',C.na],['Leyenda','Relato tradicional ligado a un lugar, personaje o hecho. Mezcla lo <b>real</b> y lo <b>fantástico</b>.',C.mo],['Cantar de gesta / poema épico','En <b>verso</b>. Cuenta las hazañas de un <b>héroe</b> importante para un pueblo.',C.ma]]}],
+ truco:'Breve → <b>cuento</b>. Larga → <b>novela</b>. Animales y moraleja → <b>fábula</b>. Un lugar y algo de magia → <b>leyenda</b>. Héroe en verso → <b>épica</b>.'},
+{id:'l5',t:1,n:'Esopo y la fábula',s:'Animales que enseñan',
+ idea:'La <b>fábula</b> es una historia breve, casi siempre con <b>animales</b> que hablan, que deja una enseñanza: la <b>moraleja</b>.',
+ fig:()=>svgOf('fabula','La zorra y la leona, de Esopo'),
+ b:[{k:'cards',h:'Cómo es una fábula',it:[['Personificación','Los animales hablan y actúan como personas.',C.na],['Qué representan','Actitudes: la astucia, la vanidad, la prudencia, la generosidad…',C.mo],['Moraleja','La enseñanza: puede ir escrita al final o deducirse de la historia.',C.ro]]},
+ {k:'cards',h:'Esopo',it:[['Quién era','Fabulista griego. La tradición lo sitúa en el <b>siglo VI a. C.</b> Hay pocos datos seguros y muchas leyendas sobre él.',C.az],['Qué enseña','A actuar con prudencia y moderación, a valorar el trabajo y a ser agradecidos.',C.ve],['Su influencia','Sus fábulas se usaban en las escuelas griegas e influyeron muchísimo.',C.gr]]},
+ {k:'ej',h:'La zorra y la leona',t:'La zorra critica que la leona tenga <b>un solo cachorro</b>. La leona responde destacando lo que vale. <b>Moraleja</b>: la calidad puede importar más que la cantidad.'},
+ {k:'chips',h:'Siguieron escribiendo fábulas',it:['La Fontaine (Francia)','Félix María de Samaniego (España)','Tomás de Iriarte (España)']}],
+ truco:'Fábula = <b>animales + moraleja</b>. Y el padre de las fábulas es <b>Esopo</b>.'},
+{id:'l6',t:2,n:'El género lírico',s:'Verso, ritmo, rima. Alceo y Safo',
+ idea:'La <b>lírica</b> (la poesía) <b>expresa</b> lo que siente o piensa una voz: amor, naturaleza, alegría, tristeza, el paso del tiempo… No tiene por qué contar una historia.',
+ fig:()=>FIG_POEMA,
+ b:[{k:'cards',h:'Palabras clave',it:[['Verso','Cada una de las líneas de un poema.',C.ro],['Ritmo','La <b>musicalidad</b> del poema, por repeticiones y pausas. ¡Lo más importante!',C.mo],['Rima','Los <b>sonidos iguales</b> al final de dos o más versos.',C.az],['Prosa poética','Escrita en prosa, pero con lenguaje cuidado, musical y expresivo.',C.ve]]},
+ {k:'cards',h:'La lírica griega',it:[['Alceo','Poeta del <b>siglo VII a. C.</b> Escribe sobre la guerra, la política, los banquetes y los dioses.',C.ma],['Safo','Poetisa de la <b>isla de Lesbos</b>. Expresa sus sentimientos y la pasión amorosa.',C.ro]]}],
+ truco:'<b>A</b>lceo: <b>a</b>rmas y banquetes. <b>S</b>afo: <b>s</b>entimientos.'},
+{id:'l7',t:2,n:'Homero: la Ilíada y la Odisea',s:'La épica griega',
+ idea:'La <b>épica</b> cuenta hazañas de héroes, guerras y viajes. Venía de la tradición oral: la recitaban cantores profesionales. Sus dos grandes obras se atribuyen a <b>Homero</b>.',
+ fig:()=>svgOf('homero','De Troya a Ítaca'),
+ b:[{k:'cards',h:'Las dos obras',it:[['La Ilíada','El último año de la <b>guerra de Troya</b>. Centro: la <b>cólera de Aquiles</b>.',C.ma],['La Odisea','El <b>viaje de regreso</b> de Odiseo a Ítaca tras la guerra.',C.ro]]},
+ {k:'steps',h:'La Ilíada en 3 pasos',it:['<b>Aquiles</b>, héroe griego, se enfada con <b>Agamenón</b> y deja de luchar.','Muere su amigo <b>Patroclo</b>.','Aquiles vuelve al combate y mata a <b>Héctor</b>, el héroe troyano.']},
+ {k:'cards',h:'La Odisea',it:[['El héroe','<b>Odiseo</b>, también llamado <b>Ulises</b>.',C.ro],['Los peligros','Monstruos, tormentas, hechiceras y otros seres extraordinarios.',C.mo],['Le esperan en Ítaca','Su esposa <b>Penélope</b> y su hijo <b>Telémaco</b>.',C.ve],['Cómo lo consigue','Con <b>inteligencia</b>, valentía y ayuda de dioses y humanos.',C.az]]},
+ {k:'ej',h:'Ojo',t:'La Ilíada no es solo batallas: también muestra <b>emociones</b> (cólera, sufrimiento, honor, piedad, ternura). Y de Homero se saben <b>pocos datos seguros</b>: hay dudas de que escribiera las dos obras.'}],
+ truco:'Il<b>í</b>ada → guerra en Troya y Aquiles. <b>O</b>disea → <b>O</b>diseo vuelve a casa.'},
+{id:'l8',t:2,n:'El género dramático',s:'Texto teatral, partes y subgéneros',
+ idea:'El teatro se escribe para ser <b>representado</b> por actores ante un público. Normalmente no hay narrador: lo sabemos todo por lo que <b>dicen y hacen</b> los personajes.',
+ fig:()=>FIG_TEATRO,
+ b:[{k:'cards',h:'El texto teatral',it:[['Diálogo','Conversación entre personajes. Es la forma básica del teatro y hace avanzar el conflicto.',C.mo],['Monólogo','Un personaje habla largo rato en voz alta, solo o consigo mismo.',C.az],['Aparte','Lo oye el <b>público</b>, pero se supone que los demás personajes <b>no</b>.',C.ro],['Acotación','Indicaciones del autor (gestos, movimientos, voz, vestuario, decorado). Entre <b>paréntesis</b> o en cursiva. ¡No se dicen!',C.gr]]},
+ {k:'cards',h:'Cómo se organiza',it:[['Actos','Las grandes partes de la obra.',C.na],['Escenas','Cambian con la entrada o salida de personajes.',C.na],['Cuadros','Cambian con el ambiente o el decorado.',C.na],['La representación','Actores, dirección, decorado, luces, vestuario, música y sonidos.',C.ve]]},
+ {k:'cards',h:'Los subgéneros',it:[['Tragedia','Conflictos graves y final <b>desgraciado</b>.',C.ma],['Comedia','Humor y final <b>feliz</b>. Puede criticar defectos de la sociedad.',C.ve],['Drama','Conflictos serios; mezcla momentos dolorosos y cómicos.',C.mo]]},
+ {k:'ej',h:'Cuidado',t:'«Dramático» es <b>todo</b> el teatro: una comedia también es género dramático. Y el teatro también tiene planteamiento, nudo y desenlace.'}],
+ truco:'Acotación = lo que va <b>entre paréntesis</b> y los actores <b>no dicen</b>.'},
+{id:'l9',t:2,n:'La tragedia griega',s:'Esquilo, Sófocles y Eurípides',
+ idea:'Las tragedias griegas salían de los <b>mitos</b>. Sus héroes intentan escapar de un <b>destino</b> desgraciado. Un <b>coro</b> intervenía y comentaba lo que pasaba.',
+ fig:()=>svgOf('mascaras','Los tres grandes autores de tragedias'),
+ b:[{k:'cards',h:'Los tres grandes',it:[
+  ['Esquilo','La <b>justicia de Zeus</b> ordena el mundo. El orgullo desmedido (<b>hybris</b>) lleva a la ceguera (<b>ate</b>) y al castigo. Obras: <b>Prometeo encadenado</b> y la <b>Orestíada</b>.',C.ma],
+  ['Sófocles','Los <b>límites</b> del ser humano. Usa la <b>ironía trágica</b>: el público sabe lo que el personaje ignora. Obra: <b>Edipo rey</b>.',C.az],
+  ['Eurípides','Los <b>sentimientos</b>: amor, celos, dolor, venganza. Piensa en las mujeres y en los menos favorecidos. Obras: <b>Medea</b>, <b>Hipólito</b>, <b>Las bacantes</b>.',C.ro]]},
+ {k:'cards',h:'Las obras, en una frase',it:[['Prometeo encadenado','Prometeo es castigado por desafiar a Zeus y dar el <b>fuego</b> a la humanidad.',C.ma],['La Orestíada','Una <b>trilogía</b> (tres tragedias) de crímenes y venganzas en la familia de Agamenón y Orestes. Final: la justicia debe sustituir a la venganza.',C.ma],['Edipo rey','Un oráculo dice que Edipo matará a su padre y se casará con su madre. Intenta evitarlo, pero se cumple. Siendo rey de Tebas, descubre quién es.',C.az],['Medea','Traicionada por Jasón, prepara una terrible venganza.',C.ro],['Hipólito','El amor imposible de Fedra por su hijastro acaba en desgracia.',C.ro],['Las bacantes','El rey Penteo contra el dios Dioniso: el peligro de no tener moderación.',C.ro]]},
+ {k:'chips',h:'Palabras griegas',it:['<b>hybris</b>: orgullo desmedido','<b>ate</b>: ceguera que no deja ver los errores','<b>oráculo</b>: mensaje de los dioses','<b>trilogía</b>: tres obras unidas','<b>coro</b>: grupo que comenta la obra']},
+ {k:'ej',h:'Dato',t:'De Esquilo y de Sófocles se conservan <b>siete</b> tragedias completas de cada uno.'}],
+ truco:'<b>E</b>squilo, <b>S</b>ófocles, <b>E</b>urípides: el fuego de <b>Prometeo</b>, el destino de <b>Edipo</b>, la venganza de <b>Medea</b>.'},
+{id:'l10',t:2,n:'Jenofonte y la historia',s:'Narración histórica y repaso de autores',
+ idea:'<b>Jenofonte</b> fue un historiador griego que vivió muchas de las cosas que contó. Con él vemos la diferencia entre contar una <b>ficción</b> y contar la <b>historia</b>.',
+ fig:()=>svgOf('anabasis','La Anábasis: el regreso de los soldados griegos'),
+ b:[{k:'cards',h:'Quién era',it:[['Atenas y Esparta','Nació en Atenas, pero estuvo muy unido a Esparta.',C.az],['Discípulo de Sócrates','Y lo defendió en sus escritos.',C.mo],['Soldado','Participó en expediciones militares.',C.ma]]},
+ {k:'cards',h:'¿Ficción o historia?',it:[['Narración literaria','Puede <b>inventar</b> los hechos.',C.ro],['Narración histórica','Quiere <b>explicar hechos del pasado</b>. Pero el historiador elige y ordena la información desde su punto de vista.',C.ve]]},
+ {k:'cards',h:'Sus obras',it:[['Anábasis','Una expedición de soldados griegos en territorio persa y su difícil regreso.',C.ma],['Helénicas','Sigue la historia de Grecia donde la dejó Tucídides.',C.az],['Ciropedia','La educación y la vida de Ciro el Grande: cómo es un buen gobernante.',C.mo],['Agesilao y Hierón','Sobre un rey espartano y un diálogo sobre el poder.',C.gr]]},
+ {k:'ej',h:'Relaciónalo todo',t:'<b>Homero</b> → épica · <b>Alceo y Safo</b> → lírica · <b>Esopo</b> → fábula · <b>Esquilo, Sófocles y Eurípides</b> → tragedia · <b>Jenofonte</b> → historia.'}]},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ if(B.k==='steps')return`<section class="blk">${h}<ol class="steps">${B.it.map(x=>`<li><span>${x}</span></li>`).join('')}</ol></section>`;
+ return''}).join('')}
+const CHULETA=[['Géneros','Narrativo (contar), lírico (sentir) y dramático (representar).',C.mo],['Narración','Narrador + personajes + acción + tiempo + espacio.',C.az],['Estructura','Planteamiento, nudo y desenlace.',C.az],['Narrador','Interno (yo), externo (él/ella), omnisciente (lo sabe todo).',C.az],['Subgéneros narrativos','Novela, cuento, fábula, leyenda y cantar de gesta.',C.az],['Lírica','Expresa sentimientos; lo más importante es el ritmo. Verso y rima.',C.ro],['Teatro','Diálogo, monólogo, aparte y acotaciones. Actos y escenas.',C.ve],['Subgéneros teatrales','Tragedia (triste), comedia (feliz) y drama (mezcla).',C.ve],['Épica griega','Homero: Ilíada (guerra de Troya, Aquiles) y Odisea (viaje de Odiseo).',C.ma],['Autores griegos','Alceo y Safo (lírica), Esopo (fábula), Esquilo, Sófocles y Eurípides (tragedia), Jenofonte (historia).',C.ma]];
+
+const QB={
+l1:[['t','¿Qué género cuenta una historia mediante un narrador?','Narrativo',['Lírico','Dramático','Ninguno'],'Narrar es contar.'],
+ ['t','¿Qué género expresa sobre todo sentimientos y emociones?','Lírico',['Narrativo','Dramático','Histórico'],'Suele escribirse en verso.'],
+ ['t','¿Qué género está pensado para representarse ante un público?','Dramático',['Lírico','Narrativo','Épico'],'Es el teatro.'],
+ ['t','Una oda pertenece al género…','Lírico',['Narrativo','Dramático','Ninguno'],'Como el poema y la canción.'],
+ ['t','Un cantar de gesta pertenece al género…','Narrativo',['Lírico','Dramático','Teatral'],'Cuenta las hazañas de un héroe.'],
+ ['t','La comedia pertenece al género…','Dramático',['Narrativo','Lírico','Épico'],'Es una obra de teatro.'],
+ ['t','¿Qué son los géneros literarios?','Las principales clases de obras literarias',['Las partes de un libro','Los tipos de narrador','Los tipos de rima'],'Ordenan los textos por su forma e intención.'],
+ ['v','Un cuento y una novela pertenecen al género narrativo.',true,'Verdadero.']],
+l2:[['t','¿Qué es el narrador?','La voz que cuenta la historia',['La persona que escribe el libro','El protagonista','El lugar de la historia'],'No siempre coincide con el autor.'],
+ ['t','¿Cuál es el orden de la estructura de una narración?','Planteamiento, nudo y desenlace',['Nudo, planteamiento y desenlace','Desenlace, nudo y planteamiento','Introducción, diálogo y final'],'Presentar, complicar y resolver.'],
+ ['t','¿En qué parte se presentan los personajes, el lugar y el problema inicial?','Planteamiento',['Nudo','Desenlace','Trama'],'Es el comienzo.'],
+ ['t','¿En qué parte avanza el conflicto y aparecen los problemas principales?','Nudo o desarrollo',['Planteamiento','Desenlace','Acotación'],'Es la parte central.'],
+ ['t','¿En qué parte se resuelve el conflicto?','Desenlace',['Nudo','Planteamiento','Monólogo'],'La historia llega a su final.'],
+ ['t','¿Qué es la acción?','El conjunto de acontecimientos de la historia',['El lugar de la historia','La voz que cuenta','El final feliz'],'La trama es cómo se organizan.'],
+ ['t','¿Qué es la trama?','La manera en que se organizan y relacionan los hechos',['El nombre del protagonista','El tiempo que dura la historia','La moraleja'],'La acción son los hechos.'],
+ ['v','Todas las narraciones están escritas en prosa.',false,'Falso: hay narraciones en verso, como los poemas épicos.']],
+l3:[['t','«Aquella tarde encontré una llave». ¿Qué narrador es?','Interno',['Externo','Omnisciente','No hay narrador'],'Habla en primera persona y participa.'],
+ ['t','«Aquella tarde, Ana encontró una llave». ¿Qué narrador es?','Externo',['Interno','Protagonista','Ninguno'],'No participa: tercera persona.'],
+ ['t','¿Cómo se llama el narrador que conoce los pensamientos y sentimientos de los personajes?','Omnisciente',['Interno','Antagonista','Secundario'],'Lo sabe todo.'],
+ ['t','¿Qué persona gramatical suele usar el narrador interno?','La primera (yo)',['La tercera (él, ella)','La segunda (tú)','Ninguna'],'Porque participa en los hechos.'],
+ ['t','¿Qué personaje se opone a los objetivos del protagonista?','El antagonista',['El secundario','El narrador','El autor'],'No tiene por qué ser malvado.'],
+ ['t','«La historia ocurre en la Edad Media». Esto es…','El tiempo externo',['El tiempo interno','El espacio','La trama'],'La época de los hechos.'],
+ ['t','«Todo sucede en una sola noche». Esto es…','El tiempo interno',['El tiempo externo','El espacio','El narrador'],'La duración de los hechos.'],
+ ['t','¿Cómo puede ser el espacio de una historia?','Real o ficticio',['Solo real','Solo inventado','Siempre una ciudad'],'Puede existir o no.'],
+ ['v','El antagonista siempre es una persona malvada.',false,'Falso: basta con que dificulte lo que quiere el protagonista.']],
+l4:[['t','«El pasillo era oscuro». ¿Qué forma de expresión es?','Descripción',['Diálogo','Narración de acciones','Monólogo'],'Explica cómo es un lugar.'],
+ ['t','¿Para qué sirven palabras como «después» o «al día siguiente»?','Para ordenar los hechos en el tiempo',['Para describir personajes','Para rimar','Para separar actos'],'Son marcadores temporales.'],
+ ['t','¿Qué reproduce el diálogo?','Lo que dicen los personajes entre sí',['Cómo es un lugar','Lo que piensa el autor','La moraleja'],'Conversaciones.'],
+ ['t','Relato breve, con pocos personajes y desenlace rápido:','Cuento',['Novela','Cantar de gesta','Leyenda'],'Muchos vienen de la tradición oral.'],
+ ['t','¿Qué subgénero es más extenso y desarrolla a fondo personajes y ambientes?','La novela',['El cuento','La fábula','La leyenda'],'Puede ser de aventuras, histórica, realista…'],
+ ['t','Relato tradicional ligado a un lugar o personaje, que mezcla lo real y lo fantástico:','Leyenda',['Novela realista','Fábula','Comedia'],'Por ejemplo, la leyenda de un castillo.'],
+ ['t','Poema épico medieval que cuenta las hazañas de un héroe:','Cantar de gesta',['Oda','Cuento','Fábula'],'Está en verso.'],
+ ['t','¿Cómo están escritos la novela y el cuento?','En prosa',['En verso','En diálogo teatral','Con acotaciones'],'La fábula puede ir en verso o en prosa.']],
+l5:[['t','¿Cómo se llama la enseñanza de una fábula?','Moraleja',['Acotación','Rima','Trama'],'Puede ir al final o deducirse.'],
+ ['t','¿Quiénes suelen protagonizar las fábulas?','Animales que hablan y actúan como personas',['Dioses griegos','Reyes y guerreros','Actores'],'Eso se llama personificación.'],
+ ['t','¿Qué es la personificación?','Dar cualidades humanas a animales u objetos',['Escribir en primera persona','Hablar solo','Repetir sonidos'],'Los animales hablan y actúan como humanos.'],
+ ['t','¿En qué siglo sitúa la tradición a Esopo?','Siglo VI a. C.',['Siglo XVI','Siglo I d. C.','Siglo XIX'],'Hay pocos datos seguros de su vida.'],
+ ['t','¿Cuál es la moraleja de «La zorra y la leona»?','La calidad puede importar más que la cantidad',['Hay que madrugar','El que mucho abarca poco aprieta','No hay que mentir'],'La leona solo tiene un cachorro, pero vale mucho.'],
+ ['t','¿Qué escritores españoles continuaron la tradición de la fábula?','Samaniego e Iriarte',['Esquilo y Sófocles','Homero y Safo','Jenofonte y Tucídides'],'También el francés La Fontaine.'],
+ ['t','¿Qué enseñan las fábulas de Esopo?','Prudencia, moderación, valorar el trabajo y ser agradecidos',['A ganar guerras','A escribir poesía','A hacer teatro'],'Se usaban en las escuelas griegas.'],
+ ['v','En una fábula, la moraleja siempre aparece escrita al final.',false,'Falso: a veces hay que deducirla.']],
+l6:[['t','¿Qué es un verso?','Cada una de las líneas de un poema',['La musicalidad del poema','Un tipo de narrador','Una parte del teatro'],'Un poema tiene varios versos.'],
+ ['t','¿Qué es la rima?','La coincidencia de sonidos al final de dos o más versos',['El número de páginas','Una indicación del autor','El tema del poema'],'Día / alegría.'],
+ ['t','¿Cuál es la característica más importante de la poesía?','El ritmo',['El narrador','Las acotaciones','La moraleja'],'Su musicalidad.'],
+ ['t','¿Qué es la prosa poética?','Prosa con lenguaje cuidado, musical y expresivo',['Un poema con rima','Un diálogo teatral','Un cuento breve'],'La poesía no siempre va en verso.'],
+ ['t','¿De qué isla era Safo?','Lesbos',['Ítaca','Creta','Sicilia'],'Escribía sobre sus sentimientos.'],
+ ['t','¿Sobre qué escribía Alceo?','La guerra, la política, el banquete y los dioses',['La pasión amorosa','Animales con moraleja','Historia de Persia'],'Siglo VII a. C.'],
+ ['t','¿Qué destaca en la poesía de Safo?','Los sentimientos y la pasión amorosa',['Las batallas','Las acotaciones','Los viajes por mar'],'Expresión de la subjetividad.'],
+ ['v','La lírica siempre cuenta una historia.',false,'Falso: sobre todo expresa lo que siente o piensa una voz poética.']],
+l7:[['t','¿Qué cuenta la épica?','Hazañas de héroes, guerras, viajes y aventuras',['Sentimientos amorosos','Chistes','Recetas'],'Viene de la tradición oral.'],
+ ['t','¿A quién se atribuyen la Ilíada y la Odisea?','A Homero',['A Esopo','A Sófocles','A Jenofonte'],'Hay dudas sobre si las escribió el mismo autor.'],
+ ['t','¿Qué narra la Ilíada?','El último año de la guerra de Troya',['El regreso de Odiseo a Ítaca','La vida de Esopo','La historia de Persia'],'Con la cólera de Aquiles en el centro.'],
+ ['t','¿Qué narra la Odisea?','El viaje de regreso de Odiseo a Ítaca',['La guerra entre Atenas y Esparta','La cólera de Aquiles','El castigo de Prometeo'],'Odiseo también se llama Ulises.'],
+ ['t','¿Con quién se enfada Aquiles al principio?','Con Agamenón',['Con Héctor','Con Odiseo','Con Patroclo'],'Por eso deja de luchar.'],
+ ['t','¿Por qué vuelve Aquiles a luchar?','Porque muere su amigo Patroclo',['Porque se lo pide Penélope','Porque gana un premio','Porque lo ordena Zeus'],'Y entonces mata a Héctor.'],
+ ['t','¿Quién era Héctor?','El gran héroe troyano',['El hijo de Odiseo','Un poeta lírico','Un fabulista'],'Muere a manos de Aquiles.'],
+ ['t','¿Quiénes esperan a Odiseo en Ítaca?','Su esposa Penélope y su hijo Telémaco',['Aquiles y Patroclo','Medea y Jasón','Edipo y su madre'],'Tarda muchos años en volver.'],
+ ['t','¿Cómo transmitían los poemas épicos en la antigua Grecia?','Los recitaban cantores profesionales',['En libros impresos','En el teatro con actores','Por carta'],'Venían de la tradición oral.'],
+ ['v','Odiseo y Ulises son el mismo personaje.',true,'Verdadero.']],
+l8:[['t','¿Qué es una acotación?','Una indicación del autor sobre gestos, decorado, voz…',['Lo que dice un personaje solo','Una parte del poema','La enseñanza final'],'Va entre paréntesis o en cursiva.'],
+ ['t','¿Quién pronuncia las acotaciones?','Nadie: sirven para guiar la representación',['El protagonista','El narrador','El público'],'No forman parte de lo que se dice.'],
+ ['t','¿Qué es un aparte?','Lo que el público oye pero los demás personajes no',['Un cambio de decorado','Un acto completo','Una conversación entre dos'],'Es una convención teatral.'],
+ ['t','¿Qué es un monólogo?','Un personaje habla largo rato en voz alta, solo o consigo mismo',['Una conversación entre varios','Una acotación','El final de la obra'],'Expresa sus pensamientos.'],
+ ['t','¿Cuál es la forma básica del teatro?','El diálogo',['La descripción','La rima','La moraleja'],'Hace avanzar el conflicto.'],
+ ['t','¿Cuáles son las grandes partes de una obra de teatro?','Los actos',['Los versos','Los capítulos','Las moralejas'],'Se dividen en escenas.'],
+ ['t','¿Qué suele marcar el cambio de escena?','La entrada o salida de personajes',['Un cambio de rima','El final del libro','La aparición del narrador'],'Los cuadros cambian con el decorado.'],
+ ['t','¿Cómo termina normalmente una tragedia?','De forma desgraciada',['De forma feliz','Con una moraleja','Con un chiste'],'Presenta conflictos graves.'],
+ ['t','¿Qué subgénero teatral tiene humor y final feliz?','La comedia',['La tragedia','El drama','La épica'],'Puede criticar defectos de la sociedad.'],
+ ['v','Una comedia también pertenece al género dramático.',true,'Verdadero: «dramático» es todo el teatro.']],
+l9:[['t','¿De dónde salían los argumentos de las tragedias griegas?','De los mitos',['De las noticias','De las fábulas','De los viajes de Jenofonte'],'Planteaban preguntas sobre la justicia y el poder.'],
+ ['t','¿Qué era el coro?','Un grupo que intervenía y comentaba los acontecimientos',['El decorado','El protagonista','El público'],'Era fundamental en la tragedia.'],
+ ['t','¿Qué significa hybris?','Orgullo desmedido',['Ceguera','Venganza','Mensaje de los dioses'],'Lleva al ser humano a pasarse de sus límites.'],
+ ['t','¿Qué es la ate?','Una ceguera que impide reconocer los errores',['Un tipo de verso','El coro','Un dios griego'],'Conduce al castigo, según Esquilo.'],
+ ['t','¿Quién escribió Prometeo encadenado y la Orestíada?','Esquilo',['Sófocles','Eurípides','Homero'],'Daba importancia a la justicia de Zeus.'],
+ ['t','¿Por qué castigan a Prometeo?','Por desafiar a Zeus y dar el fuego a la humanidad',['Por matar a su padre','Por vengarse de Jasón','Por no volver a Ítaca'],'Obra de Esquilo.'],
+ ['t','¿Qué es una trilogía?','Un conjunto de tres tragedias relacionadas',['Un poema de tres versos','Tres personajes','Un acto con tres escenas'],'Como la Orestíada.'],
+ ['t','¿Quién escribió Edipo rey?','Sófocles',['Esquilo','Eurípides','Esopo'],'Destaca la ironía trágica.'],
+ ['t','¿Qué es la ironía trágica?','Que el público sabe algo que el personaje ignora',['Que la obra es graciosa','Que hay un narrador','Que el final es feliz'],'Típica de Sófocles.'],
+ ['t','¿Qué anuncia el oráculo a Edipo?','Que matará a su padre y se casará con su madre',['Que será un gran poeta','Que volverá a Ítaca','Que recibirá el fuego'],'Intenta evitarlo, pero se cumple.'],
+ ['t','¿Quién escribió Medea, Hipólito y Las bacantes?','Eurípides',['Esquilo','Sófocles','Homero'],'Exploraba los sentimientos humanos.'],
+ ['t','¿Contra quién prepara Medea su venganza?','Contra Jasón',['Contra Edipo','Contra Zeus','Contra Penteo'],'Se siente traicionada.'],
+ ['t','¿A quién se enfrenta el rey Penteo en Las bacantes?','Al dios Dioniso',['A Aquiles','A Prometeo','A Jasón'],'Muestra los peligros de la falta de moderación.']],
+l10:[['t','¿Quién fue Jenofonte?','Un escritor e historiador griego',['Un poeta lírico de Lesbos','Un fabulista','Un autor de tragedias'],'Participó en expediciones militares.'],
+ ['t','¿De quién fue discípulo Jenofonte?','De Sócrates',['De Homero','De Esopo','De Esquilo'],'Lo defendió en sus escritos.'],
+ ['t','¿Qué cuenta la Anábasis?','Una expedición de soldados griegos en territorio persa y su regreso',['La guerra de Troya','La vida de Edipo','Un viaje a Ítaca'],'Con muchos peligros en el camino.'],
+ ['t','¿Qué es la Ciropedia?','La educación y la vida de Ciro el Grande',['Una tragedia','Una fábula','Un poema épico'],'Reflexiona sobre el buen gobernante.'],
+ ['t','¿Qué pretende la narración histórica?','Explicar hechos del pasado',['Inventar mundos fantásticos','Expresar sentimientos','Hacer reír'],'Aunque el historiador elige y ordena la información.'],
+ ['t','Nació en Atenas, pero estuvo muy unido a…','Esparta',['Troya','Persia','Lesbos'],'Escribió el Agesilao sobre un rey espartano.'],
+ ['t','¿Con qué género se relaciona Esopo?','Con la fábula',['Con la tragedia','Con la lírica','Con la historia'],'Esquilo, Sófocles y Eurípides, con la tragedia.'],
+ ['v','La narración histórica cuenta los hechos sin ningún punto de vista.',false,'Falso: el historiador selecciona y organiza la información desde su punto de vista.']]};
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='taller-lit-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'Los géneros y la narración'],[2,'Poesía, teatro y autores griegos']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente! Mañana lo bordas.':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de los temas 1 y 2</h2><p>15 preguntas de todas las fichas, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),1)));list.push(...wpick(QS.filter(q=>!list.includes(q)),5));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'nar',ico:'¿Quién habla?',n:'Detective del narrador',d:'Lee la frase: ¿narrador interno, externo u omnisciente?',best:v=>v+' de 8'},
+{id:'ord',ico:'1, 2, 3',n:'Ordena la historia',d:'Planteamiento, nudo y desenlace: pon cada historia en orden.',best:v=>v+(v===1?' error':' errores')},
+{id:'tea',ico:'(Acotación)',n:'Detective del teatro',d:'Encuentra acotaciones, apartes, diálogos y nombres en una escena.',best:v=>v+' de 8'},
+{id:'quien',ico:'¿Quién soy?',n:'¿Quién soy?',d:'Héroes, dioses y autores griegos con pistas. Cuantas menos pistas, más puntos.',best:v=>v+' puntos'},
+{id:'une',ico:'Une',n:'Une parejas',d:'Palabras con su significado y obras con su autor.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Clasifica contra reloj',d:'Géneros, subgéneros, autores y teatro en 60 segundos.',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({nar:gNar,ord:gOrd,tea:gTea,quien:gQuien,une:gUne,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+
+/* Detective del narrador */
+const NAR=[['Cuando abrí la caja, me temblaban las manos.',0],['Aquel verano aprendí a nadar en el río del pueblo.',0],['Nunca olvidaré el día en que conocí a mi mejor amiga.',0],['Corrí hasta la estación, pero el tren ya se había ido.',0],['Mi hermano y yo encontramos un mapa en el desván.',0],
+ ['Pablo cerró la puerta y bajó las escaleras.',1],['El barco zarpó al amanecer con veinte marineros a bordo.',1],['La niña recogió la mochila y salió de clase.',1],['Los dos hermanos caminaron hasta el faro sin decir nada.',1],['El caballero desenvainó la espada y cruzó el puente.',1],
+ ['Lucía sonrió, aunque por dentro sentía un miedo terrible.',2],['El capitán miró el mar y pensó que nunca volvería a ver a su familia.',2],['Nadie lo sabía, pero Tomás llevaba semanas soñando con huir.',2],['Marta saludó a su vecino; en el fondo, deseaba que se marchara pronto.',2],['El rey fingía estar tranquilo, pero temía perder la corona.',2]];
+const NARN=['Interno','Externo','Omnisciente'];
+const NARE=['Habla en primera persona: participa en la historia.','Habla en tercera persona y solo cuenta lo que se ve.','Cuenta en tercera persona y además sabe lo que piensan o sienten los personajes.'];
+function gNar(){const items=[...shuffle(NAR.filter(x=>x[1]===0)).slice(0,3),...shuffle(NAR.filter(x=>x[1]===1)).slice(0,2),...shuffle(NAR.filter(x=>x[1]===2)).slice(0,3)];const R=shuffle(items);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Detective del narrador</span></div><div id="pb"></div><p class="prompt">¿Qué tipo de narrador es?</p><p class="quote" id="qt"></p><div class="opts three" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R.length){const b=setBest('nar',good,false);$('#qt').hidden=true;$('#opts').innerHTML='';$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${b?'¡Nueva mejor marca! ':''}Yo → interno. Él o ella → externo. Si además sabe lo que piensan → omnisciente.`,gNar);return}
+  const [txt,a]=R[k];$('#pb').innerHTML=pbar(8,res,k);$('#qt').textContent='«'+txt+'»';$('#fb').textContent='';
+  $('#opts').innerHTML=NARN.map((n,i)=>`<button class="opt" type="button" data-i="${i}">${n}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;const ok=i===a;$('#opts').querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(j===a)x.classList.add('right');else if(j===i)x.classList.add('wrong')});
+   if(ok)good++;res.push(ok);$('#fb').className='fb '+(ok?'okk':'ko');$('#fb').textContent=(ok?'¡Bien! ':'Era '+NARN[a].toLowerCase()+'. ')+NARE[a];
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* Ordena la historia */
+const HIST=[['El perro perdido',['Ana encuentra un perro perdido en el parque.','Busca a su dueño por todo el barrio, pero nadie lo reconoce.','Al final ve un cartel con su foto y lo devuelve a su familia.']],
+ ['El puerto',['Un pequeño pueblo vive tranquilo junto al mar.','Una tormenta destroza el puerto y los barcos no pueden salir.','Los vecinos se unen, reconstruyen el puerto y celebran una gran fiesta.']],
+ ['El instituto nuevo',['Leo llega a su nuevo instituto sin conocer a nadie.','Un compañero se burla de él y Leo se siente muy solo.','Leo se apunta al equipo de baloncesto y hace nuevos amigos.']],
+ ['La Odisea',['Termina la guerra de Troya y Odiseo quiere volver a Ítaca.','Monstruos, tormentas y hechiceras le cierran el paso durante años.','Por fin llega a casa, donde lo esperan Penélope y Telémaco.']],
+ ['La Ilíada',['Aquiles se enfada con Agamenón y deja de luchar.','Muere Patroclo, el amigo de Aquiles.','Aquiles vuelve al combate y mata a Héctor.']]];
+const PARTS=['Planteamiento','Nudo','Desenlace'];
+function gOrd(){const L=shuffle(HIST).slice(0,4);let ki=0,err=0;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ordena la historia</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="pool" id="pool"></div><ol class="ladder" id="lad"></ol><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const set=()=>{if(ki>=L.length){const b=setBest('ord',err,true);$('#q').textContent='';$('#pool').innerHTML='';$('#lad').innerHTML='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Planteamiento: se presenta todo. Nudo: aparece el problema. Desenlace: se resuelve.`,gOrd);return}
+  const [tt,parts]=L[ki];let placed=0;$('#q').innerHTML=`«${tt}»: toca primero el <b>${PARTS[0].toLowerCase()}</b>`;$('#lad').innerHTML='';
+  $('#pool').innerHTML=shuffle(parts.map((p,i)=>[p,i])).map(([p,i])=>`<button class="ev" type="button" data-i="${i}">${p}</button>`).join('');
+  $('#pool').querySelectorAll('.ev').forEach(b=>b.onclick=()=>{if(+b.dataset.i===placed){$('#lad').insertAdjacentHTML('beforeend',`<li><b>${PARTS[placed]}</b>${parts[placed]}</li>`);b.remove();placed++;if(placed<3)$('#q').innerHTML=`«${tt}»: ahora el <b>${PARTS[placed].toLowerCase()}</b>`;else{$('#q').innerHTML=`«${tt}»: ¡ordenada!`;ki++;setTimeout(set,1100)}}else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}})};set()}
+
+/* Detective del teatro */
+const SCENES=[[['pn','LUCÍA.'],['ac','(Entra corriendo, con una carta en la mano.)'],['di','¡Abuelo, ha llegado la carta del concurso!'],['br'],['pn','ABUELO.'],['ac','(Se pone las gafas despacio.)'],['di','¿Y qué dice? ¿Has ganado?'],['br'],['pn','LUCÍA.'],['ap','(Aparte.) Si le digo que he quedado segunda, se va a reír…'],['br'],['pn','ABUELO.'],['di','¡Vamos, léela en voz alta!'],['ac','(Se sienta en el sillón.)']],
+ [['pn','REY.'],['ac','(Sentado en su trono, con voz grave.)'],['di','¿Quién se atreve a entrar sin permiso?'],['br'],['pn','BUFÓN.'],['ac','(Haciendo una reverencia exagerada.)'],['di','Solo yo, majestad: el más sabio de su corte.'],['br'],['pn','REY.'],['ap','(Aparte.) Este bufón sabe más de lo que aparenta.'],['br'],['pn','BUFÓN.'],['di','¡Traigo noticias del castillo vecino!'],['ac','(Saca un pergamino.)']]];
+const TEAQ=[['ac','Toca una <b>acotación</b>.','Las acotaciones son las indicaciones entre paréntesis.'],['ap','Toca el <b>aparte</b>.','El aparte lo oye el público, pero no los demás personajes.'],['di','Toca una intervención del <b>diálogo</b>.','El diálogo es lo que los personajes se dicen.'],['pn','Toca el <b>nombre de un personaje</b>.','El nombre va antes de cada intervención.'],['ac','¿Qué indica cómo se mueve un personaje? Tócalo.','Es una acotación.'],['ac','Toca lo que los actores <b>no dicen</b> en voz alta.','Las acotaciones no se pronuncian.'],['ap','Toca lo que el público oye pero el otro personaje no.','Es un aparte.'],['di','Toca algo que un personaje le dice a otro.','Eso es diálogo.']];
+const TEAN={ac:'una acotación',ap:'un aparte',di:'diálogo',pn:'el nombre de un personaje'};
+function gTea(){const sc=pick(SCENES);const qs=shuffle(TEAQ);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Detective del teatro</span></div><div id="pb"></div><p class="prompt" id="q"></p><div class="scene" id="scene">${sc.map((p,i)=>p[0]==='br'?'<br>':`<span data-k="${p[0]}" data-i="${i}" tabindex="0" role="button" class="${p[0]==='pn'?'pn':p[0]==='ac'||p[0]==='ap'?'ac':''}">${p[1]}</span>`).join(' ')}</div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ let tries=0,done=false;
+ const clear=()=>$('#scene').querySelectorAll('[data-k]').forEach(e=>e.classList.remove('okk','ko'));
+ const draw=()=>{clear();if(k>=qs.length){const b=setBest('tea',good,false);$('#q').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${b?'¡Nueva mejor marca! ':''}Nombre en mayúsculas, acotaciones entre paréntesis, el aparte avisa con «(Aparte.)» y lo demás es diálogo.`,gTea);return}
+  $('#pb').innerHTML=pbar(8,res,k);$('#q').innerHTML=qs[k][1];$('#fb').textContent='';tries=0;done=false};
+ $('#scene').querySelectorAll('[data-k]').forEach(el=>{const act=e=>{if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();if(done||k>=qs.length)return;const want=qs[k][0];tries++;
+  if(el.dataset.k===want){done=true;el.classList.add('okk');if(tries===1)good++;res.push(tries===1);$('#fb').className='fb okk';$('#fb').textContent='¡Bien! '+qs[k][2];k++;setTimeout(draw,1300)}
+  else{el.classList.add('ko');setTimeout(()=>el.classList.remove('ko'),700);$('#fb').className='fb ko';$('#fb').textContent=`Eso es ${TEAN[el.dataset.k]}.${tries<2?' Prueba otra vez.':''}`;
+   if(tries>=2){done=true;res.push(false);$('#scene').querySelectorAll(`[data-k="${want}"]`).forEach(x=>x.classList.add('okk'));$('#fb').textContent+=' '+qs[k][2];k++;setTimeout(draw,2400)}}};
+  el.addEventListener('click',act);el.addEventListener('keydown',act)});draw()}
+
+/* ¿Quién soy? */
+const WHO=[['Aquiles',['Soy un héroe griego de la guerra de Troya.','Me enfadé con Agamenón y dejé de luchar.','Cuando murió mi amigo Patroclo, volví al combate y maté a Héctor.']],
+ ['Héctor',['Soy un héroe de la Ilíada.','Defendía mi ciudad, Troya.','Aquiles me mató para vengar a Patroclo.']],
+ ['Odiseo',['Tardé muchos años en volver a casa después de una guerra.','Me enfrenté a monstruos, tormentas y hechiceras.','También me llaman Ulises y mi isla es Ítaca.']],
+ ['Penélope',['Vivo en una isla griega.','Esperé durante años a que mi esposo volviera.','Soy la esposa de Odiseo y la madre de Telémaco.']],
+ ['Edipo',['Llegué a ser rey de Tebas.','Un oráculo anunció mi terrible destino.','Sin saberlo, maté a mi padre y me casé con mi madre.']],
+ ['Medea',['Soy la protagonista de una tragedia de Eurípides.','Me siento traicionada.','Preparo una terrible venganza contra Jasón.']],
+ ['Prometeo',['Desafié al dios más poderoso.','Quise ayudar a la humanidad.','Les di el fuego a los humanos y Zeus me castigó.']],
+ ['Esopo',['La tradición me sitúa en el siglo VI a. C.','Sobre mi vida se cuentan muchas leyendas.','Escribí fábulas como «La zorra y la leona».']],
+ ['Safo',['Escribí poesía lírica en la antigua Grecia.','Hablo de mis sentimientos y de la pasión amorosa.','Soy una poetisa de la isla de Lesbos.']],
+ ['Alceo',['Soy un poeta lírico griego del siglo VII a. C.','Escribí sobre banquetes y sobre los dioses.','Mis poemas hablan también de la guerra y la política.']],
+ ['Homero',['De mí se saben muy pocos datos seguros.','Hay dudas de que escribiera yo solo mis dos obras.','Se me atribuyen la Ilíada y la Odisea.']],
+ ['Esquilo',['Escribí tragedias.','Para mí, la justicia de Zeus mantiene el orden del mundo.','Escribí Prometeo encadenado y la Orestíada.']],
+ ['Sófocles',['Escribí tragedias; se conservan siete completas.','En mis obras el público sabe lo que el personaje ignora.','Escribí Edipo rey.']],
+ ['Eurípides',['Escribí tragedias sobre los sentimientos humanos.','Me interesaba la situación de las mujeres.','Escribí Medea, Hipólito y Las bacantes.']],
+ ['Jenofonte',['Nací en Atenas, pero estuve muy unido a Esparta.','Fui discípulo de Sócrates.','Escribí la Anábasis y la Ciropedia.']]];
+function gQuien(){const R=shuffle(WHO).slice(0,8);let k=0,pts=0;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>¿Quién soy?</span><span id="hud">0 puntos</span></div><div id="pb"></div><ol class="clues" id="clues"></ol><div class="actions"><button class="ghost" id="more" type="button">Otra pista</button></div><div class="opts grid" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const res=[];
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R.length){const b=setBest('quien',pts,false);$('#clues').innerHTML='';$('#opts').innerHTML='';$('#more').hidden=true;$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${pts} puntos de 24`,`${b?'¡Nueva mejor marca! ':''}Con 1 pista ganas 3 puntos; con 2, 2; con 3, 1.`,gQuien);return}
+  const [name,cl]=R[k];let shown=1,done=false;$('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';
+  const showC=()=>{$('#clues').innerHTML=cl.slice(0,shown).map(c=>`<li>${c}</li>`).join('');$('#more').hidden=shown>=3||done};showC();
+  $('#more').onclick=()=>{if(shown<3){shown++;showC()}};
+  const opts=shuffle([name,...shuffle(WHO.filter(w=>w[0]!==name)).slice(0,3).map(w=>w[0])]);
+  $('#opts').innerHTML=opts.map(o=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${o}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;if(b.textContent===name){done=true;const g=4-shown;pts+=g;res.push(true);b.classList.add('right');$('#hud').textContent=pts+' puntos';$('#fb').className='fb okk';$('#fb').textContent=`¡Sí, soy ${name}! +${g} ${g===1?'punto':'puntos'}.`}
+   else{b.classList.add('wrong');b.disabled=true;if(shown<3){shown++;showC();$('#fb').className='fb ko';$('#fb').textContent='No. Te doy otra pista.';return}done=true;res.push(false);$('#opts').querySelectorAll('.opt').forEach(x=>{if(x.textContent===name)x.classList.add('right')});$('#fb').className='fb ko';$('#fb').textContent=`Era ${name}.`}
+   $('#opts').querySelectorAll('.opt').forEach(x=>x.disabled=true);shown=3;showC();
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* Une parejas */
+const DEFS=[['Acotación','Indicación del autor sobre gestos o decorado'],['Aparte','Lo oye el público, pero no los otros personajes'],['Monólogo','Un personaje habla solo en voz alta'],['Moraleja','La enseñanza de una fábula'],['Rima','Sonidos iguales al final de los versos'],['Verso','Cada línea de un poema'],['Hybris','Orgullo desmedido'],['Ate','Ceguera que impide ver los propios errores'],['Oráculo','Mensaje atribuido a los dioses'],['Trilogía','Tres tragedias relacionadas'],['Coro','Grupo que comenta la acción en la tragedia'],['Trama','Cómo se organizan los hechos'],['Personificación','Animales que actúan como personas'],['Antagonista','Se opone al protagonista'],['Ironía trágica','El público sabe lo que el personaje ignora'],['Prosa poética','Prosa con lenguaje musical y expresivo'],['Acto','Gran parte de una obra de teatro'],['Escena','Cambia cuando entran o salen personajes'],['Tiempo interno','Lo que duran los hechos'],['Tiempo externo','La época en que pasa la historia']];
+const OBRAS={Homero:['Ilíada','Odisea'],Esquilo:['Prometeo encadenado','Orestíada'],Sófocles:['Edipo rey'],Eurípides:['Medea','Hipólito','Las bacantes'],Jenofonte:['Anábasis','Ciropedia','Helénicas'],Esopo:['La zorra y la leona'],Safo:['Poemas de amor de Lesbos']};
+function gUne(){let mode='def',round=0,err=0;
+ const setup=()=>{round=0;err=0;
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Une parejas</span><span id="hud">Errores: 0</span></div><div class="chips" id="modes"><button type="button" data-m="def" aria-pressed="${mode==='def'}">Palabras y significados</button><button type="button" data-m="obra" aria-pressed="${mode==='obra'}">Obras y autores</button></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+  $('#modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;setup()});play()};
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has unido 12 parejas.`,setup);return}
+  const pairs=mode==='def'?shuffle(DEFS).slice(0,6):shuffle(Object.keys(OBRAS)).slice(0,6).map(a=>[pick(OBRAS[a]),a]);
+  $('#q').innerHTML=`Ronda ${round+1} de 2: toca un elemento de la izquierda y luego su pareja.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca algo de la columna izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};
+ setup()}
+
+/* Clasifica contra reloj */
+const DECKS={
+gen:{n:'Géneros',c:['Narrativo','Lírico','Dramático'],it:[['«Érase una vez un rey que tenía tres hijas…»',0],['«Mi corazón es un pájaro / que vuela cuando te ve»',1],['PEDRO. (Entra enfadado.) ¿Quién ha roto la ventana?',2],['Lo cuenta un narrador',0],['Se representa ante un público',2],['Expresa sentimientos',1],['Suele escribirse en verso',1],['Tiene acotaciones',2],['Novela',0],['Oda',1],['Comedia',2],['Fábula',0],['Tragedia',2],['Canción',1],['Cantar de gesta',0],['Cuento',0],['Poema',1],['Monólogo y aparte',2],['La Ilíada',0],['Safo y Alceo',1],['Edipo rey',2]]},
+sub:{n:'Subgéneros narrativos',c:['Novela','Cuento','Fábula','Leyenda','Épica'],it:[['Larga, desarrolla a fondo a los personajes',0],['De aventuras, histórica o de ciencia ficción',0],['Breve, con pocos personajes',1],['Muchos vienen de la tradición oral',1],['Animales que hablan',2],['Tiene moraleja',2],['La zorra y la leona',2],['Ligada a un lugar, mezcla lo real y lo fantástico',3],['Hazañas de un héroe en verso',4],['La Ilíada y la Odisea',4],['Cantar de gesta',4],['Desenlace rápido',1]]},
+aut:{n:'Autores',c:['Homero','Esquilo','Sófocles','Eurípides'],it:[['Ilíada',0],['Odisea',0],['Épica',0],['Prometeo encadenado',1],['La Orestíada',1],['Hybris y ate',1],['La justicia de Zeus',1],['Edipo rey',2],['Ironía trágica',2],['Los límites del ser humano',2],['Medea',3],['Hipólito',3],['Las bacantes',3],['Amor, celos y venganza',3]]},
+tea:{n:'Teatro',c:['Diálogo','Monólogo','Aparte','Acotación'],it:[['Conversación entre personajes',0],['Forma básica del teatro',0],['Un personaje habla solo en voz alta',1],['Expresa sus pensamientos en un discurso largo',1],['Lo oye el público, pero no los demás',2],['(Aparte.) ¡Qué pesado es este hombre!',2],['(Se sienta en el sillón.)',3],['Indica gestos, vestuario o decorado',3],['Va entre paréntesis o en cursiva',3],['ANA. ¿Vienes? — LUIS. Ahora voy.',0]]}};
+function gCla(){let dk='gen';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length===3?'three':'grid'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Lectora experta',()=>ST.every(s=>S.stars[s.id]===3)],['Detective del narrador',()=>(S.games.nar||0)>=7],['Directora de teatro',()=>(S.games.tea||0)>=7],['Sabia griega',()=>(S.games.quien||0)>=18],['Historias en orden',()=>S.games.ord===0],['Rápida como el rayo',()=>(S.games.cla||0)>=25],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>

@@ -16,7 +16,10 @@ window.CATALOGO = {
         { titulo: 'Fichas animadas: Tema 2', descripcion: 'Megalitismo y Barroco musical paso a paso, con animaciones y preguntas al final de cada ficha', ruta: 'ale/ham/tema2-animado/' },
         { titulo: 'Audiciones de Música', descripcion: 'Las 10 audiciones de los temas 1 y 2: fichas, juego de reconocer fragmentos y prueba', ruta: 'ale/ham/audiciones/' }
       ]},
-      { id: 'lengua', nombre: 'Lengua y Literatura', tono: 0, apps: [] },
+      { id: 'lengua', nombre: 'Lengua', tono: 0, apps: [] },
+      { id: 'literatura', nombre: 'Literatura', tono: 320, apps: [
+        { titulo: 'Taller de Literatura: Temas 1 y 2', descripcion: 'Géneros literarios, narración, poesía y teatro; Homero, Esopo, la tragedia griega y Jenofonte. Fichas resumidas, 6 juegos y prueba', ruta: 'ale/literatura/temas-1-2/' }
+      ]},
       { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
       { id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [
         { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' }
