@@ -26,6 +26,7 @@ ale/
     celulas/          Laboratorio de células: «Formados por células»
   fisica-quimica/
     materia-atomo/    Laboratorio de Física y Química: densidad, unidades, materia, átomo y tabla periódica
+    animado/          Física y Química animada: ejemplos resueltos paso a paso con GSAP
 carla/
 ```
 
