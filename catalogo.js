@@ -32,6 +32,9 @@ window.CATALOGO = {
       { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [
         { titulo: 'Laboratorio de células', descripcion: 'Formados por células: el microscopio, partes de la célula, procariotas y eucariotas, célula animal y vegetal y tejidos. Fichas, 8 juegos y prueba', ruta: 'ale/biologia/celulas/' }
       ]},
+      { id: 'fisica-quimica', nombre: 'Física y Química', tono: 330, apps: [
+        { titulo: 'Laboratorio de Física y Química', descripcion: 'Densidad, cambio de unidades, clasificación de la materia, el átomo (Z y A) y la tabla periódica. Fichas, 7 juegos y prueba', ruta: 'ale/fisica-quimica/materia-atomo/' }
+      ]},
       { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] }
     ]
   },

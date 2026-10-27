@@ -24,6 +24,8 @@ ale/
     temas-1-2/        Atlas de Geografía: conceptos geográficos y medio físico de España (temas 1 y 2)
   biologia/
     celulas/          Laboratorio de células: «Formados por células»
+  fisica-quimica/
+    materia-atomo/    Laboratorio de Física y Química: densidad, unidades, materia, átomo y tabla periódica
 carla/
 ```
 

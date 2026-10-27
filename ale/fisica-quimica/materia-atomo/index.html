@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio de Física y Química</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Laboratorio de Física y Química: misma familia que las otras apps (cuaderno cuadriculado, sellos B/M, estrellas). Acento verde azulado. */
+:root{
+  --bg:#eeecf6; --paper:#fdfdfb; --grid:#e6e3f1; --ink:#1f1d3a; --muted:#5d5a7a; --line:#d6d2e6;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --lit:#0b7a75;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#5fd3c9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#5fd3c9; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--lit)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--lit);color:var(--lit)}
+.dot.done{background:var(--lit);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+/* Chuleta */
+.chuleta{border:2px solid var(--lit)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--lit);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+/* Fichas en cajas */
+.idea{margin:0;background:var(--paper);border:2px solid var(--lit);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--lit);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--lit);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--lit);color:var(--paper);font:800 .9rem var(--f-display);display:grid;place-items:center}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+/* Textos de ejemplo */
+.txt{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;font-size:1.05rem;line-height:1.7;margin:0;width:100%}
+.txt .hl{border-radius:4px;padding:1px 3px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem;color:var(--muted);justify-content:center}.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px}
+.poem{font-size:1.1rem;line-height:1.8}.poem .r{font-weight:700;border-bottom:3px solid var(--c)}.poem small{color:var(--muted);font-size:.8rem;margin-left:8px;font-weight:700}
+.stage .pn{font-weight:800;letter-spacing:.04em}.stage .ac{font-style:italic;color:var(--muted)}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.quote{font:400 1.12rem var(--f-body);background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;margin:0;font-style:italic}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.scene{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 14px;line-height:2;font-size:1.05rem}
+.scene [data-k]{cursor:pointer;border-radius:5px;padding:1px 2px}.scene [data-k]:hover{background:var(--grid)}
+.scene .pn{font-weight:800;letter-spacing:.04em}.scene .ac{font-style:italic;color:var(--muted)}
+.scene .okk{background:var(--ok-soft)!important;outline:2px solid var(--ok)}.scene .ko{background:var(--marker-soft)!important}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--lit);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+/* Física y Química */
+.pt{display:grid;grid-template-columns:22px repeat(6,minmax(0,1fr));gap:4px;width:100%;max-width:560px}
+.pth{font-size:.72rem;color:var(--muted);font-weight:700;display:grid;place-items:center}
+.pe{border:2px solid var(--c);background:var(--paper);background:color-mix(in srgb,var(--c) 14%,var(--paper));color:var(--ink);border-radius:8px;padding:3px 2px 4px;display:flex;flex-direction:column;align-items:center;font:inherit;min-height:52px;cursor:default;min-width:0}
+.pe small{font-size:.66rem;color:var(--muted);line-height:1;align-self:flex-start;padding-left:3px}.pe b{font:800 1.12rem var(--f-display);line-height:1.1}.pe i{font-style:normal;font-size:.6rem;color:var(--muted);line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pe.empty{border:1px dashed var(--line);background:transparent}
+#tb .pe:not(.empty){cursor:pointer}.pe.okk{background:var(--ok-soft);border-color:var(--ok);outline:3px solid var(--ok)}.pe.ko{background:var(--marker-soft);border-color:var(--marker)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;line-height:1.25}.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}.frac>span:last-child{padding:0 4px}
+.frac.fx{color:var(--lit);font-weight:700}
+.calc .row{font-size:1.08rem;display:flex;align-items:center;flex-wrap:wrap;gap:4px 2px;line-height:1.3}.calc s{text-decoration-color:var(--marker);text-decoration-thickness:2px}
+.fopt{text-align:center;font-size:1.05rem}
+.fields{display:flex;flex-direction:column;gap:8px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.numrow .lab{min-width:6.5em;font-weight:700}
+.numrow input{font:400 1.15rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:9px 12px;width:8em;max-width:100%;font-variant-numeric:tabular-nums}
+.numrow .unit{font-weight:700;color:var(--muted)}.numrow input.ok{border-color:var(--ok);background:var(--ok-soft)}.numrow input.ko{border-color:var(--marker);background:var(--marker-soft)}
+.nota{display:inline-flex;align-items:center;gap:2px;font:800 1.6rem var(--f-display);vertical-align:middle}.nota .na{display:inline-flex;flex-direction:column;align-items:flex-end;font-size:.55em;line-height:1.05}.nota sup{color:var(--marker)}.nota sub{color:#1e6fd9}.nota sup,.nota sub{vertical-align:baseline;font-size:1em}
+.atomview svg{width:100%;max-width:360px;display:block;margin:0 auto;border-radius:12px}
+.ctr{display:flex;flex-direction:column;gap:8px}.cnt{display:grid;grid-template-columns:28px 1fr 44px 40px 44px;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.dotc{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}.cnt output{font:800 1.2rem var(--f-display);text-align:center;font-variant-numeric:tabular-nums}
+.ghost.sm{padding:6px 0;font-size:1.2rem;line-height:1}
+.mt.sym{font:800 1.15rem var(--f-display);text-align:center}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+body{margin:0}[hidden]{display:none!important}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/fisica-quimica">← Física y Química de Ale</a>
+  <header>
+    <div><h1>Laboratorio de Física y Química <span>Ale</span></h1>
+    <p>La densidad, el cambio de unidades, la clasificación de la materia, el átomo y la tabla periódica.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',ma:'#a0522d'};
+
+/* =================== ELEMENTOS QUE ENTRAN ===================
+   [símbolo, nombre, Z, A del isótopo más común, grupo, periodo, familia] */
+const EL=[['H','Hidrógeno',1,1,1,1,'g1'],['Li','Litio',3,7,1,2,'g1'],['Na','Sodio',11,23,1,3,'g1'],['K','Potasio',19,39,1,4,'g1'],['Rb','Rubidio',37,85,1,5,'g1'],['Cs','Cesio',55,133,1,6,'g1'],['Fr','Francio',87,223,1,7,'g1'],
+ ['Be','Berilio',4,9,2,2,'g2'],['Mg','Magnesio',12,24,2,3,'g2'],['Ca','Calcio',20,40,2,4,'g2'],['Sr','Estroncio',38,88,2,5,'g2'],['Ba','Bario',56,137,2,6,'g2'],['Ra','Radio',88,226,2,7,'g2'],
+ ['Fe','Hierro',26,56,8,4,'fe'],['Co','Cobalto',27,59,9,4,'fe'],['Ni','Níquel',28,58,10,4,'fe'],
+ ['B','Boro',5,11,13,2,'g13'],['Al','Aluminio',13,27,13,3,'g13'],['Ga','Galio',31,69,13,4,'g13'],['In','Indio',49,115,13,5,'g13'],['Tl','Talio',81,205,13,6,'g13']];
+const FAM={g1:['Grupo 1 · alcalinos','#1e6fd9'],g2:['Grupo 2 · alcalinotérreos','#b3264f'],fe:['Hierro, cobalto y níquel','#c0127e'],g13:['Grupo 13 · familia del boro','#2f9e5c']};
+const elOf=s=>EL.find(e=>e[0]===s);
+/* Mini tabla periódica con solo los elementos que entran, cada uno en su sitio */
+function miniTable(o={}){const cols=[1,2,8,9,10,13];let h='<div class="pt" role="group" aria-label="Tabla periódica: los elementos que entran">';
+ h+=`<div class="pth"></div>${cols.map(c=>`<div class="pth">${c}</div>`).join('')}`;
+ for(let p=1;p<=7;p++){h+=`<div class="pth">${p}</div>`;cols.forEach(c=>{const e=EL.find(x=>x[4]===c&&x[5]===p);
+  if(!e){h+='<div class="pe empty"></div>';return}
+  h+=`<button type="button" class="pe" data-s="${e[0]}" style="--c:${FAM[e[6]][1]}" ${o.tap?'':'tabindex="-1"'}><small>${e[2]}</small><b>${e[0]}</b>${o.names===false?'':`<i>${e[1]}</i>`}</button>`})}
+ return h+'</div>'}
+
+/* =================== DIBUJOS =================== */
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+const fr=(a,b,cls='')=>`<span class="frac ${cls}"><span>${a}</span><span>${b}</span></span>`;
+const x_=t=>`<s>${t}</s>`;
+const DR={
+triangulo:()=>({vb:'0 0 360 190',s:`<rect width="360" height="190" fill="#eef7f6"/>
+ <path d="M90 20 L160 160 L20 160Z" fill="#fff" stroke="#0b7a75" stroke-width="3"/><path d="M48 104 H132 M90 104 V160" stroke="#0b7a75" stroke-width="3"/>
+ ${T(90,90,'m','font-size="30" font-weight="800" fill="#c0127e"')}${T(62,146,'d','font-size="28" font-weight="800" fill="#1e6fd9"')}${T(118,146,'V','font-size="28" font-weight="800" fill="#2f9e5c"')}
+ ${T(90,180,'Tapa la que buscas','font-size="11" fill="#5d6b7a"')}
+ <g font-size="15" font-weight="700" fill="#1f2d3a"><text x="190" y="62">d = m : V</text><text x="190" y="102">m = d × V</text><text x="190" y="142">V = m : d</text></g>
+ <g font-size="10.5" fill="#5d6b7a"><text x="190" y="78">m arriba, entre V</text><text x="190" y="118">d y V juntas: se multiplican</text><text x="190" y="158">m arriba, entre d</text></g>`}),
+cubos:()=>({vb:'0 0 360 170',s:`<rect width="360" height="170" fill="#eef7f6"/>
+ <path d="M40 130 h280" stroke="#8a6d3b" stroke-width="4"/>
+ <g><path d="M70 70 h50 v50 h-50z" fill="#e8c88a" stroke="#8a6d3b" stroke-width="2"/><path d="M70 70 l14 -12 h50 l-14 12z M120 70 l14 -12 v50 l-14 12z" fill="#d9b36a" stroke="#8a6d3b" stroke-width="2"/>${T(100,100,'corcho','font-size="11" font-weight="700" fill="#5a4320"')}${T(100,150,'poca masa','font-size="11" fill="#5d6b7a"')}${T(100,164,'→ poca densidad','font-size="11" font-weight="700" fill="#0b7a75"')}</g>
+ <g><path d="M230 70 h50 v50 h-50z" fill="#8f97a3" stroke="#4a5260" stroke-width="2"/><path d="M230 70 l14 -12 h50 l-14 12z M280 70 l14 -12 v50 l-14 12z" fill="#6f7785" stroke="#4a5260" stroke-width="2"/>${T(260,100,'hierro','font-size="11" font-weight="700" fill="#fff"')}${T(260,150,'mucha masa','font-size="11" fill="#5d6b7a"')}${T(260,164,'→ mucha densidad','font-size="11" font-weight="700" fill="#0b7a75"')}</g>
+ ${T(180,30,'Mismo volumen, distinta masa','font-size="13" font-weight="800" fill="#1f2d3a"')}`}),
+materia:()=>{const leaf=(x,t,d,c,ico)=>`<rect x="${x-42}" y="118" width="84" height="56" rx="8" fill="#fff" stroke="${c}" stroke-width="2"/>${ico}${T(x,190,t,`font-size="11" font-weight="800" fill="${c}"`)}${T(x,203,d,'font-size="9" fill="#5d6b7a"')}`;
+ return{vb:'0 0 360 210',s:`<rect width="360" height="210" fill="#eef7f6"/>
+ <rect x="130" y="6" width="100" height="24" rx="12" fill="#1f2d3a"/>${T(180,22,'MATERIA','font-size="12" font-weight="800" fill="#fff"')}
+ <path d="M180 30 V40 M95 40 H265 M95 40 V52 M265 40 V52" stroke="#1f2d3a" stroke-width="2" fill="none"/>
+ <rect x="45" y="52" width="100" height="24" rx="12" fill="#d9822b"/>${T(95,68,'Mezclas','font-size="12" font-weight="800" fill="#fff"')}
+ <rect x="205" y="52" width="120" height="24" rx="12" fill="#0b7a75"/>${T(265,68,'Sustancias puras','font-size="12" font-weight="800" fill="#fff"')}
+ <path d="M95 76 V90 M52 90 H138 M52 90 V118 M138 90 V118 M265 76 V90 M222 90 H308 M222 90 V118 M308 90 V118" stroke="#1f2d3a" stroke-width="2" fill="none"/>
+ ${leaf(52,'Homogénea','no se ven','#d9822b',`<path d="M38 128 h28 l-3 38 h-22z" fill="#cfe6f7" stroke="#5d6b7a"/><path d="M40 140 h24 l-2 26 h-20z" fill="#a9d3f0"/>`)}
+ ${leaf(138,'Heterogénea','se ven a simple vista','#d9822b',`<path d="M124 128 h28 l-3 38 h-22z" fill="#cfe6f7" stroke="#5d6b7a"/><path d="M126 148 h24 l-2 18 h-20z" fill="#a9d3f0"/><path d="M125.5 140 h25 l-.6 8 h-23.8z" fill="#f2c94c"/>${[[132,158],[140,162],[146,156]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2" fill="#8a6d3b"/>`).join('')}`)}
+ ${leaf(222,'Elemento','no se descompone','#0b7a75',`<circle cx="222" cy="146" r="16" fill="#8f97a3" stroke="#4a5260" stroke-width="2"/>${T(222,151,'Fe','font-size="13" font-weight="800" fill="#fff"')}`)}
+ ${leaf(308,'Compuesto','se descompone','#0b7a75',`<circle cx="308" cy="146" r="12" fill="#e05a5a"/><circle cx="292" cy="158" r="7" fill="#fff" stroke="#5d6b7a"/><circle cx="324" cy="158" r="7" fill="#fff" stroke="#5d6b7a"/>${T(308,150,'O','font-size="11" font-weight="800" fill="#fff"')}${T(292,161,'H','font-size="8" font-weight="800" fill="#1f2d3a"')}${T(324,161,'H','font-size="8" font-weight="800" fill="#1f2d3a"')}`)}`}},
+atomo:()=>{let s=`<rect width="400" height="220" fill="#0f2233"/>`;
+ [[90,34,0],[90,34,60],[90,34,120]].forEach(([rx,ry,a])=>s+=`<ellipse cx="160" cy="110" rx="${rx}" ry="${ry}" fill="none" stroke="#5fd3c9" stroke-width="1.5" opacity=".7" transform="rotate(${a} 160 110)"/>`);
+ const N=[[-8,-6,'p'],[6,-8,'n'],[-2,6,'p'],[10,4,'n'],[-12,6,'n'],[2,-2,'p']];
+ N.forEach(([x,y,t])=>s+=`<circle cx="${160+x}" cy="${110+y}" r="7" fill="${t==='p'?'#e05a5a':'#b8c0cc'}" stroke="#0f2233"/>${t==='p'?T(160+x,114+y,'+','font-size="11" font-weight="800" fill="#fff"'):''}`);
+ [[250,110],[115,32],[115,188]].forEach(([x,y])=>s+=`<circle cx="${x}" cy="${y}" r="7" fill="#4aa3ff"/>${T(x,114+(y-110),'−','font-size="12" font-weight="800" fill="#fff"')}`);
+ s+=`<g font-size="12" fill="#fff"><text x="262" y="40" font-weight="800">NÚCLEO (dentro)</text><text x="262" y="56" fill="#ffb3b3">protones +</text><text x="262" y="71" fill="#d6dbe3">neutrones (sin carga)</text>
+  <text x="262" y="160" font-weight="800">CORTEZA (fuera)</text><text x="262" y="176" fill="#9fd0ff">electrones −</text><text x="262" y="191" fill="#d6dbe3" font-size="10.5">giran alrededor</text></g>
+  <path d="M258 52 L176 104" stroke="#fff" stroke-width="1" opacity=".6"/><path d="M258 168 L258 120" stroke="#fff" stroke-width="1" opacity=".6"/>`;
+ return{vb:'0 0 400 220',s}},
+notacion:()=>({vb:'0 0 360 170',s:`<rect width="360" height="170" fill="#eef7f6"/>
+ ${T(70,62,'40','font-size="26" font-weight="800" fill="#c0127e"')}${T(70,128,'20','font-size="26" font-weight="800" fill="#1e6fd9"')}${T(130,112,'Ca','font-size="64" font-weight="800" fill="#1f2d3a"')}
+ <path d="M90 54 H180" stroke="#c0127e" stroke-width="1.5"/><path d="M90 120 H180" stroke="#1e6fd9" stroke-width="1.5"/>
+ <g font-size="13"><text x="186" y="50" font-weight="800" fill="#c0127e">A = número másico</text><text x="186" y="66" fill="#1f2d3a">protones + neutrones</text>
+ <text x="186" y="116" font-weight="800" fill="#1e6fd9">Z = número atómico</text><text x="186" y="132" fill="#1f2d3a">protones (= electrones)</text></g>
+ ${T(180,160,'A arriba · Z abajo · a la izquierda del símbolo','font-size="11" fill="#5d6b7a"')}`}),
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg><figcaption>${label}</figcaption></figure>`}
+const FIG_FACTOR=`<figure class="ill" style="width:100%"><div class="txt calc">
+ <div class="row">60 ${fr(x_('km'),x_('h'))} · ${fr('1000 m','1 '+x_('km'),'fx')} · ${fr('1 '+x_('h'),'3600 s','fx')} = ${fr('60 · 1000 m','3600 s')} = <b>16,67 m/s</b></div></div>
+ <figcaption>Cada fracción vale 1 (1000 m = 1 km), así que no cambia la cantidad: solo la unidad. Las unidades tachadas se van.</figcaption></figure>`;
+const FIG_TABLA=()=>`<figure class="ill" style="width:100%">${miniTable()}<figcaption>Solo los elementos que entran, cada uno en su sitio. El número pequeño es Z.</figcaption></figure>`;
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'f1',t:1,n:'La densidad',s:'d = m / V y sus dos trucos',
+ idea:'La <b>densidad</b> dice cuánta <b>masa</b> hay en cada trozo de <b>volumen</b>. Se calcula dividiendo la masa entre el volumen.',
+ fig:()=>svgOf('triangulo','El triángulo de la densidad'),
+ b:[{k:'cards',h:'Las tres fórmulas',it:[['Densidad','d = m / V',C.az],['Masa','m = d × V',C.ro],['Volumen','V = m / d',C.ve]]},
+ {k:'cards',h:'Las unidades',it:[['Masa','gramos (g) o kilos (kg)',C.ro],['Volumen','cm³, dm³ o m³',C.ve],['Densidad','g/cm³ o kg/m³',C.az]]},
+ {k:'ej',h:'Ejemplo',t:'Masa = 30 g, volumen = 6 cm³ → d = 30 : 6 = <b>5 g/cm³</b>.<br>Al revés: si d = 5 g/cm³ y V = 6 cm³ → m = 5 × 6 = <b>30 g</b>.'},
+ {k:'html',h:'',t:()=>svgOf('cubos','Por qué el hierro pesa más que el corcho')}],
+ truco:'Tapa en el triángulo lo que buscas: si te queda una arriba y otra abajo, <b>divides</b>; si quedan las dos abajo, <b>multiplicas</b>.'},
+{id:'f2',t:1,n:'Cambio de unidades',s:'El factor de conversión, paso a paso',
+ idea:'Para cambiar de unidad se multiplica por <b>fracciones que valen 1</b> (como 1000 m / 1 km). La cantidad no cambia: solo cambia la unidad.',
+ fig:()=>FIG_FACTOR,
+ b:[{k:'steps',h:'Los 4 pasos',it:['Multiplica la cantidad por <b>tantas fracciones como unidades</b> quieras cambiar.','Pon la unidad que quieres quitar en el <b>lugar contrario</b> (si está arriba, abajo; si está abajo, arriba).','Pon un <b>1</b> en la unidad más grande y, en la otra, su equivalencia.','Multiplica y <b>tacha</b> las unidades que estén arriba y abajo a la vez.']},
+ {k:'ej',h:'Otro ejemplo',t:'30 m/s a km/h: 30 m/s · (1 km / 1000 m) · (3600 s / 1 h) = 30 · 3600 / 1000 = <b>108 km/h</b>.'},
+ {k:'ej',h:'El ejercicio de clase',t:'20 g/cm³ a dg/dm³: 20 · (10 dg / 1 g) · (1000 cm³ / 1 dm³) = <b>200.000 dg/dm³</b>. (Aquí cm³ está abajo, por eso 1000 cm³ va arriba.)'},
+ {k:'chips',h:'Equivalencias que conviene saber',it:['1 km = 1000 m','1 m = 100 cm','1 kg = 1000 g','1 g = 10 dg','1 h = 60 min = 3600 s','1 dm³ = 1000 cm³ = 1 L']}],
+ truco:'km/h a m/s: <b>divide entre 3,6</b>. m/s a km/h: <b>multiplica por 3,6</b>. Te sirve para comprobar el resultado.'},
+{id:'f3',t:1,n:'Clasificación de la materia',s:'Mezclas y sustancias puras',
+ idea:'Toda la materia es o una <b>mezcla</b> (varias sustancias juntas) o una <b>sustancia pura</b> (una sola sustancia).',
+ fig:()=>svgOf('materia','El árbol de la materia'),
+ b:[{k:'cards',h:'Mezclas',it:[['Qué son','Combinación de sustancias que se pueden <b>separar por procesos físicos</b> (filtrar, evaporar, imantar…).',C.na],['Homogéneas','<b>No</b> podemos distinguir los componentes. <i>Agua con sal disuelta, aire.</i>',C.na],['Heterogéneas','Se ven los componentes <b>a simple vista</b>. <i>Agua y aceite, arena y agua, granito.</i>',C.na]]},
+ {k:'cards',h:'Sustancias puras',it:[['Qué son','Materiales formados por <b>una sola sustancia</b>.',C.mo],['Elemento','<b>No</b> se puede descomponer en otras sustancias. Están en la <b>tabla periódica</b>. <i>Hierro, oxígeno, oro.</i>',C.mo],['Compuesto','<b>Sí</b> se puede descomponer en otras sustancias. <i>Agua (H₂O) → hidrógeno + oxígeno.</i>',C.mo]]}],
+ truco:'¿Se separa con métodos físicos? → <b>mezcla</b>. ¿Se ve a simple vista? → <b>heterogénea</b>. ¿Se puede romper en otras sustancias? → <b>compuesto</b>.'},
+{id:'f4',t:2,n:'Estructura del átomo',s:'Núcleo y corteza',
+ idea:'El átomo tiene dos partes: el <b>núcleo</b>, en el centro, y la <b>corteza</b>, alrededor.',
+ fig:()=>svgOf('atomo','Las partes del átomo'),
+ b:[{k:'cards',h:'Las partículas',it:[['Protones','En el <b>núcleo</b>. Carga <b>positiva (+)</b>.',C.ro],['Neutrones','En el <b>núcleo</b>. <b>Sin carga</b> (0).',C.gr],['Electrones','En la <b>corteza</b>. Carga <b>negativa (−)</b>. Se mueven alrededor del núcleo.',C.az]]},
+ {k:'ej',h:'Lo más importante',t:'Cada elemento tiene un número distinto de partículas, pero un átomo <b>siempre</b> tiene el <b>mismo número de protones que de electrones</b>. Por eso no tiene carga.'}],
+ truco:'<b>P</b>rotón = <b>P</b>ositivo. <b>N</b>eutrón = <b>N</b>eutro. Electrón = el que se queda fuera, en la corteza.'},
+{id:'f5',t:2,n:'Número atómico y número másico',s:'Z, A y cómo se calculan',
+ idea:'Con dos números sabemos todo de un átomo: <b>Z</b> (número atómico) y <b>A</b> (número másico).',
+ fig:()=>svgOf('notacion','Cómo se escribe un átomo'),
+ b:[{k:'cards',h:'Las fórmulas',it:[['Z','Z = protones = electrones = <b>su lugar en la tabla</b>.',C.az],['A','A = protones + neutrones.',C.ro],['Neutrones','n = A − Z.',C.gr]]},
+ {k:'ej',h:'Ejemplo: calcio',t:'Ca con A = 40 y Z = 20 → protones = <b>20</b>, electrones = <b>20</b>, neutrones = 40 − 20 = <b>20</b>.'},
+ {k:'ej',h:'Ejemplo: sodio',t:'Na con Z = 11 y 12 neutrones → A = 11 + 12 = <b>23</b>. Se escribe con el 23 arriba y el 11 abajo.'}],
+ truco:'A es el número <b>grande</b> y va <b>arriba</b>; Z es el <b>pequeño</b> y va <b>abajo</b>. Si te los dan cambiados, el grande siempre es A.'},
+{id:'f6',t:2,n:'La tabla periódica',s:'Los elementos que entran en el examen',
+ idea:'Los elementos se ordenan por su <b>número atómico (Z)</b>. Las columnas son <b>grupos</b> y las filas, <b>periodos</b>.',
+ fig:()=>FIG_TABLA(),
+ b:[{k:'cards',h:'Las familias que entran',it:[['Grupo 1','H hidrógeno · Li litio · Na sodio · K potasio · Rb rubidio · Cs cesio · Fr francio',C.az],['Grupo 2','Be berilio · Mg magnesio · Ca calcio · Sr estroncio · Ba bario · Ra radio',C.ro],['Fe, Co y Ni','Fe hierro (26) · Co cobalto (27) · Ni níquel (28)',C.mo],['Grupo 13','B boro · Al aluminio · Ga galio · In indio · Tl talio',C.ve]]},
+ {k:'chips',h:'Símbolos con trampa',it:['<b>Na</b> = sodio','<b>K</b> = potasio','<b>Fe</b> = hierro','<b>Cs</b> = cesio','<b>Sr</b> = estroncio','<b>Ra</b> = radio','<b>Tl</b> = talio (no Ti)']}],
+ truco:'Los símbolos que no se parecen al nombre vienen del latín: <b>Na</b> sodio (natrium), <b>K</b> potasio (kalium) y <b>Fe</b> hierro (ferrum).'},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ if(B.k==='steps')return`<section class="blk">${h}<ol class="steps">${B.it.map(x=>`<li><span>${x}</span></li>`).join('')}</ol></section>`;
+ if(B.k==='html')return B.t();
+ return''}).join('')}
+const CHULETA=[['Densidad','d = m / V · m = d × V · V = m / d. Unidades: g/cm³.',C.az],['Factor de conversión','Multiplica por fracciones que valen 1 y tacha unidades. km/h ÷ 3,6 = m/s.',C.az],['Mezclas','Homogéneas (no se ven los componentes) y heterogéneas (sí se ven).',C.na],['Sustancias puras','Elementos (no se descomponen) y compuestos (sí, como el agua).',C.na],['Átomo','Núcleo: protones + y neutrones. Corteza: electrones −. Protones = electrones.',C.ro],['Z y A','Z = protones = electrones. A = protones + neutrones. n = A − Z.',C.ro],['Tabla','Grupo 1, grupo 2, Fe-Co-Ni y grupo 13: símbolo y nombre.',C.ve]];
+
+const QB={
+f1:[['t','¿Cuál es la fórmula de la densidad?','d = m / V',['d = m × V','d = V / m','d = m + V'],'Masa entre volumen.'],
+ ['t','Un objeto tiene 30 g de masa y 6 cm³ de volumen. ¿Su densidad?','5 g/cm³',['180 g/cm³','36 g/cm³','0,2 g/cm³'],'30 : 6 = 5.'],
+ ['t','Si sabes la densidad y el volumen, ¿cómo calculas la masa?','m = d × V',['m = d / V','m = V / d','m = d + V'],'Se multiplican.'],
+ ['t','Si sabes la masa y la densidad, ¿cómo calculas el volumen?','V = m / d',['V = m × d','V = d / m','V = d − m'],'Masa entre densidad.'],
+ ['t','Densidad 4 g/cm³ y volumen 5 cm³. ¿Masa?','20 g',['0,8 g','1,25 g','9 g'],'4 × 5 = 20 g.'],
+ ['t','Masa 40 g y densidad 8 g/cm³. ¿Volumen?','5 cm³',['320 cm³','0,2 cm³','48 cm³'],'40 : 8 = 5 cm³.'],
+ ['t','¿En qué unidad puede expresarse la densidad?','g/cm³',['cm³','g','m/s'],'Masa entre volumen: g/cm³ o kg/m³.'],
+ ['v','Dos objetos con el mismo volumen tienen siempre la misma masa.',false,'Falso: depende de su densidad (corcho y hierro).']],
+f2:[['t','¿Qué valor tiene una fracción como 1000 m / 1 km?','1',['1000','0,001','Depende'],'Arriba y abajo hay lo mismo: por eso no cambia la cantidad.'],
+ ['t','Para pasar km a m, ¿qué fracción usas?','1000 m / 1 km',['1 km / 1000 m','100 m / 1 km','1 m / 1000 km'],'Los km van abajo para tacharlos.'],
+ ['t','¿Dónde colocas la unidad que quieres cambiar?','En el lugar contrario de la fracción',['En el mismo lugar','Siempre arriba','No se escribe'],'Así se tacha.'],
+ ['t','¿Dónde va el 1 en la fracción?','En la unidad más grande',['En la unidad más pequeña','Siempre arriba','Siempre abajo'],'1 km = 1000 m.'],
+ ['t','60 km/h, ¿cuántos m/s son?','16,67 m/s',['216 m/s','1,67 m/s','60.000 m/s'],'60 · 1000 / 3600 = 16,67.'],
+ ['t','30 m/s, ¿cuántos km/h son?','108 km/h',['8,33 km/h','30.000 km/h','1,8 km/h'],'30 · 3600 / 1000 = 108.'],
+ ['t','¿Cuántos segundos tiene una hora?','3600',['60','1000','360'],'60 min × 60 s.'],
+ ['t','20 g/cm³, ¿cuántos dg/dm³ son?','200.000 dg/dm³',['2.000 dg/dm³','200 dg/dm³','0,2 dg/dm³'],'20 · 10 · 1000.'],
+ ['v','1 dm³ es lo mismo que 1000 cm³.',true,'Verdadero (y también 1 litro).']],
+f3:[['t','¿Qué es una mezcla?','Una combinación de sustancias que se pueden separar por procesos físicos',['Una sola sustancia','Algo que no se puede separar','Un elemento de la tabla'],'Se separan filtrando, evaporando…'],
+ ['t','¿Qué es una mezcla homogénea?','Una mezcla en la que no se distinguen los componentes',['Una mezcla en la que se ven los componentes','Un elemento','Un compuesto'],'Por ejemplo, agua con sal disuelta.'],
+ ['t','Agua y aceite es…','Una mezcla heterogénea',['Una mezcla homogénea','Un elemento','Un compuesto'],'Se ven las dos capas.'],
+ ['t','¿Qué es una sustancia pura?','Un material formado por una sola sustancia',['Una mezcla de dos cosas','Cualquier líquido','Algo sin masa'],'Puede ser elemento o compuesto.'],
+ ['t','¿Qué es un elemento?','Una sustancia que no se puede descomponer en otras',['Una mezcla homogénea','Algo que se puede descomponer','Un compuesto de dos átomos distintos'],'Están en la tabla periódica.'],
+ ['t','El agua (H₂O) es…','Un compuesto',['Un elemento','Una mezcla heterogénea','Una mezcla homogénea'],'Se puede descomponer en hidrógeno y oxígeno.'],
+ ['t','El hierro (Fe) es…','Un elemento',['Un compuesto','Una mezcla','Una disolución'],'Está en la tabla periódica.'],
+ ['t','Arena con agua es…','Una mezcla heterogénea',['Una mezcla homogénea','Un compuesto','Un elemento'],'La arena se ve a simple vista.']],
+f4:[['t','¿Qué partículas hay en el núcleo?','Protones y neutrones',['Electrones','Solo protones','Protones y electrones'],'Los electrones están en la corteza.'],
+ ['t','¿Qué carga tiene el protón?','Positiva (+)',['Negativa (−)','Ninguna','Depende del átomo'],'P de positivo.'],
+ ['t','¿Qué carga tiene el neutrón?','Ninguna',['Positiva','Negativa','Doble'],'Es neutro.'],
+ ['t','¿Dónde están los electrones?','En la corteza, moviéndose alrededor del núcleo',['En el núcleo','Dentro de los protones','No existen'],'La corteza es la parte externa.'],
+ ['t','¿Qué carga tiene el electrón?','Negativa (−)',['Positiva (+)','Ninguna','Positiva y negativa'],'Se representa con un −.'],
+ ['t','En un átomo, siempre hay el mismo número de…','Protones que de electrones',['Protones que de neutrones','Neutrones que de electrones','Átomos que de moléculas'],'Por eso el átomo no tiene carga.'],
+ ['v','El núcleo es la parte externa del átomo.',false,'Falso: el núcleo es la parte interna; la corteza, la externa.']],
+f5:[['t','¿Qué es Z?','El número de protones (número atómico)',['Protones + neutrones','El número de neutrones','La masa en gramos'],'También es el número de electrones.'],
+ ['t','¿Qué es A?','Protones + neutrones (número másico)',['Solo protones','Solo electrones','Protones − neutrones'],'A = p + n.'],
+ ['t','¿Cómo calculas los neutrones?','n = A − Z',['n = A + Z','n = Z − A','n = Z'],'Másico menos atómico.'],
+ ['t','Un átomo tiene Z = 12 y A = 24. ¿Cuántos neutrones?','12',['24','36','2'],'24 − 12 = 12.'],
+ ['t','Un átomo tiene 11 protones y 12 neutrones. ¿Cuánto vale A?','23',['11','12','1'],'11 + 12 = 23.'],
+ ['t','El calcio tiene Z = 20. ¿Cuántos electrones tiene?','20',['40','10','0'],'Electrones = protones = Z.'],
+ ['t','¿Dónde se escribe A al lado del símbolo?','Arriba a la izquierda',['Abajo a la izquierda','Abajo a la derecha','No se escribe'],'Z va abajo.'],
+ ['t','¿Qué indica Z en la tabla periódica?','El lugar (orden) del elemento',['Su color','Su densidad','Su grupo'],'Los elementos se ordenan por Z.']],
+f6:[['t','¿Cuál es el símbolo del sodio?','Na',['S','So','Sd'],'Viene del latín natrium.'],
+ ['t','¿Cuál es el símbolo del potasio?','K',['P','Po','Pt'],'Viene del latín kalium.'],
+ ['t','¿Qué elemento es Fe?','Hierro',['Flúor','Fósforo','Francio'],'Del latín ferrum.'],
+ ['t','¿Qué elemento es Sr?','Estroncio',['Azufre','Sodio','Selenio'],'Está en el grupo 2.'],
+ ['t','¿Qué elementos forman el grupo 13 que entra?','B, Al, Ga, In, Tl',['Li, Na, K, Rb, Cs','Be, Mg, Ca, Sr, Ba','Fe, Co, Ni'],'La familia del boro.'],
+ ['t','¿En qué grupo está el magnesio (Mg)?','Grupo 2',['Grupo 1','Grupo 13','Con Fe y Co'],'Los alcalinotérreos.'],
+ ['t','¿Qué número atómico tiene el hierro?','26',['27','28','56'],'Co es 27 y Ni es 28.'],
+ ['t','¿Qué símbolo tiene el talio?','Tl',['Ti','Ta','Tal'],'Ti es el titanio, que no entra.'],
+ ['t','¿Qué elemento abre el grupo 1?','Hidrógeno (H)',['Helio (He)','Litio (Li)','Berilio (Be)'],'Encima del litio.'],
+ ['v','Los elementos de la tabla están ordenados por su número atómico (Z).',true,'Verdadero.']]};
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='lab-fq-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'La materia y sus medidas'],[2,'El átomo y la tabla periódica']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente!':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de Física y Química</h2><p>15 preguntas de todas las fichas, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),1)));list.push(...wpick(QS.filter(q=>!list.includes(q)),9));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'den',ico:'d = m/V',n:'Problemas de densidad',d:'Calcula la densidad, la masa o el volumen.',best:v=>v+' de 8'},
+{id:'fac',ico:'1000 m / 1 km',n:'Factor de conversión',d:'Elige la fracción correcta y calcula el cambio de unidad.',best:v=>v+' de 8'},
+{id:'tab',ico:'Z · A',n:'Completa el átomo',d:'Protones, neutrones y electrones a partir de Z y A, como en tu tabla.',best:v=>v+' de 8'},
+{id:'mon',ico:'+ − 0',n:'Monta el átomo',d:'Pon los protones, neutrones y electrones que tocan.',best:v=>v+' de 6'},
+{id:'bus',ico:'Tabla',n:'Encuentra en la tabla',d:'Toca el elemento que te pido en la tabla periódica.',best:v=>v+' de 8'},
+{id:'une',ico:'Na ↔ sodio',n:'Símbolos y nombres',d:'Une cada símbolo con su elemento.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Clasifica contra reloj',d:'Mezclas y sustancias, partículas del átomo y familias de la tabla.',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({den:gDen,fac:gFac,tab:gTab,mon:gMon,bus:gBus,une:gUne,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const nf=n=>Number(n).toLocaleString('es-ES',{maximumFractionDigits:2});
+function parseNum(s){s=String(s).replace(/\s/g,'');if(!s)return null;if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return /^-?\d+(\.\d+)?$/.test(s)?parseFloat(s):NaN}
+const same=(v,a)=>Math.abs(v-a)<=Math.max(.011,Math.abs(a)*1e-6);
+const hover=()=>window.matchMedia&&matchMedia('(hover:hover)').matches;
+/* Motor de preguntas con respuesta numérica (una o varias casillas) */
+function numGame(id,title,n,make,tip,again,note=''){let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${title}</span></div><div id="pb"></div>${note}<div id="body"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{if(k>=n){const b=setBest(id,good,false);$('#body').innerHTML='';$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}${tip}`,again);return}
+  const q=make(k);$('#pb').innerHTML=pbar(n,res,k);let tries=0;
+  $('#body').innerHTML=`<p class="q">${q.q}</p><div class="fields">${q.f.map((f,i)=>`<label class="numrow"><span class="lab">${f.l}</span><input data-i="${i}" inputmode="decimal" autocomplete="off" aria-label="${esc(f.l.replace(/<[^>]+>/g,''))}"><span class="unit">${f.u||''}</span></label>`).join('')}</div><div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p>`;
+  const ins=[...$('#body').querySelectorAll('input')];if(hover())ins[0].focus();
+  const check=()=>{const vals=ins.map(i=>parseNum(i.value));if(vals.some(v=>v===null||Number.isNaN(v))){$('#fb').className='fb ko';$('#fb').textContent=q.f.length>1?'Rellena todas las casillas con números.':'Escribe un número.';return}
+   tries++;const oks=vals.map((v,i)=>same(v,q.f[i].a));ins.forEach((inp,i)=>inp.className=oks[i]?'ok':'ko');const all=oks.every(Boolean);
+   if(all||tries>=2){ins.forEach(i=>i.disabled=true);const win=all&&tries===1;if(win)good++;res.push(win);$('#fb').className='fb '+(all?'okk':'ko');
+    $('#fb').innerHTML=(all?'¡Bien! ':'La solución: '+q.f.map(f=>`${f.l.replace(/<[^>]+>/g,'')} = ${nf(f.a)}${f.u?' '+f.u:''}`).join(' · ')+'. ')+(q.exp||'');
+    $('#chk').outerHTML=`<button class="primary" id="nx" type="button">${k===n-1?'Ver resultado':'Siguiente'}</button>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})}
+   else{$('#fb').className='fb ko';$('#fb').innerHTML=(q.hint?q.hint(vals,oks):'')||'Revisa las casillas en rosa e inténtalo otra vez.'}};
+  $('#chk').onclick=check;ins.forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#chk'))check()}))};draw()}
+
+/* 1. Densidad */
+const OBJ=['un objeto','una pieza de metal','un bloque','una bola','un cilindro','un mineral','una figura','un trozo de material'];
+function denQ(k){const d=pick([2,3,4,5,6,7,8,9,10]),V=pick([2,3,4,5,6,8,10,12,15,20]),m=d*V,o=pick(OBJ);const t=['d','m','V'][k%3];
+ if(t==='d')return{q:`La masa de ${o} es <b>${m} g</b> y su volumen es <b>${V} cm³</b>. ¿Cuál es su densidad?`,f:[{l:'d',u:'g/cm³',a:d}],exp:`d = m / V = ${m} : ${V} = ${d} g/cm³.`,hint:v=>same(v[0],m*V)?'Has multiplicado: para la densidad hay que <b>dividir</b> la masa entre el volumen.':same(v[0],V/m)?'Has dividido al revés: es <b>masa entre volumen</b>.':''};
+ if(t==='m')return{q:`La densidad de ${o} es <b>${d} g/cm³</b> y su volumen es <b>${V} cm³</b>. ¿Cuál es su masa?`,f:[{l:'m',u:'g',a:m}],exp:`m = d × V = ${d} × ${V} = ${m} g.`,hint:v=>same(v[0],d/V)||same(v[0],V/d)?'Para la masa hay que <b>multiplicar</b> densidad por volumen.':''};
+ return{q:`La masa de ${o} es <b>${m} g</b> y su densidad es <b>${d} g/cm³</b>. ¿Cuál es su volumen?`,f:[{l:'V',u:'cm³',a:V}],exp:`V = m / d = ${m} : ${d} = ${V} cm³.`,hint:v=>same(v[0],m*d)?'Has multiplicado: el volumen es <b>masa entre densidad</b>.':same(v[0],d/m)?'Al revés: es <b>masa entre densidad</b>.':''}}
+function gDen(){numGame('den','Problemas de densidad',8,denQ,'Tapa en el triángulo lo que buscas: m arriba, d y V abajo.',gDen,'<p class="note">Recuerda: d = m / V · m = d × V · V = m / d</p>')}
+
+/* 2. Factor de conversión */
+const CONV=[
+ {de:'km/h',a:'m/s',vals:[18,36,54,72,90,108],f:v=>v/3.6,fac:[['1000 m','1 km','km'],['1 h','3600 s','h']]},
+ {de:'m/s',a:'km/h',vals:[5,10,15,20,25,30],f:v=>v*3.6,fac:[['1 km','1000 m','m'],['3600 s','1 h','s']]},
+ {de:'kg',a:'g',vals:[2,3,5,2.5,0.5],f:v=>v*1000,fac:[['1000 g','1 kg','kg']]},
+ {de:'g',a:'kg',vals:[500,750,1500,2000,250],f:v=>v/1000,fac:[['1 kg','1000 g','g']]},
+ {de:'h',a:'s',vals:[2,3,5],f:v=>v*3600,fac:[['3600 s','1 h','h']]},
+ {de:'min',a:'s',vals:[2,5,10,15],f:v=>v*60,fac:[['60 s','1 min','min']]},
+ {de:'km',a:'m',vals:[3,7,12,0.5],f:v=>v*1000,fac:[['1000 m','1 km','km']]},
+ {de:'cm',a:'m',vals:[200,350,1200,50],f:v=>v/100,fac:[['1 m','100 cm','cm']]},
+ {de:'dm³',a:'cm³',vals:[2,3,5,0.5],f:v=>v*1000,fac:[['1000 cm³','1 dm³','dm³']]},
+ {de:'g/cm³',a:'dg/dm³',vals:[2,3,5],f:v=>v*10000,fac:[['10 dg','1 g','g'],['1000 cm³','1 dm³','cm³']]}];
+const ALT={'1000':'100','3600':'60','60':'100','100':'10','10':'100'};
+const altF=([a,b])=>{const sw=s=>s.replace(/^[\d.]+/,x=>ALT[x]||x);return a.startsWith('1 ')?[a,sw(b)]:[sw(a),b]};
+function gFac(){let k=0,good=0;const res=[];const n=8;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Factor de conversión</span></div><div id="pb"></div><div id="body"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{if(k>=n){const b=setBest('fac',good,false);$('#body').innerHTML='';$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}La unidad que quieres quitar va en el lugar contrario, y el 1 en la unidad más grande.`,gFac);return}
+  $('#pb').innerHTML=pbar(n,res,k);const c=pick(CONV),v=pick(c.vals),ans=Math.round(c.f(v)*100)/100;const chain=c.fac.map(f=>fr(f[0],f[1])).join(' · ');
+  if(k%2===0){const fi=Math.floor(Math.random()*c.fac.length),F=c.fac[fi];const opts=shuffle([F,[F[1],F[0]],altF(F),altF([F[1],F[0]])].filter((x,i,a)=>a.findIndex(y=>y[0]===x[0]&&y[1]===x[1])===i));
+   $('#body').innerHTML=`<p class="q">Quieres pasar <b>${nf(v)} ${c.de}</b> a <b>${c.a}</b>. ¿Qué fracción usas para cambiar los <b>${F[2]}</b>?</p><div class="opts grid" id="opts">${opts.map((o,i)=>`<button class="opt fopt" type="button" data-i="${i}">${fr(o[0],o[1])}</button>`).join('')}</div><p class="fb" id="fb" role="status"></p><div id="nxw"></div>`;
+   let tries=0,done=false;$('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;tries++;const o=opts[+b.dataset.i];const ok=o[0]===F[0]&&o[1]===F[1];
+    if(ok||tries>=2){done=true;$('#opts').querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(opts[j][0]===F[0]&&opts[j][1]===F[1])x.classList.add('right')});if(!ok)b.classList.add('wrong');const win=ok&&tries===1;if(win)good++;res.push(win);
+     $('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Bien! ':''}${nf(v)} ${c.de} · ${chain} = <b>${nf(ans)} ${c.a}</b>`;$('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===n-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})}
+    else{b.classList.add('wrong');b.disabled=true;$('#fb').className='fb ko';$('#fb').textContent=o[1].endsWith(' '+F[2])?'Los números no son la equivalencia correcta.':`Así los ${F[2]} no se tachan: tienen que ir en el lugar contrario.`}})}
+  else{$('#body').innerHTML=`<p class="q">Pasa <b>${nf(v)} ${c.de}</b> a <b>${c.a}</b>.</p><div class="txt calc"><div class="row">${nf(v)} ${c.de} · ${chain} = ?</div></div><label class="numrow"><input id="ans" inputmode="decimal" autocomplete="off" aria-label="Respuesta"><span class="unit">${c.a}</span></label><div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p>`;
+   const inp=$('#ans');if(hover())inp.focus();let tries=0;
+   const check=()=>{const x=parseNum(inp.value);if(x===null||Number.isNaN(x)){$('#fb').className='fb ko';$('#fb').textContent='Escribe un número.';return}tries++;const ok=same(x,ans);
+    if(ok||tries>=2){inp.disabled=true;inp.className=ok?'ok':'ko';const win=ok&&tries===1;if(win)good++;res.push(win);$('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Bien! ':'Era '+nf(ans)+' '+c.a+'. '}`;$('#chk').outerHTML=`<button class="primary" id="nx" type="button">${k===n-1?'Ver resultado':'Siguiente'}</button>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})}
+    else{inp.className='ko';$('#fb').className='fb ko';$('#fb').textContent=same(x*1000*1000,ans)||same(x/1000/1000,ans)||same(x*1e6,ans)?'Revisa: has puesto alguna fracción al revés.':'No es correcto. Multiplica los de arriba y divide entre los de abajo.'}};
+   $('#chk').onclick=check;inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#chk'))check()})}};draw()}
+
+/* 3. Completa el átomo */
+const notation=e=>`<span class="nota"><span class="na"><sup>${e[3]}</sup><sub>${e[2]}</sub></span><b>${e[0]}</b></span>`;
+function tabQ(k){const e=pick(EL),p=e[2],nn=e[3]-e[2];
+ if(k%2===0)return{q:`${notation(e)} <span class="note">(${e[1]})</span><br>¿Cuántos protones, neutrones y electrones tiene?`,f:[{l:'protones',a:p},{l:'neutrones',a:nn},{l:'electrones',a:p}],exp:`p = e = Z = ${p}; n = A − Z = ${e[3]} − ${p} = ${nn}.`,hint:(v,o)=>!o[1]&&same(v[1],e[3])?'Los neutrones no son A: son <b>A − Z</b>.':!o[1]&&same(v[1],e[3]+p)?'Para los neutrones se <b>resta</b>: A − Z.':''};
+ return{q:`Un átomo de <b>${e[1]}</b> tiene <b>${p} protones</b> y <b>${nn} neutrones</b>. ¿Cuánto valen Z y A?`,f:[{l:'Z',a:p},{l:'A',a:e[3]}],exp:`Z = protones = ${p}; A = p + n = ${p} + ${nn} = ${e[3]}.`,hint:(v,o)=>!o[1]&&same(v[1],nn-p)||!o[1]&&same(v[1],p-nn)?'A es la <b>suma</b>: protones + neutrones.':''}}
+function gTab(){numGame('tab','Completa el átomo',8,tabQ,'Z = protones = electrones. A = protones + neutrones. Neutrones = A − Z.',gTab,'<p class="note">El número de arriba es A; el de abajo, Z.</p>')}
+
+/* 4. Monta el átomo */
+const MON=[['H',1,0],['Li',3,4],['Be',4,5],['B',5,6],['Na',11,12],['Mg',12,12],['Al',13,14]];
+function atomSVG(p,n,e){let s=`<rect width="300" height="220" fill="#0f2233"/>`;const cx=150,cy=110;
+ [[44],[78]].forEach(([r])=>s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#5fd3c9" stroke-width="1.2" opacity=".5"/>`);if(e>10)s+=`<circle cx="${cx}" cy="${cy}" r="102" fill="none" stroke="#5fd3c9" stroke-width="1.2" opacity=".5"/>`;
+ const parts=[];{let a=p,b=n;while(a||b){if(a){parts.push('p');a--}if(b){parts.push('n');b--}}}
+ parts.forEach((t,i)=>{const a=i*2.4,r=i===0?0:4.2*Math.sqrt(i)+2;const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${t==='p'?'#e05a5a':'#b8c0cc'}" stroke="#0f2233" stroke-width="1"/>`});
+ const shells=[2,8,8];let left=e;[44,78,102].forEach((r,si)=>{const k=Math.min(left,shells[si]);left-=k;for(let j=0;j<k;j++){const a=j/k*Math.PI*2-Math.PI/2;s+=`<circle cx="${(cx+r*Math.cos(a)).toFixed(1)}" cy="${(cy+r*Math.sin(a)).toFixed(1)}" r="5.5" fill="#4aa3ff"/>`}});
+ return`<svg viewBox="0 0 300 220" role="img" aria-label="Átomo con ${p} protones, ${n} neutrones y ${e} electrones">${s}</svg>`}
+function gMon(){const R_=shuffle(MON).slice(0,6);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Monta el átomo</span></div><div id="pb"></div><p class="prompt" id="q"></p><div class="atomview" id="av"></div><div class="ctr" id="ctr"></div><div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ let c={p:0,n:0,e:0},tries=0,done=false,cur;
+ const view=()=>{$('#av').innerHTML=atomSVG(c.p,c.n,c.e);$('#ctr').innerHTML=[['p','Protones','#e05a5a','+'],['n','Neutrones','#8a94a3','0'],['e','Electrones','#4aa3ff','−']].map(([k2,t,col,sg])=>`<div class="cnt"><span class="dotc" style="background:${col}">${sg}</span><b>${t}</b><button type="button" class="ghost sm" data-k="${k2}" data-d="-1" aria-label="Quitar ${t.toLowerCase()}">−</button><output>${c[k2]}</output><button type="button" class="ghost sm" data-k="${k2}" data-d="1" aria-label="Añadir ${t.toLowerCase()}">+</button></div>`).join('');
+  $('#ctr').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(done)return;c[b.dataset.k]=Math.max(0,Math.min(30,c[b.dataset.k]+ +b.dataset.d));view()})};
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('mon',good,false);$('#q').textContent='';$('#av').innerHTML='';$('#ctr').innerHTML='';$('#chk').hidden=true;$('#fb').textContent='';$('#pb').innerHTML=pbar(6,res,99);endG(`${good} de 6`,`${b?'¡Nueva mejor marca! ':''}Protones = electrones = Z. Neutrones = A − Z.`,gMon);return}
+  cur=R_[k];const e=elOf(cur[0]);c={p:0,n:0,e:0};tries=0;done=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(6,res,k);
+  $('#q').innerHTML=`Monta un átomo de <b>${e[1]}</b>: ${notation(e)}`;$('#fb').textContent='';view()};
+ $('#chk').onclick=()=>{if(done)return;tries++;const want={p:cur[1],n:cur[2],e:cur[1]};const bad=['p','n','e'].filter(x=>c[x]!==want[x]);
+  if(!bad.length||tries>=2){done=true;const win=!bad.length&&tries===1;if(win)good++;res.push(win);if(bad.length){c=want;view()}$('#fb').className='fb '+(bad.length?'ko':'okk');$('#fb').innerHTML=`${bad.length?'Así es como queda: ':'¡Átomo perfecto! '}${want.p} protones, ${want.n} neutrones y ${want.e} electrones.`;
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R_.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})}
+  else{const N={p:'protones',n:'neutrones',e:'electrones'};$('#fb').className='fb ko';$('#fb').textContent=`Revisa los ${bad.map(x=>N[x]).join(' y los ')}. Una oportunidad más.`}};
+ draw()}
+
+/* 5. Encuentra en la tabla */
+function gBus(){const R_=shuffle(EL).slice(0,8);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Encuentra en la tabla</span></div><div id="pb"></div><p class="prompt" id="q"></p><div id="tb">${miniTable({tap:true,names:false})}</div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ let tries=0,done=false;
+ const draw=()=>{$('#tb').querySelectorAll('.pe').forEach(x=>x.classList.remove('okk','ko'));if(k>=R_.length){const b=setBest('bus',good,false);$('#q').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${b?'¡Nueva mejor marca! ':''}Grupo 1 y 2 a la izquierda, Fe-Co-Ni en el centro y el grupo 13 a la derecha.`,gBus);return}
+  const e=R_[k];tries=0;done=false;$('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';$('#q').innerHTML=k%3===2?`Toca el elemento con <b>Z = ${e[2]}</b>`:`Toca el <b>${e[1].toLowerCase()}</b>`};
+ $('#tb').querySelectorAll('.pe:not(.empty)').forEach(b=>b.onclick=()=>{if(done||k>=R_.length)return;const e=R_[k];tries++;
+  if(b.dataset.s===e[0]){done=true;b.classList.add('okk');if(tries===1)good++;res.push(tries===1);$('#fb').className='fb okk';$('#fb').textContent=`¡Bien! ${e[0]} = ${e[1]}, Z = ${e[2]}.`;k++;setTimeout(draw,1100)}
+  else{const o=elOf(b.dataset.s);b.classList.add('ko');setTimeout(()=>b.classList.remove('ko'),700);$('#fb').className='fb ko';$('#fb').textContent=`Ese es el ${o[1].toLowerCase()} (${o[0]}).${tries<2?' Prueba otra vez.':''}`;
+   if(tries>=2){done=true;res.push(false);$('#tb').querySelector(`[data-s="${e[0]}"]`).classList.add('okk');k++;setTimeout(draw,2000)}}});draw()}
+
+/* 6. Símbolos y nombres */
+function gUne(){let round=0,err=0;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Símbolos y nombres</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Ojo con Na (sodio), K (potasio) y Fe (hierro).`,gUne);return}
+  const pairs=shuffle(EL).slice(0,6).map(e=>[e[0],e[1]]);$('#q').innerHTML=`Ronda ${round+1} de 2: toca un símbolo y luego su nombre.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt sym" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca un símbolo de la izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};play()}
+
+/* 7. Clasifica contra reloj */
+const DECKS={
+mat:{n:'La materia',c:['Mezcla homogénea','Mezcla heterogénea','Elemento','Compuesto'],it:[['Agua con sal disuelta',0],['Aire',0],['Agua con azúcar disuelta',0],['No se distinguen los componentes',0],['Agua y aceite',1],['Arena y agua',1],['Granito',1],['Ensalada',1],['Se ven los componentes a simple vista',1],['Hierro (Fe)',2],['Oxígeno (O₂)',2],['Oro (Au)',2],['Aluminio (Al)',2],['No se puede descomponer en otras sustancias',2],['Agua (H₂O)',3],['Dióxido de carbono (CO₂)',3],['Sal común (NaCl)',3],['Se puede descomponer en otras sustancias',3]]},
+par:{n:'Partículas del átomo',c:['Protón','Neutrón','Electrón'],it:[['Carga positiva (+)',0],['Su número es Z',0],['Está en el núcleo y tiene carga',0],['Sin carga',1],['Se calcula con A − Z',1],['Está en el núcleo y no tiene carga',1],['Carga negativa (−)',2],['Está en la corteza',2],['Se mueve alrededor del núcleo',2],['En un átomo hay tantos como protones',2]]},
+fam:{n:'Familias de la tabla',c:['Grupo 1','Grupo 2','Fe · Co · Ni','Grupo 13'],it:EL.map(e=>[`${e[1]} (${e[0]})`,{g1:0,g2:1,fe:2,g13:3}[e[6]]])}};
+function gCla(){let dk='mat';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length===3?'three':'grid'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Química experta',()=>ST.every(s=>S.stars[s.id]===3)],['Reina de la densidad',()=>(S.games.den||0)>=7],['Conversora',()=>(S.games.fac||0)>=7],['Átomos perfectos',()=>(S.games.tab||0)>=7],['Constructora de átomos',()=>(S.games.mon||0)>=5],['La tabla en la cabeza',()=>(S.games.bus||0)>=7],['Rápida como un electrón',()=>(S.games.cla||0)>=25],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>
