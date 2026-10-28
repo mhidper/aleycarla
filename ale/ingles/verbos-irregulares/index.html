@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verbos Irregulares</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Verbos Irregulares: misma familia que las otras apps (cuaderno cuadriculado, sellos B/M, estrellas). Acento azul tinta. */
+:root{
+  --bg:#eeecf6; --paper:#fdfdfb; --grid:#e6e3f1; --ink:#1f1d3a; --muted:#5d5a7a; --line:#d6d2e6;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --lit:#3b4cc0;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#9aa8ff; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#9aa8ff; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--lit)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--lit);color:var(--lit)}
+.dot.done{background:var(--lit);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+/* Chuleta */
+.chuleta{border:2px solid var(--lit)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--lit);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+/* Fichas en cajas */
+.idea{margin:0;background:var(--paper);border:2px solid var(--lit);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--lit);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--lit);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--lit);color:var(--paper);font:800 .9rem var(--f-display);display:grid;place-items:center}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+/* Textos de ejemplo */
+.txt{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;font-size:1.05rem;line-height:1.7;margin:0;width:100%}
+.txt .hl{border-radius:4px;padding:1px 3px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem;color:var(--muted);justify-content:center}.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px}
+.poem{font-size:1.1rem;line-height:1.8}.poem .r{font-weight:700;border-bottom:3px solid var(--c)}.poem small{color:var(--muted);font-size:.8rem;margin-left:8px;font-weight:700}
+.stage .pn{font-weight:800;letter-spacing:.04em}.stage .ac{font-style:italic;color:var(--muted)}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.quote{font:400 1.12rem var(--f-body);background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;margin:0;font-style:italic}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.scene{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 14px;line-height:2;font-size:1.05rem}
+.scene [data-k]{cursor:pointer;border-radius:5px;padding:1px 2px}.scene [data-k]:hover{background:var(--grid)}
+.scene .pn{font-weight:800;letter-spacing:.04em}.scene .ac{font-style:italic;color:var(--muted)}
+.scene .okk{background:var(--ok-soft)!important;outline:2px solid var(--ok)}.scene .ko{background:var(--marker-soft)!important}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--lit);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+/* Física y Química */
+.pt{display:grid;grid-template-columns:22px repeat(6,minmax(0,1fr));gap:4px;width:100%;max-width:560px}
+.pth{font-size:.72rem;color:var(--muted);font-weight:700;display:grid;place-items:center}
+.pe{border:2px solid var(--c);background:var(--paper);background:color-mix(in srgb,var(--c) 14%,var(--paper));color:var(--ink);border-radius:8px;padding:3px 2px 4px;display:flex;flex-direction:column;align-items:center;font:inherit;min-height:52px;cursor:default;min-width:0}
+.pe small{font-size:.66rem;color:var(--muted);line-height:1;align-self:flex-start;padding-left:3px}.pe b{font:800 1.12rem var(--f-display);line-height:1.1}.pe i{font-style:normal;font-size:.6rem;color:var(--muted);line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pe.empty{border:1px dashed var(--line);background:transparent}
+#tb .pe:not(.empty){cursor:pointer}.pe.okk{background:var(--ok-soft);border-color:var(--ok);outline:3px solid var(--ok)}.pe.ko{background:var(--marker-soft);border-color:var(--marker)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;line-height:1.25}.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}.frac>span:last-child{padding:0 4px}
+.frac.fx{color:var(--lit);font-weight:700}
+.calc .row{font-size:1.08rem;display:flex;align-items:center;flex-wrap:wrap;gap:4px 2px;line-height:1.3}.calc s{text-decoration-color:var(--marker);text-decoration-thickness:2px}
+.fopt{text-align:center;font-size:1.05rem}
+.fields{display:flex;flex-direction:column;gap:8px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.numrow .lab{min-width:6.5em;font-weight:700}
+.numrow input{font:400 1.15rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:9px 12px;width:8em;max-width:100%;font-variant-numeric:tabular-nums}
+.numrow .unit{font-weight:700;color:var(--muted)}.numrow input.ok{border-color:var(--ok);background:var(--ok-soft)}.numrow input.ko{border-color:var(--marker);background:var(--marker-soft)}
+.nota{display:inline-flex;align-items:center;gap:2px;font:800 1.6rem var(--f-display);vertical-align:middle}.nota .na{display:inline-flex;flex-direction:column;align-items:flex-end;font-size:.55em;line-height:1.05}.nota sup{color:var(--marker)}.nota sub{color:#1e6fd9}.nota sup,.nota sub{vertical-align:baseline;font-size:1em}
+.atomview svg{width:100%;max-width:360px;display:block;margin:0 auto;border-radius:12px}
+.ctr{display:flex;flex-direction:column;gap:8px}.cnt{display:grid;grid-template-columns:28px 1fr 44px 40px 44px;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.dotc{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}.cnt output{font:800 1.2rem var(--f-display);text-align:center;font-variant-numeric:tabular-nums}
+.ghost.sm{padding:6px 0;font-size:1.2rem;line-height:1}
+.mt.sym{font:800 1.15rem var(--f-display);text-align:center}
+/* Verbos */
+.vt{display:flex;flex-direction:column;gap:4px;width:100%}
+.vr{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:6px;align-items:center}
+.vt.mini .vr{grid-template-columns:1fr 1fr}
+.vr>span{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:5px 12px;min-width:0;overflow-wrap:anywhere}
+.vr .c1{background:#dbe9fb;border-color:#b5cdee;color:#1f2d3a}.vr .c2{background:#f9dcdc;border-color:#efbcbc;color:#1f2d3a}.vr .c3{background:#dcf1dd;border-color:#b6dfb9;color:#1f2d3a}
+.vr .c1 b{display:block;font-size:1.02rem}.vr .c1 small{display:block;font-size:.74rem;color:#4a5866;line-height:1.2}
+.vr.vh>span{overflow-wrap:normal;hyphens:none;background:transparent;border:0;font:800 .78rem var(--f-body);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:0 12px}
+.vr .c2,.vr .c3{font-weight:700}
+.spk{border:1.5px solid var(--line);background:var(--chip);color:var(--lit);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;cursor:pointer}
+.bigverb{font:800 2.4rem var(--f-display);text-align:center;margin:4px 0 0;color:var(--lit)}
+.sent{font-size:1.25rem;line-height:1.5;margin:0}.gap{display:inline-block;min-width:4em;border-bottom:3px solid var(--marker);text-align:center;font-weight:800;color:var(--marker)}
+.numrow input{width:12em}
+.primary.big{display:inline-flex;align-items:center;gap:8px;font-size:1.1rem;padding:14px 22px}
+.erow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ebtn{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font:inherit}
+.ebtn small{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}.ebtn b{font:800 1.25rem var(--f-display);overflow-wrap:anywhere}
+.ebtn.bad{border-color:var(--marker);background:var(--marker-soft)}.ebtn.bad b{text-decoration:line-through;text-decoration-color:var(--marker)}.ebtn.wrongpick{outline:3px dashed var(--muted)}
+.card{width:100%;min-height:190px;box-sizing:border-box;border:2px solid var(--lit);border-radius:16px;background:var(--paper);color:var(--ink);cursor:pointer;font:inherit;position:relative;padding:16px;display:grid}
+.card .face{grid-area:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+.card .front b{font:800 2.4rem var(--f-display);color:var(--lit)}.card .back b{font:800 1.7rem var(--f-display);color:var(--ink)}
+.card small{color:var(--muted)}.card i{font-size:.85rem;color:var(--muted)}
+.card .back{display:none}.card.flipped .front{display:none}.card.flipped .back{display:flex}
+@media (prefers-reduced-motion:no-preference){.card.flipped{animation:flip .35s ease-out}@keyframes flip{from{transform:rotateY(90deg)}}}
+@media (max-width:460px){.vr{grid-template-columns:1.2fr 1fr 1fr auto;gap:4px}.vr>span{padding:4px 8px;font-size:.92rem}.spk{width:32px;height:32px}.erow{gap:5px}.ebtn b{font-size:1.05rem}}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+body{margin:0}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/ingles">← Inglés de Ale</a>
+  <header>
+    <div><h1>Verbos Irregulares <span>Ale</span></h1>
+    <p>De <i>grow</i> a <i>send</i>: infinitive, past simple y past participle, con su significado, su pronunciación y muchos juegos.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',ma:'#a0522d'};
+
+/* =================== VERBOS ===================
+   [infinitivo, pasado, participio, significado, frase en pasado, frase en presente perfecto, forma inventada (error típico)] */
+const VB=[
+['grow','grew','grown','crecer, cultivar','My little brother ___ a lot last year.','These tomatoes have ___ very fast.','growed'],
+['hang','hung','hung','colgar','She ___ her coat behind the door.','We have ___ the pictures on the wall.','hunged'],
+['have','had','had','tener, haber','We ___ pizza for dinner last night.','I have ___ a cold all week.','haved'],
+['hear','heard','heard','oír','I ___ a strange noise yesterday.','Have you ___ the news?','heared'],
+['hide','hid','hidden','esconder(se)','The cat ___ under the bed.','Where have you ___ my keys?','hided'],
+['hit','hit','hit','golpear','The ball ___ the window yesterday.','Somebody has ___ my car!','hitted'],
+['hold','held','held','sostener, sujetar','She ___ the baby in her arms.','He has ___ the door open for us.','holded'],
+['hurt','hurt','hurt','herir, hacer daño','I ___ my leg playing football.','Have you ___ yourself?','hurted'],
+['keep','kept','kept','guardar, mantener','He ___ the secret for years.','I have ___ all your letters.','keeped'],
+['know','knew','known','saber, conocer','I ___ the answer, but I didn\'t say it.','We have ___ each other since we were five.','knowed'],
+['lay','laid','laid','poner, colocar','She ___ the book on the table.','The hen has ___ three eggs.','layed'],
+['lead','led','led','guiar, dirigir','The guide ___ us through the museum.','She has ___ the team to victory.','leaded'],
+['leave','left','left','dejar, irse','We ___ home at eight o\'clock.','The train has already ___.','leaved'],
+['lend','lent','lent','prestar','My friend ___ me her bike.','I have ___ my pen to Tom.','lended'],
+['let','let','let','dejar, permitir','My parents ___ me go to the party.','They have never ___ us play here.','letted'],
+['lie','lay','lain','tumbarse, estar tumbado','He ___ on the beach all afternoon.','The dog has ___ there all day.','lien'],
+['light','lit','lit','encender','Dad ___ the candles on the cake.','Have you ___ the fire?','lited'],
+['lose','lost','lost','perder','I ___ my phone at school yesterday.','Our team has ___ three matches.','losed'],
+['make','made','made','hacer, fabricar','Mum ___ a delicious cake.','I have ___ a new friend.','maked'],
+['mean','meant','meant','significar, querer decir','She ___ what she said.','This song has always ___ a lot to me.','meaned'],
+['meet','met','met','conocer, quedar con','I ___ my best friend at school.','Have you ever ___ a famous person?','meeted'],
+['pay','paid','paid','pagar','Dad ___ for the tickets.','I have already ___ for lunch.','payed'],
+['put','put','put','poner','She ___ her bag on the chair.','Where have you ___ my book?','puted'],
+['read','read','read','leer','I ___ a great book last summer.','Have you ___ this comic?','readed'],
+['ride','rode','ridden','montar (en bici, a caballo)','We ___ our bikes to the park.','Have you ever ___ a horse?','rided'],
+['ring','rang','rung','sonar, llamar por teléfono','The phone ___ during the lesson.','The bell has just ___.','ringged'],
+['rise','rose','risen','subir, elevarse','The sun ___ at seven o\'clock.','Prices have ___ a lot.','rised'],
+['run','ran','run','correr','I ___ to the bus stop.','She has ___ a marathon.','runned'],
+['say','said','said','decir','He ___ goodbye and left.','What have you ___ to her?','sayed'],
+['see','saw','seen','ver','We ___ a great film on Saturday.','I have never ___ snow.','seed'],
+['seek','sought','sought','buscar','The knights ___ the lost treasure.','They have ___ help from the police.','seeked'],
+['sell','sold','sold','vender','They ___ their old car.','We have ___ all the tickets.','selled'],
+['send','sent','sent','enviar','I ___ you a message last night.','Have you ___ the email?','sended']];
+const vOf=i=>VB.find(v=>v[0]===i);
+/* Voz: pronunciación en inglés con el sintetizador del dispositivo */
+const HASVOICE=typeof window.speechSynthesis!=='undefined';
+function say(t){if(!HASVOICE)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';u.rate=.85;const vs=speechSynthesis.getVoices();const v=vs.find(x=>/^en(-|_)GB/i.test(x.lang))||vs.find(x=>/^en/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+const SPK='<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+function vtable(list,o={}){return`<div class="vt" role="table" aria-label="Verbos"><div class="vr vh" role="row"><span role="columnheader">Infinitive</span><span role="columnheader">Past simple</span><span role="columnheader">Past participle</span>${HASVOICE?'<span></span>':''}</div>${list.map(i=>{const v=vOf(i);return`<div class="vr" role="row"><span class="c1" role="cell"><b>${v[0]}</b><small>${v[3]}</small></span><span class="c2" role="cell">${v[1]}</span><span class="c3" role="cell">${v[2]}</span>${HASVOICE?`<button type="button" class="spk" data-say="${v[0]}, ${v[1]}, ${v[2]}" aria-label="Escuchar ${v[0]}">${SPK}</button>`:''}</div>`}).join('')}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-say]');if(b)say(b.dataset.say)});
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'v1',t:1,n:'Las tres iguales',s:'hit, hurt, let, put, read',vs:['hit','hurt','let','put','read'],
+ idea:'Los más fáciles: el <b>infinitivo</b>, el <b>pasado</b> y el <b>participio</b> se escriben <b>igual</b>.',
+ b:[{k:'ej',h:'Ojo con read',t:'Se escribe igual, pero <b>no suena igual</b>: el infinitivo suena «riid» y el pasado y el participio suenan «red», como el color.'},
+ {k:'cards',h:'En frases',it:[['Past simple','Yesterday I <b>hurt</b> my leg.',C.az],['Present perfect','Somebody <b>has hit</b> my car!',C.ro]]}],
+ truco:'Casi todos acaban en <b>-t</b>: hi<b>t</b>, hur<b>t</b>, le<b>t</b>, pu<b>t</b>. El único distinto es <b>read</b>.'},
+{id:'v2',t:1,n:'Pasado = participio (1)',s:'hang, have, hear, hold, keep, lay, lead, leave, lend',vs:['hang','have','hear','hold','keep','lay','lead','leave','lend'],
+ idea:'En estos, el <b>pasado</b> y el <b>participio</b> son la <b>misma palabra</b>: solo tienes que aprender una.',
+ b:[{k:'cards',h:'Familias que se parecen',it:[['ee → e + t','k<b>ee</b>p → k<b>e</b>p<b>t</b>',C.az],['-d → -t','len<b>d</b> → len<b>t</b>',C.ro],['-ay → -aid','l<b>ay</b> → l<b>aid</b>',C.ve],['cambian mucho','leave → <b>left</b> · hold → <b>held</b> · hang → <b>hung</b>',C.na]]},
+ {k:'ej',h:'No los confundas',t:'<b>lead</b> (guiar) → <b>led</b>. Y <b>leave</b> (irse) → <b>left</b>, que también significa «izquierda».'}],
+ truco:'Si oyes una <b>-t</b> o una <b>-d</b> al final (kept, lent, heard, had, laid), seguramente es la forma del pasado y del participio.'},
+{id:'v3',t:1,n:'Pasado = participio (2)',s:'light, lose, make, mean, meet, pay, say, seek, sell, send',vs:['light','lose','make','mean','meet','pay','say','seek','sell','send'],
+ idea:'Otros diez verbos con el <b>pasado</b> y el <b>participio</b> iguales.',
+ b:[{k:'cards',h:'Familias que se parecen',it:[['-ay → -aid','p<b>ay</b> → p<b>aid</b> · s<b>ay</b> → s<b>aid</b>',C.ve],['ee / ea → e','m<b>ee</b>t → m<b>e</b>t · m<b>ea</b>n → m<b>ea</b>n<b>t</b>',C.az],['-d → -t','sen<b>d</b> → sen<b>t</b>',C.ro],['-ought','s<b>eek</b> → s<b>ought</b>',C.mo]]},
+ {k:'ej',h:'Cuidado al escribir',t:'Es <b>paid</b> y <b>said</b> (con <b>i</b>), no «payed» ni «sayed».'}],
+ truco:'<b>sell</b> → <b>sold</b> y <b>lose</b> → <b>lost</b>: cambian la vocal y ya está.'},
+{id:'v4',t:2,n:'Las tres distintas',s:'grow, hide, know, lie, ride, ring, rise, see y run',vs:['grow','hide','know','lie','ride','ring','rise','see','run'],
+ idea:'Aquí cada columna es diferente. Muchos participios terminan en <b>-n</b> o <b>-en</b>.',
+ b:[{k:'cards',h:'Familias que se parecen',it:[['-ew / -own','gr<b>ow</b> → gr<b>ew</b> → gr<b>own</b> · kn<b>ow</b> → kn<b>ew</b> → kn<b>own</b>',C.az],['i → o → idden / isen','r<b>i</b>de → r<b>o</b>de → r<b>idden</b> · r<b>i</b>se → r<b>o</b>se → r<b>isen</b>',C.ro],['i → a → u','r<b>i</b>ng → r<b>a</b>ng → r<b>u</b>ng',C.ve],['sueltos','see → saw → seen · hide → hid → hidden · lie → lay → lain',C.na]]},
+ {k:'ej',h:'El raro: run',t:'<b>run → ran → run</b>: el participio es <b>igual que el infinitivo</b>. «She has <b>run</b> a marathon».'},
+ {k:'ej',h:'¡Trampa! lie y lay',t:'<b>lie</b> (tumbarse) → <b>lay</b> → <b>lain</b>. Su pasado se escribe igual que el verbo <b>lay</b> (poner) → laid → laid.'}],
+ truco:'Si en el participio oyes una <b>-n</b> al final (grow<b>n</b>, see<b>n</b>, hidde<b>n</b>, ride<b>n</b>), es la tercera columna: va con <b>have / has</b>.'},
+{id:'v5',t:2,n:'¿Cuándo uso cada forma?',s:'Past simple y present perfect',vs:[],
+ idea:'La 2.ª columna (<b>past simple</b>) va sola; la 3.ª (<b>past participle</b>) va detrás de <b>have / has</b>.',
+ b:[{k:'cards',h:'Las dos formas',it:[['Past simple','Algo terminado en el pasado, a menudo con <b>yesterday, last…, ago</b>.<br><i>I <b>saw</b> a film yesterday.</i>',C.az],['Present perfect','<b>have / has</b> + participio. Con <b>ever, never, already, just</b>…<br><i>I <b>have seen</b> that film.</i>',C.ro]]},
+ {k:'ej',h:'Truco para el examen',t:'¿Hay <b>have</b> o <b>has</b> justo antes del hueco? → 3.ª columna. ¿No lo hay? → 2.ª columna.'},
+ {k:'html',t:()=>`<div class="vt mini"><div class="vr vh"><span>Sin have</span><span>Con have / has</span></div>${[['I <b>saw</b> it.','I have <b>seen</b> it.'],['She <b>rode</b> a horse.','She has <b>ridden</b> a horse.'],['They <b>knew</b> the answer.','They have <b>known</b> the answer.']].map(([a,b])=>`<div class="vr"><span>${a}</span><span>${b}</span></div>`).join('')}</div>`}]},
+];
+function stFig(s){return s.vs.length?`<div class="ill" style="width:100%">${vtable(s.vs)}${HASVOICE?'<p class="note" style="text-align:center">Toca el altavoz para escuchar las tres formas.</p>':''}</div>`:''}
+ST.forEach(s=>s.fig=()=>stFig(s));
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='html')return B.t();
+ return''}).join('')}
+const CHULETA=[['Las tres iguales','hit · hurt · let · put · read',C.az],['Pasado = participio','had, heard, held, kept, laid, led, left, lent, hung, lit, lost, made, meant, met, paid, said, sought, sold, sent',C.ro],['Las tres distintas','grow-grew-grown · hide-hid-hidden · know-knew-known · lie-lay-lain · ride-rode-ridden · ring-rang-rung · rise-rose-risen · see-saw-seen',C.ve],['El raro','run-ran-run',C.na],['Cuál uso','Sin have → 2.ª columna. Con have/has → 3.ª columna.',C.mo]];
+
+/* Preguntas de los retos, generadas a partir de los verbos de cada ficha */
+const QB={};
+ST.forEach(s=>{const arr=[];s.vs.forEach(i=>{const v=vOf(i);
+ arr.push(['t',`Past simple de «${v[0]}»`,v[1],[...new Set([v[6],v[0]===v[1]?v[0]+'s':v[0],v[2]!==v[1]?v[2]:v[0]+'ing'])].filter(x=>x!==v[1]).slice(0,3),`${v[0]} → ${v[1]} → ${v[2]}`]);
+ arr.push(['t',`Past participle de «${v[0]}»`,v[2],[...new Set([v[6],v[1]!==v[2]?v[1]:v[0]+'en',v[0]+'ing'])].filter(x=>x!==v[2]).slice(0,3),`${v[0]} → ${v[1]} → ${v[2]}`]);
+ arr.push(['t',v[4].replace('___','____')+` (${v[0]})`,v[1],[...new Set([v[6],v[0],v[2]!==v[1]?v[2]:v[0]+'s'])].filter(x=>x!==v[1]).slice(0,3),'Sin have: past simple (2.ª columna).']);
+ arr.push(['t',v[5].replace('___','____')+` (${v[0]})`,v[2],[...new Set([v[6],v[0]!==v[2]?v[0]:v[0]+'s',v[1]!==v[2]?v[1]:v[0]+'ing'])].filter(x=>x!==v[2]).slice(0,3),'Con have/has: participio (3.ª columna).']);
+ arr.push(['t',`¿Qué significa «${v[0]}»?`,v[3],shuffle(VB.filter(x=>x[0]!==v[0]&&!x[3].split(/[ ,()]+/).some(w=>w.length>3&&v[3].includes(w))).map(x=>x[3])).slice(0,3),`${v[0]}: ${v[3]}.`])});
+ QB[s.id]=arr});
+QB.v5=[['t','I have ____ that film. (see)','seen',['saw','see','seed'],'Con have: participio.'],
+ ['t','We ____ a film yesterday. (see)','saw',['seen','see','seed'],'Yesterday, sin have: past simple.'],
+ ['t','She has ____ a horse. (ride)','ridden',['rode','ride','rided'],'Con has: participio.'],
+ ['t','He ____ goodbye and left. (say)','said',['sayed','say','saying'],'Past simple.'],
+ ['t','¿Qué va detrás de have / has?','El past participle (3.ª columna)',['El past simple (2.ª columna)','El infinitivo','Nada'],'have + participio = present perfect.'],
+ ['t','¿Qué columna usas con yesterday o last week?','El past simple (2.ª columna)',['El participio (3.ª columna)','El infinitivo','Ninguna'],'Es algo terminado en el pasado.'],
+ ['t','Have you ever ____ a famous person? (meet)','met',['meeted','meet','meat'],'meet → met → met.'],
+ ['t','The bell has just ____. (ring)','rung',['rang','ringed','ring'],'ring → rang → rung.'],
+ ['t','I ____ my phone at school yesterday. (lose)','lost',['losed','lose','losted'],'lose → lost → lost.'],
+ ['v','En «She has run a marathon», run es participio.',true,'run → ran → run: el participio es igual que el infinitivo.']];
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='verbos-irr-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'Pasado y participio iguales'],[2,'Los más difíciles y cuándo usarlos']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente!':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de verbos irregulares</h2><p>15 preguntas de todas las fichas, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),1)));list.push(...wpick(QS.filter(q=>!list.includes(q)),10));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'esc',ico:'grow → ?',n:'Escribe las formas',d:'Te doy el infinitivo y escribes el pasado y el participio.',best:v=>v+' de 10'},
+{id:'fra',ico:'have ___',n:'Completa la frase',d:'Elige la forma correcta según la frase.',best:v=>v+' de 10'},
+{id:'err',ico:'¿knowed?',n:'Caza el error',d:'Una de las tres formas está mal. ¡Encuéntrala!',best:v=>v+' de 8'},
+{id:'fla',ico:'Tarjetas',n:'Tarjetas de memoria',d:'Piensa las tres formas, dale la vuelta y comprueba.',best:v=>v+' de 12'},
+{id:'une',ico:'Une',n:'Une parejas',d:'Infinitivo con su pasado o con su significado.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Contra reloj',d:'Pasados y participios a toda velocidad durante 60 segundos.',best:v=>v+' puntos'},
+...(HASVOICE?[{id:'dic',ico:'Escucha',n:'Dictado',d:'Escucha una forma del verbo y escríbela.',best:v=>v+' de 8'}]:[]),
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({esc:gEsc,fra:gFra,err:gErr,fla:gFla,une:gUne,cla:gCla,dic:gDic})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+const hover=()=>window.matchMedia&&matchMedia('(hover:hover)').matches;
+const norm=s=>String(s).trim().toLowerCase().replace(/\s+/g,' ');
+/* Elige verbos dando más peso a los que ha fallado en los juegos */
+function vpick(n){const w=v=>{const s=S.v&&S.v[v[0]];return s?Math.max(.5,1+2*(s.n-s.ok)):2};const out=[],pool=[...VB];while(out.length<n){if(!pool.length)pool.push(...VB);let r=Math.random()*pool.reduce((a,v)=>a+w(v),0),k=0;for(;k<pool.length;k++){r-=w(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function vlog(inf,ok){S.v=S.v||{};const s=S.v[inf]||(S.v[inf]={ok:0,n:0});s.n++;if(ok)s.ok++;save()}
+
+/* 1. Escribe las formas */
+function textGame(id,title,n,make,tip,again){let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${title}</span></div><div id="pb"></div><div id="body"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{if(k>=n){const b=setBest(id,good,false);$('#body').innerHTML='';$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}${tip}`,again);return}
+  const q=make(k);$('#pb').innerHTML=pbar(n,res,k);let tries=0;
+  $('#body').innerHTML=`<div class="q">${q.q}</div><div class="fields">${q.f.map((f,i)=>`<label class="numrow"><span class="lab">${f.l}</span><input data-i="${i}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="${f.l}"></label>`).join('')}</div><div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p>`;
+  const ins=[...$('#body').querySelectorAll('input')];if(hover())ins[0].focus();if(q.onShow)q.onShow();$('#body').querySelectorAll('[data-replay]').forEach(b=>b.onclick=()=>q.onShow());
+  const check=()=>{const vals=ins.map(i=>norm(i.value));if(vals.some(v=>!v)){$('#fb').className='fb ko';$('#fb').textContent=q.f.length>1?'Rellena las dos casillas.':'Escribe la palabra.';return}
+   tries++;const oks=vals.map((v,i)=>v===q.f[i].a);ins.forEach((inp,i)=>inp.className=oks[i]?'ok':'ko');const all=oks.every(Boolean);
+   if(all||tries>=2){ins.forEach(i=>i.disabled=true);const win=all&&tries===1;if(win)good++;res.push(win);if(q.inf)vlog(q.inf,win);$('#fb').className='fb '+(all?'okk':'ko');
+    $('#fb').innerHTML=(all?'¡Bien! ':'Era: ')+q.sol;if(q.say)say(q.say);
+    $('#chk').outerHTML=`<button class="primary" id="nx" type="button">${k===n-1?'Ver resultado':'Siguiente'}</button>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})}
+   else{$('#fb').className='fb ko';$('#fb').innerHTML=vals.some(v=>/ed$/.test(v)&&!q.f.some(f=>f.a===v))?'¡Es irregular! No se forma con <b>-ed</b>. Prueba otra vez.':'Revisa las casillas en rosa e inténtalo otra vez.'}};
+  $('#chk').onclick=check;ins.forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#chk'))check()}))};draw()}
+function gEsc(){const L=vpick(10);textGame('esc','Escribe las formas',10,k=>{const v=L[k];return{inf:v[0],q:`<p class="bigverb">${v[0]}</p><p class="note" style="text-align:center">${v[3]}</p>`,f:[{l:'Past simple',a:v[1]},{l:'Past participle',a:v[2]}],sol:`<b>${v[0]} → ${v[1]} → ${v[2]}</b>`,say:`${v[0]}, ${v[1]}, ${v[2]}`}},'Repasa en Estudiar los que has fallado: te saldrán más veces.',gEsc)}
+function gDic(){const L=vpick(8);textGame('dic','Dictado',8,k=>{const v=L[k],c=1+Math.floor(Math.random()*2),w=v[c];return{inf:v[0],q:`<div class="actions" style="justify-content:center"><button class="primary big" type="button" data-replay>${SPK} Escuchar otra vez</button></div><p class="note" style="text-align:center">Es el ${c===1?'past simple':'past participle'} de un verbo de la lista.</p>`,f:[{l:'Has oído…',a:w}],sol:`<b>${w}</b> (${v[0]} → ${v[1]} → ${v[2]})`,onShow:()=>say(w)}},'Escucha con atención: read (riid) y read (red) se escriben igual.',gDic)}
+
+/* 2. Completa la frase */
+function gFra(){const L=vpick(10);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Completa la frase</span></div><div id="pb"></div><div id="body"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{if(k>=10){const b=setBest('fra',good,false);$('#body').innerHTML='';$('#pb').innerHTML=pbar(10,res,99);endG(`${good} de 10`,`${b?'¡Nueva mejor marca! ':''}Con have/has → 3.ª columna. Sin have → 2.ª columna.`,gFra);return}
+  const v=L[k],perf=Math.random()<.5,ans=perf?v[2]:v[1],sent=perf?v[5]:v[4];
+  let opts=[...new Set([v[0],v[1],v[2],v[6]])];if(opts.length<4)opts.push(v[0]+(v[0].endsWith('e')?'s':'ing'));opts=shuffle(opts);
+  $('#pb').innerHTML=pbar(10,res,k);
+  $('#body').innerHTML=`<p class="sent">${esc(sent).replace('___','<span class="gap">____</span>')} <span class="note">(${v[0]})</span></p><div class="opts grid" id="opts">${opts.map(o=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${o}</button>`).join('')}</div><p class="fb" id="fb" role="status"></p><div id="nxw"></div>`;
+  let done=false;$('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=b.textContent===ans;
+   $('#opts').querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===ans)x.classList.add('right')});if(!ok)b.classList.add('wrong');if(ok)good++;res.push(ok);vlog(v[0],ok);
+   const full=sent.replace('___',ans);$('#body').querySelector('.gap').textContent=ans;say(full);
+   $('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=(ok?'¡Bien! ':'')+(perf?'Hay <b>have/has</b>: va el participio. ':'No hay have: va el past simple. ')+`${v[0]} → ${v[1]} → ${v[2]}.`+(b.textContent===v[6]?' («'+v[6]+'» no existe).':'');
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===9?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* 3. Caza el error */
+function gErr(){const L=vpick(8);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Caza el error</span></div><div id="pb"></div><p class="prompt">Toca la forma que está <b>mal</b>.</p><div id="body"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=8){const b=setBest('err',good,false);$('#body').innerHTML='';$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${good} de 8`,`${b?'¡Nueva mejor marca! ':''}Los verbos irregulares no llevan -ed.`,gErr);return}
+  const v=L[k];const row=[v[0],v[1],v[2]];const pos=1+Math.floor(Math.random()*2);let wrong;
+  const swap=pos===1?v[2]:v[1];wrong=(swap!==row[pos]&&Math.random()<.4)?swap:v[6];if(wrong===row[pos])wrong=v[6];row[pos]=wrong;
+  $('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';
+  $('#body').innerHTML=`<div class="erow">${row.map((w,i)=>`<button type="button" class="ebtn" data-i="${i}"><small>${['infinitive','past simple','past participle'][i]}</small><b>${w}</b></button>`).join('')}</div>`;
+  let done=false;$('#body').querySelectorAll('.ebtn').forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=+b.dataset.i===pos;
+   $('#body').querySelectorAll('.ebtn').forEach(x=>{x.disabled=true;if(+x.dataset.i===pos)x.classList.add('bad')});if(!ok)b.classList.add('wrongpick');if(ok)good++;res.push(ok);vlog(v[0],ok);say(`${v[0]}, ${v[1]}, ${v[2]}`);
+   $('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Cazado! ':'El error estaba en «'+wrong+'». '}Lo correcto: <b>${v[0]} → ${v[1]} → ${v[2]}</b>.`;
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===7?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* 4. Tarjetas */
+function gFla(){const L=vpick(12);let k=0,known=0;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Tarjetas de memoria</span><span id="hud"></span></div><p class="note">Di en voz alta el pasado y el participio, dale la vuelta a la tarjeta y sé sincera.</p><div id="body"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{if(k>=12){const b=setBest('fla',known,false);$('#body').innerHTML='';$('#hud').textContent='';endG(`Sabías ${known} de 12`,`${b?'¡Nueva mejor marca! ':''}Las que marcaste para repasar te saldrán más veces en los juegos.`,gFla);return}
+  const v=L[k];$('#hud').textContent=`${k+1} / 12`;
+  $('#body').innerHTML=`<button type="button" class="card" id="card" aria-label="Dar la vuelta"><span class="face front"><b>${v[0]}</b><small>${v[3]}</small><i>Toca para ver las formas</i></span><span class="face back"><b>${v[0]} · ${v[1]} · ${v[2]}</b><small>${v[3]}</small></span></button><div class="actions" id="self" hidden><button class="primary" id="yes" type="button">La sabía</button><button class="ghost" id="no" type="button">Tengo que repasarla</button></div>`;
+  $('#card').onclick=()=>{$('#card').classList.add('flipped');$('#self').hidden=false;say(`${v[0]}, ${v[1]}, ${v[2]}`)};
+  $('#yes').onclick=()=>{known++;vlog(v[0],true);k++;draw()};$('#no').onclick=()=>{vlog(v[0],false);k++;draw()}};draw()}
+
+/* 5. Une parejas */
+function gUne(){let mode='pas',round=0,err=0;
+ const setup=()=>{round=0;err=0;
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Une parejas</span><span id="hud">Errores: 0</span></div><div class="chips" id="modes"><button type="button" data-m="pas" aria-pressed="${mode==='pas'}">Infinitivo y pasado</button><button type="button" data-m="par" aria-pressed="${mode==='par'}">Infinitivo y participio</button><button type="button" data-m="sig" aria-pressed="${mode==='sig'}">Infinitivo y significado</button></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+  $('#modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;setup()});play()};
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has unido 12 parejas.`,setup);return}
+  const col={pas:1,par:2,sig:3}[mode];const pool=shuffle(VB);const pairs=[];for(const v of pool){if(pairs.length>=6)break;if(!pairs.some(p=>p[1]===v[col]))pairs.push([v[0],v[col]])}
+  $('#q').innerHTML=`Ronda ${round+1} de 2: toca un verbo y luego su pareja.`;
+  const Lc=shuffle(pairs.map((p,i)=>[p[0],i])),Rc=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${Lc.map(([t,i])=>`<button class="mt sym" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rc.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca un verbo de la izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};
+ setup()}
+
+/* 6. Contra reloj */
+function gCla(){let pts=0,streak=0,left=60,cur=null,miss=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Contra reloj</span><span>60 segundos</span></div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts three" id="opts" hidden></div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+ const next=()=>{const v=vpick(1)[0],c=1+Math.floor(Math.random()*2),ans=v[c];let o=[...new Set([ans,v[6],c===1?(v[2]!==ans?v[2]:v[0]):(v[1]!==ans?v[1]:v[0]),v[0]])].filter(Boolean);o=shuffle([ans,...shuffle(o.filter(x=>x!==ans)).slice(0,2)]);
+  cur={v,c,ans};$('#item').innerHTML=`${c===1?'Past simple':'Past participle'} de <b>${v[0]}</b>`;$('#opts').innerHTML=o.map(x=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${x}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(left<=0)return;const ok=b.textContent===cur.ans;const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}vlog(cur.v[0],ok);it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()})};
+ $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+ function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m.v[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${m.v[0]} → ${m.v[1]} → ${m.v[2]}</b>`).join(', ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,gCla)}}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Experta en verbos',()=>ST.every(s=>S.stars[s.id]===3)],['Adiós al -ed',()=>(S.games.esc||0)>=9],['Frases perfectas',()=>(S.games.fra||0)>=9],['Cazadora de errores',()=>(S.games.err||0)>=7],['Memoria de elefante',()=>(S.games.fla||0)>=11],['Rápida como el rayo',()=>(S.games.cla||0)>=25],...(HASVOICE?[['Buen oído',()=>(S.games.dic||0)>=7]]:[]),['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>

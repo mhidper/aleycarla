@@ -17,6 +17,8 @@ ale/
   literatura/
     temas-1-2/        Taller de Literatura: géneros, narración, lírica, teatro y literatura griega
     animado/          Literatura animada: fichas paso a paso hechas con GSAP
+  ingles/
+    verbos-irregulares/  Verbos Irregulares: de grow a send, con juegos y pronunciación
   geografia-historia/   (asignatura «Historia»)
     temas-1-2/        Expedición Historia: La Prehistoria y La Tierra y el Universo
   mapas-geografia/

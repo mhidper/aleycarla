@@ -21,7 +21,9 @@ window.CATALOGO = {
         { titulo: 'Taller de Literatura: Temas 1 y 2', descripcion: 'Géneros literarios, narración, poesía y teatro; Homero, Esopo, la tragedia griega y Jenofonte. Fichas resumidas, 6 juegos y prueba', ruta: 'ale/literatura/temas-1-2/' },
         { titulo: 'Literatura animada', descripcion: 'Once fichas animadas paso a paso: géneros, narrador, fábula, poesía, la Ilíada y la Odisea, el teatro y la tragedia griega', ruta: 'ale/literatura/animado/' }
       ]},
-      { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [] },
+      { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [
+        { titulo: 'Verbos Irregulares', descripcion: 'De grow a send: infinitive, past simple y past participle con significado y pronunciación. Fichas, 7 juegos y prueba', ruta: 'ale/ingles/verbos-irregulares/' }
+      ]},
       { id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [
         { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' }
       ]},
