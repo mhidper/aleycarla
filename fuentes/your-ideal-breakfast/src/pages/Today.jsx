@@ -8,7 +8,7 @@ import { tr, HOLIDAYS } from '@/lib/i18n'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Plate from '@/components/Plate'
-import { SKY, Particles } from '@/components/SeasonSky'
+import { SKY, Particles, HERO_VIDEO, useHeroVideo } from '@/components/SeasonSky'
 import { SeasonLabel, RecipeFacts } from '@/components/RecipeMeta'
 
 function greeting(t, date) {
@@ -21,15 +21,27 @@ export default function Today() {
   const [offset, setOffset] = useState(0)
   const { recipe, holiday, season, fallback } = pickBreakfast(recipes, today, allergies, offset)
   const sky = SKY[season]
+  const useVideo = useHeroVideo()
   const dateText = today.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
     <>
-      <section className="relative overflow-hidden text-white" style={{ backgroundColor: sky.base }}>
+      <section className="relative overflow-hidden text-white" style={{ backgroundColor: useVideo ? '#332522' : sky.base }}>
         {/* Imagen del amanecer: ocupa el ancho y mantiene su proporción (9:16) */}
-        <div className="absolute inset-x-0 top-0 aspect-[572/1024] bg-cover bg-top" style={{ backgroundImage: `url(${sky.img})` }} />
-        <div className="absolute inset-x-0 top-0 aspect-[572/1024] bg-gradient-to-b from-chocolate/25 via-transparent via-30% to-chocolate/45" />
-        <Particles kind={sky.particle} />
+        <div className="absolute inset-x-0 top-0 aspect-[572/1024] bg-cover bg-top" style={{ backgroundImage: `url(${sky.img})` }}>
+          {useVideo && (
+            <video className="h-full w-full object-cover object-top" src={HERO_VIDEO} poster={sky.img}
+              autoPlay muted loop playsInline preload="auto" aria-hidden="true" />
+          )}
+        </div>
+        {useVideo ? (
+          <div className="absolute inset-x-0 top-0 aspect-[572/1024]" style={{ background: 'linear-gradient(to bottom, rgba(51,37,34,.25) 0%, transparent 25%, transparent 55%, rgba(51,37,34,.55) 72%, #332522 100%)' }} />
+        ) : (
+          <>
+            <div className="absolute inset-x-0 top-0 aspect-[572/1024] bg-gradient-to-b from-chocolate/25 via-transparent via-30% to-chocolate/45" />
+            <Particles kind={sky.particle} />
+          </>
+        )}
 
         <div className="relative aspect-[572/1024] w-full">
           <div className="absolute inset-x-0 top-0 px-5 pt-4">

@@ -1,3 +1,24 @@
+import { useEffect, useState } from 'react'
+
+// Vídeo de las cuatro estaciones (se usa salvo con "reducir movimiento" o ahorro de datos)
+export const HERO_VIDEO = './hero/estaciones.mp4'
+export function useHeroVideo() {
+  const ok = () => {
+    if (typeof window === 'undefined') return false
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const saveData = navigator.connection?.saveData
+    return !reduce && !saveData
+  }
+  const [use, setUse] = useState(ok)
+  useEffect(() => {
+    const mq = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+    const fn = () => setUse(ok())
+    mq?.addEventListener?.('change', fn)
+    return () => mq?.removeEventListener?.('change', fn)
+  }, [])
+  return use
+}
+
 // Fondo del hero: amanecer de cada estación + partículas que caen.
 export const SKY = {
   spring: { img: './hero/spring.webp', base: '#374028', particle: 'petal' },
