@@ -1,0 +1,56 @@
+id,name_es,name_en,aisle
+fresas,Fresas,Strawberries,produce
+menta,Menta fresca,Fresh mint,produce
+aguacate,Aguacates,Avocados,produce
+tomate,Tomates,Tomatoes,produce
+limon,Limones,Lemons,produce
+esparragos,Espárragos trigueros,Wild asparagus,produce
+kiwi,Kiwis,Kiwis,produce
+mango,Mango,Mango,produce
+pina,Piña,Pineapple,produce
+melocoton,Melocotones,Peaches,produce
+platano,Plátanos,Bananas,produce
+frambuesas,Frambuesas,Raspberries,produce
+cerezas,Cerezas,Cherries,produce
+sandia,Sandía,Watermelon,produce
+melon,Melón,Melon,produce
+calabaza,Calabaza,Pumpkin,produce
+manzana,Manzanas,Apples,produce
+granada,Granadas,Pomegranates,produce
+pera,Peras,Pears,produce
+higos,Higos frescos,Fresh figs,produce
+naranjas,Naranjas,Oranges,produce
+mandarinas,Mandarinas,Mandarins,produce
+espinacas,Espinacas frescas,Fresh spinach,produce
+frutos_rojos,Frutos rojos,Red berries,produce
+yogur,Yogures naturales,Plain yogurts,dairy
+leche,Leche,Milk,dairy
+huevos,Huevos,Eggs,dairy
+requeson,Requesón,Ricotta,dairy
+queso_fresco,Queso fresco,Fresh cheese,dairy
+queso_crema,Queso crema,Cream cheese,dairy
+hummus,Hummus,Hummus,dairy
+pan_integral,Pan integral,Wholegrain bread,bakery
+pan,Pan del día anterior,Day-old bread,bakery
+avena,Copos de avena,Oat flakes,bakery
+granola,Granola con frutos secos,Granola with nuts,bakery
+harina_integral,Harina integral,Wholemeal flour,bakery
+miel,Miel,Honey,pantry
+aceite,Aceite de oliva virgen extra,Extra virgin olive oil,pantry
+sesamo,Semillas de sésamo,Sesame seeds,pantry
+coco,Coco rallado,Grated coconut,pantry
+oregano,Orégano,Oregano,pantry
+chia,Semillas de chía,Chia seeds,pantry
+palitos,Palitos de brocheta,Skewer sticks,pantry
+canela,Canela,Cinnamon,pantry
+nuez_moscada,Nuez moscada,Nutmeg,pantry
+pipas_calabaza,Pipas de calabaza,Pumpkin seeds,pantry
+nueces,Nueces,Walnuts,pantry
+crema_cacahuete,Crema de cacahuete natural,Natural peanut butter,pantry
+pasas,Pasas,Raisins,pantry
+orejones,Orejones,Dried apricots,pantry
+datiles,Dátiles,Dates,pantry
+cacao,Cacao puro en polvo,Pure cocoa powder,pantry
+pimenton,Pimentón dulce,Sweet paprika,pantry
+levadura,Levadura química,Baking powder,pantry
+almendras,Almendras laminadas,Flaked almonds,pantry

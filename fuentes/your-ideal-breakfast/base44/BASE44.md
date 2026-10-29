@@ -12,6 +12,7 @@ Tailwind y componentes shadcn/ui), así que el resultado debería parecerse much
 |---|---|
 | `recetas.json` | Las 25 recetas en español e inglés, con el formato exacto de la entidad `Recipe` |
 | `recetas.csv` | Las mismas recetas en CSV, por si Base44 permite importarlas desde el panel de datos |
+| `ingredientes.json`, `ingredientes.csv` | Los 55 ingredientes de la lista de la compra, con su sección del súper |
 | `logo.png`, `icono-512.png` | Logo redondo con fondo transparente e icono de la app |
 | `capturas/` | Capturas de cada pantalla para pegarlas en el chat de Base44 como referencia |
 
@@ -38,8 +39,9 @@ Estilo visual:
 - Botones redondeados tipo píldora. Botón principal chocolate #332522 con texto crema.
 - Diseño pensado para móvil, columna centrada de ancho máximo 448 px.
 
-Por ahora crea solo la estructura vacía con tres pestañas en una barra inferior fija:
-"Hoy" (icono de amanecer), "Recetas" (icono de libro) y "Alergias" (icono de escudo con check).
+Por ahora crea solo la estructura vacía con cuatro pestañas en una barra inferior fija:
+"Hoy" (icono de amanecer), "Semana" (icono de calendario), "Recetas" (icono de libro) y
+"Alergias" (icono de escudo con check).
 Arriba, una barra naranja con el logo redondo a la izquierda y el nombre "Your Ideal Breakfast" en Lilita One, en dos líneas.
 ```
 Sube `logo.png` cuando Base44 pida el logo, o adjúntalo a este primer mensaje.
@@ -66,6 +68,10 @@ Crea una entidad llamada Recipe con estos campos:
 - allergens (lista de textos, valores posibles: gluten, milk, egg, nuts, peanut, soy, sesame)
 - name_es, name_en, description_es, description_en, tip_es, tip_en (textos)
 - ingredients_es, ingredients_en, steps_es, steps_en (listas de textos)
+- shopping_items (lista de textos con los id de la entidad Ingredient que hay que comprar para esta receta)
+
+Crea también una entidad Ingredient con los campos id, name_es, name_en y aisle
+(sección del súper: produce, dairy, bakery o pantry).
 Los textos _es se muestran cuando la app está en español y los _en cuando está en inglés.
 ```
 
@@ -73,12 +79,14 @@ Los textos _es se muestran cuando la app está en español y los _en cuando est�
 
 Primero prueba a importar `recetas.csv` desde el panel de datos de la entidad Recipe.
 Las columnas de listas vienen escritas como listas JSON (`["gluten","milk"]`).
-Si no hay opción de importar, adjunta `recetas.json` en el chat con este prompt:
+Haz lo mismo con `ingredientes.csv` en la entidad Ingredient.
+Si no hay opción de importar, adjunta `recetas.json` e `ingredientes.json` en el chat con este prompt:
 
 ```
-Te adjunto el archivo recetas.json con 25 recetas. Crea un registro de la entidad Recipe por cada
-elemento del archivo, copiando todos los campos tal cual, sin cambiar ni resumir los textos.
-Cuando termines, dime cuántas recetas hay de cada estación y de cada festivo.
+Te adjunto recetas.json (25 recetas) e ingredientes.json (55 ingredientes). Crea un registro de la
+entidad Recipe por cada receta y uno de la entidad Ingredient por cada ingrediente, copiando todos
+los campos tal cual, sin cambiar ni resumir los textos.
+Cuando termines, dime cuántas recetas hay de cada estación y de cada festivo, y cuántos ingredientes.
 ```
 Debe responder: 5 de primavera, 5 de verano, 5 de otoño, 5 de invierno y 1 de cada festivo
 (Navidad, Reyes, San Valentín, Semana Santa y Halloween).
@@ -181,6 +189,72 @@ pantalla "Hoy" aparece una etiqueta "Fecha de prueba: 31/10/2026". Un botón "Vo
 Esta fecha no se guarda: al recargar, vuelve el día real.
 ```
 
+## Paso 11. Pestaña "Semana": plan de desayunos
+
+```
+Crea una entidad WeeklyPlan, propia de cada usuario, con: start_date (fecha), days (lista de
+objetos con date, recipe_id y accepted sí/no), missing_items (lista de id de Ingredient) y
+step (número: 0, 1 o 2).
+
+Pantalla "Semana" (adjunto capturas 6-semana.png y 7-semana-cambiar.png). Parte superior naranja con
+el título "Tu semana", el rango de fechas ("Del viernes 30 de octubre al jueves 5 de noviembre") y
+un indicador de tres pasos: 1 Desayunos, 2 Ingredientes, 3 Compra. El paso activo va en blanco y los
+terminados llevan un check.
+
+Paso 1, Desayunos:
+- Se planifican los 7 días siguientes, empezando mañana. Para cada día se elige un desayuno con la
+  misma lógica que la pantalla Hoy (festivos primero, luego la estación, sin alérgenos del usuario),
+  pero sin repetir ninguna receta en la semana.
+- Una tarjeta por día: día de la semana abreviado y número a la izquierda, emoji en un circulito,
+  nombre de la receta (enlace a su detalle) y estación o festivo.
+- Dos botones: "OK" (chocolate) y "Cambiar". Al dar OK, la tarjeta queda con borde naranja y un
+  check redondo a la derecha, y aparece un enlace pequeño "Cambiar" por si se arrepiente.
+- Al pulsar "Cambiar" se abre dentro de la tarjeta "Elige otro desayuno para este día" con 4 opciones
+  (emoji, nombre, minutos y estación): primero las de la estación de ese día, sin alérgenos del usuario
+  y sin repetir las que ya están en la semana. Debajo, "Más opciones" muestra las 4 siguientes y
+  "Cancelar" cierra. Al elegir una opción, ese día queda con la nueva receta y con OK.
+- Si una receta del plan contiene un alérgeno del usuario, se avisa en naranja y no se puede dar OK.
+- Barra fija abajo, encima de las pestañas: "3 de 7 días con OK", un botón "OK a todos" y el botón
+  "Aceptar la semana", que solo se activa con los 7 días en OK y lleva al paso 2.
+```
+
+## Paso 12. Ingredientes que faltan
+
+```
+Paso 2 de la pestaña Semana (adjunto captura 8-ingredientes.png):
+- Título "¿Qué te falta en casa?" y "Estos son los ingredientes para tus 7 desayunos. Marca los que no tienes."
+- Se juntan los shopping_items de las 7 recetas sin repetir y se agrupan por sección del súper, en este
+  orden: Fruta y verdura (produce), Lácteos, huevos y frescos (dairy), Pan y cereales (bakery) y
+  Despensa (pantry). En inglés: Fruit and vegetables, Dairy, eggs and chilled, Bread and cereals, Pantry.
+- Cada ingrediente con una casilla, su nombre y a la derecha en gris "para 3 desayunos" (cuántas
+  recetas de la semana lo usan). Botones pequeños "Marcar todos" y "Desmarcar todos".
+- Barra fija abajo: botón con flecha para volver al paso 1 y "Crear lista de la compra (5)", con el
+  número de ingredientes marcados. Desactivado si no hay ninguno marcado.
+```
+
+## Paso 13. Lista de la compra en PDF
+
+```
+Paso 3 de la pestaña Semana (adjunto captura 9-lista-compra.png):
+- Título "Lista de la compra" y "5 productos para comprar."
+- Los ingredientes marcados, agrupados por sección, con una casilla vacía delante de cada uno.
+- Botón grande "Descargar PDF". Debajo, "Cambiar ingredientes" (vuelve al paso 2) y "Empezar de nuevo".
+
+El PDF se genera en el navegador con la librería jsPDF y se descarga con el nombre
+lista-de-la-compra-AAAA-MM-DD.pdf. Formato A4:
+- Banda naranja #ED9940 arriba con el logo, el título "Lista de la compra" en blanco y debajo
+  "Your Ideal Breakfast | " seguido del rango de fechas.
+- Cada sección con su título en naranja tostado #E37634 y una línea debajo; cada ingrediente con una
+  casilla vacía para tachar, el nombre y a la derecha "para N desayunos".
+- Al final, un recuadro crema con "Desayunos de la semana": cada día y su receta.
+- Abajo del todo, centrado, el eslogan en naranja tostado.
+Todo en el idioma que tenga elegida la app.
+```
+
+Añade también en la pantalla Hoy, antes del eslogan, una tarjeta chocolate con un icono de cesta:
+«Planifica tu semana. Elige los desayunos de los próximos 7 días y saca la lista de la compra.»
+y un botón "Planificar" que abre la pestaña Semana.
+
 ---
 
 ## Comprobaciones finales
@@ -197,10 +271,15 @@ Con "Probar otra fecha", la app debería proponer:
 
 Y si marcas Gluten y Leche en otoño, debe salir el aviso de otra época y proponer la Macedonia de cítricos con dátiles.
 
+En la pestaña Semana, con la fecha real del 29 de octubre de 2026, el sábado 31 debe salir la receta de Halloween,
+ninguna receta debe repetirse y el PDF debe descargarse con las secciones y los desayunos de la semana.
+
 ## Prompts de corrección
 
 - **Los colores no coinciden:** «Usa exactamente estos colores y ningún otro: #ED9940, #F29731, #E37634, #F9F0E2, #332522 y blanco.»
 - **Mezcla idiomas:** «Revisa todas las pantallas: con el idioma en inglés no debe quedar ningún texto en español, y al revés.»
 - **No respeta las alergias:** «Si el usuario marca un alérgeno, ninguna receta que lo contenga puede salir en la pantalla Hoy. Revisa la lógica del paso 6.»
 - **Cambia el texto de las recetas:** «No reescribas las recetas: muestra los textos exactamente como están en la entidad Recipe.»
+- **El plan repite recetas:** «En el plan semanal no puede haber dos días con la misma receta.»
+- **El PDF sale con símbolos raros:** «No pongas emojis en el PDF, solo texto.»
 - **Se parece poco a la captura:** adjunta la captura otra vez y escribe «Haz que esta pantalla se parezca lo más posible a la imagen adjunta.»

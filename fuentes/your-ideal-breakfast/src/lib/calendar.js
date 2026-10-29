@@ -57,3 +57,38 @@ export const toISODate = (date) => {
   const p = (n) => String(n).padStart(2, '0')
   return `${date.getFullYear()}-${p(date.getMonth() + 1)}-${p(date.getDate())}`
 }
+
+// ---------- Plan semanal ----------
+export const addDays = (date, n) => new Date(date.getFullYear(), date.getMonth(), date.getDate() + n, 9)
+
+// Los 7 días siguientes, empezando mañana.
+export const nextWeekDates = (today) => Array.from({ length: 7 }, (_, i) => addDays(today, i + 1))
+
+const seasonPool = (recipes, date, allergies) => {
+  const season = getSeason(date), holiday = getHoliday(date)
+  const safe = recipes.filter((r) => isSafe(r, allergies))
+  const special = holiday ? safe.filter((r) => r.holiday === holiday) : []
+  const regular = safe.filter((r) => r.season === season && !r.holiday)
+  const others = safe.filter((r) => r.season !== season && !r.holiday)
+  return { special, regular, others }
+}
+
+// Propone un desayuno para cada día sin repetir recetas.
+export function buildWeek(recipes, dates, allergies) {
+  const used = new Set()
+  return dates.map((date) => {
+    const { special, regular, others } = seasonPool(recipes, date, allergies)
+    const start = dayNumber(date)
+    const rotate = (list) => list.map((_, i) => list[(start + i) % list.length])
+    const pick = [...special, ...rotate(regular), ...rotate(others)].find((r) => !used.has(r.id))
+      || [...special, ...regular, ...others][0]
+    if (pick) used.add(pick.id)
+    return { date: toISODate(date), recipeId: pick ? pick.id : null, accepted: false }
+  })
+}
+
+// Opciones para cambiar un día: primero las de su estación, sin repetir las de la semana.
+export function alternatives(recipes, date, allergies, excludeIds) {
+  const { special, regular, others } = seasonPool(recipes, date, allergies)
+  return [...special, ...regular, ...others].filter((r) => !excludeIds.includes(r.id))
+}

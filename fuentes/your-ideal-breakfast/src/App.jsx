@@ -7,6 +7,7 @@ import Today from '@/pages/Today'
 import Recipes from '@/pages/Recipes'
 import RecipeDetail from '@/pages/RecipeDetail'
 import Allergies from '@/pages/Allergies'
+import Week from '@/pages/Week'
 
 function ScrollTop() {
   const { pathname } = useLocation()
@@ -23,6 +24,7 @@ export default function App() {
         <main className="mx-auto min-h-dvh max-w-md pb-28">
           <Routes>
             <Route path="/" element={<Today />} />
+            <Route path="/semana" element={<Week />} />
             <Route path="/recetas" element={<Recipes />} />
             <Route path="/receta/:id" element={<RecipeDetail />} />
             <Route path="/alergias" element={<Allergies />} />

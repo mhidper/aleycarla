@@ -1,0 +1,332 @@
+[
+  {
+    "id": "fresas",
+    "name_es": "Fresas",
+    "name_en": "Strawberries",
+    "aisle": "produce"
+  },
+  {
+    "id": "menta",
+    "name_es": "Menta fresca",
+    "name_en": "Fresh mint",
+    "aisle": "produce"
+  },
+  {
+    "id": "aguacate",
+    "name_es": "Aguacates",
+    "name_en": "Avocados",
+    "aisle": "produce"
+  },
+  {
+    "id": "tomate",
+    "name_es": "Tomates",
+    "name_en": "Tomatoes",
+    "aisle": "produce"
+  },
+  {
+    "id": "limon",
+    "name_es": "Limones",
+    "name_en": "Lemons",
+    "aisle": "produce"
+  },
+  {
+    "id": "esparragos",
+    "name_es": "Espárragos trigueros",
+    "name_en": "Wild asparagus",
+    "aisle": "produce"
+  },
+  {
+    "id": "kiwi",
+    "name_es": "Kiwis",
+    "name_en": "Kiwis",
+    "aisle": "produce"
+  },
+  {
+    "id": "mango",
+    "name_es": "Mango",
+    "name_en": "Mango",
+    "aisle": "produce"
+  },
+  {
+    "id": "pina",
+    "name_es": "Piña",
+    "name_en": "Pineapple",
+    "aisle": "produce"
+  },
+  {
+    "id": "melocoton",
+    "name_es": "Melocotones",
+    "name_en": "Peaches",
+    "aisle": "produce"
+  },
+  {
+    "id": "platano",
+    "name_es": "Plátanos",
+    "name_en": "Bananas",
+    "aisle": "produce"
+  },
+  {
+    "id": "frambuesas",
+    "name_es": "Frambuesas",
+    "name_en": "Raspberries",
+    "aisle": "produce"
+  },
+  {
+    "id": "cerezas",
+    "name_es": "Cerezas",
+    "name_en": "Cherries",
+    "aisle": "produce"
+  },
+  {
+    "id": "sandia",
+    "name_es": "Sandía",
+    "name_en": "Watermelon",
+    "aisle": "produce"
+  },
+  {
+    "id": "melon",
+    "name_es": "Melón",
+    "name_en": "Melon",
+    "aisle": "produce"
+  },
+  {
+    "id": "calabaza",
+    "name_es": "Calabaza",
+    "name_en": "Pumpkin",
+    "aisle": "produce"
+  },
+  {
+    "id": "manzana",
+    "name_es": "Manzanas",
+    "name_en": "Apples",
+    "aisle": "produce"
+  },
+  {
+    "id": "granada",
+    "name_es": "Granadas",
+    "name_en": "Pomegranates",
+    "aisle": "produce"
+  },
+  {
+    "id": "pera",
+    "name_es": "Peras",
+    "name_en": "Pears",
+    "aisle": "produce"
+  },
+  {
+    "id": "higos",
+    "name_es": "Higos frescos",
+    "name_en": "Fresh figs",
+    "aisle": "produce"
+  },
+  {
+    "id": "naranjas",
+    "name_es": "Naranjas",
+    "name_en": "Oranges",
+    "aisle": "produce"
+  },
+  {
+    "id": "mandarinas",
+    "name_es": "Mandarinas",
+    "name_en": "Mandarins",
+    "aisle": "produce"
+  },
+  {
+    "id": "espinacas",
+    "name_es": "Espinacas frescas",
+    "name_en": "Fresh spinach",
+    "aisle": "produce"
+  },
+  {
+    "id": "frutos_rojos",
+    "name_es": "Frutos rojos",
+    "name_en": "Red berries",
+    "aisle": "produce"
+  },
+  {
+    "id": "yogur",
+    "name_es": "Yogures naturales",
+    "name_en": "Plain yogurts",
+    "aisle": "dairy"
+  },
+  {
+    "id": "leche",
+    "name_es": "Leche",
+    "name_en": "Milk",
+    "aisle": "dairy"
+  },
+  {
+    "id": "huevos",
+    "name_es": "Huevos",
+    "name_en": "Eggs",
+    "aisle": "dairy"
+  },
+  {
+    "id": "requeson",
+    "name_es": "Requesón",
+    "name_en": "Ricotta",
+    "aisle": "dairy"
+  },
+  {
+    "id": "queso_fresco",
+    "name_es": "Queso fresco",
+    "name_en": "Fresh cheese",
+    "aisle": "dairy"
+  },
+  {
+    "id": "queso_crema",
+    "name_es": "Queso crema",
+    "name_en": "Cream cheese",
+    "aisle": "dairy"
+  },
+  {
+    "id": "hummus",
+    "name_es": "Hummus",
+    "name_en": "Hummus",
+    "aisle": "dairy"
+  },
+  {
+    "id": "pan_integral",
+    "name_es": "Pan integral",
+    "name_en": "Wholegrain bread",
+    "aisle": "bakery"
+  },
+  {
+    "id": "pan",
+    "name_es": "Pan del día anterior",
+    "name_en": "Day-old bread",
+    "aisle": "bakery"
+  },
+  {
+    "id": "avena",
+    "name_es": "Copos de avena",
+    "name_en": "Oat flakes",
+    "aisle": "bakery"
+  },
+  {
+    "id": "granola",
+    "name_es": "Granola con frutos secos",
+    "name_en": "Granola with nuts",
+    "aisle": "bakery"
+  },
+  {
+    "id": "harina_integral",
+    "name_es": "Harina integral",
+    "name_en": "Wholemeal flour",
+    "aisle": "bakery"
+  },
+  {
+    "id": "miel",
+    "name_es": "Miel",
+    "name_en": "Honey",
+    "aisle": "pantry"
+  },
+  {
+    "id": "aceite",
+    "name_es": "Aceite de oliva virgen extra",
+    "name_en": "Extra virgin olive oil",
+    "aisle": "pantry"
+  },
+  {
+    "id": "sesamo",
+    "name_es": "Semillas de sésamo",
+    "name_en": "Sesame seeds",
+    "aisle": "pantry"
+  },
+  {
+    "id": "coco",
+    "name_es": "Coco rallado",
+    "name_en": "Grated coconut",
+    "aisle": "pantry"
+  },
+  {
+    "id": "oregano",
+    "name_es": "Orégano",
+    "name_en": "Oregano",
+    "aisle": "pantry"
+  },
+  {
+    "id": "chia",
+    "name_es": "Semillas de chía",
+    "name_en": "Chia seeds",
+    "aisle": "pantry"
+  },
+  {
+    "id": "palitos",
+    "name_es": "Palitos de brocheta",
+    "name_en": "Skewer sticks",
+    "aisle": "pantry"
+  },
+  {
+    "id": "canela",
+    "name_es": "Canela",
+    "name_en": "Cinnamon",
+    "aisle": "pantry"
+  },
+  {
+    "id": "nuez_moscada",
+    "name_es": "Nuez moscada",
+    "name_en": "Nutmeg",
+    "aisle": "pantry"
+  },
+  {
+    "id": "pipas_calabaza",
+    "name_es": "Pipas de calabaza",
+    "name_en": "Pumpkin seeds",
+    "aisle": "pantry"
+  },
+  {
+    "id": "nueces",
+    "name_es": "Nueces",
+    "name_en": "Walnuts",
+    "aisle": "pantry"
+  },
+  {
+    "id": "crema_cacahuete",
+    "name_es": "Crema de cacahuete natural",
+    "name_en": "Natural peanut butter",
+    "aisle": "pantry"
+  },
+  {
+    "id": "pasas",
+    "name_es": "Pasas",
+    "name_en": "Raisins",
+    "aisle": "pantry"
+  },
+  {
+    "id": "orejones",
+    "name_es": "Orejones",
+    "name_en": "Dried apricots",
+    "aisle": "pantry"
+  },
+  {
+    "id": "datiles",
+    "name_es": "Dátiles",
+    "name_en": "Dates",
+    "aisle": "pantry"
+  },
+  {
+    "id": "cacao",
+    "name_es": "Cacao puro en polvo",
+    "name_en": "Pure cocoa powder",
+    "aisle": "pantry"
+  },
+  {
+    "id": "pimenton",
+    "name_es": "Pimentón dulce",
+    "name_en": "Sweet paprika",
+    "aisle": "pantry"
+  },
+  {
+    "id": "levadura",
+    "name_es": "Levadura química",
+    "name_en": "Baking powder",
+    "aisle": "pantry"
+  },
+  {
+    "id": "almendras",
+    "name_es": "Almendras laminadas",
+    "name_en": "Flaked almonds",
+    "aisle": "pantry"
+  }
+]

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { STRINGS } from './i18n'
+import { WEEK_STRINGS } from './i18n-week'
 
 // Preferencias del usuario (en Base44 será la entidad UserPreferences).
 const KEY = 'yib-preferences'
@@ -23,7 +24,7 @@ export function PreferencesProvider({ children }) {
   const value = useMemo(() => {
     const today = demoDate ? new Date(`${demoDate}T09:00:00`) : new Date()
     return {
-      lang, setLang, t: STRINGS[lang],
+      lang, setLang, t: { ...STRINGS[lang], w: WEEK_STRINGS[lang] },
       allergies,
       toggleAllergy: (id) => setAllergies((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id])),
       demoDate, setDemoDate, today,

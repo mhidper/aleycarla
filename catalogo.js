@@ -40,7 +40,7 @@ window.CATALOGO = {
       ]},
       { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] },
       { id: 'proyectos', nombre: 'Proyectos', tono: 28, apps: [
-        { titulo: 'Your Ideal Breakfast', descripcion: 'Nuestra app de desayunos: el desayuno ideal de cada día según la estación y los festivos, recetas paso a paso y registro de alergias. En español e inglés', ruta: 'ale/proyectos/your-ideal-breakfast/' }
+        { titulo: 'Your Ideal Breakfast', descripcion: 'Nuestra app de desayunos: el desayuno ideal de cada día según la estación y los festivos, recetas paso a paso, plan semanal con lista de la compra en PDF y registro de alergias. En español e inglés', ruta: 'ale/proyectos/your-ideal-breakfast/' }
       ]}
     ]
   },

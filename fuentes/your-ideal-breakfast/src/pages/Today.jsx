@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Shuffle, ShieldCheck, Lightbulb, CalendarDays } from 'lucide-react'
+import { Shuffle, ShieldCheck, Lightbulb, CalendarDays, ShoppingBasket } from 'lucide-react'
 import recipes from '@/data/recipes.json'
 import { usePrefs } from '@/lib/store'
 import { pickBreakfast } from '@/lib/calendar'
@@ -75,6 +75,14 @@ export default function Today() {
             <p className="mt-2 text-lg leading-snug">{tr(recipe, 'tip', lang)}</p>
           </Card>
         )}
+        <Card className="flex items-center gap-4 bg-chocolate text-crema">
+          <ShoppingBasket className="size-9 shrink-0 text-naranja" />
+          <div className="flex-1">
+            <h2 className="font-display text-xl">{t.w.plan_card_title}</h2>
+            <p className="leading-snug text-crema/85">{t.w.plan_card_text}</p>
+          </div>
+          <Button asChild variant="secondary" size="sm"><Link to="/semana">{t.w.plan_card_btn}</Link></Button>
+        </Card>
         <p className="pb-2 pt-2 text-center font-display text-lg text-tostado">{t.slogan}</p>
       </div>
     </>
