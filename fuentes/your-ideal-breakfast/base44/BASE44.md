@@ -14,6 +14,7 @@ Tailwind y componentes shadcn/ui), así que el resultado debería parecerse much
 | `recetas.csv` | Las mismas recetas en CSV, por si Base44 permite importarlas desde el panel de datos |
 | `ingredientes.json`, `ingredientes.csv` | Los 55 ingredientes de la lista de la compra, con su sección del súper |
 | `logo.png`, `icono-512.png` | Logo redondo con fondo transparente e icono de la app |
+| `primavera.png`, `verano.png`, `otono.png`, `invierno.png` | Los cuatro amaneceres del fondo de la pantalla Hoy |
 | `capturas/` | Capturas de cada pantalla para pegarlas en el chat de Base44 como referencia |
 
 ## Cómo trabajar
@@ -254,6 +255,28 @@ Todo en el idioma que tenga elegida la app.
 Añade también en la pantalla Hoy, antes del eslogan, una tarjeta chocolate con un icono de cesta:
 «Planifica tu semana. Elige los desayunos de los próximos 7 días y saca la lista de la compra.»
 y un botón "Planificar" que abre la pestaña Semana.
+
+## Paso 14. El amanecer de cada estación en la pantalla Hoy
+
+Sube las cuatro imágenes (`primavera.png`, `verano.png`, `otono.png`, `invierno.png`) y pega:
+
+```
+En la pantalla Hoy, cambia el fondo naranja de la parte superior por la imagen del amanecer de la
+estación del día (primavera, verano, otoño o invierno; en un festivo, la de su estación).
+- La imagen ocupa todo el ancho con su proporción original (vertical 9:16), pegada arriba.
+- El plato con el emoji se coloca exactamente delante del sol: centrado en horizontal y a un 48 %
+  de la altura de la imagen, con un resplandor crema suave alrededor. El plato mide unos 192 px.
+- El texto (Tu desayuno de hoy, nombre, descripción, datos y botones) empieza sobre la colina de
+  abajo, a un 66 % de la altura de la imagen, en blanco.
+- Encima de la imagen, un degradado: chocolate #332522 al 25 % arriba, transparente en el centro y
+  chocolate al 45 % abajo, para que el texto blanco se lea. Debajo de la imagen, el fondo continúa
+  con este color sólido según la estación: primavera #374028, verano #6F481F, otoño #542816,
+  invierno #5B566A, para que no se note dónde acaba la imagen.
+- Partículas que caen despacio por todo el fondo: pétalos rosas en primavera, destellos dorados que
+  suben en verano, hojas naranjas en otoño y copos de nieve blancos en invierno. Unas 16, con
+  distintos tamaños y velocidades. Si el usuario tiene activado "reducir movimiento", no se muestran.
+- El botón "Ver receta" pasa a ser crema con texto chocolate, para que destaque sobre el fondo oscuro.
+```
 
 ---
 

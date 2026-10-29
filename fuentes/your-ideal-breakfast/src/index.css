@@ -21,3 +21,19 @@ body { font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; 
 }
 .servir { animation: servir .55s cubic-bezier(.2,.8,.2,1) both; }
 @media (prefers-reduced-motion: reduce) { .servir { animation: none; } }
+
+/* Partículas del hero */
+.particle { animation-timing-function: linear; animation-iteration-count: infinite; will-change: transform; }
+@keyframes caer {
+  0%   { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate(var(--drift), 1100px) rotate(320deg); opacity: 0; }
+}
+@keyframes flotar {
+  0%   { transform: translate(0, 700px) scale(.6); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: .9; }
+  100% { transform: translate(var(--drift), 120px) scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .particle { display: none; } }
