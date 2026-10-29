@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-naranja: #ED9940;
+  --color-mandarina: #F29731;
+  --color-tostado: #E37634;
+  --color-crema: #F9F0E2;
+  --color-chocolate: #332522;
+  --font-display: "Lilita One", system-ui, sans-serif;
+  --font-sans: "Nunito", system-ui, sans-serif;
+}
+
+html, body { background: var(--color-crema); color: var(--color-chocolate); }
+body { font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid var(--color-chocolate); outline-offset: 2px; }
+
+@keyframes servir {
+  0%   { transform: translateY(18px) rotate(-14deg) scale(.92); opacity: 0; }
+  60%  { transform: translateY(-4px) rotate(3deg) scale(1.02); opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+.servir { animation: servir .55s cubic-bezier(.2,.8,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .servir { animation: none; } }

@@ -38,7 +38,10 @@ window.CATALOGO = {
         { titulo: 'Laboratorio de Física y Química', descripcion: 'Densidad, cambio de unidades, clasificación de la materia, el átomo (Z y A) y la tabla periódica. Fichas, 7 juegos y prueba', ruta: 'ale/fisica-quimica/materia-atomo/' },
         { titulo: 'Física y Química animada', descripcion: 'Diez ejemplos resueltos paso a paso: medir una densidad, el triángulo, corcho y hierro, factores de conversión, mezclas, elementos y compuestos, el átomo, Z y A y la tabla', ruta: 'ale/fisica-quimica/animado/' }
       ]},
-      { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] }
+      { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] },
+      { id: 'proyectos', nombre: 'Proyectos', tono: 28, apps: [
+        { titulo: 'Your Ideal Breakfast', descripcion: 'Nuestra app de desayunos: el desayuno ideal de cada día según la estación y los festivos, recetas paso a paso y registro de alergias. En español e inglés', ruta: 'ale/proyectos/your-ideal-breakfast/' }
+      ]}
     ]
   },
   carla: {

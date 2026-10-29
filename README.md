@@ -29,7 +29,11 @@ ale/
   fisica-quimica/
     materia-atomo/    Laboratorio de Física y Química: densidad, unidades, materia, átomo y tabla periódica
     animado/          Física y Química animada: ejemplos resueltos paso a paso con GSAP
+  proyectos/
+    your-ideal-breakfast/  App «Your Ideal Breakfast» (compilada; el código fuente está en fuentes/)
 carla/
+fuentes/
+  your-ideal-breakfast/    Código fuente React + Vite + Tailwind de esa app y guía para pasarla a Base44 (BASE44.md)
 ```
 
 Para añadir una app:
@@ -41,3 +45,16 @@ Las asignaturas también se añaden, quitan o renombran en `catalogo.js`.
 ## Publicación
 
 Con GitHub Pages activado (Settings → Pages → Deploy from a branch → `main`, carpeta `/ (root)`), la web queda en `https://mhidper.github.io/aleycarla/`.
+
+## Apps con código fuente
+
+Algunas apps no son un HTML suelto sino un proyecto React. Su código vive en `fuentes/<app>/` y al compilar se publica en la carpeta de la web:
+
+```
+cd fuentes/your-ideal-breakfast
+npm install
+npm run dev     # verla en local
+npm run build   # regenera ale/proyectos/your-ideal-breakfast/
+```
+
+Después hay que hacer commit también de la carpeta compilada.
