@@ -15,7 +15,8 @@ Tailwind y componentes shadcn/ui), así que el resultado debería parecerse much
 | `ingredientes.json`, `ingredientes.csv` | Los 55 ingredientes de la lista de la compra, con su sección del súper |
 | `logo.png`, `icono-512.png` | Logo redondo con fondo transparente e icono de la app |
 | `primavera.png`, `verano.png`, `otono.png`, `invierno.png` | Los cuatro amaneceres del fondo de la pantalla Hoy |
-| `estaciones-1080.mp4` | Vídeo en bucle de las cuatro estaciones (25,7 s, sin audio) para el fondo de Hoy |
+| `estaciones-720.mp4` | Vídeo en bucle de las cuatro estaciones (25,7 s, sin audio, 2,3 MB) para el fondo de Hoy |
+| `estaciones-1080.mp4` | El mismo vídeo en alta calidad, para la presentación |
 | `capturas/` | Capturas de cada pantalla para pegarlas en el chat de Base44 como referencia |
 
 ## Cómo trabajar
@@ -135,7 +136,7 @@ Así se elige el desayuno de cada día (es la parte más importante de la app):
 ## Paso 7. Pantalla "Hoy"
 
 ```
-Pantalla "Hoy" (adjunto captura 1-hoy.png). Parte superior naranja #ED9940, todo centrado:
+Pantalla "Hoy" (adjunto capturas 1-hoy.png y 1b-hoy-abajo.png). Parte superior naranja #ED9940, todo centrado:
 - Saludo y fecha: "Buenos días. Jueves, 29 de octubre" (en inglés "Good morning. Thursday 29 October").
 - Si es festivo, en Lilita One color chocolate: "¡Hoy es un día especial! Halloween".
 - Un "plato": círculo crema grande (unos 208 px) con un borde blanco semitransparente grueso,
@@ -282,8 +283,7 @@ estación del día (primavera, verano, otoño o invierno; en un festivo, la de s
 
 ## Paso 15. El vídeo de las estaciones de fondo
 
-Sube `estaciones-1080.mp4` (si Base44 pone límite de tamaño, usa la versión de 720p que está en
-`ale/proyectos/your-ideal-breakfast/hero/estaciones.mp4`) y pega:
+Sube `estaciones-720.mp4` (2,3 MB, la que usa la app de referencia; `estaciones-1080.mp4` es para proyectar) y pega:
 
 ```
 En la parte superior de la pantalla Hoy, pon de fondo el vídeo que te adjunto en lugar de la imagen
