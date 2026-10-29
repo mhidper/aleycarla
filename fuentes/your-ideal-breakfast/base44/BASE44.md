@@ -15,6 +15,7 @@ Tailwind y componentes shadcn/ui), así que el resultado debería parecerse much
 | `ingredientes.json`, `ingredientes.csv` | Los 55 ingredientes de la lista de la compra, con su sección del súper |
 | `logo.png`, `icono-512.png` | Logo redondo con fondo transparente e icono de la app |
 | `primavera.png`, `verano.png`, `otono.png`, `invierno.png` | Los cuatro amaneceres del fondo de la pantalla Hoy |
+| `estaciones-1080.mp4` | Vídeo en bucle de las cuatro estaciones (25,7 s, sin audio) para el fondo de Hoy |
 | `capturas/` | Capturas de cada pantalla para pegarlas en el chat de Base44 como referencia |
 
 ## Cómo trabajar
@@ -276,6 +277,25 @@ estación del día (primavera, verano, otoño o invierno; en un festivo, la de s
   suben en verano, hojas naranjas en otoño y copos de nieve blancos en invierno. Unas 16, con
   distintos tamaños y velocidades. Si el usuario tiene activado "reducir movimiento", no se muestran.
 - El botón "Ver receta" pasa a ser crema con texto chocolate, para que destaque sobre el fondo oscuro.
+```
+
+## Paso 15. El vídeo de las estaciones de fondo
+
+Sube `estaciones-1080.mp4` (si Base44 pone límite de tamaño, usa la versión de 720p que está en
+`ale/proyectos/your-ideal-breakfast/hero/estaciones.mp4`) y pega:
+
+```
+En la parte superior de la pantalla Hoy, pon de fondo el vídeo que te adjunto en lugar de la imagen
+fija, ocupando el mismo espacio (todo el ancho, proporción vertical 9:16, pegado arriba).
+- El vídeo se reproduce solo, sin sonido, en bucle y sin controles (autoplay, muted, loop, playsInline).
+- Mientras carga se ve la imagen de la estación del día (como poster).
+- Si el usuario tiene activado "reducir movimiento" o el ahorro de datos, no se carga el vídeo y se
+  queda la imagen fija con las partículas.
+- Con el vídeo puesto no se muestran las partículas, porque el vídeo ya tiene pétalos, hojas y nieve.
+- El degradado de encima pasa a ser: chocolate al 25 % arriba, transparente del 25 % al 55 % de la
+  altura, chocolate al 55 % a la altura del 72 % y chocolate #332522 sólido abajo del todo. Debajo
+  del vídeo, el fondo es chocolate #332522, para que no se note el corte en ninguna estación.
+- El plato sigue delante del sol y los textos siguen en blanco.
 ```
 
 ---
