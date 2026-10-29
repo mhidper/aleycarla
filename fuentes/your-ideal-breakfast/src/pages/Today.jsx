@@ -28,22 +28,22 @@ export default function Today() {
     <>
       <section className="relative overflow-hidden text-white" style={{ backgroundColor: useVideo ? '#332522' : sky.base }}>
         {/* Imagen del amanecer: ocupa el ancho y mantiene su proporción (9:16) */}
-        <div className="absolute inset-x-0 top-0 aspect-[572/1024] bg-cover bg-top" style={{ backgroundImage: `url(${sky.img})` }}>
+        <div className="absolute inset-x-0 top-0 aspect-[2/3] bg-cover bg-bottom" style={{ backgroundImage: `url(${sky.img})` }}>
           {useVideo && (
-            <video className="h-full w-full object-cover object-top" src={HERO_VIDEO} poster={sky.img}
+            <video className="h-full w-full object-cover object-bottom" src={HERO_VIDEO} poster={sky.img}
               autoPlay muted loop playsInline preload="auto" aria-hidden="true" />
           )}
         </div>
         {useVideo ? (
-          <div className="absolute inset-x-0 top-0 aspect-[572/1024]" style={{ background: 'linear-gradient(to bottom, rgba(51,37,34,.25) 0%, transparent 25%, transparent 55%, rgba(51,37,34,.55) 72%, #332522 100%)' }} />
+          <div className="absolute inset-x-0 top-0 aspect-[2/3]" style={{ background: 'linear-gradient(to bottom, rgba(51,37,34,.25) 0%, transparent 25%, transparent 55%, rgba(51,37,34,.55) 72%, #332522 100%)' }} />
         ) : (
           <>
-            <div className="absolute inset-x-0 top-0 aspect-[572/1024] bg-gradient-to-b from-chocolate/25 via-transparent via-30% to-chocolate/45" />
+            <div className="absolute inset-x-0 top-0 aspect-[2/3] bg-gradient-to-b from-chocolate/25 via-transparent via-30% to-chocolate/45" />
             <Particles kind={sky.particle} />
           </>
         )}
 
-        <div className="relative aspect-[572/1024] w-full">
+        <div className="relative aspect-[2/3] w-full">
           <div className="absolute inset-x-0 top-0 px-5 pt-4">
             <p className="font-bold text-white drop-shadow-sm">{greeting(t, today)}. {dateText.charAt(0).toUpperCase() + dateText.slice(1)}</p>
             {demoDate && (
@@ -56,14 +56,14 @@ export default function Today() {
             )}
           </div>
           {recipe && (
-            <div className="absolute left-1/2 top-[48.5%] -translate-x-1/2 -translate-y-1/2">
-              <Plate emoji={recipe.emoji} animateKey={recipe.id} className="shadow-[0_0_60px_20px_rgba(255,240,210,.45)]" />
+            <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2">
+              <Plate emoji={recipe.emoji} size="md" animateKey={recipe.id} className="shadow-[0_10px_40px_rgba(51,37,34,.35)]" />
             </div>
           )}
         </div>
 
         {recipe && (
-          <div className="relative -mt-[57%] flex flex-col items-center px-5 pb-10 text-center">
+          <div className="relative -mt-[33%] flex flex-col items-center px-5 pb-10 text-center">
             <p className="text-lg font-bold text-white/90">{t.today_label}</p>
             <h1 className="mt-1 font-display text-[2.4rem] leading-[1.05] text-balance drop-shadow-sm">{tr(recipe, 'name', lang)}</h1>
             <p className="mt-3 max-w-[34ch] text-lg leading-snug text-white/95">{tr(recipe, 'description', lang)}</p>

@@ -264,11 +264,12 @@ Sube las cuatro imágenes (`primavera.png`, `verano.png`, `otono.png`, `invierno
 ```
 En la pantalla Hoy, cambia el fondo naranja de la parte superior por la imagen del amanecer de la
 estación del día (primavera, verano, otoño o invierno; en un festivo, la de su estación).
-- La imagen ocupa todo el ancho con su proporción original (vertical 9:16), pegada arriba.
-- El plato con el emoji se coloca exactamente delante del sol: centrado en horizontal y a un 48 %
-  de la altura de la imagen, con un resplandor crema suave alrededor. El plato mide unos 192 px.
-- El texto (Tu desayuno de hoy, nombre, descripción, datos y botones) empieza sobre la colina de
-  abajo, a un 68 % de la altura de la imagen, en blanco.
+- La imagen ocupa todo el ancho en una caja de proporción 2:3, alineada abajo, de modo que se
+  recorta solo la parte alta del cielo, que está vacía.
+- El sol tiene que verse entero. El plato con el emoji (unos 144 px, con una sombra suave) va debajo,
+  apoyado sobre la colina: centrado en horizontal y a un 62 % de la altura de la caja.
+- El texto (Tu desayuno de hoy, nombre, descripción, datos y botones) empieza justo debajo del
+  plato, en blanco.
 - Encima de la imagen, un degradado: chocolate #332522 al 25 % arriba, transparente en el centro y
   chocolate al 45 % abajo, para que el texto blanco se lea. Debajo de la imagen, el fondo continúa
   con este color sólido según la estación: primavera #374028, verano #6F481F, otoño #542816,
@@ -286,7 +287,7 @@ Sube `estaciones-1080.mp4` (si Base44 pone límite de tamaño, usa la versión d
 
 ```
 En la parte superior de la pantalla Hoy, pon de fondo el vídeo que te adjunto en lugar de la imagen
-fija, ocupando el mismo espacio (todo el ancho, proporción vertical 9:16, pegado arriba).
+fija, ocupando el mismo espacio (caja 2:3 a todo el ancho, vídeo alineado abajo, como la imagen).
 - El vídeo se reproduce solo, sin sonido, en bucle y sin controles (autoplay, muted, loop, playsInline).
 - Mientras carga se ve la imagen de la estación del día (como poster).
 - Si el usuario tiene activado "reducir movimiento" o el ahorro de datos, no se carga el vídeo y se
@@ -295,7 +296,7 @@ fija, ocupando el mismo espacio (todo el ancho, proporción vertical 9:16, pegad
 - El degradado de encima pasa a ser: chocolate al 25 % arriba, transparente del 25 % al 55 % de la
   altura, chocolate al 55 % a la altura del 72 % y chocolate #332522 sólido abajo del todo. Debajo
   del vídeo, el fondo es chocolate #332522, para que no se note el corte en ninguna estación.
-- El plato sigue delante del sol y los textos siguen en blanco.
+- El sol sigue viéndose entero, con el plato debajo sobre la colina, y los textos siguen en blanco.
 ```
 
 ---
