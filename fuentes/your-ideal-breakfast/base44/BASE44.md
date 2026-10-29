@@ -267,7 +267,7 @@ estación del día (primavera, verano, otoño o invierno; en un festivo, la de s
 - El plato con el emoji se coloca exactamente delante del sol: centrado en horizontal y a un 48 %
   de la altura de la imagen, con un resplandor crema suave alrededor. El plato mide unos 192 px.
 - El texto (Tu desayuno de hoy, nombre, descripción, datos y botones) empieza sobre la colina de
-  abajo, a un 66 % de la altura de la imagen, en blanco.
+  abajo, a un 68 % de la altura de la imagen, en blanco.
 - Encima de la imagen, un degradado: chocolate #332522 al 25 % arriba, transparente en el centro y
   chocolate al 45 % abajo, para que el texto blanco se lea. Debajo de la imagen, el fondo continúa
   con este color sólido según la estación: primavera #374028, verano #6F481F, otoño #542816,
