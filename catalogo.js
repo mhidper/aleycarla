@@ -36,7 +36,8 @@ window.CATALOGO = {
       ]},
       { id: 'fisica-quimica', nombre: 'Física y Química', tono: 330, apps: [
         { titulo: 'Laboratorio de Física y Química', descripcion: 'Densidad, cambio de unidades, clasificación de la materia, el átomo (Z y A) y la tabla periódica. Fichas, 7 juegos y prueba', ruta: 'ale/fisica-quimica/materia-atomo/' },
-        { titulo: 'Física y Química animada', descripcion: 'Diez ejemplos resueltos paso a paso: medir una densidad, el triángulo, corcho y hierro, factores de conversión, mezclas, elementos y compuestos, el átomo, Z y A y la tabla', ruta: 'ale/fisica-quimica/animado/' }
+        { titulo: 'Física y Química animada', descripcion: 'Diez ejemplos resueltos paso a paso: medir una densidad, el triángulo, corcho y hierro, factores de conversión, mezclas, elementos y compuestos, el átomo, Z y A y la tabla', ruta: 'ale/fisica-quimica/animado/' },
+        { titulo: 'Los hidruros', descripcion: 'Combinaciones del hidrógeno con los metales: valencias, fórmulas y nombres (prefijos y número romano), con ejemplos. 5 fichas, 5 juegos y prueba', ruta: 'ale/fisica-quimica/hidruros/' }
       ]},
       { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] },
       { id: 'proyectos', nombre: 'Proyectos', tono: 28, apps: [

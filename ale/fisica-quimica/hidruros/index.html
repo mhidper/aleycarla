@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Los hidruros</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+/* Los hidruros: misma familia que el Laboratorio de Física y Química (cuaderno cuadriculado, sellos B/M, estrellas). */
+:root{
+  --bg:#eeecf6; --paper:#fdfdfb; --grid:#e6e3f1; --ink:#1f1d3a; --muted:#5d5a7a; --line:#d6d2e6;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --lit:#0b7a75;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#5fd3c9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --star:#ffd23f; --lit:#5fd3c9; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--ink);font-weight:700}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--lit)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--lit);color:var(--lit)}
+.dot.done{background:var(--lit);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+/* Chuleta */
+.chuleta{border:2px solid var(--lit)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--lit);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+/* Fichas en cajas */
+.idea{margin:0;background:var(--paper);border:2px solid var(--lit);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--lit);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--lit);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--lit);color:var(--paper);font:800 .9rem var(--f-display);display:grid;place-items:center}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+/* Textos de ejemplo */
+.txt{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;font-size:1.05rem;line-height:1.7;margin:0;width:100%}
+.txt .hl{border-radius:4px;padding:1px 3px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.88rem;color:var(--muted);justify-content:center}.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px}
+.poem{font-size:1.1rem;line-height:1.8}.poem .r{font-weight:700;border-bottom:3px solid var(--c)}.poem small{color:var(--muted);font-size:.8rem;margin-left:8px;font-weight:700}
+.stage .pn{font-weight:800;letter-spacing:.04em}.stage .ac{font-style:italic;color:var(--muted)}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.quote{font:400 1.12rem var(--f-body);background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:12px 14px;margin:0;font-style:italic}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.scene{background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:12px 14px;line-height:2;font-size:1.05rem}
+.scene [data-k]{cursor:pointer;border-radius:5px;padding:1px 2px}.scene [data-k]:hover{background:var(--grid)}
+.scene .pn{font-weight:800;letter-spacing:.04em}.scene .ac{font-style:italic;color:var(--muted)}
+.scene .okk{background:var(--ok-soft)!important;outline:2px solid var(--ok)}.scene .ko{background:var(--marker-soft)!important}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--lit);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+/* Física y Química */
+.pt{display:grid;grid-template-columns:22px repeat(6,minmax(0,1fr));gap:4px;width:100%;max-width:560px}
+.pth{font-size:.72rem;color:var(--muted);font-weight:700;display:grid;place-items:center}
+.pe{border:2px solid var(--c);background:var(--paper);background:color-mix(in srgb,var(--c) 14%,var(--paper));color:var(--ink);border-radius:8px;padding:3px 2px 4px;display:flex;flex-direction:column;align-items:center;font:inherit;min-height:52px;cursor:default;min-width:0}
+.pe small{font-size:.66rem;color:var(--muted);line-height:1;align-self:flex-start;padding-left:3px}.pe b{font:800 1.12rem var(--f-display);line-height:1.1}.pe i{font-style:normal;font-size:.6rem;color:var(--muted);line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pe.empty{border:1px dashed var(--line);background:transparent}
+#tb .pe:not(.empty){cursor:pointer}.pe.okk{background:var(--ok-soft);border-color:var(--ok);outline:3px solid var(--ok)}.pe.ko{background:var(--marker-soft);border-color:var(--marker)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;line-height:1.25}.frac>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}.frac>span:last-child{padding:0 4px}
+.frac.fx{color:var(--lit);font-weight:700}
+.calc .row{font-size:1.08rem;display:flex;align-items:center;flex-wrap:wrap;gap:4px 2px;line-height:1.3}.calc s{text-decoration-color:var(--marker);text-decoration-thickness:2px}
+.fopt{text-align:center;font-size:1.05rem}
+.fields{display:flex;flex-direction:column;gap:8px}
+.numrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.numrow .lab{min-width:6.5em;font-weight:700}
+.numrow input{font:400 1.15rem var(--f-body);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:9px 12px;width:8em;max-width:100%;font-variant-numeric:tabular-nums}
+.numrow .unit{font-weight:700;color:var(--muted)}.numrow input.ok{border-color:var(--ok);background:var(--ok-soft)}.numrow input.ko{border-color:var(--marker);background:var(--marker-soft)}
+.nota{display:inline-flex;align-items:center;gap:2px;font:800 1.6rem var(--f-display);vertical-align:middle}.nota .na{display:inline-flex;flex-direction:column;align-items:flex-end;font-size:.55em;line-height:1.05}.nota sup{color:var(--marker)}.nota sub{color:#1e6fd9}.nota sup,.nota sub{vertical-align:baseline;font-size:1em}
+.atomview svg{width:100%;max-width:360px;display:block;margin:0 auto;border-radius:12px}
+.ctr{display:flex;flex-direction:column;gap:8px}.cnt{display:grid;grid-template-columns:28px 1fr 44px 40px 44px;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.dotc{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}.cnt output{font:800 1.2rem var(--f-display);text-align:center;font-variant-numeric:tabular-nums}
+.ghost.sm{padding:6px 0;font-size:1.2rem;line-height:1}
+.mt.sym{font:800 1.15rem var(--f-display);text-align:center}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+body{margin:0}[hidden]{display:none!important}
+/* Hidruros */
+.fml{font:800 2.1rem var(--f-display);text-align:center;margin:0;min-height:1.3em;letter-spacing:.02em}
+.fml.sm{font-size:1.6rem}
+.brow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.brow .lab{font-weight:700;min-width:7.5em}
+.chipb{border:2px solid var(--line);background:var(--paper);color:var(--ink);font:800 1.25rem var(--f-display);padding:8px 14px;border-radius:10px;cursor:pointer;min-width:60px}
+.chipb:hover:not(:disabled){border-color:var(--muted)}.chipb[aria-pressed="true"]{border-color:var(--lit);background:var(--grid);outline:2px solid var(--lit)}
+.chipb.right{border-color:var(--ok);background:var(--ok-soft)}.chipb.wrong{border-color:var(--marker);background:var(--marker-soft)}.chipb:disabled{cursor:default}
+.anat .row{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:1.12rem;margin:6px 0}
+.seg{background:var(--chip);background:color-mix(in srgb,var(--c) 16%,var(--chip));border-bottom:3px solid var(--c);border-radius:6px;padding:2px 7px;font-weight:700}
+.pe small.v{color:var(--marker);font-weight:800;font-size:.72rem}
+.ampl{font:700 .78rem var(--f-body);color:var(--marker);border:1.5px solid var(--marker);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px;text-transform:none;letter-spacing:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/fisica-quimica">← Física y Química de Ale</a>
+  <header>
+    <div><h1>Los hidruros <span>Ale</span></h1>
+    <p>Cómo se combina el hidrógeno: valencias, fórmulas y nombres, con ejemplos y juegos.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',ma:'#a0522d',li:'#0b7a75'};
+
+/* =================== QUÍMICA ===================
+   [símbolo, nombre, valencias, grupo, periodo, familia]. Solo metales: el boro (no metal) y los elementos sin hidruro estable (Fr, Ra, Tl) se dejan fuera. */
+const EL=[['Li','Litio',[1],1,2,'g1'],['Na','Sodio',[1],1,3,'g1'],['K','Potasio',[1],1,4,'g1'],['Rb','Rubidio',[1],1,5,'g1'],['Cs','Cesio',[1],1,6,'g1'],
+ ['Be','Berilio',[2],2,2,'g2'],['Mg','Magnesio',[2],2,3,'g2'],['Ca','Calcio',[2],2,4,'g2'],['Sr','Estroncio',[2],2,5,'g2'],['Ba','Bario',[2],2,6,'g2'],
+ ['Fe','Hierro',[2,3],8,4,'fe'],['Co','Cobalto',[2,3],9,4,'fe'],['Ni','Níquel',[2,3],10,4,'fe'],
+ ['Al','Aluminio',[3],13,3,'g13'],['Ga','Galio',[3],13,4,'g13'],['In','Indio',[3],13,5,'g13']];
+const FAM={g1:['Grupo 1 · valencia 1','#1e6fd9'],g2:['Grupo 2 · valencia 2','#b3264f'],fe:['Fe, Co y Ni · valencias 2 y 3','#6a2fa0'],g13:['Grupo 13 · valencia 3','#2f9e5c']};
+const SUB={1:'',2:'₂',3:'₃',4:'₄',5:'₅',6:'₆'},ROM={1:'I',2:'II',3:'III'},PRE={1:'',2:'di',3:'tri'};
+const elOf=s=>EL.find(e=>e[0]===s);
+const low=e=>e[1].toLowerCase();
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const lf=s=>s[0].toLowerCase()+s.slice(1);
+const vtxt=e=>e[2].join(' y ');
+const fml=(sym,n)=>sym+'H'+(SUB[n]??n);
+const preN=(e,v)=>cap(PRE[v]+'hidruro de '+low(e));
+const stoN=(e,v)=>cap('hidruro de '+low(e)+(e[2].length>1?'('+ROM[v]+')':''));
+const COMP=[];EL.forEach(e=>e[2].forEach(v=>COMP.push({e,v,f:fml(e[0],v),pre:preN(e,v),sto:stoN(e,v)})));
+const bothN=c=>c.pre===c.sto?c.pre:`${c.pre} o ${lf(c.sto)}`;
+
+/* =================== DIBUJOS =================== */
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+const ANG={1:[0],2:[-40,40],3:[-60,0,60],4:[-90,-30,30,90]};
+/* Átomo con tantas «manos» como valencia (v) y nH hidrógenos. hooks:false oculta las manos (juego). */
+function molG(cx,cy,sym,v,nH,col,o={}){const s=o.s||1,R=30*s,L=52*s,D=68*s,rh=15*s;let g='';
+ const pos=(a,d)=>[cx+d*Math.cos(a*Math.PI/180),cy+d*Math.sin(a*Math.PI/180)];
+ const angs=n=>n<=4?(ANG[n]||[]):Array.from({length:n},(_,i)=>-90+i*360/n);
+ const H=(x,y,bad)=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rh}" fill="#ffffff" stroke="${bad?'#c0127e':'#5d6b7a'}" stroke-width="${bad?2.5:1.5}"/>${T(x.toFixed(1),(y+5*s).toFixed(1),'H',`font-size="${14*s}" font-weight="800" fill="#1f2d3a"`)}`;
+ if(o.hooks===false)angs(nH).forEach(a=>{const[x,y]=pos(a,D);g+=H(x,y)});
+ else{ANG[v].forEach((a,i)=>{const[x1,y1]=pos(a,R),[x2,y2]=pos(a,L);const full=i<nH;
+   g+=`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="${full?'#1f2d3a':'#c0127e'}" stroke-width="${3*s}" ${full?'':`stroke-dasharray="${4*s} ${3*s}"`}/>`;
+   if(full){const[x,y]=pos(a,D);g+=H(x,y)}else g+=`<circle cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" r="${4*s}" fill="#eef7f6" stroke="#c0127e" stroke-width="2"/>`});
+  const extra=Math.max(0,nH-v);for(let i=0;i<extra;i++)g+=H(cx-(extra-1)*18*s+i*36*s,cy+(o.ey||100)*s,true)}
+ g+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="${col}" stroke="#1f2d3a" stroke-width="1.5"/>${T(cx,cy+7*s,sym,`font-size="${20*s}" font-weight="800" fill="#fff"`)}`;
+ return g}
+const Hsolo=(x,y)=>`<circle cx="${x}" cy="${y}" r="15" fill="#fff" stroke="#5d6b7a" stroke-width="1.5"/>${T(x,y+5,'H','font-size="14" font-weight="800" fill="#1f2d3a"')}`;
+const DR={
+manos:()=>({vb:'0 0 380 230',s:`<rect width="380" height="230" fill="#eef7f6"/>
+ ${molG(55,60,'Na',1,0,FAM.g1[1])}${T(55,110,'1 mano','font-size="12" font-weight="700" fill="#5d6b7a"')}
+ ${T(128,66,'+','font-size="22" font-weight="800" fill="#1f2d3a"')}${Hsolo(158,60)}${T(200,67,'→','font-size="24" font-weight="800" fill="#0b7a75"')}
+ ${molG(245,60,'Na',1,1,FAM.g1[1])}${T(352,67,'NaH','font-size="19" font-weight="800" fill="#c0127e"')}
+ ${molG(55,160,'Ca',2,0,FAM.g2[1])}${T(55,214,'2 manos','font-size="12" font-weight="700" fill="#5d6b7a"')}
+ ${T(128,166,'+','font-size="22" font-weight="800" fill="#1f2d3a"')}${Hsolo(158,143)}${Hsolo(158,178)}${T(200,167,'→','font-size="24" font-weight="800" fill="#0b7a75"')}
+ ${molG(245,160,'Ca',2,2,FAM.g2[1])}${T(352,167,'CaH₂','font-size="19" font-weight="800" fill="#c0127e"')}`}),
+formula:()=>({vb:'0 0 360 175',s:`<rect width="360" height="175" fill="#eef7f6"/>
+ <defs><marker id="arH" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0127e"/></marker></defs>
+ <rect x="16" y="34" width="128" height="76" rx="12" fill="#fff" stroke="#2f9e5c" stroke-width="2.5"/>
+ ${T(80,64,'Aluminio','font-size="17" font-weight="800" fill="#1f2d3a"')}${T(80,92,'valencia <tspan fill="#c0127e" font-weight="800" font-size="20">3</tspan>','font-size="15" fill="#1f2d3a"')}
+ <text x="200" y="92" font-size="50" font-weight="800" fill="#1f2d3a">AlH<tspan font-size="32" dy="14" fill="#c0127e">3</tspan></text>
+ <path d="M118 112 C 150 160, 250 165, 300 124" fill="none" stroke="#c0127e" stroke-width="2.5" marker-end="url(#arH)"/>
+ ${T(180,24,'La valencia del metal baja a la H','font-size="13" font-weight="800" fill="#0b7a75"')}${T(250,162,'3 hidrógenos','font-size="12" font-weight="700" fill="#5d6b7a"')}`}),
+nometal:()=>{const M=[['C',4,4,'#3a3f4a','CH₄','metano'],['N',3,3,'#1e6fd9','NH₃','amoniaco'],['O',2,2,'#d43c3c','H₂O','agua'],['Cl',1,1,'#2f9e5c','HCl','cloruro de hidrógeno']];
+ return{vb:'0 0 400 160',s:`<rect width="400" height="160" fill="#eef7f6"/>${M.map(([s,v,n,c,f,nm],i)=>{const x=30+i*96;return molG(x,62,s,v,n,c,{s:.62})+T(x+18,134,f,'font-size="16" font-weight="800" fill="#c0127e"')+T(x+18,151,nm,'font-size="10.5" fill="#5d6b7a"')}).join('')}`}},
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg><figcaption>${label}</figcaption></figure>`}
+function valTable(o={}){const cols=[1,2,8,9,10,13];let h='<div class="pt" role="group" aria-label="Las valencias de los metales">';
+ h+=`<div class="pth"></div>${cols.map(c=>`<div class="pth">${c}</div>`).join('')}`;
+ for(let p=2;p<=6;p++){h+=`<div class="pth">${p}</div>`;cols.forEach(c=>{const e=EL.find(x=>x[3]===c&&x[4]===p);
+  if(!e){h+='<div class="pe empty"></div>';return}
+  h+=`<button type="button" class="pe" data-s="${e[0]}" style="--c:${FAM[e[5]][1]}" ${o.tap?'':'tabindex="-1"'}><small class="v">${o.hideV?'':e[2].join('·')}</small><b>${e[0]}</b><i>${e[1]}</i></button>`})}
+ return h+'</div>'}
+const FIG_VAL=()=>`<figure class="ill" style="width:100%">${valTable()}<figcaption>Los metales que entran, en su sitio de la tabla. El número rosa es su valencia.</figcaption></figure>`;
+const FIG_NOMBRE=`<figure class="ill" style="width:100%"><div class="txt anat">
+ <div class="row"><span class="seg" style="--c:#c0127e">tri</span><span class="seg" style="--c:#0b7a75">hidruro de</span><span class="seg" style="--c:#1e6fd9">aluminio</span>&nbsp;→&nbsp;<b>AlH₃</b></div>
+ <div class="row"><span class="seg" style="--c:#0b7a75">hidruro de</span><span class="seg" style="--c:#1e6fd9">hierro</span><span class="seg" style="--c:#c0127e">(III)</span>&nbsp;→&nbsp;<b>FeH₃</b></div></div>
+ <div class="legend"><span style="--c:#c0127e">cuántos H o qué valencia</span><span style="--c:#0b7a75">siempre igual</span><span style="--c:#1e6fd9">el metal</span></div>
+ <figcaption>Dos formas de nombrar: con prefijos (arriba) o con número romano (abajo).</figcaption></figure>`;
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'f1',t:1,n:'¿Qué es un hidruro?',s:'Hidrógeno + otro elemento',
+ idea:'Un <b>hidruro</b> es la combinación del <b>hidrógeno</b> con <b>otro elemento</b>. Como solo lleva dos elementos, es un compuesto <b>binario</b>.',
+ fig:()=>svgOf('manos','Cada átomo tiene tantas «manos» como su valencia. El hidrógeno tiene una.'),
+ b:[{k:'cards',h:'Las piezas',it:[['Hidrógeno (H)','Valencia <b>1</b>: tiene una sola «mano», así que solo se engancha a un átomo.',C.gr],['El otro elemento','En este tema, un <b>metal</b>: sodio, calcio, aluminio, hierro…',C.az],['La valencia','El número de uniones que puede hacer un átomo: sus «manos».',C.ro]]},
+ {k:'ej',h:'Ejemplo',t:'El calcio tiene valencia 2: dos manos. Para no dejar ninguna libre necesita <b>dos hidrógenos</b> → <b>CaH₂</b>.'},
+ {k:'ej',h:'¿Para qué sirven?',t:'El hidruro de magnesio (MgH₂) se estudia para <b>guardar hidrógeno</b> dentro de un sólido y usarlo después como combustible.'}],
+ truco:'Regla de oro: <b>no puede quedar ninguna mano libre</b>. Cuenta las manos del metal y pon ese número de hidrógenos.'},
+{id:'f2',t:1,n:'Las valencias que necesitas',s:'Grupo 1, grupo 2, grupo 13 y Fe-Co-Ni',
+ idea:'Para formular un hidruro solo necesitas la <b>valencia del metal</b>. Va por familias, como en la tabla periódica.',
+ fig:()=>FIG_VAL(),
+ b:[{k:'cards',h:'Las familias',it:[['Grupo 1','Li, Na, K, Rb, Cs → valencia <b>1</b>',FAM.g1[1]],['Grupo 2','Be, Mg, Ca, Sr, Ba → valencia <b>2</b>',FAM.g2[1]],['Grupo 13','Al, Ga, In → valencia <b>3</b>',FAM.g13[1]],['Fe, Co y Ni','Hierro, cobalto y níquel → valencias <b>2 y 3</b>. Forman dos hidruros cada uno.',FAM.fe[1]]]},
+ {k:'ej',h:'Fíjate',t:'El número del grupo da la pista: grupo <b>1</b> → valencia 1; grupo <b>2</b> → valencia 2; grupo 1<b>3</b> → valencia 3.'}],
+ truco:'Fe, Co y Ni son los únicos con <b>dos valencias</b>. Por eso el hierro forma FeH₂ y también FeH₃.'},
+{id:'f3',t:2,n:'Escribir la fórmula',s:'Metal + H + la valencia debajo',
+ idea:'La fórmula se escribe con el <b>símbolo del metal</b>, después la <b>H</b> y, debajo de la H, la <b>valencia del metal</b>.',
+ fig:()=>svgOf('formula','La valencia del aluminio se convierte en el número de hidrógenos.'),
+ b:[{k:'steps',h:'Los 3 pasos',it:['Escribe el <b>símbolo del metal</b> (¡ojo con Na, K y Fe!).','Escribe la <b>H</b> a su derecha.','Pon debajo de la H la <b>valencia del metal</b>. Si es 1, <b>no se escribe</b>.']},
+ {k:'cards',h:'Ejemplos',it:[['NaH','Sodio, valencia 1 → un H, sin número.',FAM.g1[1]],['MgH₂','Magnesio, valencia 2 → dos H.',FAM.g2[1]],['AlH₃','Aluminio, valencia 3 → tres H.',FAM.g13[1]],['FeH₂ y FeH₃','El hierro tiene 2 y 3: dos hidruros distintos.',FAM.fe[1]]]}],
+ truco:'Compruébalo con las manos: el número de H tiene que ser igual al número de manos del metal.'},
+{id:'f4',t:2,n:'Ponerle nombre',s:'Con prefijos o con número romano',
+ idea:'Un hidruro se nombra de dos formas: con <b>prefijos</b> que cuentan los hidrógenos, o con un <b>número romano</b> que dice la valencia del metal.',
+ fig:()=>FIG_NOMBRE,
+ b:[{k:'cards',h:'Con prefijos',it:[['Los prefijos','mono = 1 (no se suele poner) · <b>di</b> = 2 · <b>tri</b> = 3',C.ro],['Cómo','prefijo + «hidruro de» + metal',C.ro],['Ejemplos','NaH → hidruro de sodio<br>CaH₂ → dihidruro de calcio<br>AlH₃ → trihidruro de aluminio',C.ro]]},
+ {k:'cards',h:'Con número romano',it:[['Cuándo','Solo si el metal tiene <b>más de una valencia</b> (Fe, Co, Ni).',C.az],['Cómo','«hidruro de» + metal + la valencia en romano entre paréntesis, pegada.',C.az],['Ejemplos','FeH₂ → hidruro de hierro(II)<br>CoH₃ → hidruro de cobalto(III)<br>CaH₂ → hidruro de calcio (sin número)',C.az]]}],
+ truco:'Si el metal solo tiene una valencia, el número romano <b>sobra</b>: hidruro de calcio, nunca «hidruro de calcio(II)».'},
+{id:'f5',t:3,n:'Hidruros con no metales',s:'Para saber más: agua, amoniaco, metano…',
+ idea:'El hidrógeno también se une a <b>no metales</b>. Muchos de esos compuestos tienen <b>nombres especiales</b> que ya conoces.',
+ fig:()=>svgOf('nometal','Cada no metal con sus manos llenas de hidrógenos.'),
+ b:[{k:'cards',h:'Los más famosos',it:[['H₂O · agua','Oxígeno (valencia 2) + 2 H.',C.ro],['NH₃ · amoniaco','Nitrógeno (valencia 3) + 3 H. Huele muy fuerte; diluido se usa para limpiar.',C.az],['CH₄ · metano','Carbono (valencia 4) + 4 H. Es casi todo el gas natural de las cocinas.',C.gr],['HCl · cloruro de hidrógeno','Cloro (valencia 1) + 1 H. Disuelto en agua es el ácido clorhídrico (el salfumán).',C.ve],['H₂S · sulfuro de hidrógeno','Azufre (valencia 2) + 2 H. Huele a huevo podrido.',C.na]]}],
+ truco:'Con el <b>oxígeno, el azufre y F, Cl, Br, I</b> la H se escribe <b>delante</b>: H₂O, H₂S, HCl. Con los demás va detrás: NH₃, CH₄.'},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='steps')return`<section class="blk">${h}<ol class="steps">${B.it.map(x=>`<li><span>${x}</span></li>`).join('')}</ol></section>`;
+ return''}).join('')}
+const CHULETA=[['Hidruro','Hidrógeno + otro elemento. Compuesto binario. El H tiene valencia 1.',C.gr],['Valencias','Grupo 1 → 1 · grupo 2 → 2 · grupo 13 → 3 · Fe, Co, Ni → 2 y 3.',C.az],['Fórmula','Metal + H + valencia del metal debajo: NaH, CaH₂, AlH₃.',C.ve],['Prefijos','di = 2, tri = 3: dihidruro de calcio, trihidruro de aluminio.',C.ro],['Número romano','Solo con dos valencias: hidruro de hierro(II), hidruro de hierro(III).',C.ro]];
+
+const QB={
+f1:[['t','¿Qué es un hidruro?','La combinación del hidrógeno con otro elemento',['Un elemento de la tabla periódica','Una mezcla de hidrógeno y aire','La combinación del oxígeno con otro elemento'],'Hidrógeno + otro elemento.'],
+ ['t','Un compuesto binario está formado por…','Dos elementos distintos',['Dos átomos en total','Dos moléculas','Dos mezclas'],'«Bi» significa dos: aquí, el hidrógeno y otro elemento.'],
+ ['t','¿Qué valencia tiene el hidrógeno?','1',['2','3','Depende del metal'],'Siempre 1: una sola «mano».'],
+ ['t','¿Cuál de estos es un hidruro?','NaH',['NaCl','CO₂','Fe'],'Sodio + hidrógeno.'],
+ ['t','¿Cuál de estos NO es un hidruro?','MgO',['MgH₂','LiH','AlH₃'],'MgO lleva oxígeno, no hidrógeno.'],
+ ['t','¿Qué indica la valencia de un átomo?','Cuántas uniones puede hacer (sus «manos»)',['Cuántos protones tiene','Cuánto pesa','En qué periodo está'],'Es su capacidad para unirse a otros átomos.'],
+ ['t','El calcio tiene 2 «manos». ¿Cuántos hidrógenos necesita?','2',['1','3','4'],'Uno por mano: CaH₂.'],
+ ['v','En un hidruro siempre hay hidrógeno.',true,'Verdadero: por eso se llama hidruro.'],
+ ['v','En un hidruro pueden quedar «manos» libres.',false,'Falso: todas las manos del metal tienen que quedar ocupadas.']],
+f2:[['t','¿Qué valencia tiene el sodio (Na)?','1',['2','3','2 y 3'],'Grupo 1 → valencia 1.'],
+ ['t','¿Qué valencia tiene el calcio (Ca)?','2',['1','3','2 y 3'],'Grupo 2 → valencia 2.'],
+ ['t','¿Qué valencia tiene el aluminio (Al)?','3',['1','2','2 y 3'],'Grupo 13 → valencia 3.'],
+ ['t','¿Qué valencias tiene el hierro (Fe)?','2 y 3',['1','2','3'],'Fe, Co y Ni tienen dos valencias.'],
+ ['t','¿Qué valencia tienen los elementos del grupo 1?','1',['2','3','Cada uno una distinta'],'Li, Na, K, Rb y Cs: valencia 1.'],
+ ['t','¿Qué metales tienen dos valencias (2 y 3)?','Fe, Co y Ni',['Li, Na y K','Mg, Ca y Ba','Al, Ga e In'],'Hierro, cobalto y níquel.'],
+ ['t','¿Qué valencia tiene el bario (Ba)?','2',['1','3','2 y 3'],'Está en el grupo 2.'],
+ ['t','¿Qué valencia tiene el potasio (K)?','1',['2','3','2 y 3'],'Está en el grupo 1.'],
+ ['v','El magnesio tiene valencia 2.',true,'Verdadero: está en el grupo 2.'],
+ ['v','El galio tiene valencia 1.',false,'Falso: está en el grupo 13, valencia 3.']],
+f3:[['t','¿Cuál es la fórmula del hidruro de sodio?','NaH',['NaH₂','HNa','SoH'],'Sodio: valencia 1, y el 1 no se escribe.'],
+ ['t','¿Cuál es la fórmula del dihidruro de calcio?','CaH₂',['CaH','Ca₂H','CaH₃'],'Di = 2 hidrógenos.'],
+ ['t','¿Cuál es la fórmula del trihidruro de aluminio?','AlH₃',['Al₃H','AlH','H₃Al'],'El número va debajo de la H.'],
+ ['t','¿Cuál es la fórmula del hidruro de hierro(III)?','FeH₃',['FeH₂','Fe₃H','FeH'],'Valencia 3 → tres H.'],
+ ['t','¿Cuál es la fórmula del hidruro de potasio?','KH',['PH','KH₂','PoH'],'El potasio es K (del latín kalium).'],
+ ['t','¿Cuál es la fórmula del hidruro de cobalto(II)?','CoH₂',['CoH₃','Co₂H','COH₂'],'Co con la o minúscula: CO serían carbono y oxígeno.'],
+ ['t','En la fórmula de un hidruro metálico, ¿qué se escribe primero?','El símbolo del metal',['La H','El número','Da igual el orden'],'Primero el metal y después la H.'],
+ ['t','¿Qué número se escribe debajo de la H?','La valencia del metal',['La valencia del hidrógeno','El número atómico Z','Siempre un 2'],'Tantos H como manos tiene el metal.'],
+ ['t','¿Por qué en NaH no aparece ningún número?','Porque el 1 no se escribe',['Porque el sodio no tiene valencia','Porque es un error','Porque el H no cuenta'],'Con valencia 1 la fórmula queda NaH.']],
+f4:[['t','¿Cómo se llama MgH₂ con prefijos?','Dihidruro de magnesio',['Hidruro de dimagnesio','Trihidruro de magnesio','Magnesio dihidruro'],'Dos H → di.'],
+ ['t','¿Cómo se llama AlH₃ con prefijos?','Trihidruro de aluminio',['Dihidruro de aluminio','Hidruro de trialuminio','Hidruro de aluminio(II)'],'Tres H → tri.'],
+ ['t','¿Cómo se llama FeH₂ con número romano?','Hidruro de hierro(II)',['Hidruro de hierro(III)','Hidruro de hierro(2)','Hidruro de dihierro'],'El hierro usa la valencia 2.'],
+ ['t','¿Cómo se llama NiH₃ con número romano?','Hidruro de níquel(III)',['Hidruro de níquel(II)','Trihidruro de níquel(III)','Hidruro de níquel(3)'],'Tres H → valencia 3 → (III).'],
+ ['t','¿Qué significa el prefijo «tri»?','3',['2','1','4'],'Di = 2, tri = 3.'],
+ ['t','¿Cuándo se pone el número romano en el nombre?','Cuando el metal tiene más de una valencia',['Siempre','Nunca','Solo con el sodio'],'Con Fe, Co y Ni hace falta para saber cuál de las dos usa.'],
+ ['t','¿Cómo se llama CaH₂ con número romano?','Hidruro de calcio',['Hidruro de calcio(II)','Dihidruro de calcio(II)','Hidruro de dicalcio'],'El calcio solo tiene valencia 2: el número sobra.'],
+ ['t','¿Cómo se llama LiH?','Hidruro de litio',['Dihidruro de litio','Hidruro de litio(II)','Hidruro de dilitio'],'Un H y valencia 1: sin prefijo ni número.'],
+ ['v','«Dihidruro de cobalto» e «hidruro de cobalto(II)» son el mismo compuesto: CoH₂.',true,'Verdadero: son dos formas de nombrar lo mismo.']],
+f5:[['t','¿Qué fórmula tiene el agua?','H₂O',['HO₂','OH','H₂O₂'],'Oxígeno (valencia 2) + 2 H.'],
+ ['t','¿Cómo se llama NH₃?','Amoniaco',['Metano','Agua','Nitruro de sodio'],'Nitrógeno + 3 hidrógenos.'],
+ ['t','¿Cómo se llama CH₄?','Metano',['Amoniaco','Dióxido de carbono','Carbonato'],'Es el gas natural.'],
+ ['t','¿Cómo se llama HCl?','Cloruro de hidrógeno',['Hidruro de cloro','Clorato','Cloro'],'Disuelto en agua es el ácido clorhídrico (salfumán).'],
+ ['t','¿En cuál de estos la H se escribe delante?','HCl',['NH₃','CH₄','NaH'],'Con O, S y F, Cl, Br, I la H va delante.'],
+ ['t','¿Qué valencia tiene el carbono en el metano (CH₄)?','4',['1','2','3'],'Cuatro manos, cuatro H.'],
+ ['v','El agua es un compuesto binario de hidrógeno y oxígeno.',true,'Verdadero: dos elementos, H y O.']]};
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+const CORE=['f1','f2','f3','f4'];
+
+/* =================== ESTADO =================== */
+const KEY='hidruros-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'Qué son y cómo se forman'],[2,'Formular y nombrar'],[3,'Para saber más']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${t===3?'ampliación · ':''}${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}${s.t===3?'<span class="ampl">ampliación</span>':''}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after" aria-live="polite"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente!':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de hidruros</h2><p>15 preguntas de las fichas 1 a 4, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];CORE.forEach(id=>list.push(...wpick(QS.filter(q=>q.st===id),3)));list.push(...wpick(QS.filter(q=>CORE.includes(q.st)&&!list.includes(q)),3));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'eng',ico:'H — Al — H',n:'Engancha hidrógenos',d:'Ponle al metal los hidrógenos que necesita. Sus manos están escondidas.',best:v=>v+' de 6'},
+{id:'for',ico:'Al + H₃',n:'Monta la fórmula',d:'Te doy el nombre: elige el símbolo y cuántos H.',best:v=>v+' de 8'},
+{id:'nom',ico:'tri · (III)',n:'Ponle nombre',d:'Te doy la fórmula: elige su nombre con prefijos o con número romano.',best:v=>v+' de 8'},
+{id:'par',ico:'CaH₂ ↔ ?',n:'Parejas',d:'Une cada fórmula con su nombre.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Contra reloj',d:'Valencias, cuántos H y ¿bien o mal formulado? en 60 segundos.',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({eng:gEng,for:gFor,nom:gNom,par:gPar,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+const nxBtn=(last,fn)=>{$('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=fn;$('#nx').focus({preventScroll:true})};
+
+/* 1. Engancha hidrógenos */
+function gEng(){const R_=shuffle(COMP).slice(0,6);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Engancha hidrógenos</span></div><div id="pb"></div><p class="prompt" id="q"></p><div class="atomview" id="av"></div><p class="fml" id="fm" aria-live="polite"></p><div class="ctr" id="ctr"></div><div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ let n=0,tries=0,done=false,cur,reveal=false;
+ const view=()=>{const col=FAM[cur.e[5]][1];$('#av').innerHTML=`<svg viewBox="0 0 300 232" role="img" aria-label="${esc(cur.e[1])} con ${n} hidrógenos"><rect width="300" height="232" fill="#eef7f6"/>${molG(110,96,cur.e[0],cur.v,n,col,{hooks:reveal})}${reveal&&n>cur.v?T(110,226,'sobran','font-size="12" font-weight="700" fill="#c0127e"'):''}</svg>`;
+  $('#fm').textContent=n?fml(cur.e[0],n):cur.e[0];
+  $('#ctr').innerHTML=`<div class="cnt"><span class="dotc" style="background:#8a94a3">H</span><b>Hidrógenos</b><button type="button" class="ghost sm" data-d="-1" aria-label="Quitar un hidrógeno">−</button><output>${n}</output><button type="button" class="ghost sm" data-d="1" aria-label="Añadir un hidrógeno">+</button></div>`;
+  $('#ctr').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(done)return;n=Math.max(0,Math.min(6,n+ +b.dataset.d));$('#fb').textContent='';view()})};
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('eng',good,false);['#q','#fm','#fb'].forEach(s=>$(s).textContent='');$('#av').innerHTML='';$('#ctr').innerHTML='';$('#chk').hidden=true;$('#pb').innerHTML=pbar(6,res,99);endG(`${good} de 6`,`${b?'¡Nueva mejor marca! ':''}Tantos hidrógenos como manos (valencia) tenga el metal.`,gEng);return}
+  cur=R_[k];n=0;tries=0;done=false;reveal=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(6,res,k);$('#fb').textContent='';
+  $('#q').innerHTML=cur.e[2].length>1?`Engancha hidrógenos al <b>${low(cur.e)}</b> usando su <b>valencia ${cur.v}</b>.<small>Al comprobar verás sus manos.</small>`:`Engancha al <b>${low(cur.e)}</b> los hidrógenos que necesita.<small>Sus manos están escondidas: piensa en su valencia.</small>`;view()};
+ $('#chk').onclick=()=>{if(done)return;if(!n){$('#fb').className='fb ko';$('#fb').textContent='Añade algún hidrógeno con el botón +.';return}tries++;const ok=n===cur.v;
+  if(ok||tries>=2){done=true;const win=ok&&tries===1;if(win)good++;res.push(win);reveal=true;if(!ok)n=cur.v;view();$('#fb').className='fb '+(ok?'okk':'ko');
+   $('#fb').innerHTML=`${ok?'¡Todas las manos ocupadas! ':`El ${low(cur.e)} tiene ${cur.v===1?'una mano':cur.v+' manos'}. `}<b>${cur.f}</b> · ${bothN(cur)}.`;nxBtn(k===R_.length-1,()=>{k++;draw()})}
+  else{$('#fb').className='fb ko';$('#fb').textContent=n<cur.v?'Le quedan manos libres: faltan hidrógenos. Una oportunidad más.':'Sobran hidrógenos: tiene menos manos. Una oportunidad más.'}};
+ draw()}
+
+/* 2. Monta la fórmula */
+const FAKE={Li:['L','Lt'],Na:['So','S'],K:['P','Po'],Rb:['R','Ru'],Cs:['Ce','C'],Be:['Br','B'],Mg:['Ma','M'],Ca:['C','Cl'],Sr:['Es','S'],Ba:['B','Br'],Fe:['Hi','F'],Co:['CO','C'],Ni:['N','Nq'],Al:['A','Au'],Ga:['G','Gl'],In:['I','Id']};
+function gFor(){const n=8;const R_=shuffle(COMP).slice(0,n);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Monta la fórmula</span></div><div id="pb"></div><p class="prompt" id="q"></p><p class="fml" id="fm" aria-live="polite"></p>
+ <div class="brow"><span class="lab">1. El metal</span><span class="brow" id="b1"></span></div><div class="brow"><span class="lab">2. Hidrógenos</span><span class="brow" id="b2"></span></div>
+ <div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ let cur,sym=null,sub=null,tries=0,done=false,syms;
+ const prev=()=>{$('#fm').innerHTML=(sym||'<span style="color:var(--line)">?</span>')+(sub?'H'+SUB[sub]:'<span style="color:var(--line)">H?</span>')};
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=n){const b=setBest('for',good,false);['#q','#fm','#fb'].forEach(s=>$(s).textContent='');$('#b1').innerHTML='';$('#b2').innerHTML='';$('#chk').hidden=true;$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Primero el metal, luego la H y debajo la valencia del metal.`,gFor);return}
+  cur=R_[k];sym=null;sub=null;tries=0;done=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(n,res,k);$('#fb').textContent='';
+  const nm=k%2&&cur.sto!==cur.pre?cur.sto:cur.pre;$('#q').innerHTML=`Escribe la fórmula del <b>${lf(nm)}</b>`;
+  syms=shuffle([cur.e[0],...FAKE[cur.e[0]]]);
+  $('#b1').innerHTML=syms.map(s=>`<button type="button" class="chipb" data-s="${esc(s)}" aria-pressed="false">${esc(s)}</button>`).join('');
+  $('#b2').innerHTML=[1,2,3].map(v=>`<button type="button" class="chipb" data-v="${v}" aria-pressed="false">H${SUB[v]}</button>`).join('');
+  $('#b1').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(done)return;sym=b.dataset.s;$('#b1').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));prev()});
+  $('#b2').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(done)return;sub=+b.dataset.v;$('#b2').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));prev()});prev()};
+ $('#chk').onclick=()=>{if(done)return;if(!sym||!sub){$('#fb').className='fb ko';$('#fb').textContent='Elige el símbolo del metal y cuántos hidrógenos.';return}
+  tries++;const okS=sym===cur.e[0],okV=sub===cur.v;
+  if((okS&&okV)||tries>=2){done=true;const win=okS&&okV&&tries===1;if(win)good++;res.push(win);
+   $('#b1').querySelectorAll('button').forEach(x=>{x.disabled=true;if(x.dataset.s===cur.e[0])x.classList.add('right');else if(x.dataset.s===sym)x.classList.add('wrong')});
+   $('#b2').querySelectorAll('button').forEach(x=>{x.disabled=true;if(+x.dataset.v===cur.v)x.classList.add('right');else if(+x.dataset.v===sub)x.classList.add('wrong')});
+   $('#fm').textContent=cur.f;$('#fb').className='fb '+(okS&&okV?'okk':'ko');$('#fb').innerHTML=`${okS&&okV?'¡Bien! ':'Era así: '}<b>${cur.f}</b>. ${cur.e[1]} (${cur.e[0]}) con valencia ${cur.v} → ${cur.v===1?'un H, sin número':cur.v+' H'}.`;nxBtn(k===n-1,()=>{k++;draw()})}
+  else{$('#fb').className='fb ko';$('#fb').innerHTML=!okS?`<b>${esc(sym)}</b> no es el símbolo del ${low(cur.e)}. Prueba otra vez.`:'El símbolo está bien. Revisa los hidrógenos: tantos como la valencia del metal.'}};
+ draw()}
+
+/* 3. Ponle nombre */
+function nameOpts(c,mode){const e=c.e,L=low(e);const right=mode==='pre'?c.pre:c.sto;let d=[];
+ if(mode==='pre'){[1,2,3].filter(x=>x!==c.v).forEach(x=>d.push(preN(e,x)));if(c.v>1)d.push(cap('hidruro de '+PRE[c.v]+L));d.push(preN(pick(EL.filter(x=>x!==e&&x[2].includes(c.v))),c.v))}
+ else if(e[2].length>1){d.push(stoN(e,c.v===2?3:2),cap('hidruro de '+L+'('+c.v+')'),cap(PRE[c.v]+'hidruro de '+L+'('+ROM[c.v]+')'))}
+ else{d.push(cap('hidruro de '+L+'('+ROM[c.v]+')'),cap('hidruro de '+PRE[Math.max(2,c.v)]+L));if(c.v>1)d.push(cap(PRE[c.v]+'hidruro de '+L+'('+ROM[c.v]+')'));d.push(stoN(pick(EL.filter(x=>x!==e&&x[2].length===1)),0))}
+ d=[...new Set(d)].filter(x=>x!==c.pre&&x!==c.sto);return shuffle([right,...shuffle(d).slice(0,3)])}
+function gNom(){const n=8;const R_=shuffle(COMP).slice(0,n);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ponle nombre</span></div><div id="pb"></div><p class="fml" id="fm"></p><p class="prompt" id="q" style="text-align:center"></p><div class="opts" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';$('#fb').textContent='';if(k>=n){const b=setBest('nom',good,false);['#q','#fm'].forEach(s=>$(s).textContent='');$('#opts').innerHTML='';$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Prefijos: di = 2, tri = 3. Número romano: solo con Fe, Co y Ni.`,gNom);return}
+  const c=R_[k],mode=k%2?'sto':'pre',right=mode==='pre'?c.pre:c.sto,opts=nameOpts(c,mode);$('#pb').innerHTML=pbar(n,res,k);$('#fm').textContent=c.f;
+  $('#q').innerHTML=mode==='pre'?'¿Cómo se llama <b>con prefijos</b>?':'¿Cómo se llama <b>con número romano</b> (si hace falta)?';
+  $('#opts').innerHTML=opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('');let done=false;
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const o=opts[+b.dataset.i],ok=o===right;if(ok)good++;res.push(ok);
+   $('#opts').querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(opts[j]===right)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+   const why=mode==='pre'?`${c.f} tiene ${c.v===1?'un H: sin prefijo':c.v+' H → «'+PRE[c.v]+'»'}.`:(c.e[2].length>1?`En ${c.f} el ${low(c.e)} usa la valencia ${c.v} → (${ROM[c.v]}).`:`El ${low(c.e)} solo tiene valencia ${c.v}: no lleva número romano.`);
+   $('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Bien! ':'Era: <b>'+esc(right)+'</b>. '}${why}`;$('#pb').innerHTML=pbar(n,res,k);nxBtn(k===n-1,()=>{k++;draw()})})};draw()}
+
+/* 4. Parejas */
+function gPar(){let round=0,err=0;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Parejas</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const play=()=>{if(round>=2){const b=setBest('par',err,true);$('#mt').innerHTML='';$('#q').textContent='';$('#fb').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Cuenta los H para el prefijo; el número romano es la valencia del metal.`,gPar);return}
+  const pairs=shuffle(COMP).slice(0,6).map(c=>[c.f,Math.random()<.5?c.pre:c.sto]);$('#q').innerHTML=`Ronda ${round+1} de 2: toca una fórmula y luego su nombre.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt sym" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca una fórmula de la izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};play()}
+
+/* 5. Contra reloj */
+const DECKS={
+val:{n:'Valencias',c:['1','2','3','2 y 3'],gen:()=>{const e=pick(EL);return[`${e[1]} (${e[0]})`,['1','2','3','2 y 3'].indexOf(vtxt(e))]}},
+hs:{n:'¿Cuántos H?',c:['1','2','3'],gen:()=>{const c=pick(COMP);return[c.sto,c.v-1]}},
+bm:{n:'¿Bien o mal?',c:['Bien','Mal'],gen:()=>{const c=pick(COMP),nm=Math.random()<.5?c.pre:c.sto;if(Math.random()<.5)return[`${c.f} = ${lf(nm)}`,0];
+  if(Math.random()<.25)return[`H${SUB[c.v]}${c.e[0]} = ${lf(nm)}`,1];const kk=pick([1,2,3].filter(x=>x!==c.v));return[`${fml(c.e[0],kk)} = ${lf(nm)}`,1]}}};
+function gCla(){let dk='val';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,miss=[],last='';
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length===4?'grid':D.c.length===3?'three':'two'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{let it,g=0;do{it=D.gen();g++}while(it[0]===last&&g<10);last=it[0];cur=it;$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Experta en hidruros',()=>CORE.every(id=>S.stars[id]===3)],['Ninguna mano libre',()=>(S.games.eng||0)>=5],['Formuladora',()=>(S.games.for||0)>=7],['Nombra sin dudar',()=>(S.games.nom||0)>=7],['Parejas perfectas',()=>S.games.par!=null&&S.games.par<=1],['Rápida como el hidrógeno',()=>(S.games.cla||0)>=25],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>
