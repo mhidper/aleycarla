@@ -166,15 +166,28 @@ svg text{font-family:var(--f-body)}
 body{margin:0}[hidden]{display:none!important}
 /* Hidruros */
 .fml{font:800 2.1rem var(--f-display);text-align:center;margin:0;min-height:1.3em;letter-spacing:.02em}
-.fml.sm{font-size:1.6rem}
 .brow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.brow .lab{font-weight:700;min-width:7.5em}
-.chipb{border:2px solid var(--line);background:var(--paper);color:var(--ink);font:800 1.25rem var(--f-display);padding:8px 14px;border-radius:10px;cursor:pointer;min-width:60px}
+.chipb{border:2px solid var(--line);background:var(--paper);color:var(--ink);font:800 1.25rem var(--f-display);padding:8px 14px;border-radius:10px;cursor:pointer;min-width:56px}
 .chipb:hover:not(:disabled){border-color:var(--muted)}.chipb[aria-pressed="true"]{border-color:var(--lit);background:var(--grid);outline:2px solid var(--lit)}
 .chipb.right{border-color:var(--ok);background:var(--ok-soft)}.chipb.wrong{border-color:var(--marker);background:var(--marker-soft)}.chipb:disabled{cursor:default}
+.chipb.shake{border-color:var(--marker);animation:shake .35s}
 .anat .row{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:1.12rem;margin:6px 0}
 .seg{background:var(--chip);background:color-mix(in srgb,var(--c) 16%,var(--chip));border-bottom:3px solid var(--c);border-radius:6px;padding:2px 7px;font-weight:700}
 .pe small.v{color:var(--marker);font-weight:800;font-size:.72rem}
-.ampl{font:700 .78rem var(--f-body);color:var(--marker);border:1.5px solid var(--marker);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px;text-transform:none;letter-spacing:0}
+.pt.nmg{grid-template-columns:repeat(5,minmax(0,1fr));max-width:330px}
+.demo{display:flex;flex-direction:column;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.dchips button{font-weight:700}
+.dfig svg,.cfig svg{width:100%;max-width:420px;display:block;margin:0 auto;border-radius:10px}
+.dcap,.ccap{margin:0;text-align:center;font-weight:700;min-height:1.5em}
+.gtag{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.85rem;color:#fff;background:var(--c);margin-left:6px;vertical-align:1px}
+.nrows{display:flex;flex-direction:column;gap:8px}
+.nrow{display:grid;grid-template-columns:9.5em 1fr;gap:10px;align-items:center;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:8px 12px}
+.nk{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}.nv{font-weight:700;font-size:1.05rem}
+mark{background:var(--marker-soft);color:var(--marker);border-radius:4px;padding:0 2px;font-weight:800}
+@media (prefers-reduced-motion:no-preference){.pop{animation:popin .45s ease-out both;animation-delay:var(--d,0s)}.hin{animation:hin .6s cubic-bezier(.3,1.45,.6,1) both;animation-delay:var(--d,0s)}}
+@keyframes popin{from{opacity:0;transform:translateY(8px)}}
+@keyframes hin{from{opacity:0;transform:translate(var(--dx),var(--dy))}}
+@media (max-width:460px){.nrow{grid-template-columns:1fr;gap:2px}.chipb{min-width:48px;padding:8px 10px}}
 </style>
 </head>
 <body>
@@ -182,7 +195,7 @@ body{margin:0}[hidden]{display:none!important}
   <a class="back" href="../../../#ale/fisica-quimica">← Física y Química de Ale</a>
   <header>
     <div><h1>Los hidruros <span>Ale</span></h1>
-    <p>Cómo se combina el hidrógeno: valencias, fórmulas y nombres, con ejemplos y juegos.</p></div>
+    <p>Tema 3 · Formulación: los tres grupos de hidruros, el intercambio de valencias y los tres nombres, con ejemplos que se mueven y juegos.</p></div>
     <div class="score" id="score" aria-label="Estrellas"></div>
   </header>
   <div class="tabs" role="group" aria-label="Sección">
@@ -201,43 +214,60 @@ const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
 const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
-const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',ma:'#a0522d',li:'#0b7a75'};
+const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',li:'#0b7a75',rj:'#d43c3c'};
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
 
 /* =================== QUÍMICA ===================
-   [símbolo, nombre, valencias, grupo, periodo, familia]. Solo metales: el boro (no metal) y los elementos sin hidruro estable (Fr, Ra, Tl) se dejan fuera. */
+   [símbolo, nombre, valencias, grupo de la tabla, periodo, familia, nombre especial]
+   Metales: los de la tabla de clase que forman hidruro (fuera Fr, Ra y Tl). No metales: B, C, N (grupo 2 de hidruros) y O, F (grupo 3). */
 const EL=[['Li','Litio',[1],1,2,'g1'],['Na','Sodio',[1],1,3,'g1'],['K','Potasio',[1],1,4,'g1'],['Rb','Rubidio',[1],1,5,'g1'],['Cs','Cesio',[1],1,6,'g1'],
  ['Be','Berilio',[2],2,2,'g2'],['Mg','Magnesio',[2],2,3,'g2'],['Ca','Calcio',[2],2,4,'g2'],['Sr','Estroncio',[2],2,5,'g2'],['Ba','Bario',[2],2,6,'g2'],
  ['Fe','Hierro',[2,3],8,4,'fe'],['Co','Cobalto',[2,3],9,4,'fe'],['Ni','Níquel',[2,3],10,4,'fe'],
  ['Al','Aluminio',[3],13,3,'g13'],['Ga','Galio',[3],13,4,'g13'],['In','Indio',[3],13,5,'g13']];
-const FAM={g1:['Grupo 1 · valencia 1','#1e6fd9'],g2:['Grupo 2 · valencia 2','#b3264f'],fe:['Fe, Co y Ni · valencias 2 y 3','#6a2fa0'],g13:['Grupo 13 · valencia 3','#2f9e5c']};
-const SUB={1:'',2:'₂',3:'₃',4:'₄',5:'₅',6:'₆'},ROM={1:'I',2:'II',3:'III'},PRE={1:'',2:'di',3:'tri'};
-const elOf=s=>EL.find(e=>e[0]===s);
+const NM=[['B','Boro',[3],13,2,'h2','borano'],['C','Carbono',[4],14,2,'h2','metano'],['N','Nitrógeno',[3],15,2,'h2','amoniaco'],['O','Oxígeno',[2],16,2,'h3','agua'],['F','Flúor',[1],17,2,'h3','fluoruro de hidrógeno']];
+const FAM={g1:['Grupo 1 de la tabla · valencia 1','#1e6fd9'],g2:['Grupo 2 de la tabla · valencia 2','#b3264f'],fe:['Fe, Co y Ni · valencias 2 y 3','#6a2fa0'],g13:['Grupo 13 de la tabla · valencia 3','#2f9e5c'],h2:['B, C, N','#d9822b'],h3:['O, F','#d43c3c']};
+const HG={1:['Grupo 1','metal + H','#0b7a75'],2:['Grupo 2','B, C, N','#d9822b'],3:['Grupo 3','O, F','#d43c3c']};
+const SUB={1:'',2:'₂',3:'₃',4:'₄'},SUBV={1:'₁',2:'₂',3:'₃',4:'₄'},ROM={1:'I',2:'II',3:'III'},PRE={1:'',2:'di',3:'tri',4:'tetra'};
+const ALLEL=[...EL,...NM];
+const elOf=s=>ALLEL.find(e=>e[0]===s);
 const low=e=>e[1].toLowerCase();
 const cap=s=>s[0].toUpperCase()+s.slice(1);
 const lf=s=>s[0].toLowerCase()+s.slice(1);
 const vtxt=e=>e[2].join(' y ');
-const fml=(sym,n)=>sym+'H'+(SUB[n]??n);
-const preN=(e,v)=>cap(PRE[v]+'hidruro de '+low(e));
-const stoN=(e,v)=>cap('hidruro de '+low(e)+(e[2].length>1?'('+ROM[v]+')':''));
-const COMP=[];EL.forEach(e=>e[2].forEach(v=>COMP.push({e,v,f:fml(e[0],v),pre:preN(e,v),sto:stoN(e,v)})));
-const bothN=c=>c.pre===c.sto?c.pre:`${c.pre} o ${lf(c.sto)}`;
+const hgOf=e=>e[5]==='h2'?2:e[5]==='h3'?3:1;
+const fml=(sym,n)=>sym+'H'+SUB[n];
+const estN=(e,v)=>cap(PRE[v]+'hidruro de '+low(e));
+const oxiN=(e,v)=>cap('hidruro de '+low(e)+(e[2].length>1?'('+ROM[v]+')':''));
+const carN=(e,v)=>cap('hidruro de '+low(e)+(e[2].length>1?'('+v+'+)':''));
+const COMP=[];EL.forEach(e=>e[2].forEach(v=>COMP.push({e,v,g:1,f:fml(e[0],v),est:estN(e,v),oxi:oxiN(e,v),car:carN(e,v)})));
+const HNM=NM.map(e=>{const v=e[2][0],g=hgOf(e);return{e,v,g,f:g===3?'H'+SUB[v]+e[0]:fml(e[0],v),esp:cap(e[6])}});
+const ALLH=[...COMP,...HNM];
+const NOMS={est:['Estequiométrica',C.ro],oxi:['Nº de oxidación',C.az],car:['Nº de carga',C.ve]};
+const namesOf=c=>c.g===1?[...new Set([c.est,c.oxi,c.car])]:[c.esp];
+const nameLine=c=>namesOf(c).join(' · ');
+const compOf=(s,v)=>ALLH.find(c=>c.e[0]===s&&(v==null||c.v===v));
+/* Datos del intercambio de valencias: el primer símbolo es el elemento, salvo en el grupo 3 (H delante) */
+const crossOf=c=>c.g===3?{A:'H',va:1,B:c.e[0],vb:c.v,f:c.f}:{A:c.e[0],va:c.v,B:'H',vb:1,f:c.f};
 
 /* =================== DIBUJOS =================== */
 const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
 const ANG={1:[0],2:[-40,40],3:[-60,0,60],4:[-90,-30,30,90]};
-/* Átomo con tantas «manos» como valencia (v) y nH hidrógenos. hooks:false oculta las manos (juego). */
+/* Átomo con tantas «manos» como valencia (v) y nH hidrógenos. hooks:false oculta las manos (juego); anim:true hace que los H lleguen volando. */
 function molG(cx,cy,sym,v,nH,col,o={}){const s=o.s||1,R=30*s,L=52*s,D=68*s,rh=15*s;let g='';
  const pos=(a,d)=>[cx+d*Math.cos(a*Math.PI/180),cy+d*Math.sin(a*Math.PI/180)];
  const angs=n=>n<=4?(ANG[n]||[]):Array.from({length:n},(_,i)=>-90+i*360/n);
  const H=(x,y,bad)=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rh}" fill="#ffffff" stroke="${bad?'#c0127e':'#5d6b7a'}" stroke-width="${bad?2.5:1.5}"/>${T(x.toFixed(1),(y+5*s).toFixed(1),'H',`font-size="${14*s}" font-weight="800" fill="#1f2d3a"`)}`;
+ const wrap=(a,i,inner)=>o.anim?`<g class="hin" style="--dx:${(Math.cos(a*Math.PI/180)*60).toFixed(0)}px;--dy:${(Math.sin(a*Math.PI/180)*60).toFixed(0)}px;--d:${(.35+i*.3).toFixed(2)}s">${inner}</g>`:inner;
  if(o.hooks===false)angs(nH).forEach(a=>{const[x,y]=pos(a,D);g+=H(x,y)});
  else{ANG[v].forEach((a,i)=>{const[x1,y1]=pos(a,R),[x2,y2]=pos(a,L);const full=i<nH;
-   g+=`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="${full?'#1f2d3a':'#c0127e'}" stroke-width="${3*s}" ${full?'':`stroke-dasharray="${4*s} ${3*s}"`}/>`;
-   if(full){const[x,y]=pos(a,D);g+=H(x,y)}else g+=`<circle cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" r="${4*s}" fill="#eef7f6" stroke="#c0127e" stroke-width="2"/>`});
+   if(full){const[x,y]=pos(a,D);g+=wrap(a,i,`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="#1f2d3a" stroke-width="${3*s}"/>`+H(x,y))}
+   else g+=`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="#c0127e" stroke-width="${3*s}" stroke-dasharray="${4*s} ${3*s}"/><circle cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" r="${4*s}" fill="#eef7f6" stroke="#c0127e" stroke-width="2"/>`});
   const extra=Math.max(0,nH-v);for(let i=0;i<extra;i++)g+=H(cx-(extra-1)*18*s+i*36*s,cy+(o.ey||100)*s,true)}
  g+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="${col}" stroke="#1f2d3a" stroke-width="1.5"/>${T(cx,cy+7*s,sym,`font-size="${20*s}" font-weight="800" fill="#fff"`)}`;
  return g}
 const Hsolo=(x,y)=>`<circle cx="${x}" cy="${y}" r="15" fill="#fff" stroke="#5d6b7a" stroke-width="1.5"/>${T(x,y+5,'H','font-size="14" font-weight="800" fill="#1f2d3a"')}`;
+const colOf=e=>FAM[e[5]][1];
 const DR={
 manos:()=>({vb:'0 0 380 230',s:`<rect width="380" height="230" fill="#eef7f6"/>
  ${molG(55,60,'Na',1,0,FAM.g1[1])}${T(55,110,'1 mano','font-size="12" font-weight="700" fill="#5d6b7a"')}
@@ -246,118 +276,164 @@ manos:()=>({vb:'0 0 380 230',s:`<rect width="380" height="230" fill="#eef7f6"/>
  ${molG(55,160,'Ca',2,0,FAM.g2[1])}${T(55,214,'2 manos','font-size="12" font-weight="700" fill="#5d6b7a"')}
  ${T(128,166,'+','font-size="22" font-weight="800" fill="#1f2d3a"')}${Hsolo(158,143)}${Hsolo(158,178)}${T(200,167,'→','font-size="24" font-weight="800" fill="#0b7a75"')}
  ${molG(245,160,'Ca',2,2,FAM.g2[1])}${T(352,167,'CaH₂','font-size="19" font-weight="800" fill="#c0127e"')}`}),
-formula:()=>({vb:'0 0 360 175',s:`<rect width="360" height="175" fill="#eef7f6"/>
- <defs><marker id="arH" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0127e"/></marker></defs>
- <rect x="16" y="34" width="128" height="76" rx="12" fill="#fff" stroke="#2f9e5c" stroke-width="2.5"/>
- ${T(80,64,'Aluminio','font-size="17" font-weight="800" fill="#1f2d3a"')}${T(80,92,'valencia <tspan fill="#c0127e" font-weight="800" font-size="20">3</tspan>','font-size="15" fill="#1f2d3a"')}
- <text x="200" y="92" font-size="50" font-weight="800" fill="#1f2d3a">AlH<tspan font-size="32" dy="14" fill="#c0127e">3</tspan></text>
- <path d="M118 112 C 150 160, 250 165, 300 124" fill="none" stroke="#c0127e" stroke-width="2.5" marker-end="url(#arH)"/>
- ${T(180,24,'La valencia del metal baja a la H','font-size="13" font-weight="800" fill="#0b7a75"')}${T(250,162,'3 hidrógenos','font-size="12" font-weight="700" fill="#5d6b7a"')}`}),
-nometal:()=>{const M=[['C',4,4,'#3a3f4a','CH₄','metano'],['N',3,3,'#1e6fd9','NH₃','amoniaco'],['O',2,2,'#d43c3c','H₂O','agua'],['Cl',1,1,'#2f9e5c','HCl','cloruro de hidrógeno']];
- return{vb:'0 0 400 160',s:`<rect width="400" height="160" fill="#eef7f6"/>${M.map(([s,v,n,c,f,nm],i)=>{const x=30+i*96;return molG(x,62,s,v,n,c,{s:.62})+T(x+18,134,f,'font-size="16" font-weight="800" fill="#c0127e"')+T(x+18,151,nm,'font-size="10.5" fill="#5d6b7a"')}).join('')}`}},
 };
 function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg><figcaption>${label}</figcaption></figure>`}
-function valTable(o={}){const cols=[1,2,8,9,10,13];let h='<div class="pt" role="group" aria-label="Las valencias de los metales">';
+function valTable(){const cols=[1,2,8,9,10,13];let h='<div class="pt" role="group" aria-label="Las valencias de los metales">';
  h+=`<div class="pth"></div>${cols.map(c=>`<div class="pth">${c}</div>`).join('')}`;
  for(let p=2;p<=6;p++){h+=`<div class="pth">${p}</div>`;cols.forEach(c=>{const e=EL.find(x=>x[3]===c&&x[4]===p);
   if(!e){h+='<div class="pe empty"></div>';return}
-  h+=`<button type="button" class="pe" data-s="${e[0]}" style="--c:${FAM[e[5]][1]}" ${o.tap?'':'tabindex="-1"'}><small class="v">${o.hideV?'':e[2].join('·')}</small><b>${e[0]}</b><i>${e[1]}</i></button>`})}
- return h+'</div>'}
-const FIG_VAL=()=>`<figure class="ill" style="width:100%">${valTable()}<figcaption>Los metales que entran, en su sitio de la tabla. El número rosa es su valencia.</figcaption></figure>`;
-const FIG_NOMBRE=`<figure class="ill" style="width:100%"><div class="txt anat">
- <div class="row"><span class="seg" style="--c:#c0127e">tri</span><span class="seg" style="--c:#0b7a75">hidruro de</span><span class="seg" style="--c:#1e6fd9">aluminio</span>&nbsp;→&nbsp;<b>AlH₃</b></div>
- <div class="row"><span class="seg" style="--c:#0b7a75">hidruro de</span><span class="seg" style="--c:#1e6fd9">hierro</span><span class="seg" style="--c:#c0127e">(III)</span>&nbsp;→&nbsp;<b>FeH₃</b></div></div>
- <div class="legend"><span style="--c:#c0127e">cuántos H o qué valencia</span><span style="--c:#0b7a75">siempre igual</span><span style="--c:#1e6fd9">el metal</span></div>
- <figcaption>Dos formas de nombrar: con prefijos (arriba) o con número romano (abajo).</figcaption></figure>`;
+  h+=`<div class="pe" style="--c:${colOf(e)}"><small class="v">${e[2].join('·')}</small><b>${e[0]}</b><i>${e[1]}</i></div>`})}
+ h+='</div><div class="pt nmg" role="group" aria-label="Las valencias de los no metales">'+NM.map(e=>`<div class="pe" style="--c:${colOf(e)}"><small class="v">${e[2][0]}</small><b>${e[0]}</b><i>${e[1]}</i></div>`).join('')+'</div>';
+ return h}
+const FIG_VAL=()=>`<figure class="ill" style="width:100%">${valTable()}<figcaption>Arriba, los metales en su sitio de la tabla; abajo, los no metales. El número rosa es la valencia.</figcaption></figure>`;
+
+/* ---------- Animación: intercambio de valencias ---------- */
+function crossSVG(o,hideA,hideB){const w=s=>s.length>1?58:32,xa=100,xb=205,y=112;
+ const ta=[xb+w(o.B)/2+14,134],tb=[xa+w(o.A)/2+14,134];
+ return{xa,xb,ta,tb,svg:`<svg viewBox="0 0 320 185" role="img" aria-label="Intercambio de valencias de ${o.A} y ${o.B}"><rect width="320" height="185" fill="#eef7f6"/>
+ ${T(xa,y,o.A,'font-size="50" font-weight="800" fill="#1f2d3a"')}${T(xb,y,o.B,'font-size="50" font-weight="800" fill="#1f2d3a"')}
+ <line class="xl" pathLength="1" x1="${xa}" y1="56" x2="${ta[0]}" y2="${ta[1]-18}" stroke="#c0127e" stroke-width="2.5" stroke-dasharray="1" stroke-dashoffset="1" stroke-linecap="round"/>
+ <line class="xl" pathLength="1" x1="${xb}" y1="56" x2="${tb[0]}" y2="${tb[1]-18}" stroke="#1e6fd9" stroke-width="2.5" stroke-dasharray="1" stroke-dashoffset="1" stroke-linecap="round"/>
+ <g class="cv" transform="translate(${xa},46)"><text text-anchor="middle" font-size="30" font-weight="800" fill="#c0127e">${hideA?'?':o.va}</text></g>
+ <g class="cv" transform="translate(${xb},46)"><text text-anchor="middle" font-size="30" font-weight="800" fill="#1e6fd9">${hideB?'?':o.vb}</text></g>
+ <text class="cres" x="160" y="176" text-anchor="middle" font-size="22" font-weight="800" fill="#0b7a75" opacity="0"></text></svg>`}}
+function tween(el,[x0,y0,s0],[x1,y1,s1],ms){const set=p=>el.setAttribute('transform',`translate(${(x0+(x1-x0)*p).toFixed(1)},${(y0+(y1-y0)*p).toFixed(1)}) scale(${(s0+(s1-s0)*p).toFixed(3)})`);
+ return new Promise(res=>{if(RM||!ms){set(1);return res()}const t0=performance.now();const f=now=>{let p=Math.min(1,(now-t0)/ms);p=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;set(p);if(p<1)requestAnimationFrame(f);else res()};requestAnimationFrame(f)})}
+const fade=(el,a,b,ms)=>el.animate([{opacity:a},{opacity:b}],{duration:RM?0:ms,fill:'forwards'});
+/* Pinta y anima el intercambio en box (.cfig + .ccap). Devuelve false si se interrumpió. */
+async function runCross(box,o,opt={}){const tok=(box._t=(box._t||0)+1);const alive=()=>box._t===tok&&box.isConnected;
+ const G=crossSVG(o);box.querySelector('.cfig').innerHTML=G.svg;const cap=box.querySelector('.ccap');const say=t=>{cap.innerHTML=t};
+ const q=s=>[...box.querySelectorAll(s)];
+ if(!opt.skipIntro){say('1. Escribimos los símbolos y, encima, sus valencias.');await wait(1100);if(!alive())return false}
+ say('2. Intercambiamos las valencias: cada una baja junto al otro símbolo.');
+ q('.xl').forEach(l=>l.animate([{strokeDashoffset:1},{strokeDashoffset:0}],{duration:RM?0:700,fill:'forwards'}));await wait(800);if(!alive())return false;
+ const [ga,gb]=q('.cv');await Promise.all([tween(ga,[G.xa,46,1],[G.ta[0]+7,G.ta[1],.72],1100),tween(gb,[G.xb,46,1],[G.tb[0]+7,G.tb[1],.72],1100)]);if(!alive())return false;
+ q('.xl').forEach(l=>fade(l,1,.15,400));
+ const ones=[];if(o.va===1)ones.push(ga);if(o.vb===1)ones.push(gb);
+ say(`Queda <b>${o.A}${SUBV[o.vb]}${o.B}${SUBV[o.va]}</b>.`);await wait(900);if(!alive())return false;
+ say('3. La valencia «1» no se pone.');ones.forEach(g=>{g.querySelector('text').setAttribute('fill','#8a94a3');fade(g,1,0,700)});await wait(900);if(!alive())return false;
+ if(opt.stop)return true;
+ const r=box.querySelector('.cres');r.textContent='= '+o.f;fade(r,0,1,400);say(`Resultado: <b>${o.f}</b>${o.name?' · '+o.name:''}`);return true}
+
+/* ---------- Ejemplos interactivos dentro de las fichas ---------- */
+const DEM={};let demN=0;
+function demo(type,items,h,note=''){const id='dm'+(++demN);DEM[id]={type,items};
+ return{k:'html',t:()=>`<section class="blk">${h?`<h3 class="bh">${h}</h3>`:''}${note?`<p class="note">${note}</p>`:''}<div class="demo" id="${id}"><div class="chips dchips" role="group" aria-label="Elige un ejemplo">${items.map((it,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===0}">${it.lab}</button>`).join('')}</div><div class="${type==='cross'?'cfig':'dfig'}"></div><p class="${type==='cross'?'ccap':'dcap'}" aria-live="polite"></p>${type==='cross'?'<div class="actions"><button type="button" class="ghost drep">Repetir</button></div>':''}</div></section>`}}
+const DRUN={
+ mol:(d,it)=>{const c=it.c,e=c.e,hg=HG[c.g];
+  d.querySelector('.dfig').innerHTML=`<svg viewBox="0 0 300 220" role="img" aria-label="${esc(c.f)}: ${esc(e[1])} con ${c.v} hidrógenos"><rect width="300" height="220" fill="#eef7f6"/>${molG(120,105,e[0],c.v,c.v,colOf(e),{anim:true})}</svg>`;
+  d.querySelector('.dcap').innerHTML=`<span class="fml pop" style="display:block;--d:${(.35+c.v*.3).toFixed(2)}s">${c.f}</span><span class="pop" style="display:block;--d:${(.55+c.v*.3).toFixed(2)}s">${esc(nameLine(c))}<span class="gtag" style="--c:${hg[2]}">${hg[0]}</span></span>`},
+ cross:(d,it)=>runCross(d,Object.assign(crossOf(it.c),{name:nameLine(it.c)})),
+ names:(d,it)=>{const c=it.c,L=low(c.e),m=c.e[2].length>1;
+  const rows=[['est',c.v>1?`<mark>${PRE[c.v]}</mark>hidruro de ${L}`:`hidruro de ${L}`,c.v>1?`${PRE[c.v]} = ${c.v} hidrógenos`:'un solo H: sin prefijo'],
+   ['oxi',m?`hidruro de ${L}<mark>(${ROM[c.v]})</mark>`:`hidruro de ${L}`,m?`valencia ${c.v} en número romano`:'una sola valencia: no se pone'],
+   ['car',m?`hidruro de ${L}<mark>(${c.v}+)</mark>`:`hidruro de ${L}`,m?`carga ${c.v}+`:'una sola valencia: no se pone']];
+  d.querySelector('.dfig').innerHTML=`<p class="fml pop">${c.f}</p><div class="nrows">${rows.map(([k,n,why],i)=>`<div class="nrow pop" style="--c:${NOMS[k][1]};--d:${(.25+i*.35).toFixed(2)}s"><span class="nk">${NOMS[k][0]}</span><span><span class="nv">${n}</span><br><small class="note">${why}</small></span></div>`).join('')}</div>`;
+  d.querySelector('.dcap').innerHTML=m?`El ${L} tiene dos valencias (2 y 3): hay que decir cuál usa.`:c.v>1?`El ${L} solo tiene una valencia: solo cambia el estequiométrico.`:`El ${L} tiene valencia 1: los tres nombres son iguales.`}};
+function wireDemos(root){root.querySelectorAll('.demo').forEach(d=>{const D=DEM[d.id];let cur=0;const run=()=>DRUN[D.type](d,D.items[cur]);
+ d.querySelectorAll('.dchips button').forEach(b=>b.onclick=()=>{cur=+b.dataset.i;d.querySelectorAll('.dchips button').forEach(x=>x.setAttribute('aria-pressed',x===b));run()});
+ const r=d.querySelector('.drep');if(r)r.onclick=run;run()})}
+const it=(s,v,lab)=>{const c=compOf(s,v);return{c,lab:lab||c.f}};
 
 /* =================== FICHAS =================== */
 const ST=[
-{id:'f1',t:1,n:'¿Qué es un hidruro?',s:'Hidrógeno + otro elemento',
- idea:'Un <b>hidruro</b> es la combinación del <b>hidrógeno</b> con <b>otro elemento</b>. Como solo lleva dos elementos, es un compuesto <b>binario</b>.',
+{id:'f1',t:1,n:'¿Qué es un hidruro?',s:'Hidrógeno + otro elemento de la tabla',
+ idea:'Un <b>hidruro</b> es un compuesto formado por el <b>hidrógeno</b> y <b>otro elemento</b> de la tabla periódica. El agua (H₂O) y el metano (CH₄) también son hidruros.',
  fig:()=>svgOf('manos','Cada átomo tiene tantas «manos» como su valencia. El hidrógeno tiene una.'),
- b:[{k:'cards',h:'Las piezas',it:[['Hidrógeno (H)','Valencia <b>1</b>: tiene una sola «mano», así que solo se engancha a un átomo.',C.gr],['El otro elemento','En este tema, un <b>metal</b>: sodio, calcio, aluminio, hierro…',C.az],['La valencia','El número de uniones que puede hacer un átomo: sus «manos».',C.ro]]},
- {k:'ej',h:'Ejemplo',t:'El calcio tiene valencia 2: dos manos. Para no dejar ninguna libre necesita <b>dos hidrógenos</b> → <b>CaH₂</b>.'},
- {k:'ej',h:'¿Para qué sirven?',t:'El hidruro de magnesio (MgH₂) se estudia para <b>guardar hidrógeno</b> dentro de un sólido y usarlo después como combustible.'}],
- truco:'Regla de oro: <b>no puede quedar ninguna mano libre</b>. Cuenta las manos del metal y pon ese número de hidrógenos.'},
-{id:'f2',t:1,n:'Las valencias que necesitas',s:'Grupo 1, grupo 2, grupo 13 y Fe-Co-Ni',
- idea:'Para formular un hidruro solo necesitas la <b>valencia del metal</b>. Va por familias, como en la tabla periódica.',
+ b:[{k:'cards',h:'Las piezas',it:[['Hidrógeno (H)','Valencia <b>1</b>: tiene una sola «mano», así que solo se engancha a un átomo.',C.gr],['El otro elemento','Un <b>metal</b> (sodio, calcio, hierro…) o un <b>no metal</b> (carbono, nitrógeno, oxígeno…).',C.az],['La valencia','El número de uniones que puede hacer un átomo: sus «manos».',C.ro]]},
+ demo('mol',[it('Na'),it('Ca'),it('Al'),it('Fe',3),it('C'),it('O')],'Míralo moverse','Toca un elemento y mira cómo se le enganchan los hidrógenos.'),
+ {k:'ej',h:'¿Para qué sirven?',t:'El metano (CH₄) es casi todo el gas natural de las cocinas. El hidruro de magnesio (MgH₂) se estudia para <b>guardar hidrógeno</b> dentro de un sólido y usarlo como combustible.'}],
+ truco:'Regla de oro: <b>no puede quedar ninguna mano libre</b>. Por eso el número de H depende de la valencia del otro elemento.'},
+{id:'f2',t:1,n:'Las valencias que necesitas',s:'Metales de la tabla y B, C, N, O, F',
+ idea:'Para formular un hidruro necesitas la <b>valencia del otro elemento</b>. En los metales va por familias, como en la tabla periódica.',
  fig:()=>FIG_VAL(),
- b:[{k:'cards',h:'Las familias',it:[['Grupo 1','Li, Na, K, Rb, Cs → valencia <b>1</b>',FAM.g1[1]],['Grupo 2','Be, Mg, Ca, Sr, Ba → valencia <b>2</b>',FAM.g2[1]],['Grupo 13','Al, Ga, In → valencia <b>3</b>',FAM.g13[1]],['Fe, Co y Ni','Hierro, cobalto y níquel → valencias <b>2 y 3</b>. Forman dos hidruros cada uno.',FAM.fe[1]]]},
- {k:'ej',h:'Fíjate',t:'El número del grupo da la pista: grupo <b>1</b> → valencia 1; grupo <b>2</b> → valencia 2; grupo 1<b>3</b> → valencia 3.'}],
+ b:[{k:'cards',h:'Los metales',it:[['Grupo 1 de la tabla','Li, Na, K, Rb, Cs → valencia <b>1</b>',FAM.g1[1]],['Grupo 2 de la tabla','Be, Mg, Ca, Sr, Ba → valencia <b>2</b>',FAM.g2[1]],['Grupo 13 de la tabla','Al, Ga, In → valencia <b>3</b>',FAM.g13[1]],['Fe, Co y Ni','Hierro, cobalto y níquel → valencias <b>2 y 3</b>. Forman dos hidruros cada uno.',FAM.fe[1]]]},
+ {k:'cards',h:'Los no metales (con el hidrógeno)',it:[['B y N','Boro y nitrógeno → valencia <b>3</b>',FAM.h2[1]],['C','Carbono → valencia <b>4</b>',FAM.h2[1]],['O','Oxígeno → valencia <b>2</b>',FAM.h3[1]],['F','Flúor → valencia <b>1</b>',FAM.h3[1]]]}],
  truco:'Fe, Co y Ni son los únicos con <b>dos valencias</b>. Por eso el hierro forma FeH₂ y también FeH₃.'},
-{id:'f3',t:2,n:'Escribir la fórmula',s:'Metal + H + la valencia debajo',
- idea:'La fórmula se escribe con el <b>símbolo del metal</b>, después la <b>H</b> y, debajo de la H, la <b>valencia del metal</b>.',
- fig:()=>svgOf('formula','La valencia del aluminio se convierte en el número de hidrógenos.'),
- b:[{k:'steps',h:'Los 3 pasos',it:['Escribe el <b>símbolo del metal</b> (¡ojo con Na, K y Fe!).','Escribe la <b>H</b> a su derecha.','Pon debajo de la H la <b>valencia del metal</b>. Si es 1, <b>no se escribe</b>.']},
- {k:'cards',h:'Ejemplos',it:[['NaH','Sodio, valencia 1 → un H, sin número.',FAM.g1[1]],['MgH₂','Magnesio, valencia 2 → dos H.',FAM.g2[1]],['AlH₃','Aluminio, valencia 3 → tres H.',FAM.g13[1]],['FeH₂ y FeH₃','El hierro tiene 2 y 3: dos hidruros distintos.',FAM.fe[1]]]}],
- truco:'Compruébalo con las manos: el número de H tiene que ser igual al número de manos del metal.'},
-{id:'f4',t:2,n:'Ponerle nombre',s:'Con prefijos o con número romano',
- idea:'Un hidruro se nombra de dos formas: con <b>prefijos</b> que cuentan los hidrógenos, o con un <b>número romano</b> que dice la valencia del metal.',
- fig:()=>FIG_NOMBRE,
- b:[{k:'cards',h:'Con prefijos',it:[['Los prefijos','mono = 1 (no se suele poner) · <b>di</b> = 2 · <b>tri</b> = 3',C.ro],['Cómo','prefijo + «hidruro de» + metal',C.ro],['Ejemplos','NaH → hidruro de sodio<br>CaH₂ → dihidruro de calcio<br>AlH₃ → trihidruro de aluminio',C.ro]]},
- {k:'cards',h:'Con número romano',it:[['Cuándo','Solo si el metal tiene <b>más de una valencia</b> (Fe, Co, Ni).',C.az],['Cómo','«hidruro de» + metal + la valencia en romano entre paréntesis, pegada.',C.az],['Ejemplos','FeH₂ → hidruro de hierro(II)<br>CoH₃ → hidruro de cobalto(III)<br>CaH₂ → hidruro de calcio (sin número)',C.az]]}],
- truco:'Si el metal solo tiene una valencia, el número romano <b>sobra</b>: hidruro de calcio, nunca «hidruro de calcio(II)».'},
-{id:'f5',t:3,n:'Hidruros con no metales',s:'Para saber más: agua, amoniaco, metano…',
- idea:'El hidrógeno también se une a <b>no metales</b>. Muchos de esos compuestos tienen <b>nombres especiales</b> que ya conoces.',
- fig:()=>svgOf('nometal','Cada no metal con sus manos llenas de hidrógenos.'),
- b:[{k:'cards',h:'Los más famosos',it:[['H₂O · agua','Oxígeno (valencia 2) + 2 H.',C.ro],['NH₃ · amoniaco','Nitrógeno (valencia 3) + 3 H. Huele muy fuerte; diluido se usa para limpiar.',C.az],['CH₄ · metano','Carbono (valencia 4) + 4 H. Es casi todo el gas natural de las cocinas.',C.gr],['HCl · cloruro de hidrógeno','Cloro (valencia 1) + 1 H. Disuelto en agua es el ácido clorhídrico (el salfumán).',C.ve],['H₂S · sulfuro de hidrógeno','Azufre (valencia 2) + 2 H. Huele a huevo podrido.',C.na]]}],
- truco:'Con el <b>oxígeno, el azufre y F, Cl, Br, I</b> la H se escribe <b>delante</b>: H₂O, H₂S, HCl. Con los demás va detrás: NH₃, CH₄.'},
+{id:'f3',t:2,n:'Intercambiar las valencias',s:'Las reglas para escribir la fórmula',
+ idea:'Escribimos los <b>símbolos</b>, ponemos encima sus <b>valencias</b> y las <b>intercambiamos</b>: cada valencia baja junto al otro símbolo. La valencia <b>1 no se pone</b>.',
+ fig:()=>'',
+ b:[demo('cross',[it('Ca',null,'Calcio'),it('Na',null,'Sodio'),it('Al',null,'Aluminio'),it('Fe',3,'Hierro (3)'),it('Fe',2,'Hierro (2)'),it('O',null,'Oxígeno'),it('N',null,'Nitrógeno'),it('C',null,'Carbono')],'','Elige un elemento y mira el intercambio. Pulsa «Repetir» para verlo otra vez.'),
+ {k:'steps',h:'Las 3 reglas de formulación',it:['Escribimos los <b>símbolos</b> de los elementos que forman el compuesto.','<b>Intercambiamos las valencias</b>: la de uno baja junto al otro.','La valencia <b>«1»</b> en el compuesto <b>no se pone</b>.']},
+ {k:'ej',h:'Como en tus apuntes',t:'Ca (2) y H (1) → Ca₁H₂ → <b>CaH₂</b>.<br>H (1) y O (2) → H₂O₁ → <b>H₂O</b>.'}],
+ truco:'Con los metales, el número que acaba debajo de la H es siempre <b>la valencia del metal</b>: Al (3) → AlH₃.'},
+{id:'f4',t:2,n:'Los tres nombres',s:'Estequiométrica, nº de oxidación y nº de carga',
+ idea:'Un hidruro metálico se puede nombrar de <b>tres formas</b>: con <b>prefijos</b> (estequiométrica), con la valencia en <b>número romano</b> (nº de oxidación) o con la <b>carga</b> (nº de carga).',
+ fig:()=>'',
+ b:[demo('names',[it('Mg'),it('Fe',3),it('Co',2),it('K'),it('Ni',2),it('Al')],'Los ejemplos de tu tabla','Toca una fórmula: en rosa, lo que cambia en cada nombre.'),
+ {k:'cards',h:'Cómo se forma cada nombre',it:[['Estequiométrica','prefijo + «hidruro de» + elemento. El prefijo cuenta los H: <b>di</b> 2 · <b>tri</b> 3 · <b>tetra</b> 4 · <b>penta</b> 5 · <b>hexa</b> 6 · <b>hepta</b> 7. Con 1 no se pone.',C.ro],['Nº de oxidación','«hidruro de» + elemento + valencia en <b>romano</b> entre paréntesis: hidruro de hierro(III). Sin prefijos.',C.az],['Nº de carga','«hidruro de» + elemento + la <b>carga</b> entre paréntesis: hidruro de hierro(3+).',C.ve]]},
+ {k:'ej',h:'¿Cuándo se pone el número?',t:'Solo si el elemento tiene <b>más de una valencia</b> (Fe, Co, Ni). Si tiene <b>una sola, no</b>: MgH₂ es «hidruro de magnesio» en nº de oxidación y en nº de carga.'}],
+ truco:'Romano (III) → <b>oxidación</b>. Número con más (3+) → <b>carga</b>. Prefijo (tri) → <b>estequiométrica</b>.'},
+{id:'f5',t:3,n:'Los tres grupos de hidruros',s:'Con metales · con B, C, N · con O, F',
+ idea:'Los hidruros se reparten en <b>tres grupos</b> según el elemento que acompaña al hidrógeno. Ojo: no son los grupos de la tabla.',
+ fig:()=>'',
+ b:[{k:'cards',h:'Los tres grupos',it:[['Grupo 1 · metales','Metal + H. El <b>metal va delante</b> y se nombran con los tres nombres. <i>MgH₂, FeH₃, KH, BeH₂…</i>',HG[1][2]],['Grupo 2 · B, C, N','El elemento va delante y tienen <b>nombres especiales</b>: <i>BH₃ borano · CH₄ metano · NH₃ amoniaco.</i>',HG[2][2]],['Grupo 3 · O, F','Aquí la <b>H va delante</b>: <i>H₂O agua · HF fluoruro de hidrógeno.</i>',HG[3][2]]]},
+ demo('mol',[it('Mg'),it('Fe',3),it('B'),it('C'),it('N'),it('O'),it('F')],'Míralo moverse','Toca una fórmula: verás la molécula, su nombre y su grupo.'),
+ {k:'ej',h:'Por qué la H va delante en el grupo 3',t:'Al intercambiar valencias escribimos primero la H: H (1) y O (2) → H₂O₁ → <b>H₂O</b>. H (1) y F (1) → H₁F₁ → <b>HF</b>.'}],
+ truco:'Grupo 2 = <b>B, C, N</b> (borano, metano, amoniaco). Grupo 3 = <b>O, F</b> (agua, fluoruro de hidrógeno). Todo lo demás de este tema, grupo 1.'},
 ];
 function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
  if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
  if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
  if(B.k==='steps')return`<section class="blk">${h}<ol class="steps">${B.it.map(x=>`<li><span>${x}</span></li>`).join('')}</ol></section>`;
+ if(B.k==='html')return B.t();
  return''}).join('')}
-const CHULETA=[['Hidruro','Hidrógeno + otro elemento. Compuesto binario. El H tiene valencia 1.',C.gr],['Valencias','Grupo 1 → 1 · grupo 2 → 2 · grupo 13 → 3 · Fe, Co, Ni → 2 y 3.',C.az],['Fórmula','Metal + H + valencia del metal debajo: NaH, CaH₂, AlH₃.',C.ve],['Prefijos','di = 2, tri = 3: dihidruro de calcio, trihidruro de aluminio.',C.ro],['Número romano','Solo con dos valencias: hidruro de hierro(II), hidruro de hierro(III).',C.ro]];
+const CHULETA=[['Hidruro','Hidrógeno + otro elemento de la tabla. El H tiene valencia 1.',C.gr],['Valencias','Grupos 1, 2 y 13 de la tabla → 1, 2 y 3 · Fe, Co, Ni → 2 y 3 · B, N → 3 · C → 4 · O → 2 · F → 1.',C.az],['Formular','Símbolos, intercambio de valencias y el 1 no se pone: Ca (2) H (1) → CaH₂.',C.ve],['Tres nombres','Estequiométrica (dihidruro de cobalto) · nº de oxidación (hidruro de cobalto(II)) · nº de carga (hidruro de cobalto(2+)).',C.ro],['Tres grupos','1: metales · 2: B, C, N (borano, metano, amoniaco) · 3: O, F con la H delante (H₂O, HF).',C.na]];
 
 const QB={
-f1:[['t','¿Qué es un hidruro?','La combinación del hidrógeno con otro elemento',['Un elemento de la tabla periódica','Una mezcla de hidrógeno y aire','La combinación del oxígeno con otro elemento'],'Hidrógeno + otro elemento.'],
- ['t','Un compuesto binario está formado por…','Dos elementos distintos',['Dos átomos en total','Dos moléculas','Dos mezclas'],'«Bi» significa dos: aquí, el hidrógeno y otro elemento.'],
- ['t','¿Qué valencia tiene el hidrógeno?','1',['2','3','Depende del metal'],'Siempre 1: una sola «mano».'],
+f1:[['t','¿Qué es un hidruro?','Un compuesto formado por el hidrógeno y otro elemento de la tabla',['Un elemento de la tabla periódica','Una mezcla de hidrógeno y aire','Un compuesto formado por el oxígeno y otro elemento'],'Hidrógeno + otro elemento.'],
+ ['t','¿Qué valencia tiene el hidrógeno?','1',['2','3','Depende del otro elemento'],'Siempre 1: una sola «mano».'],
  ['t','¿Cuál de estos es un hidruro?','NaH',['NaCl','CO₂','Fe'],'Sodio + hidrógeno.'],
- ['t','¿Cuál de estos NO es un hidruro?','MgO',['MgH₂','LiH','AlH₃'],'MgO lleva oxígeno, no hidrógeno.'],
+ ['t','¿Cuál de estos NO es un hidruro?','MgO',['MgH₂','CH₄','H₂O'],'MgO lleva oxígeno, pero no hidrógeno.'],
  ['t','¿Qué indica la valencia de un átomo?','Cuántas uniones puede hacer (sus «manos»)',['Cuántos protones tiene','Cuánto pesa','En qué periodo está'],'Es su capacidad para unirse a otros átomos.'],
  ['t','El calcio tiene 2 «manos». ¿Cuántos hidrógenos necesita?','2',['1','3','4'],'Uno por mano: CaH₂.'],
- ['v','En un hidruro siempre hay hidrógeno.',true,'Verdadero: por eso se llama hidruro.'],
- ['v','En un hidruro pueden quedar «manos» libres.',false,'Falso: todas las manos del metal tienen que quedar ocupadas.']],
-f2:[['t','¿Qué valencia tiene el sodio (Na)?','1',['2','3','2 y 3'],'Grupo 1 → valencia 1.'],
- ['t','¿Qué valencia tiene el calcio (Ca)?','2',['1','3','2 y 3'],'Grupo 2 → valencia 2.'],
- ['t','¿Qué valencia tiene el aluminio (Al)?','3',['1','2','2 y 3'],'Grupo 13 → valencia 3.'],
+ ['v','El agua (H₂O) es un hidruro.',true,'Verdadero: hidrógeno + oxígeno.'],
+ ['v','El metano (CH₄) es un hidruro.',true,'Verdadero: hidrógeno + carbono.'],
+ ['v','En un hidruro pueden quedar «manos» libres.',false,'Falso: todas las manos tienen que quedar ocupadas.']],
+f2:[['t','¿Qué valencia tiene el sodio (Na)?','1',['2','3','2 y 3'],'Grupo 1 de la tabla → valencia 1.'],
+ ['t','¿Qué valencia tiene el calcio (Ca)?','2',['1','3','2 y 3'],'Grupo 2 de la tabla → valencia 2.'],
+ ['t','¿Qué valencia tiene el aluminio (Al)?','3',['1','2','2 y 3'],'Grupo 13 de la tabla → valencia 3.'],
  ['t','¿Qué valencias tiene el hierro (Fe)?','2 y 3',['1','2','3'],'Fe, Co y Ni tienen dos valencias.'],
- ['t','¿Qué valencia tienen los elementos del grupo 1?','1',['2','3','Cada uno una distinta'],'Li, Na, K, Rb y Cs: valencia 1.'],
  ['t','¿Qué metales tienen dos valencias (2 y 3)?','Fe, Co y Ni',['Li, Na y K','Mg, Ca y Ba','Al, Ga e In'],'Hierro, cobalto y níquel.'],
- ['t','¿Qué valencia tiene el bario (Ba)?','2',['1','3','2 y 3'],'Está en el grupo 2.'],
- ['t','¿Qué valencia tiene el potasio (K)?','1',['2','3','2 y 3'],'Está en el grupo 1.'],
- ['v','El magnesio tiene valencia 2.',true,'Verdadero: está en el grupo 2.'],
- ['v','El galio tiene valencia 1.',false,'Falso: está en el grupo 13, valencia 3.']],
-f3:[['t','¿Cuál es la fórmula del hidruro de sodio?','NaH',['NaH₂','HNa','SoH'],'Sodio: valencia 1, y el 1 no se escribe.'],
- ['t','¿Cuál es la fórmula del dihidruro de calcio?','CaH₂',['CaH','Ca₂H','CaH₃'],'Di = 2 hidrógenos.'],
- ['t','¿Cuál es la fórmula del trihidruro de aluminio?','AlH₃',['Al₃H','AlH','H₃Al'],'El número va debajo de la H.'],
- ['t','¿Cuál es la fórmula del hidruro de hierro(III)?','FeH₃',['FeH₂','Fe₃H','FeH'],'Valencia 3 → tres H.'],
- ['t','¿Cuál es la fórmula del hidruro de potasio?','KH',['PH','KH₂','PoH'],'El potasio es K (del latín kalium).'],
- ['t','¿Cuál es la fórmula del hidruro de cobalto(II)?','CoH₂',['CoH₃','Co₂H','COH₂'],'Co con la o minúscula: CO serían carbono y oxígeno.'],
- ['t','En la fórmula de un hidruro metálico, ¿qué se escribe primero?','El símbolo del metal',['La H','El número','Da igual el orden'],'Primero el metal y después la H.'],
- ['t','¿Qué número se escribe debajo de la H?','La valencia del metal',['La valencia del hidrógeno','El número atómico Z','Siempre un 2'],'Tantos H como manos tiene el metal.'],
- ['t','¿Por qué en NaH no aparece ningún número?','Porque el 1 no se escribe',['Porque el sodio no tiene valencia','Porque es un error','Porque el H no cuenta'],'Con valencia 1 la fórmula queda NaH.']],
-f4:[['t','¿Cómo se llama MgH₂ con prefijos?','Dihidruro de magnesio',['Hidruro de dimagnesio','Trihidruro de magnesio','Magnesio dihidruro'],'Dos H → di.'],
- ['t','¿Cómo se llama AlH₃ con prefijos?','Trihidruro de aluminio',['Dihidruro de aluminio','Hidruro de trialuminio','Hidruro de aluminio(II)'],'Tres H → tri.'],
- ['t','¿Cómo se llama FeH₂ con número romano?','Hidruro de hierro(II)',['Hidruro de hierro(III)','Hidruro de hierro(2)','Hidruro de dihierro'],'El hierro usa la valencia 2.'],
- ['t','¿Cómo se llama NiH₃ con número romano?','Hidruro de níquel(III)',['Hidruro de níquel(II)','Trihidruro de níquel(III)','Hidruro de níquel(3)'],'Tres H → valencia 3 → (III).'],
- ['t','¿Qué significa el prefijo «tri»?','3',['2','1','4'],'Di = 2, tri = 3.'],
- ['t','¿Cuándo se pone el número romano en el nombre?','Cuando el metal tiene más de una valencia',['Siempre','Nunca','Solo con el sodio'],'Con Fe, Co y Ni hace falta para saber cuál de las dos usa.'],
- ['t','¿Cómo se llama CaH₂ con número romano?','Hidruro de calcio',['Hidruro de calcio(II)','Dihidruro de calcio(II)','Hidruro de dicalcio'],'El calcio solo tiene valencia 2: el número sobra.'],
- ['t','¿Cómo se llama LiH?','Hidruro de litio',['Dihidruro de litio','Hidruro de litio(II)','Hidruro de dilitio'],'Un H y valencia 1: sin prefijo ni número.'],
- ['v','«Dihidruro de cobalto» e «hidruro de cobalto(II)» son el mismo compuesto: CoH₂.',true,'Verdadero: son dos formas de nombrar lo mismo.']],
-f5:[['t','¿Qué fórmula tiene el agua?','H₂O',['HO₂','OH','H₂O₂'],'Oxígeno (valencia 2) + 2 H.'],
- ['t','¿Cómo se llama NH₃?','Amoniaco',['Metano','Agua','Nitruro de sodio'],'Nitrógeno + 3 hidrógenos.'],
- ['t','¿Cómo se llama CH₄?','Metano',['Amoniaco','Dióxido de carbono','Carbonato'],'Es el gas natural.'],
- ['t','¿Cómo se llama HCl?','Cloruro de hidrógeno',['Hidruro de cloro','Clorato','Cloro'],'Disuelto en agua es el ácido clorhídrico (salfumán).'],
- ['t','¿En cuál de estos la H se escribe delante?','HCl',['NH₃','CH₄','NaH'],'Con O, S y F, Cl, Br, I la H va delante.'],
- ['t','¿Qué valencia tiene el carbono en el metano (CH₄)?','4',['1','2','3'],'Cuatro manos, cuatro H.'],
- ['v','El agua es un compuesto binario de hidrógeno y oxígeno.',true,'Verdadero: dos elementos, H y O.']]};
+ ['t','¿Qué valencia tiene el carbono (C) con el hidrógeno?','4',['1','2','3'],'Por eso el metano es CH₄.'],
+ ['t','¿Qué valencia tiene el nitrógeno (N) con el hidrógeno?','3',['1','2','4'],'Por eso el amoniaco es NH₃.'],
+ ['t','¿Qué valencia tiene el oxígeno (O) con el hidrógeno?','2',['1','3','4'],'Por eso el agua es H₂O.'],
+ ['t','¿Qué valencia tiene el flúor (F)?','1',['2','3','4'],'Por eso es HF.'],
+ ['v','El boro tiene valencia 3.',true,'Verdadero: BH₃.']],
+f3:[['t','Al formular un hidruro, ¿qué hacemos con las valencias?','Las intercambiamos',['Las sumamos','Las dejamos donde están','Las multiplicamos'],'La de cada elemento baja junto al otro.'],
+ ['t','Ca (valencia 2) y H (valencia 1). ¿Qué fórmula sale?','CaH₂',['Ca₂H','CaH','H₂Ca'],'Ca₁H₂ y el 1 no se pone.'],
+ ['t','H (valencia 1) y O (valencia 2). ¿Qué fórmula sale?','H₂O',['HO₂','OH₂','H₂O₂'],'H₂O₁ y el 1 no se pone.'],
+ ['t','¿Por qué se escribe CaH₂ y no Ca₁H₂?','Porque la valencia 1 no se pone',['Porque el calcio no tiene valencia','Porque es un error','Porque el H no cuenta'],'Es la tercera regla.'],
+ ['t','Al intercambiar, ¿dónde acaba la valencia del calcio?','Debajo del H',['Debajo del Ca','Encima del H','Desaparece'],'Cada valencia baja junto al otro símbolo.'],
+ ['t','Al (valencia 3) y H (valencia 1). ¿Qué fórmula sale?','AlH₃',['Al₃H','AlH','H₃Al'],'Al₁H₃ → AlH₃.'],
+ ['t','El hierro con valencia 3 y el hidrógeno forman…','FeH₃',['FeH₂','Fe₃H','FeH'],'Fe₁H₃ → FeH₃.'],
+ ['t','N (valencia 3) y H (valencia 1). ¿Qué fórmula sale?','NH₃',['N₃H','H₃N','NH'],'N₁H₃ → NH₃, el amoniaco.'],
+ ['t','¿Cuál es la primera regla de formulación?','Escribir los símbolos de los elementos que forman el compuesto',['Intercambiar las valencias','Quitar los unos','Escribir el nombre'],'Primero los símbolos; luego, intercambiar.']],
+f4:[['t','¿Cómo se llama MgH₂ en la nomenclatura estequiométrica?','Dihidruro de magnesio',['Hidruro de dimagnesio','Hidruro de magnesio(II)','Trihidruro de magnesio'],'Dos H → di.'],
+ ['t','¿Cómo se llama FeH₃ con nº de oxidación?','Hidruro de hierro(III)',['Hidruro de hierro(3+)','Trihidruro de hierro','Hidruro de hierro(II)'],'La valencia 3 en romano.'],
+ ['t','¿Cómo se llama FeH₃ con nº de carga?','Hidruro de hierro(3+)',['Hidruro de hierro(III)','Hidruro de hierro(+3)','Trihidruro de hierro'],'La carga se escribe 3+.'],
+ ['t','¿Cómo se llama CoH₂ en la estequiométrica?','Dihidruro de cobalto',['Hidruro de cobalto(II)','Hidruro de cobalto(2+)','Hidruro de dicobalto'],'Los prefijos cuentan los H.'],
+ ['t','¿Qué fórmula es el hidruro de níquel(2+)?','NiH₂',['NiH₃','Ni₂H','NiH'],'Carga 2+ → valencia 2 → dos H.'],
+ ['t','¿Qué nomenclatura usa prefijos (di, tri…)?','Estequiométrica',['Nº de oxidación','Nº de carga','Ninguna'],'Los prefijos dicen cuántos H hay.'],
+ ['t','¿Qué nomenclatura usa números romanos?','Nº de oxidación',['Estequiométrica','Nº de carga','Ninguna'],'Hidruro de hierro(III).'],
+ ['t','¿Cómo se llama KH en las tres nomenclaturas?','Hidruro de potasio en las tres',['Monohidruro de potasio(I)','Hidruro de potasio(I) y (1+)','Dihidruro de potasio'],'Un H y una sola valencia: sin prefijo ni número.'],
+ ['t','¿Qué número significa el prefijo «tetra»?','4',['3','5','6'],'di 2 · tri 3 · tetra 4 · penta 5 · hexa 6 · hepta 7.'],
+ ['t','¿Qué número significa el prefijo «hexa»?','6',['5','7','4'],'penta 5 · hexa 6 · hepta 7.'],
+ ['t','¿Cuándo se pone el número (romano o la carga) en el nombre?','Cuando el elemento tiene más de una valencia',['Siempre','Nunca','Solo con el potasio'],'Con una sola valencia no hace falta.']],
+f5:[['t','¿A qué grupo de hidruros pertenece el NH₃?','Grupo 2',['Grupo 1','Grupo 3','A ninguno'],'B, C y N forman el grupo 2.'],
+ ['t','¿A qué grupo de hidruros pertenece el H₂O?','Grupo 3',['Grupo 1','Grupo 2','A ninguno'],'O y F forman el grupo 3.'],
+ ['t','¿A qué grupo de hidruros pertenece el FeH₃?','Grupo 1',['Grupo 2','Grupo 3','A ninguno'],'Metal + H: grupo 1.'],
+ ['t','¿Qué elementos forman el grupo 2 de hidruros?','B, C y N',['O y F','Fe, Co y Ni','Li, Na y K'],'Boro, carbono y nitrógeno.'],
+ ['t','¿Qué elementos forman el grupo 3 de hidruros?','O y F',['B, C y N','Na y K','Fe y Co'],'Oxígeno y flúor.'],
+ ['t','¿Cómo se llama CH₄?','Metano',['Amoniaco','Borano','Agua'],'Carbono + 4 H.'],
+ ['t','¿Cómo se llama NH₃?','Amoniaco',['Metano','Borano','Nitruro'],'Nitrógeno + 3 H.'],
+ ['t','¿Cómo se llama BH₃?','Borano',['Metano','Amoniaco','Hidruro de boro(III)'],'Boro + 3 H.'],
+ ['t','¿Cómo se llama HF?','Fluoruro de hidrógeno',['Hidruro de flúor','Fluorano','Agua'],'Es del grupo 3.'],
+ ['t','¿En qué grupo de hidruros se escribe la H delante?','En el grupo 3 (O, F)',['En el grupo 1','En el grupo 2','En todos'],'H₂O y HF.'],
+ ['v','Los grupos de hidruros son los mismos que los grupos de la tabla periódica.',false,'Falso: son una clasificación de los hidruros.']]};
 const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
 const stOf=id=>ST.find(s=>s.id===id);
-const CORE=['f1','f2','f3','f4'];
+const CORE=ST.map(s=>s.id);
 
 /* =================== ESTADO =================== */
 const KEY='hidruros-v1';
@@ -371,16 +447,17 @@ function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.leng
 function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
 
 /* =================== ESTUDIAR / RETOS / PRUEBA =================== */
-function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
-function renderEst(){const TH=[[1,'Qué son y cómo se forman'],[2,'Formular y nombrar'],[3,'Para saber más']];
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${Math.min(totalStars(),ST.length*3)}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'Qué son y sus valencias'],[2,'Formular y nombrar'],[3,'Los tres grupos']];
  $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
- TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${t===3?'ampliación · ':''}${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
  $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
  $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
 function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
- $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}${s.t===3?'<span class="ampl">ampliación</span>':''}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
  <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco</b>${s.truco}</p>`:''}
  <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ wireDemos($('#main'));
  $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
 let V=null;
 function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
@@ -405,43 +482,73 @@ function finishQuiz(){const n=V.res.filter(Boolean).length;
   <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
   <p>${nota>=9?'¡Sobresaliente!':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
  window.scrollTo({top:0})}
-function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de hidruros</h2><p>15 preguntas de las fichas 1 a 4, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
- $('#go').onclick=()=>{let list=[];CORE.forEach(id=>list.push(...wpick(QS.filter(q=>q.st===id),3)));list.push(...wpick(QS.filter(q=>CORE.includes(q.st)&&!list.includes(q)),3));startQuiz({kind:'prueba',list:shuffle(list)})}}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de hidruros</h2><p>15 preguntas de las cinco fichas, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];CORE.forEach(id=>list.push(...wpick(QS.filter(q=>q.st===id),3)));startQuiz({kind:'prueba',list:shuffle(list)})}}
 
 /* =================== JUEGOS =================== */
 const GAMES=[
-{id:'eng',ico:'H — Al — H',n:'Engancha hidrógenos',d:'Ponle al metal los hidrógenos que necesita. Sus manos están escondidas.',best:v=>v+' de 6'},
+{id:'cru',ico:'Ca² ✕ H¹',n:'Intercambia valencias',d:'Pon la valencia, mira el intercambio y elige cómo queda la fórmula.',best:v=>v+' de 6'},
+{id:'eng',ico:'H — Al — H',n:'Engancha hidrógenos',d:'Ponle los hidrógenos que necesita. Sus manos están escondidas.',best:v=>v+' de 6'},
 {id:'for',ico:'Al + H₃',n:'Monta la fórmula',d:'Te doy el nombre: elige el símbolo y cuántos H.',best:v=>v+' de 8'},
-{id:'nom',ico:'tri · (III)',n:'Ponle nombre',d:'Te doy la fórmula: elige su nombre con prefijos o con número romano.',best:v=>v+' de 8'},
+{id:'nom',ico:'tri · (III) · (3+)',n:'Ponle nombre',d:'Te doy la fórmula: elige su nombre en la nomenclatura que te pida.',best:v=>v+' de 9'},
 {id:'par',ico:'CaH₂ ↔ ?',n:'Parejas',d:'Une cada fórmula con su nombre.',best:v=>v+(v===1?' error':' errores')},
-{id:'cla',ico:'¡Rápido!',n:'Contra reloj',d:'Valencias, cuántos H y ¿bien o mal formulado? en 60 segundos.',best:v=>v+' puntos'},
+{id:'cla',ico:'¡Rápido!',n:'Contra reloj',d:'Valencias, grupos, nomenclaturas y ¿bien o mal? en 60 segundos.',best:v=>v+' puntos'},
 ];
 function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
- $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({eng:gEng,for:gFor,nom:gNom,par:gPar,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({cru:gCru,eng:gEng,for:gFor,nom:gNom,par:gPar,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
 const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
 function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
 function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
 const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
 const nxBtn=(last,fn)=>{$('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=fn;$('#nx').focus({preventScroll:true})};
+const theEl=c=>`${c.g===3||c.e[1]==='Flúor'?'el':'el'} ${low(c.e)}`;
 
-/* 1. Engancha hidrógenos */
-function gEng(){const R_=shuffle(COMP).slice(0,6);let k=0,good=0;const res=[];
+/* 1. Intercambia valencias */
+function crossOpts(o){const sim=n=>SUB[n];const right=o.A+sim(o.vb)+o.B+sim(o.va);
+ const d=[o.A+SUBV[o.vb]+o.B+SUBV[o.va],o.A+sim(o.va)+o.B+sim(o.vb),o.B+sim(o.va)+o.A+sim(o.vb),o.B+sim(o.vb)+o.A+sim(o.va)];
+ return shuffle([right,...shuffle([...new Set(d)].filter(x=>x!==right)).slice(0,3)])}
+function gCru(){const n=6;const R_=shuffle(ALLH).slice(0,n);let k=0,good=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Intercambia valencias</span></div><div id="pb"></div><p class="prompt" id="q"></p><div class="demo" id="cbox"><div class="cfig"></div><p class="ccap" aria-live="polite"></p></div><div class="brow" id="b1"></div><div class="opts grid" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const box=$('#cbox');
+ const draw=()=>{$('#nxw').innerHTML='';$('#opts').innerHTML='';$('#b1').innerHTML='';$('#fb').textContent='';
+  if(k>=n){box._t=(box._t||0)+1;const b=setBest('cru',good,false);$('#q').textContent='';box.hidden=true;$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Símbolos, intercambio de valencias y la valencia 1 no se pone.`,gCru);return}
+  const c=R_[k];window.__g=c;const o=Object.assign(crossOf(c),{name:nameLine(c)});const isA=o.A===c.e[0];let ok1=true,t1=0;$('#pb').innerHTML=pbar(n,res,k);box.hidden=false;
+  const G=crossSVG(o,isA,!isA);box.querySelector('.cfig').innerHTML=G.svg;
+  const multi=c.e[2].length>1;
+  const step2=async()=>{$('#b1').innerHTML='';const okR=await runCross(box,o,{skipIntro:true,stop:true});if(!okR)return;
+   box.querySelector('.ccap').innerHTML='¿Cómo queda la fórmula?';const opts=crossOpts(o);
+   $('#opts').innerHTML=opts.map((x,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font:800 1.3rem var(--f-display)">${x}</button>`).join('');let done=false;
+   $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=opts[+b.dataset.i]===o.f;const win=ok&&ok1;if(win)good++;res.push(win);$('#pb').innerHTML=pbar(n,res,k);
+    $('#opts').querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(opts[j]===o.f)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+    const r=box.querySelector('.cres');r.textContent='= '+o.f;fade(r,0,1,300);
+    $('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Bien! ':'Era <b>'+o.f+'</b>. '}${o.A}${SUBV[o.vb]}${o.B}${SUBV[o.va]} → el 1 no se pone → <b>${o.f}</b> · ${esc(o.name)}.`;nxBtn(k===n-1,()=>{k++;draw()})})};
+  if(multi){$('#q').innerHTML=`El <b>${low(c.e)}</b> con <b>valencia ${c.v}</b> y el hidrógeno.`;box.querySelector('.ccap').innerHTML='Mira el intercambio…';G.svg&&setTimeout(()=>{if(R_[k]===c)step2()},RM?0:700);return}
+  $('#q').innerHTML=`El <b>${low(c.e)}</b> y el hidrógeno. ¿Qué valencia tiene ${c.g===1?'el metal':low(c.e)==='flúor'?'el flúor':'el '+low(c.e)}?`;box.querySelector('.ccap').innerHTML='Toca la valencia que va en el «?».';
+  $('#b1').innerHTML=[1,2,3,4].map(v=>`<button type="button" class="chipb" data-v="${v}">${v}</button>`).join('');
+  $('#b1').querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=+b.dataset.v;t1++;
+   if(v===c.v){b.classList.add('right');step2()}
+   else{ok1=false;b.classList.add('wrong');b.disabled=true;if(t1>=2){$('#fb').className='fb ko';$('#fb').innerHTML=`La valencia del ${low(c.e)} es <b>${c.v}</b>.`;step2()}else{$('#fb').className='fb ko';$('#fb').textContent='No es esa. Piensa en su grupo. Una oportunidad más.'}}})};
+ draw()}
+
+/* 2. Engancha hidrógenos */
+function gEng(){const R_=shuffle(ALLH).slice(0,6);let k=0,good=0;const res=[];
  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Engancha hidrógenos</span></div><div id="pb"></div><p class="prompt" id="q"></p><div class="atomview" id="av"></div><p class="fml" id="fm" aria-live="polite"></p><div class="ctr" id="ctr"></div><div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
  let n=0,tries=0,done=false,cur,reveal=false;
- const view=()=>{const col=FAM[cur.e[5]][1];$('#av').innerHTML=`<svg viewBox="0 0 300 232" role="img" aria-label="${esc(cur.e[1])} con ${n} hidrógenos"><rect width="300" height="232" fill="#eef7f6"/>${molG(110,96,cur.e[0],cur.v,n,col,{hooks:reveal})}${reveal&&n>cur.v?T(110,226,'sobran','font-size="12" font-weight="700" fill="#c0127e"'):''}</svg>`;
-  $('#fm').textContent=n?fml(cur.e[0],n):cur.e[0];
+ const fOf=nn=>cur.g===3?'H'+SUB[nn]+cur.e[0]:fml(cur.e[0],nn);
+ const view=()=>{$('#av').innerHTML=`<svg viewBox="0 0 300 232" role="img" aria-label="${esc(cur.e[1])} con ${n} hidrógenos"><rect width="300" height="232" fill="#eef7f6"/>${molG(110,96,cur.e[0],cur.v,n,colOf(cur.e),{hooks:reveal})}${reveal&&n>cur.v?T(110,226,'sobran','font-size="12" font-weight="700" fill="#c0127e"'):''}</svg>`;
+  $('#fm').textContent=n?fOf(n):cur.e[0];
   $('#ctr').innerHTML=`<div class="cnt"><span class="dotc" style="background:#8a94a3">H</span><b>Hidrógenos</b><button type="button" class="ghost sm" data-d="-1" aria-label="Quitar un hidrógeno">−</button><output>${n}</output><button type="button" class="ghost sm" data-d="1" aria-label="Añadir un hidrógeno">+</button></div>`;
   $('#ctr').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(done)return;n=Math.max(0,Math.min(6,n+ +b.dataset.d));$('#fb').textContent='';view()})};
- const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('eng',good,false);['#q','#fm','#fb'].forEach(s=>$(s).textContent='');$('#av').innerHTML='';$('#ctr').innerHTML='';$('#chk').hidden=true;$('#pb').innerHTML=pbar(6,res,99);endG(`${good} de 6`,`${b?'¡Nueva mejor marca! ':''}Tantos hidrógenos como manos (valencia) tenga el metal.`,gEng);return}
-  cur=R_[k];n=0;tries=0;done=false;reveal=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(6,res,k);$('#fb').textContent='';
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('eng',good,false);['#q','#fm','#fb'].forEach(s=>$(s).textContent='');$('#av').innerHTML='';$('#ctr').innerHTML='';$('#chk').hidden=true;$('#pb').innerHTML=pbar(6,res,99);endG(`${good} de 6`,`${b?'¡Nueva mejor marca! ':''}Tantos hidrógenos como manos (valencia) tenga el otro elemento.`,gEng);return}
+  cur=R_[k];window.__g=cur;n=0;tries=0;done=false;reveal=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(6,res,k);$('#fb').textContent='';
   $('#q').innerHTML=cur.e[2].length>1?`Engancha hidrógenos al <b>${low(cur.e)}</b> usando su <b>valencia ${cur.v}</b>.<small>Al comprobar verás sus manos.</small>`:`Engancha al <b>${low(cur.e)}</b> los hidrógenos que necesita.<small>Sus manos están escondidas: piensa en su valencia.</small>`;view()};
  $('#chk').onclick=()=>{if(done)return;if(!n){$('#fb').className='fb ko';$('#fb').textContent='Añade algún hidrógeno con el botón +.';return}tries++;const ok=n===cur.v;
   if(ok||tries>=2){done=true;const win=ok&&tries===1;if(win)good++;res.push(win);reveal=true;if(!ok)n=cur.v;view();$('#fb').className='fb '+(ok?'okk':'ko');
-   $('#fb').innerHTML=`${ok?'¡Todas las manos ocupadas! ':`El ${low(cur.e)} tiene ${cur.v===1?'una mano':cur.v+' manos'}. `}<b>${cur.f}</b> · ${bothN(cur)}.`;nxBtn(k===R_.length-1,()=>{k++;draw()})}
+   $('#fb').innerHTML=`${ok?'¡Todas las manos ocupadas! ':`El ${low(cur.e)} tiene ${cur.v===1?'una mano':cur.v+' manos'}. `}<b>${cur.f}</b> · ${esc(nameLine(cur))}.`;nxBtn(k===R_.length-1,()=>{k++;draw()})}
   else{$('#fb').className='fb ko';$('#fb').textContent=n<cur.v?'Le quedan manos libres: faltan hidrógenos. Una oportunidad más.':'Sobran hidrógenos: tiene menos manos. Una oportunidad más.'}};
  draw()}
 
-/* 2. Monta la fórmula */
+/* 3. Monta la fórmula */
 const FAKE={Li:['L','Lt'],Na:['So','S'],K:['P','Po'],Rb:['R','Ru'],Cs:['Ce','C'],Be:['Br','B'],Mg:['Ma','M'],Ca:['C','Cl'],Sr:['Es','S'],Ba:['B','Br'],Fe:['Hi','F'],Co:['CO','C'],Ni:['N','Nq'],Al:['A','Au'],Ga:['G','Gl'],In:['I','Id']};
 function gFor(){const n=8;const R_=shuffle(COMP).slice(0,n);let k=0,good=0;const res=[];
  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Monta la fórmula</span></div><div id="pb"></div><p class="prompt" id="q"></p><p class="fml" id="fm" aria-live="polite"></p>
@@ -449,9 +556,9 @@ function gFor(){const n=8;const R_=shuffle(COMP).slice(0,n);let k=0,good=0;const
  <div class="actions"><button class="primary" id="chk" type="button">Comprobar</button></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
  let cur,sym=null,sub=null,tries=0,done=false,syms;
  const prev=()=>{$('#fm').innerHTML=(sym||'<span style="color:var(--line)">?</span>')+(sub?'H'+SUB[sub]:'<span style="color:var(--line)">H?</span>')};
- const draw=()=>{$('#nxw').innerHTML='';if(k>=n){const b=setBest('for',good,false);['#q','#fm','#fb'].forEach(s=>$(s).textContent='');$('#b1').innerHTML='';$('#b2').innerHTML='';$('#chk').hidden=true;$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Primero el metal, luego la H y debajo la valencia del metal.`,gFor);return}
-  cur=R_[k];sym=null;sub=null;tries=0;done=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(n,res,k);$('#fb').textContent='';
-  const nm=k%2&&cur.sto!==cur.pre?cur.sto:cur.pre;$('#q').innerHTML=`Escribe la fórmula del <b>${lf(nm)}</b>`;
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=n){const b=setBest('for',good,false);['#q','#fm','#fb'].forEach(s=>$(s).textContent='');$('#b1').innerHTML='';$('#b2').innerHTML='';$('#chk').hidden=true;$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Intercambia las valencias: la del metal baja junto a la H.`,gFor);return}
+  cur=R_[k];window.__g=cur;sym=null;sub=null;tries=0;done=false;$('#chk').hidden=false;$('#pb').innerHTML=pbar(n,res,k);$('#fb').textContent='';
+  const nm=cur[['est','oxi','car'][k%3]];$('#q').innerHTML=`Escribe la fórmula del <b>${esc(lf(nm))}</b>`;
   syms=shuffle([cur.e[0],...FAKE[cur.e[0]]]);
   $('#b1').innerHTML=syms.map(s=>`<button type="button" class="chipb" data-s="${esc(s)}" aria-pressed="false">${esc(s)}</button>`).join('');
   $('#b2').innerHTML=[1,2,3].map(v=>`<button type="button" class="chipb" data-v="${v}" aria-pressed="false">H${SUB[v]}</button>`).join('');
@@ -462,32 +569,39 @@ function gFor(){const n=8;const R_=shuffle(COMP).slice(0,n);let k=0,good=0;const
   if((okS&&okV)||tries>=2){done=true;const win=okS&&okV&&tries===1;if(win)good++;res.push(win);
    $('#b1').querySelectorAll('button').forEach(x=>{x.disabled=true;if(x.dataset.s===cur.e[0])x.classList.add('right');else if(x.dataset.s===sym)x.classList.add('wrong')});
    $('#b2').querySelectorAll('button').forEach(x=>{x.disabled=true;if(+x.dataset.v===cur.v)x.classList.add('right');else if(+x.dataset.v===sub)x.classList.add('wrong')});
-   $('#fm').textContent=cur.f;$('#fb').className='fb '+(okS&&okV?'okk':'ko');$('#fb').innerHTML=`${okS&&okV?'¡Bien! ':'Era así: '}<b>${cur.f}</b>. ${cur.e[1]} (${cur.e[0]}) con valencia ${cur.v} → ${cur.v===1?'un H, sin número':cur.v+' H'}.`;nxBtn(k===n-1,()=>{k++;draw()})}
-  else{$('#fb').className='fb ko';$('#fb').innerHTML=!okS?`<b>${esc(sym)}</b> no es el símbolo del ${low(cur.e)}. Prueba otra vez.`:'El símbolo está bien. Revisa los hidrógenos: tantos como la valencia del metal.'}};
+   $('#fm').textContent=cur.f;$('#fb').className='fb '+(okS&&okV?'okk':'ko');$('#fb').innerHTML=`${okS&&okV?'¡Bien! ':'Era así: '}<b>${cur.f}</b>. ${cur.e[0]} (${cur.v}) y H (1) → ${cur.e[0]}₁H${SUBV[cur.v]} → <b>${cur.f}</b>.`;nxBtn(k===n-1,()=>{k++;draw()})}
+  else{$('#fb').className='fb ko';$('#fb').innerHTML=!okS?`<b>${esc(sym)}</b> no es el símbolo del ${low(cur.e)}. Prueba otra vez.`:'El símbolo está bien. Revisa los hidrógenos: la valencia del metal baja junto a la H.'}};
  draw()}
 
-/* 3. Ponle nombre */
-function nameOpts(c,mode){const e=c.e,L=low(e);const right=mode==='pre'?c.pre:c.sto;let d=[];
- if(mode==='pre'){[1,2,3].filter(x=>x!==c.v).forEach(x=>d.push(preN(e,x)));if(c.v>1)d.push(cap('hidruro de '+PRE[c.v]+L));d.push(preN(pick(EL.filter(x=>x!==e&&x[2].includes(c.v))),c.v))}
- else if(e[2].length>1){d.push(stoN(e,c.v===2?3:2),cap('hidruro de '+L+'('+c.v+')'),cap(PRE[c.v]+'hidruro de '+L+'('+ROM[c.v]+')'))}
- else{d.push(cap('hidruro de '+L+'('+ROM[c.v]+')'),cap('hidruro de '+PRE[Math.max(2,c.v)]+L));if(c.v>1)d.push(cap(PRE[c.v]+'hidruro de '+L+'('+ROM[c.v]+')'));d.push(stoN(pick(EL.filter(x=>x!==e&&x[2].length===1)),0))}
- d=[...new Set(d)].filter(x=>x!==c.pre&&x!==c.sto);return shuffle([right,...shuffle(d).slice(0,3)])}
-function gNom(){const n=8;const R_=shuffle(COMP).slice(0,n);let k=0,good=0;const res=[];
+/* 4. Ponle nombre */
+function nameOpts(c,mode){const e=c.e,L=low(e),m=e[2].length>1,right=c[mode];let d=[];
+ const other1=pick(EL.filter(x=>x!==e&&x[2].includes(c.v)));
+ if(mode==='est'){[1,2,3].filter(x=>x!==c.v).forEach(x=>d.push(estN(e,x)));if(c.v>1)d.push(cap('hidruro de '+PRE[c.v]+L));d.push(estN(other1,c.v))}
+ else if(m){const o=c.v===2?3:2;if(mode==='oxi')d.push(oxiN(e,o),cap('hidruro de '+L+'('+c.v+')'),c.car,cap(PRE[c.v]+'hidruro de '+L+'('+ROM[c.v]+')'));
+  else d.push(carN(e,o),cap('hidruro de '+L+'(+'+c.v+')'),c.oxi,cap(PRE[c.v]+'hidruro de '+L+'('+c.v+'+)'))}
+ else{d.push(cap('hidruro de '+L+'('+ROM[c.v]+')'),cap('hidruro de '+L+'('+c.v+'+)'),cap('hidruro de '+PRE[Math.max(2,c.v)]+L),oxiN(other1,c.v))}
+ const bad=new Set([c.est,c.oxi,c.car].filter(x=>x!==right&&!(m&&mode!=='est'&&(x===c.oxi||x===c.car))));
+ d=[...new Set(d)].filter(x=>x!==right&&!bad.has(x));
+ while(d.length<3){const x=estN(pick(EL.filter(y=>y!==e)),c.v);if(!d.includes(x)&&x!==right)d.push(x)}
+ return shuffle([right,...shuffle(d).slice(0,3)])}
+function gNom(){const n=9;const modes=shuffle(['est','est','est','oxi','oxi','oxi','car','car','car']);
+ const multi=shuffle(COMP.filter(c=>c.e[2].length>1)),pool=shuffle(COMP);
+ const R_=modes.map((md,i)=>md==='est'?pool.filter(c=>c.v>1)[i]:i%3?multi[i%multi.length]:pool[i]);let k=0,good=0;const res=[];
  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ponle nombre</span></div><div id="pb"></div><p class="fml" id="fm"></p><p class="prompt" id="q" style="text-align:center"></p><div class="opts" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
- const draw=()=>{$('#nxw').innerHTML='';$('#fb').textContent='';if(k>=n){const b=setBest('nom',good,false);['#q','#fm'].forEach(s=>$(s).textContent='');$('#opts').innerHTML='';$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Prefijos: di = 2, tri = 3. Número romano: solo con Fe, Co y Ni.`,gNom);return}
-  const c=R_[k],mode=k%2?'sto':'pre',right=mode==='pre'?c.pre:c.sto,opts=nameOpts(c,mode);$('#pb').innerHTML=pbar(n,res,k);$('#fm').textContent=c.f;
-  $('#q').innerHTML=mode==='pre'?'¿Cómo se llama <b>con prefijos</b>?':'¿Cómo se llama <b>con número romano</b> (si hace falta)?';
+ const draw=()=>{$('#nxw').innerHTML='';$('#fb').textContent='';if(k>=n){const b=setBest('nom',good,false);['#q','#fm'].forEach(s=>$(s).textContent='');$('#opts').innerHTML='';$('#pb').innerHTML=pbar(n,res,99);endG(`${good} de ${n}`,`${b?'¡Nueva mejor marca! ':''}Prefijos → estequiométrica. Romano → nº de oxidación. 3+ → nº de carga. El número, solo con Fe, Co y Ni.`,gNom);return}
+  const c=R_[k],mode=modes[k],right=c[mode],opts=nameOpts(c,mode);window.__g={c,mode};$('#pb').innerHTML=pbar(n,res,k);$('#fm').textContent=c.f;
+  $('#q').innerHTML=`¿Cómo se llama con la nomenclatura <b style="color:${NOMS[mode][1]}">${NOMS[mode][0].toLowerCase()}</b>?`;
   $('#opts').innerHTML=opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('');let done=false;
   $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const o=opts[+b.dataset.i],ok=o===right;if(ok)good++;res.push(ok);
    $('#opts').querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(opts[j]===right)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
-   const why=mode==='pre'?`${c.f} tiene ${c.v===1?'un H: sin prefijo':c.v+' H → «'+PRE[c.v]+'»'}.`:(c.e[2].length>1?`En ${c.f} el ${low(c.e)} usa la valencia ${c.v} → (${ROM[c.v]}).`:`El ${low(c.e)} solo tiene valencia ${c.v}: no lleva número romano.`);
+   const m=c.e[2].length>1;const why=mode==='est'?`${c.f} tiene ${c.v===1?'un H: sin prefijo':c.v+' H → «'+PRE[c.v]+'»'}.`:!m?`El ${low(c.e)} solo tiene valencia ${c.v}: no lleva número.`:mode==='oxi'?`El ${low(c.e)} usa la valencia ${c.v} → en romano (${ROM[c.v]}).`:`El ${low(c.e)} usa la valencia ${c.v} → carga (${c.v}+).`;
    $('#fb').className='fb '+(ok?'okk':'ko');$('#fb').innerHTML=`${ok?'¡Bien! ':'Era: <b>'+esc(right)+'</b>. '}${why}`;$('#pb').innerHTML=pbar(n,res,k);nxBtn(k===n-1,()=>{k++;draw()})})};draw()}
 
-/* 4. Parejas */
+/* 5. Parejas */
 function gPar(){let round=0,err=0;
  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Parejas</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
- const play=()=>{if(round>=2){const b=setBest('par',err,true);$('#mt').innerHTML='';$('#q').textContent='';$('#fb').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Cuenta los H para el prefijo; el número romano es la valencia del metal.`,gPar);return}
-  const pairs=shuffle(COMP).slice(0,6).map(c=>[c.f,Math.random()<.5?c.pre:c.sto]);$('#q').innerHTML=`Ronda ${round+1} de 2: toca una fórmula y luego su nombre.`;
+ const play=()=>{if(round>=2){const b=setBest('par',err,true);$('#mt').innerHTML='';$('#q').textContent='';$('#fb').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Cuenta los H para el prefijo; el número romano o la carga dicen la valencia del metal.`,gPar);return}
+  const pairs=[...shuffle(COMP).slice(0,4),...shuffle(HNM).slice(0,2)].map(c=>[c.f,c.g===1?pick(namesOf(c)):c.esp]);$('#q').innerHTML=`Ronda ${round+1} de 2: toca una fórmula y luego su nombre.`;
   const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
   $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt sym" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
   $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
@@ -496,27 +610,31 @@ function gPar(){let round=0,err=0;
    if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
    else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};play()}
 
-/* 5. Contra reloj */
+/* 6. Contra reloj */
+const VOPT=['1','2','3','4','2 y 3'];
 const DECKS={
-val:{n:'Valencias',c:['1','2','3','2 y 3'],gen:()=>{const e=pick(EL);return[`${e[1]} (${e[0]})`,['1','2','3','2 y 3'].indexOf(vtxt(e))]}},
-hs:{n:'¿Cuántos H?',c:['1','2','3'],gen:()=>{const c=pick(COMP);return[c.sto,c.v-1]}},
-bm:{n:'¿Bien o mal?',c:['Bien','Mal'],gen:()=>{const c=pick(COMP),nm=Math.random()<.5?c.pre:c.sto;if(Math.random()<.5)return[`${c.f} = ${lf(nm)}`,0];
-  if(Math.random()<.25)return[`H${SUB[c.v]}${c.e[0]} = ${lf(nm)}`,1];const kk=pick([1,2,3].filter(x=>x!==c.v));return[`${fml(c.e[0],kk)} = ${lf(nm)}`,1]}}};
+val:{n:'Valencias',c:VOPT,gen:()=>{const e=pick(ALLEL);return[`${e[1]} (${e[0]})`,VOPT.indexOf(vtxt(e))]}},
+gru:{n:'¿Qué grupo?',c:['Grupo 1','Grupo 2','Grupo 3'],gen:()=>{const c=Math.random()<.5?pick(COMP):pick(HNM);return[c.f,c.g-1]}},
+nom:{n:'¿Qué nomenclatura?',c:['Estequiométrica','Nº de oxidación','Nº de carga'],gen:()=>{const md=pick(['est','oxi','car']);const c=md==='est'?pick(COMP.filter(x=>x.v>1)):pick(COMP.filter(x=>x.e[2].length>1));return[lf(c[md]),['est','oxi','car'].indexOf(md)]}},
+bm:{n:'¿Bien o mal?',c:['Bien','Mal'],gen:()=>{if(Math.random()<.3){const c=pick(HNM),nm=lf(c.esp);if(Math.random()<.5)return[`${c.f} = ${nm}`,0];
+   const wrong=c.g===3?c.e[0]+'H'+SUB[c.v]:'H'+SUB[c.v]+c.e[0];return[`${wrong} = ${nm}`,1]}
+  const c=pick(COMP),nm=lf(pick(namesOf(c)));if(Math.random()<.5)return[`${c.f} = ${nm}`,0];
+  if(Math.random()<.25)return[`H${SUB[c.v]}${c.e[0]} = ${nm}`,1];const kk=pick([1,2,3].filter(x=>x!==c.v));return[`${fml(c.e[0],kk)} = ${nm}`,1]}}};
 function gCla(){let dk='val';
  const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,miss=[],last='';
   $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Contra reloj</span><span>60 segundos</span></div>
   <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
   <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
-  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length===4?'grid':D.c.length===3?'three':'two'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length===3?'three':D.c.length===2?'two':'grid'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
   <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
   $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
-  const next=()=>{let it,g=0;do{it=D.gen();g++}while(it[0]===last&&g<10);last=it[0];cur=it;$('#item').textContent=cur[0]};
+  const next=()=>{let x,g=0;do{x=D.gen();g++}while(x[0]===last&&g<10);last=x[0];cur=x;$('#item').textContent=cur[0]};
   $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
-  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const el=$('#item');el.classList.remove('flash-ok','flash-ko');void el.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}el.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
   function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
 
 /* =================== PROGRESO =================== */
-const BADGES=[['Primera estrella',()=>totalStars()>=1],['Experta en hidruros',()=>CORE.every(id=>S.stars[id]===3)],['Ninguna mano libre',()=>(S.games.eng||0)>=5],['Formuladora',()=>(S.games.for||0)>=7],['Nombra sin dudar',()=>(S.games.nom||0)>=7],['Parejas perfectas',()=>S.games.par!=null&&S.games.par<=1],['Rápida como el hidrógeno',()=>(S.games.cla||0)>=25],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Experta en hidruros',()=>CORE.every(id=>S.stars[id]===3)],['Intercambiadora',()=>(S.games.cru||0)>=5],['Ninguna mano libre',()=>(S.games.eng||0)>=5],['Formuladora',()=>(S.games.for||0)>=7],['Tres nombres',()=>(S.games.nom||0)>=8],['Parejas perfectas',()=>S.games.par!=null&&S.games.par<=1],['Rápida como el hidrógeno',()=>(S.games.cla||0)>=25],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
 function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
  $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
  <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;

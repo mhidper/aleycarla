@@ -29,7 +29,7 @@ ale/
   fisica-quimica/
     materia-atomo/    Laboratorio de Física y Química: densidad, unidades, materia, átomo y tabla periódica
     animado/          Física y Química animada: ejemplos resueltos paso a paso con GSAP
-    hidruros/         Los hidruros: valencias, fórmulas y nombres, con juegos («Engancha hidrógenos», «Monta la fórmula»…)
+    hidruros/         Los hidruros (Tema 3, Formulación): tres grupos, intercambio de valencias animado y las tres nomenclaturas
   proyectos/
     your-ideal-breakfast/  App «Your Ideal Breakfast» (compilada; el código fuente está en fuentes/)
 carla/
