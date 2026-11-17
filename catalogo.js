@@ -14,7 +14,8 @@ window.CATALOGO = {
       { id: 'ham', nombre: 'Historia del Arte y de la Música', tono: 300, apps: [
         { titulo: 'Arte y Música: Temas 1 y 2', descripcion: 'Arte del Paleolítico y megalitismo; música de la Edad Media y Barroco. Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' },
         { titulo: 'Fichas animadas: Tema 2', descripcion: 'Megalitismo y Barroco musical paso a paso, con animaciones y preguntas al final de cada ficha', ruta: 'ale/ham/tema2-animado/' },
-        { titulo: 'Audiciones de Música', descripcion: 'Las 10 audiciones de los temas 1 y 2: fichas, juego de reconocer fragmentos y prueba', ruta: 'ale/ham/audiciones/' }
+        { titulo: 'Audiciones de Música', descripcion: 'Las 10 audiciones de los temas 1 y 2: fichas, juego de reconocer fragmentos y prueba', ruta: 'ale/ham/audiciones/' },
+        { titulo: 'Arte y Música: Tema 3', descripcion: 'Arte de Mesopotamia y Egipto y el Clasicismo musical: fichas con dibujos interactivos (zigurat, Abu Simbel, canon de 18 puños, sinfonías de Haydn que suenan), 5 juegos y prueba', ruta: 'ale/ham/tema3/' }
       ]},
       { id: 'lengua', nombre: 'Lengua', tono: 0, apps: [] },
       { id: 'literatura', nombre: 'Literatura', tono: 320, apps: [
