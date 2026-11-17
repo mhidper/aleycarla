@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El Relieve: Tema 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#eee9e0; --paper:#fdfdfb; --grid:#e0d9ce; --ink:#2a1f14; --muted:#6b5d4f; --line:#d1c9ba;
+  --marker:#c44d1a; --marker-soft:#fce6db; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#2a1f14; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --geo:#2d6a4f;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141008; --paper:#1e1710; --grid:#2a2118; --ink:#ede6da; --muted:#a89b8a; --line:#3a3028;
+  --marker:#f07a3c; --marker-soft:#3a1f10; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ede6da; --btn-fg:#141008; --chip:#231b14;
+  --star:#ffd23f; --geo:#5cb88a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141008; --paper:#1e1710; --grid:#2a2118; --ink:#ede6da; --muted:#a89b8a; --line:#3a3028;
+  --marker:#f07a3c; --marker-soft:#3a1f10; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ede6da; --btn-fg:#141008; --chip:#231b14;
+  --star:#ffd23f; --geo:#5cb88a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--geo);color:var(--paper);border-color:var(--geo)}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,10,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--geo)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--geo);color:var(--geo)}
+.dot.done{background:var(--geo);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+.chuleta{border:2px solid var(--geo)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--geo);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+.idea{margin:0;background:var(--paper);border:2px solid var(--geo);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--geo);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.nums{display:flex;flex-wrap:wrap;gap:8px}.num{flex:1 1 150px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column}
+.num b{font:800 1.5rem var(--f-display);color:var(--geo);font-variant-numeric:tabular-nums}.num span{font-size:.9rem;color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--geo);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+.bars{display:flex;flex-direction:column;gap:7px}.br{display:grid;grid-template-columns:8.5em 1fr;column-gap:10px;align-items:center}
+.bn{font-weight:700;font-size:.95rem}.bt{height:14px;background:var(--grid);border-radius:7px;overflow:hidden}.bt i{display:block;height:100%;border-radius:7px}
+.br small{grid-column:2;color:var(--muted);font-size:.82rem}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--geo);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--geo);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+body{margin:0}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/mapas-geografia">← Mapas y Geografía de Ale</a>
+  <header>
+    <div><h1>El Relieve <span>Ale</span></h1>
+    <p>Geografía, tema 3: estructura de la Tierra, tectónica de placas, formas del relieve, agentes internos y externos, continentes, océanos y sostenibilidad.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={ro:'#c44d1a',az:'#1e6fd9',ve:'#2d6a4f',na:'#d9822b',ma:'#8b4513',gr:'#6b5d4f',mo:'#6a2fa0'};
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+
+/* =================== DIBUJOS =================== */
+const DR={
+capas:()=>({vb:'0 0 420 220',s:`<rect width="420" height="220" rx="8" fill="#f6efe0"/>
+ <circle cx="210" cy="180" r="150" fill="#6e3b1a"/>
+ <circle cx="210" cy="180" r="115" fill="#c26030"/>
+ <circle cx="210" cy="180" r="60" fill="#e8a040"/>
+ <circle cx="210" cy="180" r="28" fill="#f0d060"/>
+ ${T(210,185,'Núcleo','font-size="11" font-weight="800" fill="#6a3a10"')}${T(210,196,'interno','font-size="10" fill="#6a3a10"')}
+ ${T(210,140,'Núcleo externo','font-size="11" font-weight="700" fill="#fff"')}
+ ${T(210,98,'Manto','font-size="13" font-weight="800" fill="#fff"')}
+ ${T(210,50,'Corteza','font-size="13" font-weight="800" fill="#fff"')}
+ <line x1="360" y1="40" x2="285" y2="55" stroke="#2a1f14" stroke-width="1.2"/>
+ ${T(380,38,'5-70 km','font-size="10" font-weight="700" fill="#2a1f14"')}
+ <line x1="370" y1="88" x2="310" y2="105" stroke="#2a1f14" stroke-width="1.2"/>
+ ${T(390,86,'Hasta 2900 km','font-size="10" font-weight="700" fill="#2a1f14"')}
+ <line x1="360" y1="150" x2="270" y2="165" stroke="#2a1f14" stroke-width="1.2"/>
+ ${T(385,148,'Líquido','font-size="10" font-weight="700" fill="#2a1f14"')}
+ <line x1="340" y1="186" x2="240" y2="186" stroke="#2a1f14" stroke-width="1.2"/>
+ ${T(365,184,'Sólido','font-size="10" font-weight="700" fill="#2a1f14"')}`}),
+placas:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#d6e8f4"/>
+ <ellipse cx="140" cy="100" rx="90" ry="65" fill="#c9b48a" stroke="#8a7a3a" stroke-width="2"/>
+ ${T(140,95,'Pangea','font-size="16" font-weight="800" fill="#4a3a20"')}${T(140,112,'(hace 300 M. a.)','font-size="10" fill="#6b5d4f"')}
+ <path d="M240 100 L260 90 L258 100 L276 96" stroke="#c44d1a" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+ <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#c44d1a"/></marker></defs>
+ <ellipse cx="310" cy="66" rx="50" ry="30" fill="#d4c48a" stroke="#8a7a3a" stroke-width="1.5"/>
+ ${T(310,63,'Laurasia','font-size="11" font-weight="700" fill="#4a3a20"')}${T(310,76,'(norte)','font-size="9" fill="#6b5d4f"')}
+ <ellipse cx="320" cy="135" rx="55" ry="32" fill="#b8a872" stroke="#8a7a3a" stroke-width="1.5"/>
+ ${T(320,132,'Gondwana','font-size="11" font-weight="700" fill="#4a3a20"')}${T(320,145,'(sur)','font-size="9" fill="#6b5d4f"')}
+ ${T(210,185,'Pangea se rompe → Laurasia (norte) + Gondwana (sur) → continentes actuales','font-size="10" font-weight="700" fill="#2a1f14"')}`}),
+relieve:()=>({vb:'0 0 420 220',s:`<rect width="420" height="220" rx="8" fill="#f6efe0"/>
+ <rect x="0" y="110" width="420" height="110" fill="#c6dff0"/>
+ <path d="M0 110 L40 110 L60 70 L80 50 L100 60 L120 110 L160 110 L200 90 L220 50 L240 40 L260 60 L280 95 L300 110 L340 110 L370 80 L390 60 L410 70 L420 90 L420 110" fill="#c9b48a" stroke="#8a7a3a" stroke-width="2"/>
+ <path d="M0 110 L40 110 L40 130 L60 160 L80 180 L140 190 L160 190 L200 190 L240 170 L250 150 L260 190 L300 190 L340 190 L380 185 L400 160 L420 150 L420 110" fill="#7aabbf" stroke="#4a7a9a" stroke-width="1.5"/>
+ ${T(80,42,'Montaña','font-size="11" font-weight="700" fill="#4a3a20"')}
+ ${T(240,32,'Cordillera','font-size="11" font-weight="700" fill="#4a3a20"')}
+ ${T(390,52,'Sierra','font-size="10" font-weight="700" fill="#4a3a20"')}
+ ${T(140,100,'Meseta','font-size="11" font-weight="700" fill="#4a3a20"')}
+ ${T(310,104,'Depresión','font-size="10" font-weight="700" fill="#4a3a20"')}
+ ${T(55,142,'Plataforma','font-size="9" font-weight="700" fill="#1a4a6a"')}${T(55,152,'continental','font-size="9" fill="#1a4a6a"')}
+ ${T(130,172,'Talud','font-size="10" font-weight="700" fill="#1a4a6a"')}
+ ${T(210,186,'Llanura abisal','font-size="10" font-weight="700" fill="#1a4a6a"')}
+ ${T(255,142,'Dorsal','font-size="10" font-weight="700" fill="#1a4a6a"')}${T(255,153,'oceánica','font-size="9" fill="#1a4a6a"')}
+ ${T(380,170,'Fosa','font-size="10" font-weight="700" fill="#1a4a6a"')}${T(380,181,'marina','font-size="9" fill="#1a4a6a"')}`}),
+volcan:()=>({vb:'0 0 420 220',s:`<rect width="420" height="220" rx="8" fill="#f6efe0"/>
+ <path d="M60 200 L170 60 L190 40 L210 36 L230 40 L250 60 L360 200Z" fill="#8b6040" stroke="#5a3a20" stroke-width="2"/>
+ <path d="M180 42 Q195 10 210 36 Q225 10 240 42" fill="#ff5533" stroke="#cc2200" stroke-width="1.5"/>
+ <ellipse cx="210" cy="38" rx="30" ry="8" fill="#555" stroke="#333" stroke-width="1"/>
+ <line x1="210" y1="200" x2="210" y2="46" stroke="#c44d1a" stroke-width="3" stroke-dasharray="8 6"/>
+ <circle cx="210" cy="186" r="14" fill="#ff5533" stroke="#cc2200" stroke-width="1.5"/>
+ ${T(390,56,'Cráter','font-size="11" font-weight="700" fill="#2a1f14"')}
+ <line x1="370" y1="52" x2="244" y2="38" stroke="#2a1f14" stroke-width="1"/>
+ ${T(60,80,'Cono','font-size="11" font-weight="700" fill="#2a1f14"')}
+ <line x1="75" y1="82" x2="130" y2="100" stroke="#2a1f14" stroke-width="1"/>
+ ${T(380,130,'Chimenea','font-size="11" font-weight="700" fill="#2a1f14"')}
+ <line x1="365" y1="126" x2="218" y2="120" stroke="#2a1f14" stroke-width="1"/>
+ ${T(80,190,'Cámara','font-size="11" font-weight="700" fill="#2a1f14"')}${T(80,202,'magmática','font-size="10" fill="#2a1f14"')}
+ <line x1="100" y1="186" x2="194" y2="186" stroke="#2a1f14" stroke-width="1"/>
+ ${T(210,216,'Volcán: sección transversal','font-size="10.5" font-weight="700" fill="#6b5d4f"')}`}),
+mundo:()=>({vb:'0 0 420 180',s:`<rect width="420" height="180" rx="8" fill="#c6dff0"/>
+ <ellipse cx="80" cy="60" rx="30" ry="20" fill="#c9b48a" stroke="#8a7a3a" stroke-width="1.2"/>
+ ${T(80,58,'Europa','font-size="9" font-weight="700" fill="#2a1f14"')}${T(80,68,'10,5 M','font-size="8" fill="#6b5d4f"')}
+ <ellipse cx="110" cy="100" rx="42" ry="38" fill="#c9b48a" stroke="#8a7a3a" stroke-width="1.2"/>
+ ${T(110,96,'África','font-size="10" font-weight="700" fill="#2a1f14"')}${T(110,108,'30,3 M','font-size="8" fill="#6b5d4f"')}
+ <ellipse cx="160" cy="55" rx="60" ry="30" fill="#c9b48a" stroke="#8a7a3a" stroke-width="1.2"/>
+ ${T(160,52,'Asia','font-size="11" font-weight="800" fill="#2a1f14"')}${T(160,64,'44,6 M','font-size="8" fill="#6b5d4f"')}
+ <ellipse cx="290" cy="70" rx="38" ry="50" fill="#c9b48a" stroke="#8a7a3a" stroke-width="1.2"/>
+ ${T(290,55,'América','font-size="10" font-weight="700" fill="#2a1f14"')}${T(290,67,'42,5 M','font-size="8" fill="#6b5d4f"')}
+ <ellipse cx="210" cy="156" rx="50" ry="14" fill="#e0e0e8" stroke="#8a8a9a" stroke-width="1.2"/>
+ ${T(210,158,'Antártida · 14 M','font-size="8" font-weight="700" fill="#2a1f14"')}
+ <ellipse cx="380" cy="120" rx="25" ry="15" fill="#c9b48a" stroke="#8a7a3a" stroke-width="1.2"/>
+ ${T(380,118,'Oceanía','font-size="8" font-weight="700" fill="#2a1f14"')}${T(380,128,'8,5 M','font-size="7" fill="#6b5d4f"')}
+ ${T(32,30,'Ártico','font-size="8" font-style="italic" fill="#3d6d93"')}
+ ${T(350,30,'Pacífico','font-size="9" font-style="italic" fill="#3d6d93"')}
+ ${T(200,110,'Índico','font-size="9" font-style="italic" fill="#3d6d93"')}
+ ${T(55,140,'Atlántico','font-size="9" font-style="italic" fill="#3d6d93"')}
+ ${T(160,165,'Antártico','font-size="8" font-style="italic" fill="#3d6d93"')}`}),
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg>${label?`<figcaption>${label}</figcaption>`:''}</figure>`}
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'r1',t:1,n:'Estructura interna de la Tierra',s:'Núcleo, manto, corteza y litosfera',
+ idea:'La Tierra tiene tres capas: <b>corteza</b> (muy fina), <b>manto</b> (magma) y <b>núcleo</b> (hierro). La <b>litosfera</b> es la capa rígida exterior que se rompe en placas.',
+ fig:()=>svgOf('capas','Capas de la Tierra: corteza, manto y núcleo'),
+ b:[{k:'cards',h:'Las tres capas',it:[['Corteza','La capa más fina. <b>Oceánica</b>: 5-10 km; <b>Continental</b>: hasta 70 km. Es donde vivimos.',C.na],['Manto','Hasta 2900 km de profundidad. Está formado por <b>magma</b> (roca fundida) que se mueve lentamente.',C.ro],['Núcleo','Por debajo de 2900 km. <b>Externo</b>: líquido (hierro y níquel fundidos). <b>Interno</b>: sólido por la enorme presión.',C.ma]]},
+ {k:'ej',h:'La litosfera',t:'La <b>litosfera</b> es la capa rígida formada por la corteza y la parte superior del manto. Se divide en grandes <b>placas tectónicas</b> que flotan sobre el manto.'}],
+ truco:'De fuera a dentro: <b>C</b>orteza, <b>M</b>anto, <b>N</b>úcleo → «<b>C</b>ada <b>M</b>añana <b>N</b>ado».'},
+{id:'r2',t:1,n:'Tectónica de placas',s:'Pangea, deriva continental y las 8 grandes placas',
+ idea:'Hace 300 millones de años todos los continentes estaban unidos en <b>Pangea</b>. Se rompió y las <b>placas tectónicas</b> se mueven todavía hoy.',
+ fig:()=>svgOf('placas','De Pangea a los continentes actuales'),
+ b:[{k:'cards',h:'La historia',it:[['Pangea','Supercontinente que existía hace unos 300 millones de años. Estaba rodeado por un único océano: <b>Panthalassa</b>.',C.ma],['Dos bloques','Pangea se dividió en <b>Laurasia</b> (norte: América del Norte, Europa, Asia) y <b>Gondwana</b> (sur: Sudamérica, África, Antártida, India, Oceanía).',C.az],['Hoy','8 grandes placas: Euroasiática, Norteamericana, Sudamericana, Africana, Antártica, Indoaustraliana, Pacífica y de Nazca.',C.ve]]},
+ {k:'ej',h:'Alfred Wegener',t:'En 1912, el científico alemán <b>Alfred Wegener</b> propuso la <b>teoría de la deriva continental</b>: las costas de África y Sudamérica encajan como un puzle. Fósiles iguales a ambos lados del Atlántico lo confirman.'}],
+ truco:'<b>Pangea</b> = «toda la tierra» en griego. <b>Laurasia</b> = norte. <b>Gondwana</b> = sur.'},
+{id:'r3',t:1,n:'Formas del relieve',s:'Terrestre y oceánico: de la montaña a la fosa marina',
+ idea:'El relieve terrestre tiene <b>montañas, mesetas, valles y depresiones</b>. Bajo el mar hay <b>plataformas, dorsales y fosas</b> tan grandes como las montañas.',
+ fig:()=>svgOf('relieve','Perfil del relieve terrestre y oceánico'),
+ b:[{k:'cards',h:'Relieve terrestre',it:[['Montaña','Gran elevación. Una serie de montañas es una <b>sierra</b>; varias sierras forman una <b>cordillera</b>.',C.ma],['Meseta','Llanura elevada (también llamada <b>páramo</b> si es muy alta y despoblada).',C.na],['Valle','Terreno bajo entre montañas, formado por un río o un glaciar.',C.ve],['Depresión','Zona hundida por debajo del terreno que la rodea.',C.gr]]},
+ {k:'cards',h:'Relieve oceánico',it:[['Plataforma continental','Prolongación del continente bajo el mar, hasta unos 400 m de profundidad.',C.az],['Talud continental','Pendiente fuerte que baja desde la plataforma.',C.az],['Llanura abisal','Fondo plano del océano, a miles de metros.',C.az],['Dorsal oceánica','Cordillera submarina de 2000-3000 m donde sale magma.',C.az],['Fosa marina','Grieta profundísima. La de las Marianas baja a 11.034 m.',C.az]]}],
+ truco:'Montaña → sierra → cordillera: de <b>pequeño a grande</b>. Bajo el mar: plataforma → talud → llanura → dorsal → fosa.'},
+{id:'r4',t:1,n:'Agentes del relieve',s:'Internos: volcanes y terremotos. Externos: agua, viento y ser humano',
+ idea:'Los <b>agentes internos</b> (volcanes, terremotos) crean relieve desde dentro de la Tierra. Los <b>agentes externos</b> (agua, viento, ser humano) lo desgastan y transforman desde fuera.',
+ fig:()=>svgOf('volcan','Partes de un volcán'),
+ b:[{k:'cards',h:'Agentes internos',it:[['Pliegues','Cuando materiales <b>blandos</b> se comprimen, se ondula el terreno formando montañas.',C.ro],['Fallas','Cuando materiales <b>duros</b> se comprimen, se rompen y un bloque sube: escalón en el terreno.',C.ro],['Volcanes','El magma sale por la <b>chimenea</b>, por el <b>cráter</b> del <b>cono</b>. Debajo: la <b>cámara magmática</b>.',C.ro],['Terremotos','Vibraciones de la corteza. <b>Hipocentro</b>: punto profundo donde empiezan. <b>Epicentro</b>: justo encima, en la superficie. Los marinos producen <b>tsunamis</b>.',C.ro]]},
+ {k:'cards',h:'Agentes externos',it:[['Agua','Ríos crean <b>barrancos</b> y valles en V; glaciares tallan valles en U; el agua subterránea forma <b>cuevas</b>; el mar esculpe <b>acantilados</b>.',C.az],['Viento','Erosiona rocas blandas y deja las duras: <b>chimeneas de hadas</b> (columna de roca con una piedra encima).',C.na],['Ser humano','Modifica el relieve: <b>infraestructuras</b> (carreteras, ciudades), <b>minas</b> a cielo abierto, <b>presas</b> que cambian ríos.',C.ve]]}],
+ truco:'Blando → <b>pliega</b>. Duro → se <b>falla</b> (rompe). <b>Hipo</b>centro = abajo (hipo = debajo). <b>Epi</b>centro = arriba (epi = sobre).'},
+{id:'r5',t:2,n:'Continentes y océanos',s:'29 % tierra, 71 % agua y el relieve del mundo',
+ idea:'Solo el <b>29 %</b> de la superficie terrestre es tierra. Hay <b>6 continentes</b> y <b>5 océanos</b>. Cada uno tiene grandes cadenas montañosas.',
+ fig:()=>svgOf('mundo','Los seis continentes y los cinco océanos (superficie en millones de km²)'),
+ b:[{k:'cards',h:'Continentes (de mayor a menor)',it:[['Asia','44,6 M km². El <b>Himalaya</b> y el <b>Everest</b> (8848 m), la montaña más alta del mundo.',C.ro],['América','42,5 M km². <b>Andes</b> al sur y <b>Rocosas</b> al norte.',C.az],['África','30,3 M km². El <b>Rift Valley</b>, enorme fractura que cruza el este.',C.na],['Antártida','14 M km². Cubierta de hielo.',C.gr],['Europa','10,5 M km². <b>Alpes</b>, <b>Pirineos</b>, <b>Cáucaso</b> (Elbrus, 5642 m), <b>Urales</b>, <b>Escandinavos</b>. Gran Llanura Europea.',C.ve],['Oceanía','8,5 M km². Australia y miles de islas.',C.mo]]},
+ {k:'chips',h:'Los cinco océanos',it:['Pacífico (el mayor)','Atlántico','Índico','Antártico','Ártico (el menor)']}],
+ truco:'Continentes de mayor a menor: «<b>A</b>sí <b>A</b>vanzan <b>Á</b>frica, <b>A</b>ntártida, <b>E</b>uropa y <b>O</b>ceanía» (3 «A» grandes, luego A-E-O).'},
+{id:'r6',t:2,n:'Sostenibilidad y puntos negros',s:'ODS, plástico, deforestación y puntos calientes del planeta',
+ idea:'El ser humano daña el planeta. Los <b>ODS</b> (Objetivos de Desarrollo Sostenible) intentan frenarlo. Hay <b>puntos negros</b> que son emergencias ambientales.',
+ fig:()=>`<figure class="ill"><svg viewBox="0 0 420 140" role="img" aria-label="Puntos negros del planeta"><rect width="420" height="140" rx="8" fill="#f6efe0"/>
+ <circle cx="70" cy="70" r="40" fill="#c6dff0" stroke="#4a7a9a" stroke-width="1.5"/><circle cx="70" cy="70" r="18" fill="#999" opacity=".5"/>
+ ${T(70,30,'Pacífico','font-size="9" font-weight="700" fill="#2a1f14"')}${T(70,106,'80.000 t de','font-size="8" fill="#6b5d4f"')}${T(70,116,'plástico','font-size="8" fill="#6b5d4f"')}
+ <rect x="140" y="36" width="60" height="68" rx="6" fill="#3a8a3a"/><rect x="156" y="36" width="28" height="40" rx="4" fill="#c9b48a"/>
+ ${T(170,30,'Amazonía','font-size="9" font-weight="700" fill="#2a1f14"')}${T(170,116,'69 M ha en','font-size="8" fill="#6b5d4f"')}${T(170,126,'30 años','font-size="8" fill="#6b5d4f"')}
+ <path d="M260 100 L270 50 L280 46 L290 50 L300 100Z" fill="#aaa" stroke="#777" stroke-width="1.5"/>
+ ${T(280,30,'Everest','font-size="9" font-weight="700" fill="#2a1f14"')}${T(280,116,'500 t de','font-size="8" fill="#6b5d4f"')}${T(280,126,'basura','font-size="8" fill="#6b5d4f"')}
+ <ellipse cx="370" cy="70" rx="35" ry="22" fill="#c6dff0" stroke="#4a7a9a" stroke-width="1.5"/><ellipse cx="370" cy="70" rx="12" ry="8" fill="#c9b48a"/>
+ ${T(370,30,'Mar de Aral','font-size="9" font-weight="700" fill="#2a1f14"')}${T(370,116,'De 68.000 km²','font-size="8" fill="#6b5d4f"')}${T(370,126,'a casi nada','font-size="8" fill="#6b5d4f"')}
+ </svg><figcaption>Cuatro puntos negros del planeta</figcaption></figure>`,
+ b:[{k:'cards',h:'Los ODS',it:[['¿Qué son?','Los <b>17 Objetivos de Desarrollo Sostenible</b> de la ONU: un plan global para 2030.',C.ve],['Ejemplos','Acabar con la pobreza, agua limpia, energía limpia, vida submarina, vida de ecosistemas terrestres, acción por el clima…',C.ve]]},
+ {k:'cards',h:'Puntos negros',it:[['Continente de plástico','80.000 toneladas de plástico flotando en el <b>Pacífico</b> norte. Es más grande que Francia.',C.az],['Deforestación del Amazonas','69 millones de hectáreas perdidas en 30 años: destrucción del «pulmón del planeta».',C.ve],['Basura del Everest','500 toneladas de basura dejadas por alpinistas en la montaña más alta.',C.gr],['Mar de Aral','Tenía 68.000 km². Los soviéticos desviaron sus ríos para riego y casi desapareció.',C.na],['Minas de coltán','En el <b>Congo</b>: se extrae coltán para móviles en condiciones terribles, con trabajo infantil.',C.mo]]}],
+ truco:'Cinco puntos negros: <b>P</b>lástico, <b>A</b>mazonía, <b>E</b>verest, a<b>R</b>al, <b>C</b>oltán → «<b>PAERC</b>» (como «parece» sin la e final).'},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ if(B.k==='html')return B.t();
+ return''}).join('')}
+const CHULETA=[['Capas de la Tierra','Corteza (5-70 km), manto (hasta 2900 km, magma), núcleo externo (líquido) e interno (sólido). La litosfera se divide en placas.',C.ma],['Tectónica','Pangea → Laurasia (N) + Gondwana (S) → 6 continentes. 8 grandes placas. Wegener, 1912.',C.na],['Relieve terrestre','Montaña, sierra, cordillera, meseta, valle, depresión.',C.ro],['Relieve oceánico','Plataforma continental, talud, llanura abisal, dorsal oceánica, fosa marina (Marianas: 11.034 m).',C.az],['Agentes internos','Pliegues (blando), fallas (duro), volcanes (cráter, cono, chimenea), terremotos (hipocentro, epicentro, tsunami).',C.ro],['Agentes externos','Agua (barrancos, cuevas, acantilados), viento (chimeneas de hadas), ser humano (minas, presas).',C.az],['Continentes','Asia > América > África > Antártida > Europa > Oceanía. 29 % tierra, 71 % océano.',C.ve],['Puntos negros','Plástico Pacífico, Amazonía, Everest, Mar de Aral, coltán Congo. ODS de la ONU.',C.gr]];
+
+/* =================== PREGUNTAS =================== */
+const QB={
+r1:[['t','¿Cuáles son las tres capas principales de la Tierra?','Corteza, manto y núcleo',['Litosfera, hidrosfera y atmósfera','Pliegue, falla y volcán','Plataforma, talud y fosa'],'De fuera a dentro.'],
+ ['t','¿Cuánto mide la corteza continental?','Hasta 70 km',['Hasta 2900 km','Hasta 5 km','Hasta 400 m'],'La oceánica es mucho más fina: 5-10 km.'],
+ ['t','¿Qué es el manto?','La capa de magma que llega hasta 2900 km de profundidad',['La capa más fina de la Tierra','Un núcleo de hierro sólido','La parte del océano más profunda'],'Roca fundida que se mueve lentamente.'],
+ ['t','¿Cómo es el núcleo externo?','Líquido (hierro y níquel fundidos)',['Sólido como una roca','Gaseoso','Formado por agua'],'La presión en el interno es tan enorme que es sólido.'],
+ ['t','¿Qué es la litosfera?','La capa rígida formada por la corteza y la parte superior del manto',['El núcleo interno','La parte líquida del manto','La atmósfera de la Tierra'],'Se divide en placas tectónicas.'],
+ ['v','El núcleo interno de la Tierra es líquido.',false,'Falso: es sólido por la enorme presión. El líquido es el externo.'],
+ ['t','¿De qué está formado el núcleo?','Hierro y níquel',['Roca y arena','Agua y sal','Oxígeno y nitrógeno'],'Es la capa más densa.'],
+ ['v','La corteza oceánica es más gruesa que la continental.',false,'Falso: la oceánica solo tiene 5-10 km; la continental llega a 70 km.']],
+r2:[['t','¿Qué era Pangea?','Un supercontinente que existía hace 300 millones de años',['Un océano antiguo','Un volcán','Una placa tectónica actual'],'Estaba rodeado por el océano Panthalassa.'],
+ ['t','¿En qué dos bloques se dividió Pangea?','Laurasia y Gondwana',['Europa y África','Atlántico y Pacífico','Corteza y manto'],'Laurasia al norte y Gondwana al sur.'],
+ ['t','¿Cuántas grandes placas tectónicas hay?','8',['3','15','50'],'Euroasiática, Norteamericana, Sudamericana, Africana, Antártica, Indoaustraliana, Pacífica y de Nazca.'],
+ ['t','¿Quién propuso la teoría de la deriva continental?','Alfred Wegener',['Isaac Newton','Charles Darwin','Albert Einstein'],'En 1912.'],
+ ['t','¿Qué prueba apoyaba la deriva continental?','Las costas de África y Sudamérica encajan como un puzle',['Que el núcleo es de hierro','Que hay volcanes en Hawái','Que el Everest crece'],'También se encontraron fósiles iguales a ambos lados del Atlántico.'],
+ ['v','Laurasia era el bloque del sur.',false,'Falso: Laurasia era el norte (América del Norte, Europa, Asia). El sur era Gondwana.'],
+ ['t','¿Sobre qué flota la litosfera?','Sobre el manto',['Sobre el núcleo externo','Sobre el agua del océano','Sobre la atmósfera'],'El magma del manto es más denso y la sostiene.']],
+r3:[['t','¿Qué es una cordillera?','Un conjunto de sierras',['Una montaña sola','Un valle profundo','Una llanura abisal'],'Sierra = varias montañas; cordillera = varias sierras.'],
+ ['t','¿Qué es una meseta?','Una llanura elevada',['Una montaña muy alta','Una fosa marina','Una depresión'],'También puede llamarse páramo.'],
+ ['t','¿Hasta qué profundidad llega la plataforma continental?','Unos 400 m',['Unos 11.000 m','Unos 2900 km','Unos 5 m'],'Es la prolongación del continente bajo el mar.'],
+ ['t','¿Qué es una dorsal oceánica?','Una cordillera submarina donde sale magma',['Un río submarino','Una isla volcánica','La orilla del continente'],'Miden entre 2000 y 3000 metros de altura.'],
+ ['t','¿Cuál es la fosa marina más profunda?','La de las Marianas (11.034 m)',['La del Pacífico (5000 m)','La del Atlántico (3000 m)','La del Ártico (2000 m)'],'Está en el océano Pacífico.'],
+ ['t','¿Qué hay entre la plataforma continental y la llanura abisal?','El talud continental',['La dorsal oceánica','Una sierra','Un volcán submarino'],'Es una pendiente fuerte.'],
+ ['v','Una depresión es una zona hundida por debajo del terreno que la rodea.',true,'Verdadero: es lo contrario de una montaña.'],
+ ['t','¿Qué diferencia hay entre una sierra y una montaña?','Una sierra es un conjunto de montañas',['Una sierra está bajo el mar','No hay diferencia','Una montaña es más baja que una sierra'],'Y varias sierras forman una cordillera.']],
+r4:[['t','¿Qué se forma cuando se comprimen materiales blandos?','Pliegues',['Fallas','Volcanes','Fosas'],'El terreno se ondula como una tela arrugada.'],
+ ['t','¿Qué se forma cuando se comprimen materiales duros?','Fallas',['Pliegues','Dorsales','Mesetas'],'El terreno se rompe y un bloque sube sobre el otro.'],
+ ['t','¿Cómo se llama la abertura por donde sale la lava del volcán?','Cráter',['Chimenea','Cono','Cámara magmática'],'Está en la cima del cono volcánico.'],
+ ['t','¿Qué es el hipocentro de un terremoto?','El punto profundo donde se origina el terremoto',['El punto en la superficie justo encima','La intensidad del terremoto','La ola que produce'],'«Hipo» significa «debajo».'],
+ ['t','¿Qué es el epicentro?','El punto de la superficie justo encima del hipocentro',['El punto más profundo del terremoto','El volcán más cercano','La llanura abisal'],'Donde más se nota el terremoto.'],
+ ['t','¿Qué agente externo forma cuevas?','El agua subterránea',['El viento','Los volcanes','Los glaciares'],'Disuelve la roca caliza poco a poco.'],
+ ['t','¿Qué son las chimeneas de hadas?','Columnas de roca con una piedra encima, formadas por el viento',['Volcanes pequeños','Cuevas subterráneas','Montañas de hielo'],'El viento erosiona la roca blanda y deja la dura arriba.'],
+ ['t','¿Qué producen los terremotos submarinos?','Tsunamis',['Pliegues','Chimeneas de hadas','Dorsales'],'Olas gigantescas que llegan a la costa.'],
+ ['v','Los glaciares forman valles en forma de U.',true,'Verdadero: el hielo talla valles anchos. Los ríos forman valles en V.'],
+ ['t','¿Qué agente externo esculpe acantilados?','El mar (oleaje)',['El viento','Los terremotos','El ser humano'],'Las olas golpean la roca de la costa.']],
+r5:[['t','¿Qué porcentaje de la superficie terrestre es tierra?','29 %',['71 %','50 %','10 %'],'El 71 % restante es océano.'],
+ ['t','¿Cuál es el continente más grande?','Asia',['América','África','Europa'],'44,6 millones de km².'],
+ ['t','¿Cuál es la montaña más alta del mundo?','El Everest (8848 m)',['El Elbrus (5642 m)','El Mulhacén (3479 m)','El Aconcagua (6961 m)'],'Está en el Himalaya, en Asia.'],
+ ['t','¿Cuál es el océano más grande?','El Pacífico',['El Atlántico','El Índico','El Ártico'],'Es el mayor con diferencia.'],
+ ['t','¿Qué cordillera se extiende por toda Sudamérica?','Los Andes',['Las Rocosas','Los Alpes','El Himalaya'],'De norte a sur por la costa occidental.'],
+ ['t','¿Qué es el Rift Valley?','Una enorme fractura que cruza el este de África',['Una cordillera europea','Un volcán en Asia','Un océano'],'Puede verse desde el espacio.'],
+ ['t','¿Cuál es el pico más alto de Europa?','El Elbrus (5642 m) en el Cáucaso',['El Mont Blanc (4810 m)','El Mulhacén (3479 m)','El Matterhorn (4478 m)'],'Está en la frontera entre Rusia y Georgia.'],
+ ['t','¿Qué gran llanura ocupa el norte de Europa?','La Gran Llanura Europea',['La Meseta Central','La Depresión del Ebro','La Pampa'],'Se extiende desde Francia hasta Rusia.'],
+ ['v','Europa es más grande que África.',false,'Falso: África tiene 30,3 M km² y Europa solo 10,5 M km².'],
+ ['t','¿Qué cordillera separa Europa de Asia?','Los Urales',['Los Alpes','Los Pirineos','Los Andes'],'Son montañas muy antiguas y poco elevadas.']],
+r6:[['t','¿Qué significan las siglas ODS?','Objetivos de Desarrollo Sostenible',['Organización de Deportes y Salud','Obras De Superficie','Océanos Del Sur'],'Son 17 objetivos de la ONU para 2030.'],
+ ['t','¿Cuántas toneladas de plástico flotan en el Pacífico?','80.000 toneladas',['500 toneladas','100 toneladas','1 millón de toneladas'],'Forman el llamado «continente de plástico».'],
+ ['t','¿Cuántas hectáreas de Amazonía se han perdido en 30 años?','69 millones de hectáreas',['1 millón','100.000','500 millones'],'El «pulmón del planeta» se reduce.'],
+ ['t','¿Cuánta basura hay en el Everest?','500 toneladas',['50 toneladas','5 toneladas','5000 toneladas'],'Dejada por los alpinistas.'],
+ ['t','¿Qué pasó con el Mar de Aral?','Se desvió el agua de sus ríos para riego y casi desapareció',['Creció hasta duplicar su tamaño','Se congeló completamente','Se convirtió en un volcán'],'Tenía 68.000 km².'],
+ ['t','¿Qué mineral se extrae en las minas del Congo?','Coltán',['Oro','Carbón','Diamantes'],'Se usa en teléfonos móviles.'],
+ ['v','Los ODS son un plan de la ONU para el año 2030.',true,'Verdadero: 17 objetivos globales.'],
+ ['t','¿Por qué se llama «continente de plástico»?','Porque es una acumulación enorme de plástico flotante en el Pacífico',['Porque un continente entero es de plástico','Porque hay un país que solo fabrica plástico','Porque plástico es un continente nuevo'],'Es más grande que Francia.']]};
+
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='geo-t3-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'La Tierra por dentro y por fuera'],[2,'El mundo y la sostenibilidad']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco </b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente! Mañana lo bordas.':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba del tema 3</h2><p>15 preguntas de todas las fichas, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),1)));list.push(...wpick(QS.filter(q=>!list.includes(q)),9));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'quien',ico:'¿Quién soy?',n:'¿Quién soy?',d:'Accidentes, capas y conceptos: 3 pistas, cuantas menos uses, más puntos.',best:v=>v+' puntos'},
+{id:'ord',ico:'Ordena',n:'Ordena',d:'De mayor a menor, de más profundo a más superficial, de más antiguo a más reciente.',best:v=>v+(v===1?' error':' errores')},
+{id:'une',ico:'Une',n:'Une parejas',d:'Conceptos con su definición, y formas con su tipo.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Clasifica contra reloj',d:'¿Interno o externo? ¿Terrestre u oceánico? ¡60 segundos!',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({quien:gQuien,ord:gOrd,une:gUne,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+
+/* ¿Quién soy? */
+const WHO=[['Pangea',['Fui un supercontinente que existió hace 300 millones de años.','Me rodeaba un único océano llamado Panthalassa.','Me dividí en Laurasia (norte) y Gondwana (sur).']],
+ ['Plataforma continental',['Estoy bajo el agua, pero no soy muy profunda.','Soy la prolongación del continente bajo el mar.','Llego hasta unos 400 metros de profundidad.']],
+ ['Dorsal oceánica',['Soy una formación del fondo del mar.','Por mí sale magma del interior de la Tierra.','Soy una cordillera submarina de 2000-3000 metros.']],
+ ['Fosa de las Marianas',['Estoy en el océano Pacífico.','Soy el lugar más profundo de la Tierra.','Bajo hasta 11.034 metros.']],
+ ['Volcán',['Soy un agente interno del relieve.','Tengo cráter, cono, chimenea y cámara magmática.','Expulso lava, ceniza y gases.']],
+ ['Terremoto',['Soy un agente interno del relieve.','Tengo hipocentro (abajo) y epicentro (arriba).','Si ocurro bajo el mar, puedo causar un tsunami.']],
+ ['Himalaya',['Soy la cordillera más alta del mundo.','Estoy en Asia.','En mí está el Everest, con 8848 metros.']],
+ ['Los Andes',['Soy una cordillera muy larga.','Voy de norte a sur por el oeste de un continente.','Estoy en Sudamérica.']],
+ ['El Rift Valley',['Soy una enorme fractura de la corteza terrestre.','Cruzo el este de un continente.','Estoy en África y se me puede ver desde el espacio.']],
+ ['Alfred Wegener',['Fui un científico alemán.','Noté que las costas de África y Sudamérica encajaban como un puzle.','Propuse la teoría de la deriva continental en 1912.']],
+ ['El manto',['Soy una capa de la Tierra.','Estoy formado por magma que se mueve lentamente.','Llego hasta 2900 km de profundidad.']],
+ ['El Everest',['Soy la montaña más alta del mundo (8848 m).','Estoy en Asia, en el Himalaya.','Tengo 500 toneladas de basura dejadas por alpinistas.']]];
+function gQuien(){const R_=shuffle(WHO).slice(0,8);let k=0,pts=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>¿Quién soy?</span><span id="hud">0 puntos</span></div><div id="pb"></div><ol class="clues" id="clues"></ol><div class="actions"><button class="ghost" id="more" type="button">Otra pista</button></div><div class="opts grid" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('quien',pts,false);$('#clues').innerHTML='';$('#opts').innerHTML='';$('#more').hidden=true;$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${pts} puntos de 24`,`${b?'¡Nueva mejor marca! ':''}Con 1 pista ganas 3 puntos; con 2, 2; con 3, 1.`,gQuien);return}
+  const [name,cl]=R_[k];let shown=1,done=false;$('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';
+  const showC=()=>{$('#clues').innerHTML=cl.slice(0,shown).map(c=>`<li>${c}</li>`).join('');$('#more').hidden=shown>=3||done};showC();
+  $('#more').onclick=()=>{if(shown<3){shown++;showC()}};
+  const opts=shuffle([name,...shuffle(WHO.filter(w=>w[0]!==name)).slice(0,3).map(w=>w[0])]);
+  $('#opts').innerHTML=opts.map(o=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${esc(o)}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;if(b.textContent===name){done=true;const g=4-shown;pts+=g;res.push(true);b.classList.add('right');$('#hud').textContent=pts+' puntos';$('#fb').className='fb okk';$('#fb').textContent=`¡Sí, soy ${name}! +${g} ${g===1?'punto':'puntos'}.`}
+   else{b.classList.add('wrong');b.disabled=true;if(shown<3){shown++;showC();$('#fb').className='fb ko';$('#fb').textContent='No. Te doy otra pista.';return}done=true;res.push(false);$('#opts').querySelectorAll('.opt').forEach(x=>{if(x.textContent===name)x.classList.add('right')});$('#fb').className='fb ko';$('#fb').textContent=`Era ${name}.`}
+   $('#opts').querySelectorAll('.opt').forEach(x=>x.disabled=true);shown=3;showC();
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R_.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* Ordena */
+const CRONO=[['Capas de la Tierra (de fuera a dentro)',[['Corteza','5-70 km'],['Manto','Hasta 2900 km'],['Núcleo externo','Líquido, hierro y níquel'],['Núcleo interno','Sólido por la presión']]],
+ ['Continentes de mayor a menor',[['Asia','44,6 millones de km²'],['América','42,5 millones de km²'],['África','30,3 millones de km²'],['Antártida','14 millones de km²'],['Europa','10,5 millones de km²'],['Oceanía','8,5 millones de km²']]],
+ ['Relieve oceánico (de más superficial a más profundo)',[['Plataforma continental','Hasta 400 m'],['Talud continental','Pendiente fuerte'],['Llanura abisal','Fondo plano, miles de metros'],['Fosa marina','Grietas profundísimas (Marianas: 11.034 m)']]]];
+function gOrd(){let ki=0,err=0;const L=CRONO;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ordena</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="pool" id="pool"></div><ol class="ladder" id="lad"></ol><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const set=()=>{if(ki>=L.length){const b=setBest('ord',err,true);$('#q').textContent='';$('#pool').innerHTML='';$('#lad').innerHTML='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Recuerda el orden: capas de la Tierra, continentes y fondo marino.`,gOrd);return}
+  const [tt,items]=L[ki];let placed=0;$('#q').innerHTML=`${tt}`;$('#lad').innerHTML='';
+  $('#pool').innerHTML=shuffle(items.map((it,i)=>[it[0],i])).map(([t,i])=>`<button class="ev" type="button" data-i="${i}">${t}</button>`).join('');
+  $('#pool').querySelectorAll('.ev').forEach(b=>b.onclick=()=>{if(+b.dataset.i===placed){$('#lad').insertAdjacentHTML('beforeend',`<li><b>${items[placed][0]}</b>${items[placed][1]}</li>`);b.remove();placed++;if(placed===items.length){ki++;setTimeout(set,1100)}}else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}})};set()}
+
+/* Une parejas */
+const DEFS=[['Litosfera','Capa rígida: corteza + parte superior del manto'],['Pangea','Supercontinente de hace 300 M años'],['Laurasia','Bloque norte de Pangea'],['Gondwana','Bloque sur de Pangea'],['Pliegue','Se forma al comprimir material blando'],['Falla','Se forma al comprimir material duro'],['Hipocentro','Punto profundo donde nace un terremoto'],['Epicentro','Punto en la superficie encima del hipocentro'],['Tsunami','Ola gigante causada por terremoto submarino'],['Dorsal oceánica','Cordillera submarina donde sale magma'],['Fosa marina','Grieta profundísima del fondo oceánico'],['Plataforma continental','Prolongación del continente bajo el mar'],['Chimenea de hadas','Columna de roca esculpida por el viento'],['Manto','Capa de magma hasta 2900 km'],['Everest','Montaña más alta del mundo (8848 m)'],['Rift Valley','Gran fractura en el este de África'],['ODS','17 Objetivos de Desarrollo Sostenible de la ONU']];
+const DATOS=[['Corteza','Capa de la Tierra'],['Talud','Relieve oceánico'],['Meseta','Relieve terrestre'],['Volcán','Agente interno'],['Agua','Agente externo'],['Viento','Agente externo'],['Himalaya','Cordillera de Asia'],['Andes','Cordillera de América'],['Alpes','Cordillera de Europa'],['Urales','Separan Europa de Asia'],['Pacífico','Océano más grande'],['Ártico','Océano más pequeño']];
+function gUne(){let mode='def',round=0,err=0;
+ const setup=()=>{round=0;err=0;
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Une parejas</span><span id="hud">Errores: 0</span></div><div class="chips" id="modes"><button type="button" data-m="def" aria-pressed="${mode==='def'}">Conceptos y definiciones</button><button type="button" data-m="obra" aria-pressed="${mode==='obra'}">Formas y categorías</button></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+  $('#modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;setup()});play()};
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has unido 12 parejas.`,setup);return}
+  const pairs=shuffle(mode==='def'?DEFS:DATOS).slice(0,6);
+  $('#q').innerHTML=mode==='def'?`Ronda ${round+1} de 2: toca un concepto y luego su definición.`:`Ronda ${round+1} de 2: une cada forma o elemento con su categoría.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca algo de la columna izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};
+ setup()}
+
+/* Clasifica contra reloj */
+const DECKS={
+agente:{n:'¿Interno o externo?',c:['Interno','Externo'],it:[['Pliegue',0],['Falla',0],['Volcán',0],['Terremoto',0],['Agua (ríos)',1],['Viento',1],['Ser humano',1],['Tsunami (por terremoto)',0],['Glaciar',1],['Oleaje (acantilados)',1],['Lava y magma',0],['Minas a cielo abierto',1]]},
+forma:{n:'¿Terrestre u oceánico?',c:['Terrestre','Oceánico'],it:[['Montaña',0],['Meseta',0],['Valle',0],['Depresión',0],['Cordillera',0],['Sierra',0],['Plataforma continental',1],['Talud continental',1],['Llanura abisal',1],['Dorsal oceánica',1],['Fosa marina',1],['Páramo',0]]},
+cont:{n:'¿En qué continente?',c:['Asia','América','África','Europa'],it:[['Himalaya',0],['Everest',0],['Andes',1],['Rocosas',1],['Rift Valley',2],['Alpes',3],['Pirineos',3],['Urales',3],['Cáucaso',3],['Escandinavos',3],['Gran Llanura',3],['Aconcagua',1]]}};
+function gCla(){let dk='agente';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length<=4?'grid':'three'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Geóloga experta',()=>ST.filter(s=>s.t===1).every(s=>S.stars[s.id]===3)],['Ciudadana del mundo',()=>ST.filter(s=>s.t===2).every(s=>S.stars[s.id]===3)],['Sabia de las capas',()=>(S.games.quien||0)>=18],['Todo en orden',()=>S.games.ord===0],['Rápida como un terremoto',()=>(S.games.cla||0)>=25],['Pareja perfecta',()=>S.games.une===0],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>

@@ -26,6 +26,7 @@ ale/
   mapas-geografia/
     tema2/            Viaje por España: comunidades, provincias, pueblos y patrimonio (mapa del IGN vía es-atlas)
     temas-1-2/        Atlas de Geografía: conceptos geográficos y medio físico de España (temas 1 y 2)
+    tema3/            El Relieve: estructura de la Tierra, tectónica, formas del relieve, agentes, continentes y sostenibilidad
   biologia/
     celulas/          Laboratorio de células: «Formados por células»
   fisica-quimica/
