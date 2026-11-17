@@ -8,44 +8,63 @@ window.CATALOGO = {
   ale: {
     nombre: 'Ale', curso: '1º ESO',
     asignaturas: [
-      { id: 'matematicas', nombre: 'Matemáticas', tono: 215, apps: [
-        { titulo: 'Repaso de Matemáticas', descripcion: 'Potencias, divisibilidad, m.c.d. y m.c.m., fracciones, porcentajes, reglas de tres y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
-      ]},
-      { id: 'ham', nombre: 'Historia del Arte y de la Música', tono: 300, apps: [
-        { titulo: 'Arte y Música: Temas 1 y 2', descripcion: 'Arte del Paleolítico y megalitismo; música de la Edad Media y Barroco. Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' },
-        { titulo: 'Fichas animadas: Tema 2', descripcion: 'Megalitismo y Barroco musical paso a paso, con animaciones y preguntas al final de cada ficha', ruta: 'ale/ham/tema2-animado/' },
-        { titulo: 'Audiciones de Música', descripcion: 'Las 10 audiciones de los temas 1 y 2: fichas, juego de reconocer fragmentos y prueba', ruta: 'ale/ham/audiciones/' },
-        { titulo: 'Arte y Música: Tema 3', descripcion: 'Arte de Mesopotamia y Egipto y el Clasicismo musical: fichas con dibujos interactivos (zigurat, Abu Simbel, canon de 18 puños, sinfonías de Haydn que suenan), 5 juegos y prueba', ruta: 'ale/ham/tema3/' }
-      ]},
+      {
+        id: 'matematicas', nombre: 'Matemáticas', tono: 215, apps: [
+          { titulo: 'Repaso de Matemáticas', descripcion: 'Potencias, divisibilidad, m.c.d. y m.c.m., fracciones, porcentajes, reglas de tres y problemas', ruta: 'ale/matematicas/tema1-repaso/' }
+        ]
+      },
+      {
+        id: 'ham', nombre: 'Historia del Arte y de la Música', tono: 300, apps: [
+          { titulo: 'Arte y Música: Temas 1 y 2', descripcion: 'Arte del Paleolítico y megalitismo; música de la Edad Media y Barroco. Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' },
+          { titulo: 'Fichas animadas: Tema 2', descripcion: 'Megalitismo y Barroco musical paso a paso, con animaciones y preguntas al final de cada ficha', ruta: 'ale/ham/tema2-animado/' },
+          { titulo: 'Audiciones de Música', descripcion: 'Las 10 audiciones de los temas 1 y 2: fichas, juego de reconocer fragmentos y prueba', ruta: 'ale/ham/audiciones/' },
+          { titulo: 'Arte y Música: Tema 3', descripcion: 'Arte de Mesopotamia y Egipto y el Clasicismo musical: 11 fichas animadas paso a paso con comprobación, 5 juegos interactivos y prueba', ruta: 'ale/ham/tema3/' },
+          { titulo: 'Fichas animadas: Tema 3', descripcion: 'Mesopotamia, Egipto y el Clasicismo musical paso a paso: el arco y la bóveda, evolución de las tumbas, Abu Simbel, canon de 18 puños, la orquesta clásica, ópera seria vs bufa y Haydn con animaciones y preguntas', ruta: 'ale/ham/tema3-animado/' }
+        ]
+      },
       { id: 'lengua', nombre: 'Lengua', tono: 0, apps: [] },
-      { id: 'literatura', nombre: 'Literatura', tono: 320, apps: [
-        { titulo: 'Taller de Literatura: Temas 1 y 2', descripcion: 'Géneros literarios, narración, poesía y teatro; Homero, Esopo, la tragedia griega y Jenofonte. Fichas resumidas, 6 juegos y prueba', ruta: 'ale/literatura/temas-1-2/' },
-        { titulo: 'Literatura animada', descripcion: 'Once fichas animadas paso a paso: géneros, narrador, fábula, poesía, la Ilíada y la Odisea, el teatro y la tragedia griega', ruta: 'ale/literatura/animado/' },
-        { titulo: 'Literaturas orientales: Tema 3', descripcion: 'Persa, egipcia, mesopotámica, china, india y hebrea. Mapa interactivo, Piedra Rosetta, Gilgamesh, la Biblia. 6 fichas, 4 juegos y prueba', ruta: 'ale/literatura/tema3/' }
-      ]},
-      { id: 'ingles', nombre: 'Inglés', tono: 265, apps: [
-        { titulo: 'Verbos Irregulares', descripcion: 'De grow a send: infinitive, past simple y past participle con significado y pronunciación. Fichas, 7 juegos y prueba', ruta: 'ale/ingles/verbos-irregulares/' }
-      ]},
-      { id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [
-        { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' }
-      ]},
-      { id: 'mapas-geografia', nombre: 'Mapas y Geografía', tono: 175, apps: [
-        { titulo: 'Viaje por España: Tema 2', descripcion: 'Comunidades, provincias, pueblos, ríos, monumentos y personajes en un mapa interactivo, con juegos, prueba y pasaporte de sellos', ruta: 'ale/mapas-geografia/tema2/' },
-        { titulo: 'Atlas de Geografía: Temas 1 y 2', descripcion: 'Coordenadas, proyecciones y escalas; relieve, ríos, costas, climas y paisajes de España. Fichas con mapa físico, 8 juegos y prueba', ruta: 'ale/mapas-geografia/temas-1-2/' },
-        { titulo: 'El Relieve: Tema 3', descripcion: 'Estructura de la Tierra, tectónica de placas, formas del relieve, agentes internos y externos, continentes, océanos y sostenibilidad. 6 fichas con dibujos, 4 juegos y prueba', ruta: 'ale/mapas-geografia/tema3/' }
-      ]},
-      { id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [
-        { titulo: 'Laboratorio de células', descripcion: 'Formados por células: el microscopio, partes de la célula, procariotas y eucariotas, célula animal y vegetal y tejidos. Fichas, 8 juegos y prueba', ruta: 'ale/biologia/celulas/' }
-      ]},
-      { id: 'fisica-quimica', nombre: 'Física y Química', tono: 330, apps: [
-        { titulo: 'Laboratorio de Física y Química', descripcion: 'Densidad, cambio de unidades, clasificación de la materia, el átomo (Z y A) y la tabla periódica. Fichas, 7 juegos y prueba', ruta: 'ale/fisica-quimica/materia-atomo/' },
-        { titulo: 'Física y Química animada', descripcion: 'Diez ejemplos resueltos paso a paso: medir una densidad, el triángulo, corcho y hierro, factores de conversión, mezclas, elementos y compuestos, el átomo, Z y A y la tabla', ruta: 'ale/fisica-quimica/animado/' },
-        { titulo: 'Los hidruros', descripcion: 'Tema 3 · Formulación: los tres grupos de hidruros, el intercambio de valencias animado y los tres nombres (estequiométrica, nº de oxidación y nº de carga). 5 fichas con ejemplos que se mueven, 6 juegos y prueba', ruta: 'ale/fisica-quimica/hidruros/' }
-      ]},
+      {
+        id: 'literatura', nombre: 'Literatura', tono: 320, apps: [
+          { titulo: 'Taller de Literatura: Temas 1 y 2', descripcion: 'Géneros literarios, narración, poesía y teatro; Homero, Esopo, la tragedia griega y Jenofonte. Fichas resumidas, 6 juegos y prueba', ruta: 'ale/literatura/temas-1-2/' },
+          { titulo: 'Literatura animada', descripcion: 'Once fichas animadas paso a paso: géneros, narrador, fábula, poesía, la Ilíada y la Odisea, el teatro y la tragedia griega', ruta: 'ale/literatura/animado/' },
+          { titulo: 'Literaturas orientales: Tema 3', descripcion: 'Persa, egipcia, mesopotámica, china, india y hebrea. Mapa interactivo, Piedra Rosetta, Gilgamesh, la Biblia. 6 fichas, 4 juegos y prueba', ruta: 'ale/literatura/tema3/' }
+        ]
+      },
+      {
+        id: 'ingles', nombre: 'Inglés', tono: 265, apps: [
+          { titulo: 'Verbos Irregulares', descripcion: 'De grow a send: infinitive, past simple y past participle con significado y pronunciación. Fichas, 7 juegos y prueba', ruta: 'ale/ingles/verbos-irregulares/' }
+        ]
+      },
+      {
+        id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [
+          { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' }
+        ]
+      },
+      {
+        id: 'mapas-geografia', nombre: 'Mapas y Geografía', tono: 175, apps: [
+          { titulo: 'Viaje por España: Tema 2', descripcion: 'Comunidades, provincias, pueblos, ríos, monumentos y personajes en un mapa interactivo, con juegos, prueba y pasaporte de sellos', ruta: 'ale/mapas-geografia/tema2/' },
+          { titulo: 'Atlas de Geografía: Temas 1 y 2', descripcion: 'Coordenadas, proyecciones y escalas; relieve, ríos, costas, climas y paisajes de España. Fichas con mapa físico, 8 juegos y prueba', ruta: 'ale/mapas-geografia/temas-1-2/' },
+          { titulo: 'El Relieve: Tema 3', descripcion: 'Estructura de la Tierra, tectónica de placas, formas del relieve, agentes internos y externos, continentes, océanos y sostenibilidad. 6 fichas con dibujos, 4 juegos y prueba', ruta: 'ale/mapas-geografia/tema3/' }
+        ]
+      },
+      {
+        id: 'biologia', nombre: 'Biología y Geología', tono: 140, apps: [
+          { titulo: 'Laboratorio de células', descripcion: 'Formados por células: el microscopio, partes de la célula, procariotas y eucariotas, célula animal y vegetal y tejidos. Fichas, 8 juegos y prueba', ruta: 'ale/biologia/celulas/' }
+        ]
+      },
+      {
+        id: 'fisica-quimica', nombre: 'Física y Química', tono: 330, apps: [
+          { titulo: 'Laboratorio de Física y Química', descripcion: 'Densidad, cambio de unidades, clasificación de la materia, el átomo (Z y A) y la tabla periódica. Fichas, 7 juegos y prueba', ruta: 'ale/fisica-quimica/materia-atomo/' },
+          { titulo: 'Física y Química animada', descripcion: 'Diez ejemplos resueltos paso a paso: medir una densidad, el triángulo, corcho y hierro, factores de conversión, mezclas, elementos y compuestos, el átomo, Z y A y la tabla', ruta: 'ale/fisica-quimica/animado/' },
+          { titulo: 'Los hidruros', descripcion: 'Tema 3 · Formulación: los tres grupos de hidruros, el intercambio de valencias animado y los tres nombres (estequiométrica, nº de oxidación y nº de carga). 5 fichas con ejemplos que se mueven, 6 juegos y prueba', ruta: 'ale/fisica-quimica/hidruros/' }
+        ]
+      },
       { id: 'aleman', nombre: 'Alemán', tono: 190, apps: [] },
-      { id: 'proyectos', nombre: 'Proyectos', tono: 28, apps: [
-        { titulo: 'Your Ideal Breakfast', descripcion: 'Nuestra app de desayunos: el desayuno ideal de cada día según la estación y los festivos, recetas paso a paso, plan semanal con lista de la compra en PDF y registro de alergias. En español e inglés', ruta: 'ale/proyectos/your-ideal-breakfast/' }
-      ]}
+      {
+        id: 'proyectos', nombre: 'Proyectos', tono: 28, apps: [
+          { titulo: 'Your Ideal Breakfast', descripcion: 'Nuestra app de desayunos: el desayuno ideal de cada día según la estación y los festivos, recetas paso a paso, plan semanal con lista de la compra en PDF y registro de alergias. En español e inglés', ruta: 'ale/proyectos/your-ideal-breakfast/' }
+        ]
+      }
     ]
   },
   carla: {

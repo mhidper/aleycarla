@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fichas animadas: Tema 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#f2eef8; --paper:#fdfdfb; --grid:#e5e0f0; --ink:#1f1d3a; --muted:#5d5a7a; --line:#d4cee6;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --lit:#8a3b12; --gold:#d9a400; --lapiz:#1e4f94; --parch:#f7f0e4; --parch-line:#e0d3be;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --lit:#f0a774; --gold:#ffd23f; --lapiz:#4b82d9; --parch:#221e33; --parch-line:#3b3654; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12101f; --paper:#1b1830; --grid:#25213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#332e52;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#12101f; --chip:#1f1b36;
+  --lit:#f0a774; --gold:#ffd23f; --lapiz:#4b82d9; --parch:#221e33; --parch-line:#3b3654; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+[hidden]{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.nav-links{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.back:hover{text-decoration:underline}
+.link-app{font-size:.88rem;color:var(--lit);text-decoration:none;font-weight:700;border:1.5px solid var(--line);background:var(--chip);padding:4px 10px;border-radius:8px}
+.link-app:hover{border-color:var(--lit)}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;font-weight:700;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick h2{font:700 .78rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:8px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .88rem var(--f-body);padding:6px 11px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{border-color:var(--ink);background:var(--btn);color:var(--btn-fg);font-weight:700}
+.chips button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+.chips button.done[aria-current="true"]::after{color:var(--btn-fg)}
+button:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:18px 16px 20px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0}
+.sheet h2.t{font:800 1.4rem var(--f-display);margin:-6px 0 0;text-wrap:balance}
+.stage{border-radius:12px;overflow:hidden;border:1px solid var(--parch-line);background:#fbf8f1;line-height:0}
+.stage>svg{width:100%;height:auto;display:block}
+.stage svg text{font-family:var(--f-body)}
+.cap{font-size:1.15rem;line-height:1.5;margin:0;min-height:4.5em;max-width:62ch}
+.cap b{color:var(--marker)}
+@media (prefers-reduced-motion:no-preference){.cap.in{animation:capin .35s ease-out}@keyframes capin{from{opacity:0;transform:translateY(4px)}}}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--marker)}
+.dots i.past{background:var(--muted)}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctrl .sp{flex:1}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 22px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.ghost:disabled,.primary:disabled{opacity:.4;cursor:default}
+.nogsap{background:var(--marker-soft);border:1.5px solid var(--marker);border-radius:10px;padding:10px 14px;margin:0}
+.steps-list{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+/* Comprobación */
+.quiz{display:flex;flex-direction:column;gap:16px;border-top:2px solid var(--ink);padding-top:14px}
+.quiz h3{font:800 1.15rem var(--f-display);margin:0}
+.qq{display:flex;flex-direction:column;gap:8px}
+.qq p.q{font-weight:700;margin:0;font-size:1.05rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:0;font-size:.95rem}
+.exp.b{color:var(--ok)} .exp.mm{color:var(--marker)}
+.exp b{color:var(--ink)}
+.stamp{font-family:var(--f-hand);font-size:2.4rem;line-height:1;color:var(--ok);transform:rotate(-6deg);display:inline-block}
+@media (max-width:420px){header h1{font-size:1.65rem}.cap{font-size:1.05rem}.primary{padding:12px 16px}.ghost{padding:11px 12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-links">
+    <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
+    <a class="link-app" href="../tema3/">📖 Ir a la app de Tema 3 (retos y juegos)</a>
+  </div>
+  <header>
+    <h1>Fichas animadas <span>Tema 3</span></h1>
+    <p>Mesopotamia, Egipto y el Clasicismo musical, paso a paso con animaciones interactivas. Pulsa «Siguiente» para avanzar y comprueba lo aprendido al final de cada ficha.</p>
+  </header>
+  <section class="sheet" id="sheet" aria-labelledby="ttl">
+    <p class="kicker" id="kick"></p>
+    <h2 class="t" id="ttl"></h2>
+    <div class="stage" id="stagebox"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="cap" id="cap" aria-live="polite"></p>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <div class="ctrl">
+      <button class="ghost" id="bBack">← Atrás</button>
+      <button class="ghost" id="bAgain">↻ Repetir</button>
+      <span class="sp"></span>
+      <button class="primary" id="bNext">Siguiente →</button>
+    </div>
+    <div class="quiz" id="quiz" hidden></div>
+  </section>
+  <nav class="pick" id="pick" aria-label="Todas las fichas"></nav>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* =================== DIBUJOS Y UTILIDADES =================== */
+const INK='#1f1d3a',MUT='#5d5a7a',MAG='#c0127e',LIT='#8a3b12',GOLD='#d9a400',BLUE='#1e6fd9',LAP='#1e4f94',SAND='#efe0b9',SKY='#e9f1f6',GREEN='#17734a';
+const PB=`<rect width="400" height="250" fill="#fbf8f1"/>`;
+const SAND_BG=`<rect width="400" height="250" fill="#eef3f7"/><path d="M0 190 Q120 180 240 194 T400 188 L400 250 L0 250 Z" fill="#ebd8ab"/><path d="M0 216 Q160 206 280 220 T400 214 L400 250 L0 250 Z" fill="#ddc594"/>`;
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||14}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" fill="${o.c||INK}"${o.cls?` class="${o.cls}"`:''}${o.it?' font-style="italic"':''}${o.ff?` font-family="${o.ff}"`:''}>${s}</text>`;
+const tw=(s,size)=>Math.round([...s].length*size*.56+20);
+const chip=(cls,x,y,s,c=MAG,size=13)=>{const w=tw(s,size),h=size+12;return`<g class="${cls}"><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="#fff" stroke="${c}" stroke-width="1.8"/>${T(x,y+size*.35,s,{size,c,w:700})}</g>`};
+const person=(x,y,c='#3a3a3a')=>`<g fill="${c}" stroke="${c}" stroke-width="2" stroke-linecap="round"><circle cx="${x}" cy="${y}" r="3.2" stroke="none"/><line x1="${x}" y1="${y+3}" x2="${x}" y2="${y+13}"/><line x1="${x}" y1="${y+13}" x2="${x-3}" y2="${y+21}"/><line x1="${x}" y1="${y+13}" x2="${x+3}" y2="${y+21}"/><line x1="${x-4}" y1="${y+7}" x2="${x+4}" y2="${y+7}"/></g>`;
+const staff=(x1,x2,y,gap=7,c='#8a7a5c')=>[0,1,2,3,4].map(k=>`<line x1="${x1}" y1="${y+k*gap}" x2="${x2}" y2="${y+k*gap}" stroke="${c}" stroke-width="1.1"/>`).join('');
+
+/* =================== ESCENAS =================== */
+const SCENES=[
+/* ---------- 1. ARCO Y BÓVEDA ---------- */
+{id:'arco',b:'Arte',t:'Mesopotamia: el arco y la bóveda',
+ steps:[
+  '<b>Mesopotamia</b> («tierra entre ríos») floreció entre el <b>Tigris</b> y el <b>Éufrates</b> hacia el 3000 a. C. Al no tener piedra, construían con <b>ladrillo</b> y <b>adobe</b> (barro con paja secado al sol).',
+  'Por usar materiales frágiles nos han llegado <b>pocos restos</b>. Pero para cubrir grandes salas inventaron algo revolucionario que los egipcios no usaban: el <b>arco</b>.',
+  'Un arco se construye con piedras o ladrillos en cuña (<b>dovelas</b>). Al colocar la pieza central en lo alto, la <b>clave</b>, todas las piezas se aprietan entre sí y <b>desvían el peso hacia los lados</b>.',
+  'Si prolongamos un arco en profundidad, obtenemos una <b>bóveda de cañón</b>. Así crearon techos resistentes y amplios con simples ladrillos de barro.'],
+ svg(){
+  let s=PB;
+  s+=`<g class="pA">
+    ${T(200,32,'Mesopotamia: entre dos ríos',{size:18,w:800,c:LIT})}
+    <path d="M60 70 Q90 120 110 200" stroke="#4a90e2" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M160 60 Q180 120 220 200" stroke="#4a90e2" stroke-width="12" fill="none" stroke-linecap="round"/>
+    ${T(82,100,'Tigris',{size:12,w:700,c:'#21528c'})}
+    ${T(208,130,'Éufrates',{size:12,w:700,c:'#21528c'})}
+    <g class="brik" transform="translate(260 76)">
+      <rect x="0" y="0" width="90" height="42" rx="4" fill="#c49a68" stroke="#7a5528" stroke-width="2"/>
+      <rect x="10" y="8" width="70" height="26" fill="#b08453" opacity=".4"/>
+      ${T(45,26,'Ladrillo cocido',{size:11,w:700,c:'#fff'})}
+    </g>
+    <g class="brik" transform="translate(260 136)">
+      <rect x="0" y="0" width="90" height="42" rx="4" fill="#d8b27c" stroke="#8a6330" stroke-width="2"/>
+      ${[16,28,40,54,68,76].map(x=>`<line x1="${x}" y1="12" x2="${x-4}" y2="30" stroke="#684a20" stroke-width="1.5"/>`).join('')}
+      ${T(45,26,'Adobe (paja)',{size:11,w:700,c:INK})}
+    </g>
+  </g>`;
+  s+=`<g class="pB">
+    <rect x="60" y="210" width="280" height="14" fill="#7a5528"/>
+    <rect class="pillar" x="110" y="110" width="28" height="100" fill="#c49a68" stroke="#7a5528" stroke-width="2"/>
+    <rect class="pillar" x="262" y="110" width="28" height="100" fill="#c49a68" stroke="#7a5528" stroke-width="2"/>
+    <g id="dovs">
+      ${[[-42,-22],[-30,-48],[-14,-68],[14,-68],[30,-48],[42,-22]].map(([dx,dy],i)=>`
+        <rect class="dov" x="${200+dx-11}" y="${108+dy}" width="22" height="18" rx="2" fill="#d9b17d" stroke="#7a5528" stroke-width="1.6"/>
+      `).join('')}
+    </g>
+    <g class="clave">
+      <path d="M190 32 L210 32 L206 56 L194 56 Z" fill="${MAG}" stroke="#7a0d4f" stroke-width="2"/>
+      ${T(200,24,'CLAVE',{size:12,w:800,c:MAG})}
+    </g>
+    <g class="forces">
+      <path d="M188 44 Q140 54 124 104" stroke="${MAG}" stroke-width="3.5" fill="none" stroke-dasharray="4 4"/>
+      <path d="M212 44 Q260 54 276 104" stroke="${MAG}" stroke-width="3.5" fill="none" stroke-dasharray="4 4"/>
+      ${T(200,84,'reparto de cargas',{size:12,w:700,c:MAG})}
+    </g>
+  </g>`;
+  s+=`<g class="pC">
+    <path d="M120 180 Q200 80 280 180 L350 140 Q270 40 190 140 Z" fill="#e4c79e" stroke="#7a5528" stroke-width="2.5"/>
+    <path d="M120 180 Q200 80 280 180" fill="none" stroke="#7a5528" stroke-width="3"/>
+    ${[0,1,2,3,4].map(k=>`<path class="bovline" d="M${138+k*15} ${170-k*8} Q${218+k*15} ${70-k*8} ${298+k*15} ${170-k*8}" fill="none" stroke="#b08453" stroke-width="1.8"/>`).join('')}
+    ${chip('bovlab',200,224,'Bóveda de cañón = sucesión continua de arcos',LIT,13)}
+  </g>`;
+  return s;
+ },
+ anim(tl,E){
+  gsap.set(['.pB','.pC','.clave','.forces'],{opacity:0});
+  tl.from('.pA',{opacity:0,duration:.4});tl.from('.brik',{x:40,opacity:0,stagger:.3,duration:.5,ease:'back.out(1.7)'});E();
+  tl.to('.pA',{opacity:0,duration:.35});tl.to('.pB',{opacity:1,duration:.35},'<');
+  tl.from('.pillar',{y:60,opacity:0,stagger:.2,duration:.4});tl.from('.dov',{scale:0,stagger:.12,duration:.3,transformOrigin:'50% 50%'});E();
+  tl.to('.clave',{opacity:1,y:10,duration:.5,ease:'bounce.out'});tl.to('.forces',{opacity:1,duration:.4});E();
+  tl.to('.pB',{opacity:0,duration:.35});tl.to('.pC',{opacity:1,duration:.35},'<');
+  tl.from('.bovline',{opacity:0,stagger:.15,duration:.4});tl.from('.bovlab',{y:12,opacity:0,duration:.4});E();
+ },
+ qs:[
+  {q:'¿Qué gran invento arquitectónico introdujeron los mesopotámicos?',ok:'El arco y la bóveda',no:['El dintel plano de piedra','La columna con capitel dórico','La pirámide de caras lisas'],exp:'Los mesopotámicos crearon el arco y la bóveda para cubrir techos con pequeños ladrillos.'},
+  {q:'¿Qué pieza es la que cierra el arco y reparte las fuerzas hacia los lados?',ok:'La clave (pieza central superior)',no:['La dovela inferior','El dintel','El sillar de cimiento'],exp:'La clave encaja en la parte superior y hace que todas las dovelas queden encajadas a presión.'}
+ ]},
+
+/* ---------- 2. ZIGURAT ---------- */
+{id:'zigurat',b:'Arte',t:'El zigurat: santuario y observatorio',
+ steps:[
+  'El <b>zigurat</b> era la gran torre escalonada de los templos mesopotámicos, creada por los <b>sumerios</b>. Se consideraba un <b>puente entre el cielo y la tierra</b>.',
+  'El rey <b>Ur-Nammu</b> mandó levantar el gran <b>zigurat de Ur</b>: una mole de ladrillo macizo con <b>tres plantas escalonadas</b> y terrazas.',
+  'Solo los <b>sacerdotes</b> tenían permitido subir por las rampas y escaleras exteriores para realizar ceremonias y acercarse a los dioses.',
+  'En la cumbre estaba el <b>santuario</b> dedicado a <b>Nanna</b> (divinidad de la luna). Sus esquinas orientadas a los <b>cuatro puntos cardinales</b> le permitían servir también como <b>observatorio astronómico</b>.'],
+ svg(){
+  let s=SAND_BG;
+  s+=`<g class="zig" transform="translate(20 10)">
+    <polygon points="50,180 310,180 294,136 66,136" fill="#bfa075" stroke="#5a3d1b" stroke-width="2"/>
+    <polygon points="80,136 280,136 266,96 94,96" fill="#cca97d" stroke="#5a3d1b" stroke-width="2"/>
+    <polygon points="112,96 248,96 238,66 122,66" fill="#dcba8c" stroke="#5a3d1b" stroke-width="2"/>
+    <rect class="sanct" x="162" y="44" width="36" height="22" fill="#ffe29b" stroke="#7a5528" stroke-width="2"/>
+    <line x1="180" y1="180" x2="180" y2="66" stroke="#7a5528" stroke-width="5"/>
+    <line x1="66" y1="180" x2="162" y2="136" stroke="#7a5528" stroke-width="3"/>
+    <line x1="294" y1="180" x2="198" y2="136" stroke="#7a5528" stroke-width="3"/>
+  </g>`;
+  s+=`<g class="priest">${person(70,210,'#7a3818')}${T(70,236,'sacerdote',{size:11,w:700,c:'#7a3818'})}</g>`;
+  s+=`<g class="sky-ast">
+    <path d="M330 36 A18 18 0 1 0 348 54 A14 14 0 1 1 330 36 Z" fill="${GOLD}"/>
+    ${[[310,30],[360,35],[340,75],[290,60]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="${GOLD}"/>`).join('')}
+    ${T(335,90,'Nanna (la luna)',{size:12,w:700,c:LIT})}
+  </g>`;
+  s+=chip('ur_lab',200,230,'Rey Ur-Nammu · 3 plantas y terrazas',INK,13);
+  return s;
+ },
+ anim(tl,E){
+  gsap.set(['.priest','.sky-ast','.ur_lab'],{opacity:0});
+  tl.from('.zig polygon',{scaleY:0,transformOrigin:'50% 100%',stagger:.25,duration:.6,ease:'power2.out'});
+  tl.from('.sanct',{scale:0,duration:.4,transformOrigin:'50% 100%',ease:'back.out(2)'});E();
+  tl.from('.ur_lab',{opacity:0,y:10,duration:.4});E();
+  tl.to('.priest',{opacity:1,duration:.3});
+  tl.to('.priest',{x:130,y:-140,duration:2.2,ease:'power1.inOut'});E();
+  tl.to('.sanct',{fill:'#fff3b8',stroke:GOLD,duration:.4});
+  tl.from('.sky-ast',{opacity:0,scale:0,transformOrigin:'50% 50%',duration:.6,ease:'back.out(1.8)'});E();
+ },
+ qs:[
+  {q:'¿Quién podía acceder a la cima del zigurat?',ok:'Únicamente los sacerdotes',no:['Todo el pueblo en fiestas','El ejército y los esclavos','Los comerciantes extranjeros'],exp:'El santuario superior era la morada del dios y estaba reservado a los sacerdotes.'},
+  {q:'¿Qué rey sumerio ordenó construir el famoso zigurat de Ur?',ok:'Ur-Nammu',no:['Nabucodonosor II','Hammurabi','Ramsés II'],exp:'Ur-Nammu fue el rey sumerio que mandó levantar la torre escalonada de Ur.'}
+ ]},
+
+/* ---------- 3. PUERTA DE ISHTAR ---------- */
+{id:'ishtar',b:'Arte',t:'La Puerta de Ishtar y Babilonia',
+ steps:[
+  'Frente a los templos sumerios, los <b>palacios</b> mesopotámicos eran la gran creación de los <b>acadios</b>, asirios y babilonios para exhibir el <b>poder del rey</b>.',
+  'El rey <b>Nabucodonosor II</b> reconstruyó la gran ciudad de <b>Babilonia</b> en el siglo VI a. C., fortificada con doble muralla y ocho monumentales puertas.',
+  'La más hermosa era la <b>Puerta de Ishtar</b>: revestida de <b>ladrillo vidriado azul brillante</b> y decorada con relieves de <b>leones</b> y <b>dragones (mushkhushu)</b> amarillos y blancos.',
+  'En el siglo XX fue excavada por arqueólogos alemanes, desmontada y reconstruida en el <b>Museo de Pérgamo de Berlín</b>.'],
+ svg(){
+  let s=`<rect width="400" height="250" fill="#e6f0fa"/><rect y="210" width="400" height="40" fill="#dac89d"/>`;
+  s+=`<g class="gate" transform="translate(20 0)">
+    <rect x="70" y="44" width="76" height="166" fill="${LAP}" stroke="#102a50" stroke-width="2"/>
+    <rect x="214" y="44" width="76" height="166" fill="${LAP}" stroke="#102a50" stroke-width="2"/>
+    <rect x="136" y="70" width="88" height="140" fill="#2963ad" stroke="#102a50" stroke-width="2"/>
+    ${[70,214].map(x=>[0,1,2,3,4,5].map(i=>`<rect x="${x+i*13}" y="32" width="8" height="14" fill="${LAP}"/>`).join('')).join('')}
+    <path d="M152 210 V144 Q180 114 208 144 V210 Z" fill="#1b140d" stroke="${GOLD}" stroke-width="3"/>
+    <g class="beasts">
+      ${[[108,90],[108,150],[252,90],[252,150],[180,94]].map(([x,y],i)=>`
+        <g transform="translate(${x} ${y})">
+          <ellipse cx="0" cy="0" rx="14" ry="7" fill="${i%2?GOLD:'#fff'}"/>
+          <circle cx="12" cy="-4" r="4" fill="${i%2?GOLD:'#fff'}"/>
+          <line x1="-8" y1="5" x2="-8" y2="14" stroke="${i%2?GOLD:'#fff'}" stroke-width="2.5"/>
+          <line x1="8" y1="5" x2="8" y2="14" stroke="${i%2?GOLD:'#fff'}" stroke-width="2.5"/>
+        </g>
+      `).join('')}
+    </g>
+  </g>`;
+  s+=`<g class="germany" opacity="0">
+    <rect x="100" y="80" width="200" height="90" rx="10" fill="#fff" stroke="${INK}" stroke-width="2"/>
+    ${T(200,114,'Hoy en Berlín',{size:16,w:800,c:MAG})}
+    ${T(200,136,'Museo de Pérgamo',{size:14,w:700,c:INK})}
+    ${T(200,154,'(Excavada por arqueólogos alemanes)',{size:11,c:MUT})}
+  </g>`;
+  s+=chip('pal_lab',200,24,'Palacio acadio vs. Puerta babilónica',LIT,12);
+  return s;
+ },
+ anim(tl,E){
+  gsap.set('.germany',{opacity:0});
+  tl.from('.gate rect',{scaleY:0,transformOrigin:'50% 100%',stagger:.15,duration:.6});E();
+  tl.from('.gate path',{opacity:0,duration:.4});tl.from('.pal_lab',{y:-10,opacity:0,duration:.3});E();
+  tl.from('.beasts g',{scale:0,opacity:0,stagger:.2,duration:.4,transformOrigin:'50% 50%',ease:'back.out(2)'});E();
+  tl.to('.germany',{opacity:1,scale:1.05,duration:.5,ease:'back.out(1.5)'});E();
+ },
+ qs:[
+  {q:'¿De qué material está recubierta la Puerta de Ishtar?',ok:'Ladrillo vidriado azul con animales en relieve',no:['Mármol tallado con inscripciones latinas','Granito rojo y oro macizo','Madera de olivo con mosaicos de plata'],exp:'El esmalte azul brillante de sus ladrillos vidriados la hacía inconfundible.'},
+  {q:'¿En qué museo y ciudad europea se exhibe hoy reconstruida?',ok:'En el Museo de Pérgamo de Berlín',no:['En el Museo del Louvre de París','En el Museo Británico de Londres','En el Museo del Prado de Madrid'],exp:'Arqueólogos alemanes la trasladaron y montaron en Berlín a comienzos del siglo XX.'}
+ ]},
+
+/* ---------- 4. ESCULTURA Y HAMMURABI ---------- */
+{id:'escultura-mesop',b:'Arte',t:'Gudea, toros alados y Hammurabi',
+ steps:[
+  'La escultura mesopotámica cuenta con dos formas: <b>esculturas exentas</b> (de bulto redondo) y <b>relieves</b> en muros y losas.',
+  'Las esculturas exentas, como <b>Gudea de Lagash</b>, muestran gobernantes en actitud <b>orante</b> (manos juntas), con falda larga, turbante y <b>ojos grandes y desorbitados</b>.',
+  'En los palacios destacaban los relieves protectores: los <b>toros alados con cabeza humana</b> (lamassu) en las entradas, y escenas realistas de caza como la <b>Leona herida</b>.',
+  'El <b>Código de Hammurabi</b> es una estela de basalto de <b>2,25 m</b>: en la cima, el rey recibe las leyes de <b>Shamash</b> (dios del sol); debajo, 282 leyes en <b>escritura cuneiforme</b> para unificar el reino.'],
+ svg(){
+  let s=PB;
+  s+=`<g class="sc-gudea" transform="translate(60 120)">
+    <rect x="-18" y="10" width="36" height="80" rx="6" fill="#3f4a4c" stroke="#1d2324" stroke-width="2"/>
+    <ellipse cx="0" cy="-10" rx="14" ry="16" fill="#4a5658" stroke="#1d2324" stroke-width="2"/>
+    <path d="M-14 -16 Q0 -30 14 -16 Z" fill="#2f3839"/>
+    <circle cx="-5" cy="-10" r="3" fill="#fff"/><circle cx="-5" cy="-10" r="1.5" fill="#000"/>
+    <circle cx="5" cy="-10" r="3" fill="#fff"/><circle cx="5" cy="-10" r="1.5" fill="#000"/>
+    <rect x="-8" y="24" width="16" height="12" rx="4" fill="#6d7a7d"/>
+    ${T(0,110,'Gudea (orante)',{size:12,w:700,c:INK})}
+  </g>`;
+  s+=`<g class="sc-toro" transform="translate(190 120)">
+    <rect x="-30" y="0" width="60" height="50" rx="4" fill="#c4b08a" stroke="#6b5536" stroke-width="2"/>
+    <path d="M-10 0 C0 -40 40 -30 50 -10 C35 5 20 0 10 0 Z" fill="#9c8660" stroke="#6b5536" stroke-width="1.5"/>
+    <circle cx="36" cy="-2" r="10" fill="#c4b08a" stroke="#6b5536" stroke-width="1.5"/>
+    <rect x="30" y="-18" width="12" height="6" fill="#7a5528"/>
+    ${[-20,-6,8,22].map(x=>`<rect x="${x}" y="50" width="6" height="36" fill="#c4b08a" stroke="#6b5536" stroke-width="1.5"/>`).join('')}
+    ${T(0,110,'Toro alado (guardián)',{size:12,w:700,c:INK})}
+  </g>`;
+  s+=`<g class="sc-hammu" transform="translate(320 110)">
+    <path d="M-24 90 V-40 Q-24 -80 0 -80 Q24 -80 24 -40 V90 Z" fill="#2c2b30" stroke="#111" stroke-width="2"/>
+    <circle cx="-8" cy="-54" r="6" fill="#777"/><circle cx="8" cy="-56" r="7" fill="#d9a400"/>
+    ${[0,1,2,3,4,5].map(r=>`<line x1="-16" y1="${-20+r*14}" x2="16" y2="${-20+r*14}" stroke="#888" stroke-width="1.2" stroke-dasharray="2 3"/>`).join('')}
+    ${T(0,110,'Hammurabi (2,25 m)',{size:12,w:700,c:INK})}
+  </g>`;
+  return s;
+ },
+ anim(tl,E){
+  tl.from('.sc-gudea',{opacity:0,y:20,duration:.5});E();
+  tl.from('.sc-toro',{opacity:0,scale:.8,transformOrigin:'50% 50%',duration:.5,ease:'back.out(1.5)'});E();
+  tl.from('.sc-hammu',{opacity:0,x:20,duration:.5});E();
+  tl.to('.sc-hammu circle[fill="#d9a400"]',{scale:1.4,duration:.4,yoyo:true,repeat:1,transformOrigin:'50% 50%'});E();
+ },
+ qs:[
+  {q:'¿Qué representa una figura mesopotámica «orante» como Gudea?',ok:'Una persona con manos juntas rezando o rindiendo devoción',no:['Un guerrero empuñando una espada','Un sacerdote danzando en procesión','Un rey montado a caballo'],exp:'Orante significa que está en actitud de oración ante los dioses.'},
+  {q:'¿Qué dios aparece entregando las leyes a Hammurabi en su estela?',ok:'Shamash, dios del sol y la justicia',no:['Atón, dios del disco solar','Nanna, dios de la luna','Ishtar, diosa de la guerra'],exp:'Shamash entrega el cetro de la ley a Hammurabi en lo alto de la estela de basalto.'}
+ ]},
+
+/* ---------- 5. TUMBAS EGIPCIAS ---------- */
+{id:'tumbas-egipto',b:'Arte',t:'Egipto: mastaba, pirámide e hipogeo',
+ steps:[
+  'El arte egipcio estaba al servicio del <b>faraón</b> y de la vida de ultratumba. La arquitectura era <b>colosal y adintelada</b> (líneas rectas, sin arcos ni bóvedas).',
+  'La primera tumba fue la <b>mastaba</b>: con forma de pirámide cortada, sala de ofrendas arriba y un <b>pozo ciego subterráneo</b> donde descansaba el sarcófago.',
+  'Apilando mastabas surgió la pirámide escalonada y después las tres colosales <b>pirámides de Giza: Keops, Kefren y Mikerinos</b>, con pasillos laberínticos para despistar a los saqueadores.',
+  'Como las pirámides eran saqueadas, en el Imperio Nuevo crearon el <b>hipogeo</b>: tumbas secretas <b>excavadas dentro de la montaña</b> en el <b>Valle de los Reyes</b> (como la de Tutankamón).'],
+ svg(){
+  let s=SAND_BG;
+  s+=`<g class="sec-mast" transform="translate(60 160)">
+    <polygon points="-40,40 40,40 28,-10 -28,-10" fill="#d9b477" stroke="#684a1e" stroke-width="2"/>
+    <line x1="0" y1="-10" x2="0" y2="70" stroke="#222" stroke-width="5"/>
+    <rect x="-14" y="60" width="28" height="16" fill="#5a3d1b"/>
+    ${T(0,95,'1. Mastaba',{size:13,w:800,c:LIT})}
+    ${T(0,110,'(pirámide cortada)',{size:10,c:MUT})}
+  </g>`;
+  s+=`<g class="sec-pyr" transform="translate(200 160)">
+    <polygon points="-56,40 56,40 0,-56" fill="#e8c68c" stroke="#684a1e" stroke-width="2"/>
+    <path d="M-10 30 L10 10 L-6 0 L8 -16" stroke="#4a3010" stroke-width="2.5" fill="none"/>
+    <rect x="-10" y="30" width="16" height="10" fill="#5a3d1b"/>
+    ${T(0,95,'2. Pirámide',{size:13,w:800,c:LIT})}
+    ${T(0,110,'(Giza: Keops)',{size:10,c:MUT})}
+  </g>`;
+  s+=`<g class="sec-hipo" transform="translate(330 160)">
+    <path d="M-40 40 L-40 -30 Q-10 -70 40 -40 L40 40 Z" fill="#c49e68" stroke="#684a1e" stroke-width="2"/>
+    <rect x="-30" y="10" width="14" height="24" fill="#1b120c"/>
+    <path d="M-20 22 H14 V40" stroke="#1b120c" stroke-width="7" fill="none"/>
+    <rect x="8" y="32" width="16" height="10" fill="#f5d061"/>
+    ${T(0,95,'3. Hipogeo',{size:13,w:800,c:LIT})}
+    ${T(0,110,'(excavado en roca)',{size:10,c:MUT})}
+  </g>`;
+  return s;
+ },
+ anim(tl,E){
+  tl.from('.sec-mast',{opacity:0,y:30,duration:.5});E();
+  tl.from('.sec-pyr',{opacity:0,scale:0,transformOrigin:'50% 100%',duration:.6,ease:'back.out(1.5)'});E();
+  tl.from('.sec-hipo',{opacity:0,x:30,duration:.5});E();
+  tl.to('.sec-hipo rect[fill="#f5d061"]',{scale:1.4,duration:.3,yoyo:true,repeat:2,transformOrigin:'50% 50%'});E();
+ },
+ qs:[
+  {q:'¿Qué forma exterior tiene una mastaba egipcia?',ok:'Pirámide cortada o tronco de pirámide con paredes en talud',no:['Una cueva circular sin nada en el exterior','Una pirámide de punta afilada','Una torre escalonada de ladrillo azul'],exp:'La mastaba parece un banco de piedra con paredes inclinadas y techo plano.'},
+  {q:'¿Por qué se construyeron los hipogeos en el Valle de los Reyes?',ok:'Para ocultar las tumbas en la roca y evitar saqueos de tesoros',no:['Porque los egipcios ya no sabían cortar piedra','Porque las pirámides se derrumbaban con la lluvia','Porque eran solo para campesinos'],exp:'Los hipogeos excavados disimulaban la entrada para proteger el descanso y los tesoros del faraón.'}
+ ]},
+
+/* ---------- 6. ABU SIMBEL Y PRODIGIO SOLAR ---------- */
+{id:'abu-simbel',b:'Arte',t:'Abu Simbel y el prodigio solar',
+ steps:[
+  'Además de templos al aire libre (como <b>Karnak</b> y <b>Luxor</b>), los egipcios construyeron <b>speos</b>: templos excavados totalmente dentro de la roca de una montaña.',
+  'El más célebre es <b>Abu Simbel</b>, mandado labrar por <b>Ramsés II</b> con una colosal fachada de <b>cuatro estatuas sentadas de 22 metros</b>.',
+  'En su interior de 60 metros ocurre un asombroso <b>prodigio astronómico</b>: el sol naciente penetra por la puerta e ilumina el santuario del fondo <b>solo dos días al año</b>.',
+  'Ocurre el <b>21 de febrero</b> y el <b>19 de octubre</b> (su cumpleaños y coronación), iluminando a Amón, Ra y Ramsés II, mientras el dios del inframundo (Ptah) permanece en la sombra.'],
+ svg(){
+  let s=`<rect width="400" height="250" fill="#f8ecd2"/>`;
+  s+=`<g class="facade">
+    <path d="M40 210 V60 L80 40 H320 L360 60 V210 Z" fill="#c99f69" stroke="#684a1e" stroke-width="2"/>
+    ${[85,155,245,315].map(x=>`
+      <g transform="translate(${x} 170)">
+        <rect x="-14" y="-36" width="28" height="60" rx="3" fill="#dfbe8c" stroke="#5a3d1b" stroke-width="1.5"/>
+        <circle cx="0" cy="-48" r="10" fill="#dfbe8c" stroke="#5a3d1b" stroke-width="1.5"/>
+        <path d="M-8 -54 Q0 -66 8 -54 Z" fill="#ffd23f"/>
+      </g>
+    `).join('')}
+    <rect class="door" x="186" y="140" width="28" height="70" fill="#241407"/>
+  </g>`;
+  s+=`<g class="interior" opacity="0">
+    <rect width="400" height="250" fill="#291a10"/>
+    <polygon id="sunbeam" points="0,150 400,165 400,195 0,175" fill="#ffd966" opacity=".8"/>
+    <circle cx="20" cy="162" r="18" fill="#ffb703"/>
+    <g transform="translate(370 178)">
+      ${[['Ptah',-50,'#4a4540'],['Amón',-30,'#f2c14e'],['Ramsés',-10,'#f2c14e'],['Ra',10,'#f2c14e']].map(([n,dy,c])=>`
+        <circle cx="${dy}" cy="0" r="6" fill="${c}"/>
+        <rect x="${dy-4}" y="6" width="8" height="16" fill="${c}"/>
+        ${T(dy,30,n,{size:8,c:'#fff',w:700})}
+      `).join('')}
+    </g>
+    ${T(200,40,'Santuario interior iluminado',{size:16,w:800,c:'#ffd966'})}
+    ${chip('fechas',200,80,'21 de febrero y 19 de octubre',MAG,13)}
+  </g>`;
+  return s;
+ },
+ anim(tl,E){
+  gsap.set('.interior',{opacity:0});
+  tl.from('.facade',{opacity:0,duration:.5});E();
+  tl.from('.facade g',{scale:0,transformOrigin:'50% 100%',stagger:.15,duration:.4,ease:'back.out(1.5)'});E();
+  tl.to('.facade',{opacity:0,duration:.4});tl.to('.interior',{opacity:1,duration:.4},'<');
+  tl.from('#sunbeam',{scaleX:0,transformOrigin:'0% 50%',duration:1.2,ease:'power2.out'});E();
+  tl.from('.fechas',{scale:0,opacity:0,duration:.4,ease:'back.out(2)'});E();
+ },
+ qs:[
+  {q:'¿Qué es un «speos» en el Antiguo Egipto?',ok:'Un templo excavado íntegramente en la roca',no:['Una pirámide de ladrillos de barro','Un palacio real con jardines colgantes','Un barco ceremonial funerario'],exp:'Abu Simbel es el speos más famoso, excavado en la montaña nubia.'},
+  {q:'¿Qué dos días al año penetra el sol hasta el santuario de Abu Simbel?',ok:'El 21 de febrero y el 19 de octubre',no:['El 25 de diciembre y el 1 de enero','El 21 de junio y el 21 de diciembre','Todos los domingos del año'],exp:'Los rayos solares alcanzan a Amón, Ra y Ramsés II solo en esas dos fechas.'}
+ ]},
+
+/* ---------- 7. CANON DE 18 PUÑOS Y NEFERTITI ---------- */
+{id:'canon-nefertiti',b:'Arte',t:'El canon de 18 puños y Nefertiti',
+ steps:[
+  'La escultura del faraón era sagrada: se le representaba siempre <b>joven, fuerte y rígido</b>, mirando al frente con brazos pegados al cuerpo (ley de la frontalidad).',
+  'Las proporciones no eran al azar: se seguía el <b>canon de 18 puños</b> de altura desde la frente (nacimiento del pelo) hasta la planta de los pies.',
+  'En el Imperio Nuevo, el faraón <b>Amenofis IV</b> impuso al dios único <b>Atón</b> y se cambió el nombre a <b>Akhenaton</b>, iniciando la escuela de <b>Tell Amarna</b>.',
+  'El arte de Tell Amarna rompió la rigidez y se hizo <b>mucho más realista</b> y expresivo, como muestra el célebre <b>busto de Nefertiti</b> hallado en 1912.'],
+ svg(){
+  let s=PB;
+  s+=`<g class="canon-fig" transform="translate(90 18)">
+    <rect x="0" y="24" width="30" height="186" fill="#f5ede0" stroke="#b89a74" stroke-width="1.5"/>
+    <ellipse cx="15" cy="40" rx="9" ry="11" fill="#b5703d"/>
+    <path d="M5 54 H25 L22 130 H8 Z" fill="#b5703d"/>
+    <line x1="10" y1="130" x2="8" y2="204" stroke="#b5703d" stroke-width="5"/>
+    <line x1="20" y1="130" x2="22" y2="204" stroke="#b5703d" stroke-width="5"/>
+    <g id="fists">
+      ${Array.from({length:18},(_,i)=>`
+        <rect class="fist" x="38" y="${28+i*9.8}" width="18" height="7.8" rx="2" fill="${GOLD}" stroke="#8a5510" stroke-width="1"/>
+      `).join('')}
+    </g>
+    ${T(15,226,'18 puños',{size:12,w:800,c:LIT})}
+  </g>`;
+  s+=`<g class="nefertiti" transform="translate(270 40)" opacity="0">
+    <path d="M-20 60 Q-10 10 10 10 Q30 15 30 60 Z" fill="#c98b4e" stroke="#683d16" stroke-width="2"/>
+    <ellipse cx="6" cy="48" rx="16" ry="20" fill="#d9a35c" stroke="#683d16" stroke-width="2"/>
+    <path d="M-10 32 L-22 -20 Q8 -34 36 -18 L26 34 Z" fill="#1e4f94" stroke="#10254c" stroke-width="2"/>
+    <rect x="-14" y="8" width="42" height="6" fill="${GOLD}"/>
+    <path d="M-2 100 Q10 80 20 100" stroke="#17734a" stroke-width="8" fill="none"/>
+    ${T(8,160,'Busto de Nefertiti',{size:14,w:800,c:LIT})}
+    ${T(8,178,'Tell Amarna (realista)',{size:12,w:700,c:MAG})}
+  </g>`;
+  return s;
+ },
+ anim(tl,E){
+  gsap.set('.nefertiti',{opacity:0});
+  tl.from('.canon-fig',{opacity:0,duration:.4});E();
+  tl.from('.fist',{scaleX:0,transformOrigin:'0% 50%',stagger:.06,duration:.2,ease:'power1.out'});E();
+  tl.to('.nefertiti',{opacity:1,x:260,duration:.6,ease:'back.out(1.5)'});E();
+  tl.to('.nefertiti',{scale:1.08,yoyo:true,repeat:1,duration:.3,transformOrigin:'50% 50%'});E();
+ },
+ qs:[
+  {q:'¿Cuántos puños de altura medía el cuerpo humano en el canon oficial egipcio?',ok:'18 puños',no:['7 cabezas','25 dedos','12 palmos'],exp:'El canon medía exactamente 18 puños desde la línea de la frente hasta los pies.'},
+  {q:'¿Qué caracteriza el arte de Tell Amarna con Akhenaton y Nefertiti?',ok:'Un estilo mucho más realista y natural, rompiendo la rigidez',no:['La prohibición de esculpir figuras humanas','Que todas las figuras se pintaban de azul vidriado','Hacer figuras sin ojos ni boca'],exp:'Tell Amarna destacó por su expresividad y naturalismo frente a la rigidez anterior.'}
+ ]},
+
+/* ---------- 8. PINTURA EGIPCIA ---------- */
+{id:'pintura-egipcia',b:'Arte',t:'Pintura: al fresco y jerárquica',
+ steps:[
+  'La pintura egipcia servía para dar culto a los dioses y decorar el interior de <b>templos y tumbas</b> (como la tumba de la reina <b>Nefertari</b> en el Valle de las Reinas).',
+  'Pintaban con la técnica <b>al fresco</b> sobre estuco de cal húmedo, empleando colores extraídos de <b>minerales</b>.',
+  'Seguían una convención muy estricta: <b>cabeza de perfil</b>, <b>ojo de frente</b>, <b>hombros y pecho de frente</b> y <b>caderas y piernas de perfil</b>. Eran figuras planas, sin volumen ni sombras.',
+  'Utilizaban la <b>perspectiva jerárquica</b>: el tamaño reflejaba la importancia social. El faraón o los dioses eran gigantescos frente a los sirvientes o prisioneros.'],
+ svg(){
+  let s=`<rect width="400" height="250" fill="#f4ebd9"/><rect x="10" y="10" width="380" height="230" fill="none" stroke="#b24c2a" stroke-width="3"/>`;
+  s+=`<g class="paint-scene" transform="translate(40 180)">
+    <g class="pharaoh" transform="scale(1.8) translate(30 -70)">
+      <circle cx="0" cy="-20" r="7" fill="#b5703d"/>
+      <path d="M-6 -26 Q4 -36 10 -22 Z" fill="${GOLD}"/>
+      <ellipse cx="2" cy="-20" rx="3" ry="1.8" fill="#fff"/><circle cx="2" cy="-20" r="1" fill="#000"/>
+      <path d="M-8 -12 H8 L6 14 H-6 Z" fill="#b5703d"/>
+      <line x1="-3" y1="14" x2="-5" y2="44" stroke="#b5703d" stroke-width="4"/>
+      <line x1="3" y1="14" x2="6" y2="44" stroke="#b5703d" stroke-width="4"/>
+    </g>
+    ${[190,240,290].map((x,i)=>`
+      <g class="servant" transform="translate(${x} -30) scale(.85)">
+        <circle cx="0" cy="-20" r="6" fill="#b5703d"/>
+        <ellipse cx="2" cy="-20" rx="2" ry="1.2" fill="#fff"/><circle cx="2" cy="-20" r=".8" fill="#000"/>
+        <path d="M-6 -12 H6 L5 12 H-5 Z" fill="#b5703d"/>
+        <line x1="-2" y1="12" x2="-4" y2="38" stroke="#b5703d" stroke-width="3"/>
+        <line x1="2" y1="12" x2="4" y2="38" stroke="#b5703d" stroke-width="3"/>
+      </g>
+    `).join('')}
+  </g>`;
+  s+=chip('fresco_lab',110,40,'Pintura al fresco (minerales)',LIT,12);
+  s+=chip('jerar_lab',280,40,'Perspectiva jerárquica (faraón gigante)',MAG,12);
+  return s;
+ },
+ anim(tl,E){
+  tl.from('.paint-scene',{opacity:0,duration:.4});tl.from('.fresco_lab',{y:-10,opacity:0,duration:.3});E();
+  tl.from('.pharaoh circle',{scale:0,duration:.3});E();
+  tl.from('.pharaoh',{scale:0,transformOrigin:'50% 100%',duration:.7,ease:'back.out(1.5)'});
+  tl.from('.servant',{opacity:0,y:20,stagger:.2,duration:.4});E();
+  tl.from('.jerar_lab',{scale:0,opacity:0,duration:.4,ease:'back.out(2)'});E();
+ },
+ qs:[
+  {q:'¿Por qué el faraón se pintaba mucho más grande que los demás personajes?',ok:'Por perspectiva jerárquica: mayor tamaño según la importancia social',no:['Porque los faraones eran gigantescos de verdad','Porque estaba dibujado mucho más cerca en primer plano','Por falta de espacio en el papiro'],exp:'En Egipto el tamaño no indicaba distancia, sino poder y jerarquía social.'},
+  {q:'¿Cómo se pintaban el ojo y el pecho en la figura humana tradicional egipcia?',ok:'De frente, mientras la cabeza y las piernas se pintaban de perfil',no:['Completamente de perfil estricto','En perspectiva tridimensional con sombras','De espaldas mirando al santuario'],exp:'Combinaban puntos de vista para mostrar la parte más representativa de cada miembro.'}
+ ]},
+
+/* ---------- 9. CLASICISMO MUSICAL ---------- */
+{id:'clasicismo-formas',b:'Música',t:'El Clasicismo: orquesta y formas',
+ steps:[
+  'En el <b>siglo XVIII</b>, el Clasicismo busca una música <b>clara, ordenada, elegante y medida</b>, con frases musicales simétricas y equilibradas.',
+  'Nace la <b>orquesta clásica moderna</b>: se ordena en semicírculo con la <b>cuerda</b> al frente (violines, violas, cellos), <b>viento madera</b> detrás, <b>metales</b> y <b>timbales</b> al fondo.',
+  'La música instrumental se independiza en tres grandes formas: la <b>Sonata</b> (1 instrumento o pequeño grupo), la <b>Sinfonía</b> (para toda la orquesta) y el <b>Concierto</b> (un solista dialoga con la orquesta).',
+  'Aparecen los <b>conciertos públicos</b> y la venta de partituras: la música deja de ser exclusiva de los palacios reales y llega a la burguesía y al público general.'],
+ svg(){
+  let s=PB;
+  s+=`<g class="orch" transform="translate(200 130)">
+    <path d="M-150 70 A160 140 0 0 1 150 70" fill="none" stroke="#c0a47d" stroke-width="28" opacity=".35"/>
+    <path d="M-100 70 A110 95 0 0 1 100 70" fill="none" stroke="#2b4a8c" stroke-width="26" opacity=".25"/>
+    <path d="M-55 70 A60 50 0 0 1 55 70" fill="none" stroke="#c0127e" stroke-width="24" opacity=".25"/>
+    <circle cx="0" cy="65" r="8" fill="${INK}"/>
+    ${T(0,88,'Director',{size:11,w:700,c:INK})}
+    ${T(0,35,'Cuerda (violines, cellos)',{size:12,w:700,c:MAG})}
+    ${T(0,-5,'Madera y Metal (flautas, trompas)',{size:12,w:700,c:BLUE})}
+    ${T(0,-45,'Percusión (timbales)',{size:12,w:700,c:LIT})}
+  </g>`;
+  s+=`<g class="forms" transform="translate(0 20)">
+    ${[['Sonata','1 o pocos instrumentos',65,MAG],['Sinfonía','Toda la orquesta',200,BLUE],['Concierto','Solista + orquesta',335,GREEN]].map(([f,sub,x,col])=>`
+      <g class="fcard" transform="translate(${x} 0)">
+        <rect x="-56" y="0" width="112" height="36" rx="8" fill="#fff" stroke="${col}" stroke-width="2"/>
+        ${T(0,16,f,{size:13,w:800,c:col})}
+        ${T(0,29,sub,{size:8.5,c:MUT})}
+      </g>
+    `).join('')}
+  </g>`;
+  return s;
+ },
+ anim(tl,E){
+  gsap.set('.fcard',{opacity:0});
+  tl.from('.orch path',{opacity:0,stagger:.25,duration:.5});E();
+  tl.from('.orch text',{opacity:0,stagger:.2,duration:.4});E();
+  tl.to('.fcard',{opacity:1,y:8,stagger:.25,duration:.4,ease:'back.out(1.5)'});E();
+  tl.to('.fcard',{scale:1.06,yoyo:true,repeat:1,stagger:.15,duration:.3,transformOrigin:'50% 50%'});E();
+ },
+ qs:[
+  {q:'¿Cuál es la diferencia entre una sonata y una sinfonía?',ok:'La sonata es para uno o pocos instrumentos; la sinfonía, para toda la orquesta',no:['La sonata se canta en la iglesia y la sinfonía se baila','La sinfonía dura dos minutos y la sonata tres horas','Son la misma obra pero con distinto nombre'],exp:'La sonata es una forma de cámara y la sinfonía es la gran obra para orquesta.'},
+  {q:'¿Qué familia de instrumentos se sitúa más próxima al director en la orquesta clásica?',ok:'La cuerda (violines, violas y violonchelos)',no:['Los timbales de percusión','Las trompetas y trombones','Los órganos de tubos'],exp:'La sección de cuerda rodea al director en primera línea en abanico.'}
+ ]},
+
+/* ---------- 10. ÓPERA SERIA VS BUFA ---------- */
+{id:'opera-seria-bufa',b:'Música',t:'La ópera: Seria frente a Bufa',
+ steps:[
+  'En el Clasicismo la ópera era el gran espectáculo vocal y escénico. Pero se dividió claramente en dos mundos opuestos: la <b>ópera seria</b> y la <b>ópera bufa</b>.',
+  'La <b>ópera seria</b> era para reyes y aristócratas: trataba sobre <b>mitología y grandes tragedias heroicas</b>, con decorados lujosos y grandes coros para deslumbrar.',
+  'La <b>ópera bufa</b> nació para divertir al pueblo: comedias de la <b>vida cotidiana</b> con engaños y risas, lenguaje coloquial y melodías pegadizas.',
+  'A diferencia de la seria, la ópera bufa tiene <b>pocos personajes (2 o 3)</b>, argumento simple y <b>no tiene coros</b>. ¡Bufa viene de «bufón», para reír!'],
+ svg(){
+  let s=PB;
+  s+=`<g class="op-seria" transform="translate(100 40)">
+    <rect x="-80" y="0" width="160" height="170" rx="10" fill="#f5e6eb" stroke="#a02958" stroke-width="2"/>
+    <path d="M-80 0 L0 30 L80 0 Z" fill="#a02958"/>
+    ${T(0,48,'ÓPERA SERIA',{size:15,w:800,c:'#a02958'})}
+    <g transform="translate(0 75)">
+      <path d="M-14 14 L-18 -6 L-8 0 L0 -14 L8 0 L18 -6 L14 14 Z" fill="${GOLD}"/>
+      ${T(0,34,'Mitos y reyes',{size:12,w:700,c:INK})}
+      ${T(0,50,'Tragedias heroicas',{size:11,c:MUT})}
+      ${T(0,66,'Grandes coros y lujo',{size:11,w:700,c:'#a02958'})}
+    </g>
+  </g>`;
+  s+=`<g class="op-bufa" transform="translate(300 40)">
+    <rect x="-80" y="0" width="160" height="170" rx="10" fill="#e8f5ed" stroke="#1d7a46" stroke-width="2"/>
+    <path d="M-80 0 L0 30 L80 0 Z" fill="#1d7a46"/>
+    ${T(0,48,'ÓPERA BUFA',{size:15,w:800,c:'#1d7a46'})}
+    <g transform="translate(0 75)">
+      <circle cx="0" cy="0" r="14" fill="#ffd23f"/>
+      <circle cx="-5" cy="-3" r="2" fill="#000"/><circle cx="5" cy="-3" r="2" fill="#000"/>
+      <path d="M-6 4 Q0 12 6 4" stroke="#000" stroke-width="2" fill="none"/>
+      ${T(0,34,'Comedia y enredos',{size:12,w:700,c:INK})}
+      ${T(0,50,'2 o 3 personajes',{size:11,c:MUT})}
+      ${T(0,66,'¡Sin coros!',{size:11,w:800,c:'#1d7a46'})}
+    </g>
+  </g>`;
+  s+=chip('bal_lab',200,230,'Seria: aristocracia y mitos · Bufa: pueblo y comedia',INK,12);
+  return s;
+ },
+ anim(tl,E){
+  tl.from('.op-seria',{x:-40,opacity:0,duration:.5});E();
+  tl.from('.op-seria g',{scale:0,transformOrigin:'50% 50%',duration:.4,ease:'back.out(1.5)'});E();
+  tl.from('.op-bufa',{x:40,opacity:0,duration:.5});E();
+  tl.from('.op-bufa g',{scale:0,transformOrigin:'50% 50%',duration:.4,ease:'back.out(2)'});
+  tl.from('.bal_lab',{opacity:0,y:10,duration:.3});E();
+ },
+ qs:[
+  {q:'¿Qué caracteriza a la ópera bufa clásica?',ok:'Es cómica, de lenguaje coloquial, con pocos personajes y sin coros',no:['Trata sobre la mitología griega y la muerte de héroes','Requiere una orquesta de cien músicos y un coro enorme','Solo se puede cantar en latín dentro de conventos'],exp:'La ópera bufa es popular, satírica, breve y sin coros.'},
+  {q:'¿Quién era el público principal de la fastuosa ópera seria?',ok:'La nobleza y la corte real para exhibir su prestigio y poder',no:['Los campesinos y sirvientes en las plazas','Los niños de los coros parroquiales','Los soldados rasos del ejército'],exp:'Los reyes y aristócratas financiaban la ópera seria para mostrar su esplendor.'}
+ ]},
+
+/* ---------- 11. HAYDN Y BOCCHERINI ---------- */
+{id:'haydn-boccherini',b:'Música',t:'Haydn y Boccherini',
+ steps:[
+  '<b>Luigi Boccherini</b> nació en Italia y fue un virtuoso del <b>violonchelo</b>. Pasó gran parte de su vida en <b>Madrid</b> al servicio del infante don Luis y la duquesa de Osuna, famoso por sus quintetos y minuetos.',
+  '<b>Franz Joseph Haydn</b> (Austria, 1732) provenía de una familia humilde. Tras cantar de niño en la catedral de Viena y pasar apuros al cambiarle la voz, fue contratado por los riquísimos príncipes <b>Esterházy</b>.',
+  'Conocido como el <b>«padre de la sinfonía»</b>, compuso más de 100 sinfonías, triunfó en Inglaterra y recibió el doctorado honoris causa por la Universidad de <b>Oxford</b>.',
+  'Entre sus sinfonías destacan dos con truco: la <b>«Sorpresa»</b> (un fortísimo golpe de timbal y orquesta para despertar al público dormido) y la sinfonía <b>«El reloj»</b> (con su tictac en el segundo movimiento).'],
+ svg(){
+  let s=PB;
+  s+=`<g class="bocch" transform="translate(80 30)">
+    <rect x="-60" y="0" width="120" height="170" rx="10" fill="#f8f4ec" stroke="#7a5528" stroke-width="2"/>
+    ${T(0,26,'Boccherini',{size:15,w:800,c:LIT})}
+    ${T(0,44,'(Lucca 1743 - Madrid 1805)',{size:9,c:MUT})}
+    <g transform="translate(0 90)">
+      <path d="M-10 -24 C-20 -10 -15 10 -6 18 C6 18 15 10 10 -24 Z" fill="#c48a4d" stroke="#5a3512" stroke-width="1.8"/>
+      <rect x="-2" y="-40" width="4" height="20" fill="#332010"/>
+      ${T(0,44,'Violonchelo',{size:12,w:700,c:INK})}
+      ${T(0,60,'Corte en Madrid',{size:11,c:MUT})}
+    </g>
+  </g>`;
+  s+=`<g class="haydn" transform="translate(260 30)">
+    <rect x="-100" y="0" width="200" height="170" rx="10" fill="#eef2fa" stroke="#1e4f94" stroke-width="2"/>
+    ${T(0,26,'Joseph Haydn',{size:16,w:800,c:BLUE})}
+    ${T(0,44,'(Austria 1732 · Esterházy)',{size:10,c:MUT})}
+    <g class="snore" transform="translate(-40 90)">
+      <circle cx="0" cy="0" r="14" fill="#f5d0a9"/>
+      <path d="M-6 0 h12" stroke="#333" stroke-width="2"/>
+      ${T(0,26,'Sinfonía «Sorpresa»',{size:10,w:700,c:INK})}
+      <g class="boom-bang" opacity="0">
+        ${T(20,-14,'¡PUM!',{size:16,w:800,c:MAG})}
+      </g>
+    </g>
+    <g class="clock" transform="translate(45 90)">
+      <rect x="-16" y="-20" width="32" height="40" rx="4" fill="#8a5528"/>
+      <circle cx="0" cy="-6" r="10" fill="#fff"/>
+      <line x1="0" y1="-6" x2="4" y2="-6" stroke="#000" stroke-width="1.5"/>
+      <circle id="pend" cx="0" cy="14" r="3.5" fill="${GOLD}"/>
+      ${T(0,34,'«El reloj» (tic-tac)',{size:10,w:700,c:INK})}
+    </g>
+  </g>`;
+  s+=chip('hay_lab',200,230,'«Padre de la sinfonía» · El oratorio «La creación»',INK,12);
+  return s;
+ },
+ anim(tl,E){
+  gsap.set('.boom-bang',{opacity:0});
+  tl.from('.bocch',{x:-30,opacity:0,duration:.5});E();
+  tl.from('.haydn',{x:30,opacity:0,duration:.5});E();
+  tl.from('.hay_lab',{opacity:0,y:10,duration:.4});E();
+  tl.to('.boom-bang',{opacity:1,scale:1.4,duration:.25,ease:'back.out(2)'});
+  tl.to('.snore circle',{y:-8,duration:.15,yoyo:true,repeat:3});
+  tl.to('#pend',{x:6,duration:.25,yoyo:true,repeat:5,ease:'sine.inOut'});E();
+ },
+ qs:[
+  {q:'¿Para qué familia aristocrática trabajó Haydn durante casi toda su vida?',ok:'Los príncipes Esterházy',no:['La familia Médici de Florencia','La casa real de los Borbones en Madrid','Los zares de Rusia en San Petersburgo'],exp:'Haydn estuvo décadas al servicio de los príncipes húngaros Esterházy.'},
+  {q:'¿Por qué compuso Haydn un acorde atronador en la Sinfonía «Sorpresa»?',ok:'Para despertar al público que se dormía durante los movimientos lentos',no:['Porque era una señal para que entraran los bailarines','Porque se cayó un timbal al suelo por accidente','Para avisar del final de la función teatral'],exp:'Haydn ideó la sorpresa como una broma musical para sobresaltar a los oyentes adormilados.'}
+ ]}
+];
+
+/* =================== MOTOR REPRODUCTOR =================== */
+const KEY='ham-t3-anim-v1';
+let DONE={};try{DONE=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+const saveDone=()=>{try{localStorage.setItem(KEY,JSON.stringify(DONE))}catch(e){}};
+const HAS=typeof window.gsap!=='undefined';
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage=$('#stage');
+const st={i:0,k:-1,tl:null,play:null};
+
+function renderPick(){
+  const groups=[['Arte','Arte · Mesopotamia y Egipto'],['Música','Música · El Clasicismo']];
+  $('#pick').innerHTML=groups.map(([b,h])=>`<h2>${h}</h2><div class="chips">${SCENES.map((sc,i)=>sc.b===b?`<button data-i="${i}" class="${DONE[sc.id]?'done':''}" aria-current="${i===st.i}">${i+1}. ${sc.t}</button>`:'').join('')}</div>`).join('');
+  $('#pick').querySelectorAll('button').forEach(b=>b.onclick=()=>load(+b.dataset.i,true));
+}
+
+function dots(){
+  const n=SCENES[st.i].steps.length;
+  $('#dots').innerHTML=Array.from({length:n},(_,j)=>`<i class="${j===st.k?'on':j<st.k?'past':''}"></i>`).join('');
+}
+
+function caption(){
+  const sc=SCENES[st.i],c=$('#cap');
+  c.classList.remove('in');void c.offsetWidth;
+  c.innerHTML=sc.steps[st.k]||'';c.classList.add('in');dots();
+  $('#bBack').disabled=st.k<=0;
+  const last=st.k>=sc.steps.length-1;
+  $('#bNext').textContent=last?(st.i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera'):'Siguiente →';
+  if(last)showQuiz();
+}
+
+function load(i,scroll){
+  if(st.play)st.play.kill();if(st.tl)st.tl.kill();
+  st.i=i;st.k=-1;const sc=SCENES[i];
+  $('#kick').textContent=`Ficha ${i+1} de ${SCENES.length} · ${sc.b==='Arte'?'Historia del Arte':'Historia de la Música'}`;
+  $('#ttl').textContent=sc.t;stage.setAttribute('aria-label',sc.t);
+  $('#quiz').hidden=true;$('#quiz').innerHTML='';
+  renderPick();
+  if(!HAS){
+    $('#stagebox').hidden=true;
+    $('#cap').innerHTML=`<span class="nogsap" style="display:block">No se han podido cargar las animaciones (quizá no hay conexión). Aquí tienes el texto de la ficha:</span>`;
+    $('#cap').insertAdjacentHTML('beforeend',`<ol class="steps-list">${sc.steps.map(s=>`<li>${s}</li>`).join('')}</ol>`);
+    $('#dots').innerHTML='';
+    ['bBack','bAgain'].forEach(id=>$('#'+id).hidden=true);
+    st.k=sc.steps.length-1;$('#bNext').textContent=i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera';
+    showQuiz();return;
+  }
+  stage.innerHTML=sc.svg();
+  const tl=gsap.timeline({paused:true});
+  let n=0;sc.anim(tl,()=>tl.addLabel('e'+(n++)));
+  if(n!==sc.steps.length)console.warn('Pasos y etiquetas no cuadran en',sc.id,n,sc.steps.length);
+  st.tl=tl;tl.progress(0).pause();
+  if(scroll)$('#sheet').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});
+  next();
+}
+
+function playStep(k){
+  const tl=st.tl,from=k>0?tl.labels['e'+(k-1)]:0,to=tl.labels['e'+k];
+  if(st.play)st.play.kill();
+  if(RM){tl.pause();tl.seek(to);return}
+  tl.pause();tl.seek(from);st.play=tl.tweenFromTo(from,to);
+}
+
+function next(){
+  const sc=SCENES[st.i];
+  if(st.k>=sc.steps.length-1){load(st.i<SCENES.length-1?st.i+1:0,true);return}
+  if(st.k>=0&&st.play&&st.play.isActive()){st.play.kill();st.tl.seek(st.tl.labels['e'+st.k])}
+  st.k++;caption();playStep(st.k);
+}
+
+function back(){
+  if(st.k<=0)return;if(st.play)st.play.kill();
+  st.k--;st.tl.pause();st.tl.seek(st.tl.labels['e'+st.k]);caption();$('#quiz').hidden=true;
+}
+
+function again(){if(st.k<0)return;playStep(st.k);}
+
+$('#bNext').onclick=next;$('#bBack').onclick=back;$('#bAgain').onclick=again;
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('button.opt'))return;
+  if(e.key==='ArrowRight'){next()}else if(e.key==='ArrowLeft'){back()}
+});
+
+/* =================== COMPRUEBA =================== */
+function showQuiz(){
+  const sc=SCENES[st.i],q=$('#quiz');if(!q.hidden&&q.dataset.id===sc.id)return;
+  q.dataset.id=sc.id;q.hidden=false;let right=0,answered=0;
+  q.innerHTML=`<h3>Comprueba lo que has visto</h3>`+sc.qs.map((x,j)=>`
+    <div class="qq" data-j="${j}">
+      <p class="q">${j+1}. ${x.q}</p>
+      <div class="opts">${shuffle([x.ok,...x.no]).map(o=>`<button class="opt" data-ok="${o===x.ok}">${o}</button>`).join('')}</div>
+      <p class="exp" hidden></p>
+    </div>
+  `).join('')+`<p class="exp" id="qend" hidden></p>`;
+  
+  q.querySelectorAll('.qq').forEach(box=>{
+    const x=sc.qs[+box.dataset.j];
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const ok=b.dataset.ok==='true';
+      box.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.ok==='true')o.classList.add('right')});
+      if(!ok)b.classList.add('wrong');
+      const ex=box.querySelector('.exp');ex.hidden=false;ex.className='exp '+(ok?'b':'mm');
+      ex.innerHTML=(ok?'<b>¡Bien!</b> ':'<b>Casi.</b> ')+x.exp;
+      answered++;if(ok)right++;
+      if(answered===sc.qs.length){
+        const end=$('#qend');end.hidden=false;
+        if(right===sc.qs.length){
+          DONE[sc.id]=1;saveDone();renderPick();
+          end.className='exp b';end.innerHTML=`<span class="stamp">¡Ficha superada!</span>`;
+        } else {
+          end.className='exp mm';end.innerHTML='Repasa la ficha con «← Atrás» o vuelve a verla desde el principio, y prueba otra vez.';
+        }
+      }
+    });
+  });
+}
+
+renderPick();load(0,false);
+</script>
+</body>
+</html>
+
