@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Literaturas orientales: Tema 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#f0ecf6; --paper:#fdfdfb; --grid:#e3dff1; --ink:#1f1d3a; --muted:#5d5a7a; --line:#d3cfe6;
+  --marker:#9b2faf; --marker-soft:#f3e4f8; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --star:#d9a400; --lit:#7b2fa0;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14101f; --paper:#1d1830; --grid:#27213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#352e52;
+  --marker:#d07ef0; --marker-soft:#2f1a3a; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#14101f; --chip:#211b36;
+  --star:#ffd23f; --lit:#c88ef0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14101f; --paper:#1d1830; --grid:#27213d; --ink:#ebe8f7; --muted:#a6a1c4; --line:#352e52;
+  --marker:#d07ef0; --marker-soft:#2f1a3a; --ok:#4fc68c; --ok-soft:#17332a; --btn:#ebe8f7; --btn-fg:#14101f; --chip:#211b36;
+  --star:#ffd23f; --lit:#c88ef0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--lit);color:var(--paper);border-color:var(--lit)}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--lit)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--lit);color:var(--lit)}
+.dot.done{background:var(--lit);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+.chuleta{border:2px solid var(--lit)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--lit);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+.idea{margin:0;background:var(--paper);border:2px solid var(--lit);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--lit);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--lit);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+/* Mapa interactivo */
+.mapw{width:100%;max-width:520px}.mapw svg{width:100%;height:auto;display:block;border-radius:12px}
+.mapinfo{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:10px;padding:10px 14px;font-size:.96rem;min-height:3.2em}
+.mk{cursor:pointer}.mk .dotm{transition:r .2s}.mk:hover .dotm,.mk.on .dotm{r:11}
+/* Timeline interactiva */
+.tline{display:flex;gap:8px;flex-wrap:wrap}.tl{flex:1 1 140px;text-align:left;border:2px solid var(--line);background:var(--chip);color:var(--ink);font:inherit;padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.tl:hover{border-color:var(--muted)}.tl.on{border-color:var(--lit);background:var(--marker-soft)}
+.tl b{font:800 1rem var(--f-display)}.tl small{color:var(--muted);font-size:.85rem}
+/* Preguntas */
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+/* Juegos */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--lit);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--lit);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+/* Progreso */
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+body{margin:0}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/literatura">← Literatura de Ale</a>
+  <header>
+    <div><h1>Literaturas orientales <span>Ale</span></h1>
+    <p>Las literaturas más antiguas de la humanidad: persa, egipcia, mesopotámica, china, india y hebrea. Fichas con figuras interactivas, juegos y prueba.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={mo:'#6a2fa0',ro:'#c0127e',az:'#1e6fd9',ve:'#2f9e5c',na:'#d9822b',gr:'#5d5a7a',ma:'#a0522d'};
+
+/* =================== DIBUJOS =================== */
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+const INKD='#3b2f22';
+const LITS=[['persa','Persa',212,104,'#6a2fa0','Libro sagrado: el <b>Avesta</b>, atribuido a <b>Zaratustra</b> (s. VIII a. C.).'],
+ ['egipcia','Egipcia',96,142,'#d9822b','Escritura <b>jeroglífica</b> en pirámides y <b>papiros</b>. <b>Sinuhé</b> y el <b>Libro de los muertos</b>.'],
+ ['meso','Mesopotámica',168,108,'#a0522d','Tablillas de arcilla. <b>Poema de Gilgamesh</b> y <b>Código de Hammurabi</b>.'],
+ ['china','China',334,92,'#c0127e','Tablillas de <b>bambú</b>. <b>Lao Tse</b>, <b>Confucio</b> y <b>Li Tai Pe</b>.'],
+ ['india','India',272,146,'#2f9e5c','En <b>sánscrito</b>. Los <b>Vedas</b>, el <b>Mahabharata</b> y el <b>Ramayana</b>.'],
+ ['hebrea','Hebrea',126,116,'#1e6fd9','La <b>Biblia</b>: Antiguo y Nuevo Testamento.']];
+const litOf=id=>LITS.find(l=>l[0]===id);
+function mapSVG(o={}){let s=`<rect width="400" height="220" fill="#cfe3f1"/>
+ <path d="M0 40 C40 30 70 60 100 70 C120 76 140 64 160 66 C190 50 230 40 270 46 C320 30 370 34 400 40 V140 C380 150 360 160 350 176 C330 170 316 160 300 172 C290 190 280 205 270 208 C258 190 250 176 236 168 C220 160 206 150 196 146 C186 160 176 176 160 190 C150 200 130 206 120 220 H0Z" fill="#efe3c6" stroke="#c9b48a" stroke-width="1.5"/>
+ <path d="M0 74 C30 70 60 86 84 96 C100 100 112 98 118 104 C108 110 90 112 70 110 C40 108 20 100 0 102Z" fill="#cfe3f1"/>
+ <path d="M112 132 L126 128 L150 196 L142 200Z" fill="#cfe3f1"/><path d="M186 132 C196 128 206 136 212 146 L204 150 C198 142 190 138 186 132Z" fill="#cfe3f1"/>
+ <path d="M150 84 C160 96 166 110 184 128" stroke="#7aa9cf" stroke-width="2" fill="none"/><path d="M162 80 C176 94 182 110 190 126" stroke="#7aa9cf" stroke-width="2" fill="none"/>
+ <path d="M96 120 C98 140 104 160 112 200" stroke="#7aa9cf" stroke-width="2.5" fill="none"/>
+ ${T(30,90,'Mediterráneo','font-size="8.5" font-style="italic" fill="#3d6d93"')}${T(330,200,'Océano Índico','font-size="8.5" font-style="italic" fill="#3d6d93"')}`;
+ LITS.forEach(([id,n,x,y,c])=>{s+=`<g class="mk" data-k="${id}" ${o.tap?'tabindex="0" role="button" aria-label="'+n+'"':''}><circle cx="${x}" cy="${y}" r="15" fill="transparent"/><circle class="dotm" cx="${x}" cy="${y}" r="8" fill="${c}" stroke="#fff" stroke-width="2.5"/>${o.names===false?'':T(x,y-14,n,`font-size="10.5" font-weight="800" fill="${c}" paint-order="stroke" stroke="#fff" stroke-width="3"`)}</g>`});
+ return`<svg viewBox="0 0 400 220" role="img" aria-label="Mapa de las literaturas orientales">${s}</svg>`}
+
+const DR={
+rosetta:()=>({vb:'0 0 360 200',s:`<rect width="360" height="200" fill="#f6efe0"/><path d="M110 186 V40 L140 14 H230 L250 30 V186Z" fill="#4a4a50" stroke="#222" stroke-width="2"/>
+ ${[0,1,2].map(r=>`<g>${Array.from({length:6},(_,c)=>`<g transform="translate(${126+c*20} ${50+r*14})"><circle r="3" fill="none" stroke="#bbb"/><path d="M5 -3 v6 M8 -3 l3 3 l-3 3" stroke="#bbb" fill="none"/></g>`).join('')}</g>`).join('')}
+ <line x1="114" y1="94" x2="246" y2="94" stroke="#888"/>${[0,1,2].map(r=>`<path d="M120 ${104+r*10} q8 -4 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t8 0" stroke="#aaa" fill="none"/>`).join('')}
+ <line x1="114" y1="138" x2="246" y2="138" stroke="#888"/>${[0,1,2,3].map(r=>`<text x="180" y="${152+r*10}" text-anchor="middle" font-size="8" fill="#ccc" letter-spacing="1">ΠΤΟΛΕΜΑΙΟΣ</text>`).join('')}
+ ${T(300,64,'jeroglíficos','font-size="11" font-weight="700" fill="#5d4a2a"')}${T(300,112,'demótico','font-size="11" font-weight="700" fill="#5d4a2a"')}${T(300,160,'griego','font-size="11" font-weight="700" fill="#5d4a2a"')}
+ ${T(56,100,'el mismo texto','font-size="10.5" fill="#5d4a2a"')}${T(56,114,'en tres escrituras','font-size="10.5" fill="#5d4a2a"')}`}),
+tablilla:()=>({vb:'0 0 360 200',s:`<rect width="360" height="200" fill="#f6efe0"/><rect x="40" y="30" width="130" height="150" rx="16" fill="#c9a774" stroke="${INKD}" stroke-width="2"/>
+ <g stroke="${INKD}" stroke-width="2" fill="none"><circle cx="72" cy="66" r="10"/><path d="M62 66 h20 M72 56 v20"/><path d="M110 56 l14 20 h-28z"/><path d="M140 58 q6 10 0 18 M146 58 q6 10 0 18"/>
+ <path d="M64 100 l8 -12 l8 12 l8 -12 l8 12"/><path d="M118 92 h20 v16 h-20z"/><circle cx="76" cy="138" r="7"/><path d="M70 150 q6 10 12 0"/><path d="M110 132 l20 0 l-10 18z"/><path d="M140 130 v24 M136 136 h8"/></g>
+ <rect x="190" y="30" width="130" height="150" rx="16" fill="#c9a774" stroke="${INKD}" stroke-width="2"/>${Array.from({length:7},(_,r)=>Array.from({length:6},(_,c)=>`<path d="M${204+c*19} ${50+r*18} l4 -3 l4 3 m-4 -3 v8 ${(r+c)%3?'':'m4 -4 h6'}" stroke="${INKD}" stroke-width="1.4" fill="none"/>`).join('')).join('')}
+ ${T(105,196,'pictogramas (sumerios)','font-size="10.5" font-weight="700" fill="#5d4a2a"')}${T(255,196,'cuneiforme','font-size="10.5" font-weight="700" fill="#5d4a2a"')}`}),
+bambu:()=>({vb:'0 0 360 200',s:`<rect width="360" height="200" fill="#f6efe0"/>${Array.from({length:9},(_,i)=>`<g transform="translate(${70+i*24} 30)"><rect x="-9" y="0" width="18" height="140" rx="4" fill="#d9c27a" stroke="#8a7a3a"/><line x1="-9" y1="46" x2="9" y2="46" stroke="#8a7a3a"/><line x1="-9" y1="94" x2="9" y2="94" stroke="#8a7a3a"/>${[14,30,60,76,108,124].map(y=>`<path d="M-4 ${y} h8 M0 ${y-4} v8" stroke="#3b2f22" stroke-width="1.3"/>`).join('')}</g>`).join('')}
+ <path d="M58 52 H306 M58 128 H306" stroke="#7a4b2a" stroke-width="2.5"/>${T(180,192,'Tablillas de bambú atadas con cordel: se leían de arriba abajo','font-size="10.5" font-weight="700" fill="#5d4a2a"')}`}),
+biblia:()=>({vb:'0 0 360 200',s:`<rect width="360" height="200" fill="#f6efe0"/>
+ <path d="M180 40 C150 28 90 26 40 40 V176 C90 162 150 164 180 176Z" fill="#fff" stroke="${INKD}" stroke-width="2"/><path d="M180 40 C210 28 270 26 320 40 V176 C270 162 210 164 180 176Z" fill="#fff" stroke="${INKD}" stroke-width="2"/>
+ ${T(110,64,'Antiguo','font-size="15" font-weight="800" fill="#1e6fd9"')}${T(110,82,'Testamento','font-size="15" font-weight="800" fill="#1e6fd9"')}${T(110,104,'hebreo y arameo','font-size="10.5" fill="#5d5a7a"')}${T(110,122,'Yahvé e Israel','font-size="10.5" fill="#5d5a7a"')}${T(110,140,'4 grupos de libros','font-size="10.5" fill="#5d5a7a"')}
+ ${T(250,64,'Nuevo','font-size="15" font-weight="800" fill="#c0127e"')}${T(250,82,'Testamento','font-size="15" font-weight="800" fill="#c0127e"')}${T(250,104,'griego (y algo de arameo)','font-size="10.5" fill="#5d5a7a"')}${T(250,122,'vida de Jesucristo','font-size="10.5" fill="#5d5a7a"')}${T(250,140,'Evangelios, Hechos, Apocalipsis','font-size="10" fill="#5d5a7a"')}
+ ${T(180,24,'Biblia = «los libros»','font-size="13" font-weight="800" fill="#3b2f22"')}`}),
+sinopticos:()=>{const col=(x,c,n,on)=>`<g><rect x="${x}" y="40" width="70" height="120" rx="8" fill="#fff" stroke="${c}" stroke-width="2.5"/>${T(x+35,30,n,`font-size="13" font-weight="800" fill="${c}"`)}${on?[60,84,108,132].map((y,i)=>`<rect x="${x+10}" y="${y}" width="50" height="14" rx="3" fill="${['#fde3a7','#cfe8d6','#dbe6fb','#f6d5e5'][i]}"/>`).join(''):[58,78,98,118,138].map(y=>`<rect x="${x+10}" y="${y}" width="50" height="10" rx="3" fill="#eee"/>`).join('')}</g>`;
+ return{vb:'0 0 360 200',s:`<rect width="360" height="200" fill="#f6efe0"/>${col(14,'#1e6fd9','Mateo',1)}${col(94,'#2f9e5c','Marcos',1)}${col(174,'#d9822b','Lucas',1)}<path d="M258 30 V170" stroke="#999" stroke-dasharray="4 4"/>${col(272,'#6a2fa0','Juan',0)}
+ ${T(124,186,'sinópticos: se pueden poner en columnas y comparar','font-size="10.5" font-weight="700" fill="#3b2f22"')}${T(307,186,'muy distinto','font-size="10.5" font-weight="700" fill="#6a2fa0"')}`}},
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg>${label?`<figcaption>${label}</figcaption>`:''}</figure>`}
+const FIG_MAPA=`<figure class="ill" style="width:100%"><div class="mapw tapmap" id="lmap">${mapSVG({tap:true})}</div><div class="mapinfo" id="lmapInfo">Toca un punto del mapa para ver qué literatura nació allí.</div></figure>`;
+function wireMapa(){const show=k=>{const l=litOf(k);$('#lmapInfo').innerHTML=`<b style="color:${l[4]}">Literatura ${l[1].toLowerCase()}</b><br>${l[5]}`;$('#lmap').querySelectorAll('.mk').forEach(m=>m.classList.toggle('on',m.dataset.k===k))};
+ $('#lmap').querySelectorAll('.mk').forEach(m=>{m.addEventListener('click',()=>show(m.dataset.k));m.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show(m.dataset.k)}})})}
+const EGY=[['Imperio Antiguo','3500-2400 a. C.','Inscripciones en <b>templos y pirámides</b>: las escrituras más antiguas.'],['Imperio Medio','2300-1700 a. C.','<b>Aventuras de Sinuhé</b> (un oficial de palacio que huye a Siria al morir el faraón Amenemhat) e <b>Historia del náufrago</b>.'],['Imperio Nuevo','1600-700 a. C.','<b>Libro de los muertos</b> (ayudaba al difunto en su camino al más allá) y <b>Las contiendas entre Horus y Seth</b>.']];
+const FIG_EGY=`<div class="tline" id="egyT">${EGY.map((e,i)=>`<button type="button" class="tl" data-i="${i}"><b>${e[0]}</b><small>${e[1]}</small></button>`).join('')}</div><div class="mapinfo" id="egyInfo">Toca un periodo para ver sus obras.</div>`;
+function wireEgy(){const el=$('#egyT');if(!el)return;el.querySelectorAll('.tl').forEach(b=>b.onclick=()=>{el.querySelectorAll('.tl').forEach(x=>x.classList.toggle('on',x===b));const e=EGY[+b.dataset.i];$('#egyInfo').innerHTML=`<b>${e[0]} (${e[1]})</b><br>${e[2]}`})}
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'o1',t:1,n:'Las literaturas orientales',s:'Las más antiguas: el mapa de las seis',
+ idea:'Las literaturas de Asia y Oriente son <b>las más antiguas de la humanidad</b>. Nacieron contándose de viva voz y mezclan <b>fantasía</b>, <b>símbolos</b> y <b>religión</b>.',
+ fig:()=>FIG_MAPA,wire:wireMapa,
+ b:[{k:'cards',h:'Sus características',it:[['Transmisión oral','Se contaban de memoria durante siglos antes de escribirse.',C.mo],['Fantasía creativa','Dioses, héroes, monstruos y prodigios.',C.ro],['Simbólicas y religiosas','Muchos textos son sagrados o buscan explicar el mundo.',C.az]]},
+ {k:'chips',h:'Las seis más importantes',it:['Persa','Egipcia','Mesopotámica','China','India','Hebrea']}],
+ truco:'Las seis literaturas: «<b>P</b>ara <b>E</b>studiar <b>M</b>e <b>C</b>uesta <b>I</b>r <b>H</b>oy» → Persa, Egipcia, Mesopotámica, China, India, Hebrea.'},
+{id:'o2',t:1,n:'Persia y Egipto',s:'El Avesta, los jeroglíficos y Sinuhé',
+ idea:'Persia guardó su fe en un libro sagrado, el <b>Avesta</b>. Egipto escribió en <b>jeroglíficos</b> en piedra y papiro.',
+ fig:()=>svgOf('rosetta','La Piedra Rosetta permitió descifrar los jeroglíficos'),
+ b:[{k:'cards',h:'Literatura persa',it:[['El Avesta','Su libro sagrado. Recoge tradiciones religiosas e históricas de los antiguos persas.',C.mo],['Su autor','Se atribuye a <b>Zaratustra</b> (siglo VIII a. C.).',C.mo],['Oral','Se transmitió de palabra durante siglos.',C.mo]]},
+ {k:'cards',h:'Literatura egipcia',it:[['Dónde se escribía','Inscripciones en las <b>pirámides</b>, <b>papiros</b> y tablas de arcilla. Se conservan pocos textos.',C.na],['La escritura','<b>Jeroglífica</b>. Se pudo descifrar gracias a la <b>Piedra Rosetta</b>.',C.na],['Los temas','Mágicos y religiosos: la muerte, los dioses, los faraones…',C.na]]},
+ {k:'html',t:()=>`<h3 class="bh">Los tres periodos (toca cada uno)</h3>${FIG_EGY}`}],
+ wire:wireEgy,
+ truco:'Egipto, de viejo a nuevo: <b>pirámides</b> → <b>Sinuhé</b> y el náufrago → <b>Libro de los muertos</b>.'},
+{id:'o3',t:1,n:'Literatura mesopotámica',s:'Gilgamesh, Hammurabi y la biblioteca de Nínive',
+ idea:'Entre el <b>Tigris</b> y el <b>Éufrates</b> nacieron las <b>primeras escrituras</b> de la humanidad, grabadas en <b>tablillas de arcilla</b>.',
+ fig:()=>svgOf('tablilla','De los pictogramas sumerios a la escritura cuneiforme'),
+ b:[{k:'cards',h:'Lo general',it:[['Civilizaciones','Sumeria, asiria, babilónica…',C.ma],['Textos','Administrativos y literarios: mitos, aventuras, el sentido de la vida.',C.ma],['Asurbanipal','Un rey que dedicó su vida a guardar textos: creó la <b>biblioteca de Nínive</b>.',C.ma]]},
+ {k:'cards',h:'Las dos etapas',it:[['Sumeria (3500-1750 a. C.)','Primeras escrituras, en <b>pictogramas</b> (dibujos). Destaca el <b>Poema de Gilgamesh</b>, en tablillas de arcilla: las aventuras de <b>Gilgamesh</b>, rey de la ciudad de <b>Uruk</b>.',C.az],['Babilónica (1750-538 a. C.)','Siguen las leyendas de Gilgamesh y aparece el <b>Código de Hammurabi</b>, el primer texto legal que se conserva.',C.ro]]},
+ {k:'ej',h:'La Ley del Talión',t:'La regla más famosa del Código de Hammurabi: «<b>Ojo por ojo, diente por diente</b>»: el castigo debe ser igual al daño causado.'}],
+ truco:'<b>G</b>ilgamesh = <b>g</b>ran héroe (sumerio, de Uruk). <b>H</b>ammurabi = <b>h</b>ace leyes (babilónico).'},
+{id:'o4',t:2,n:'China e India',s:'Bambú, sánscrito y grandes epopeyas',
+ idea:'China escribió en <b>tablillas de bambú</b>. La India escribió en <b>sánscrito</b> sus libros sagrados y dos <b>epopeyas</b> gigantes.',
+ fig:()=>svgOf('bambu','Así eran los «libros» chinos antiguos'),
+ b:[{k:'cards',h:'Literatura china',it:[['Lao Tse','Filósofo (siglo VII a. C.).',C.ro],['Confucio','Filósofo (siglo VI a. C.).',C.ro],['Li Tai Pe','Poeta (siglo VIII <b>después</b> de Cristo).',C.ro]]},
+ {k:'cards',h:'Literatura india',it:[['Sánscrito','La lengua en que está escrita; aún hoy es la lengua <b>sagrada</b> de la India.',C.ve],['Los Vedas','<b>Cuatro libros</b> de himnos religiosos (antes del siglo V a. C.).',C.ve],['Mahabharata','Epopeya enorme: <b>más de 200.000 versos</b>. Protagonista: <b>Arjuna</b>. Se atribuye a <b>Viasa</b>.',C.ve],['Ramayana','Las historias del príncipe <b>Rama</b>. Su autor: <b>Valmiki</b>.',C.ve],['Panchatantra','Colección de <b>cuentos</b> que influyó en Occidente. <b>Alfonso X el Sabio</b> la hizo traducir al castellano: <b>Calila e Dimna</b>.',C.ve]]}],
+ truco:'<b>Ram</b>ayana → príncipe <b>Ram</b>a. <b>Mah</b>abharata → <b>má</b>s de 200.000 versos.'},
+{id:'o5',t:2,n:'La Biblia: Antiguo Testamento',s:'Hebreo, Yahvé y cuatro tipos de libros',
+ idea:'La literatura hebrea está en la <b>Biblia</b> («los libros»), la obra de mayor influencia en la cultura occidental. Tiene dos partes: <b>Antiguo</b> y <b>Nuevo Testamento</b>.',
+ fig:()=>svgOf('biblia','Las dos partes de la Biblia'),
+ b:[{k:'cards',h:'El Antiguo Testamento',it:[['Lengua','<b>Hebreo</b> o arameo.',C.az],['Tema','La alianza de <b>Yahvé</b> (Dios) con el pueblo de <b>Israel</b>.',C.az],['Escritura','Se transmitió oralmente y se fijó por escrito en el siglo I a. C.',C.az]]},
+ {k:'cards',h:'Los cuatro grupos de libros',it:[['Históricos o narrativos','Según la tradición, de <b>Moisés</b>: Génesis, Éxodo, Levítico, Números y Deuteronomio.',C.na],['Filosóficos y morales','El <b>Libro de Job</b> o los <b>Proverbios</b>.',C.mo],['Poéticos','Atribuidos al <b>rey David</b>: el <b>Cantar de los cantares</b> o los <b>Salmos</b>.',C.ro],['Proféticos','La palabra de Dios a través de los profetas: <b>Jeremías, Daniel, Isaías</b>…',C.ve]]}],
+ truco:'Cuatro grupos: Moisés <b>cuenta</b> (Históricos), Job <b>piensa</b> (Filosóficos), David <b>canta</b> (Poéticos) y los profetas <b>anuncian</b> (Proféticos).'},
+{id:'o6',t:2,n:'La Biblia: Nuevo Testamento',s:'Los cuatro Evangelios, los Hechos y el Apocalipsis',
+ idea:'El <b>Nuevo Testamento</b> cuenta la vida de <b>Jesucristo</b>. Está escrito en <b>griego</b> (algunos textos en arameo).',
+ fig:()=>svgOf('sinopticos','Por qué se llaman «sinópticos»'),
+ b:[{k:'ej',h:'La Vulgata',t:'La primera traducción de la Biblia al <b>latín</b>, hecha por <b>San Jerónimo</b> en el <b>siglo IV</b> d. C.'},
+ {k:'cards',h:'Los cuatro Evangelios',it:[['Mateo (hacia el año 80)','Para cristianos de origen <b>judío</b>. Jesús como descendiente de <b>David</b> y nuevo <b>Moisés</b>: la Ley se vuelve amor al prójimo.',C.az],['Marcos (65-70)','El <b>más breve</b> y el <b>más antiguo</b>, probablemente escrito en <b>Roma</b>. Marcos habría sido discípulo de <b>Pedro</b>.',C.ve],['Lucas (hacia el 85)','De cultura <b>griega</b>. Cuenta el <b>Buen Samaritano</b>. Escribió también los <b>Hechos de los Apóstoles</b>.',C.na],['Juan (hacia el 90)','Muy distinto, filosofía griega. Jesús es el <b>Verbo</b>. Solo él cuenta las <b>bodas de Caná</b>, la <b>Samaritana</b> y el <b>lavatorio de los pies</b>.',C.mo]]},
+ {k:'cards',h:'Y además',it:[['Sinópticos','Mateo, Marcos y Lucas se parecen tanto que se pueden poner en <b>columnas</b> para compararlos.',C.gr],['Apocalipsis','Libro poético sobre el <b>fin del mundo</b>, escrito por <b>San Juan</b>.',C.ro],['El Talmud','En el <b>siglo V</b> d. C., sabios reunieron las tradiciones hebreas: una especie de <b>enciclopedia</b>.',C.ma]]}],
+ truco:'Evangelios por antigüedad: <b>Marcos</b> (el primero y más corto) → <b>Mateo</b> → <b>Lucas</b> → <b>Juan</b> (el último y más distinto).'},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ if(B.k==='html')return B.t();
+ return''}).join('')}
+const CHULETA=[['Características','Las más antiguas. Orales, fantásticas, simbólicas y religiosas.',C.mo],['Persa','Avesta, de Zaratustra (s. VIII a. C.).',C.mo],['Egipcia','Jeroglíficos, Piedra Rosetta. Sinuhé, Historia del náufrago, Libro de los muertos.',C.na],['Mesopotámica','Tablillas de arcilla. Gilgamesh (Uruk), Hammurabi (Ley del Talión), Asurbanipal (Nínive).',C.ma],['China','Bambú. Lao Tse, Confucio y Li Tai Pe.',C.ro],['India','Sánscrito. Vedas; Mahabharata (Viasa, Arjuna), Ramayana (Valmiki, Rama); Panchatantra → Calila e Dimna.',C.ve],['Antiguo Testamento','Hebreo. Históricos, filosóficos, poéticos y proféticos.',C.az],['Nuevo Testamento','Griego. Evangelios (Mateo, Marcos, Lucas, Juan), Hechos, Apocalipsis. Vulgata (San Jerónimo).',C.az]];
+
+const QB={
+o1:[['t','¿Cuáles son las literaturas más antiguas de la humanidad?','Las orientales',['Las griegas','Las latinas','Las medievales'],'Nacieron en Asia y Oriente.'],
+ ['t','¿Cómo se transmitían al principio?','De forma oral',['Por internet','En libros impresos','Por carta'],'Se contaban de memoria durante siglos.'],
+ ['t','¿Qué tres rasgos tienen las literaturas orientales?','Transmisión oral, fantasía y componente religioso',['Humor, rima y teatro','Realismo, ciencia y viajes','Solo leyes y cuentas'],'Mezclan fantasía y religión.'],
+ ['t','¿Cuál de estas NO es una de las seis literaturas orientales del tema?','La griega',['La persa','La china','La hebrea'],'Las seis: persa, egipcia, mesopotámica, china, india y hebrea.'],
+ ['v','La literatura hebrea es una de las literaturas orientales.',true,'Verdadero: es la de la Biblia.'],
+ ['t','¿Dónde nació la literatura mesopotámica?','Entre los ríos Tigris y Éufrates',['Junto al río Nilo','En la India','En China'],'Mesopotamia = tierra entre ríos.']],
+o2:[['t','¿Cuál es el libro sagrado de la literatura persa?','El Avesta',['Los Vedas','El Talmud','El Ramayana'],'Atribuido a Zaratustra.'],
+ ['t','¿A quién se atribuye el Avesta?','A Zaratustra',['A Confucio','A Moisés','A Valmiki'],'Siglo VIII a. C.'],
+ ['t','¿Cómo es la escritura egipcia?','Jeroglífica',['Cuneiforme','Alfabética latina','Sánscrita'],'Se descifró gracias a la Piedra Rosetta.'],
+ ['t','¿Qué permitió descifrar los jeroglíficos?','La Piedra Rosetta',['El Código de Hammurabi','La biblioteca de Nínive','La Vulgata'],'Tenía el mismo texto en tres escrituras.'],
+ ['t','¿En qué periodo egipcio destacan las Aventuras de Sinuhé?','Imperio Medio',['Imperio Antiguo','Imperio Nuevo','Época romana'],'Junto con la Historia del náufrago.'],
+ ['t','¿De qué trata la historia de Sinuhé?','Un oficial que huye a Siria al morir el faraón',['Un náufrago en una isla','Un rey de Uruk','Un príncipe llamado Rama'],'Imperio Medio.'],
+ ['t','¿Para qué servía el Libro de los muertos?','Para ayudar al difunto en su camino al más allá',['Para contar batallas','Para enseñar a escribir','Para fijar leyes'],'Imperio Nuevo.'],
+ ['t','¿Qué hay en el Imperio Antiguo?','Inscripciones en templos y pirámides',['El Libro de los muertos','Sinuhé','El Avesta'],'Son las escrituras más antiguas.']],
+o3:[['t','¿Qué rey creó la biblioteca de Nínive?','Asurbanipal',['Hammurabi','Gilgamesh','Zaratustra'],'Dedicó su vida a guardar textos.'],
+ ['t','¿Cómo eran las primeras escrituras sumerias?','Pictogramas (dibujos)',['Jeroglíficos','Letras latinas','Caracteres chinos'],'Las primeras de la humanidad.'],
+ ['t','¿Sobre qué se escribió el Poema de Gilgamesh?','Tablillas de arcilla',['Papiro','Bambú','Pergamino'],'Etapa sumeria.'],
+ ['t','¿Qué ciudad gobernó Gilgamesh?','Uruk',['Babilonia','Nínive','Tebas'],'Era un rey legendario sumerio.'],
+ ['t','¿Qué es el Código de Hammurabi?','El primer texto legal que se conserva',['Un poema épico','Un libro de cuentos','Un himno religioso indio'],'Etapa babilónica.'],
+ ['t','¿Qué dice la Ley del Talión?','«Ojo por ojo, diente por diente»',['«Amarás al prójimo»','«Pienso, luego existo»','«Conócete a ti mismo»'],'El castigo, igual al daño.'],
+ ['t','¿Cuáles son las dos etapas de la literatura mesopotámica?','Sumeria y babilónica',['Antigua y moderna','Persa y egipcia','China e india'],'Sumeria: 3500-1750 a. C.; babilónica: 1750-538 a. C.']],
+o4:[['t','¿Sobre qué se escribía originalmente en China?','Tablillas de bambú',['Tablillas de arcilla','Papiro','Piedra'],'Atadas con cordel.'],
+ ['t','¿Quiénes son los dos filósofos chinos del tema?','Lao Tse y Confucio',['Valmiki y Viasa','Mateo y Lucas','Zaratustra y Asurbanipal'],'Siglos VII y VI a. C.'],
+ ['t','¿Quién fue Li Tai Pe?','Un poeta chino',['Un filósofo indio','Un rey persa','Un profeta hebreo'],'Siglo VIII d. C.'],
+ ['t','¿En qué lengua está escrita la literatura india?','En sánscrito',['En hebreo','En griego','En chino'],'Aún hoy es su lengua sagrada.'],
+ ['t','¿Qué son los Vedas?','Cuatro libros de himnos religiosos',['Una epopeya de 200.000 versos','Un código de leyes','Un libro de cuentos'],'Los textos sagrados más antiguos de la India.'],
+ ['t','¿Quién protagoniza el Mahabharata?','Arjuna',['Rama','Gilgamesh','Sinuhé'],'Se atribuye a Viasa.'],
+ ['t','¿Cuántos versos tiene el Mahabharata?','Más de 200.000',['Unos 100','Exactamente 1.000','Ninguno: está en prosa'],'Es una de las epopeyas más largas.'],
+ ['t','¿Quién es el autor del Ramayana?','Valmiki',['Viasa','Confucio','Moisés'],'Cuenta la historia del príncipe Rama.'],
+ ['t','¿Cómo se tituló la traducción castellana del Panchatantra?','Calila e Dimna',['El Cantar de mio Cid','La Vulgata','El Libro de los muertos'],'La impulsó Alfonso X el Sabio.']],
+o5:[['t','¿Qué significa «Biblia»?','«Los libros»',['«La palabra»','«El templo»','«La ley»'],'Es una colección de libros.'],
+ ['t','¿En qué lenguas está escrito el Antiguo Testamento?','Hebreo o arameo',['Griego y latín','Sánscrito','Chino'],'El Nuevo, en griego.'],
+ ['t','¿Qué relata el Antiguo Testamento?','La alianza de Yahvé con el pueblo de Israel',['La vida de Jesucristo','Las aventuras de Gilgamesh','La historia de Persia'],'Historias, tradiciones y profecías.'],
+ ['t','¿A quién atribuye la tradición los libros históricos?','A Moisés',['Al rey David','A San Jerónimo','A Lucas'],'Génesis, Éxodo, Levítico, Números y Deuteronomio.'],
+ ['t','El Génesis es un libro…','Histórico o narrativo',['Poético','Profético','Filosófico'],'Es el primero de la Biblia.'],
+ ['t','¿Qué libros se atribuyen al rey David?','Los poéticos, como los Salmos',['Los proféticos','Los Evangelios','El Apocalipsis'],'También el Cantar de los cantares.'],
+ ['t','El Libro de Job es…','Filosófico y moral',['Histórico','Poético','Profético'],'Igual que los Proverbios.'],
+ ['t','Isaías, Jeremías y Daniel aparecen en libros…','Proféticos',['Poéticos','Históricos','Filosóficos'],'Transmiten la palabra de Dios.']],
+o6:[['t','¿Qué cuenta el Nuevo Testamento?','La vida de Jesucristo',['La alianza de Yahvé con Israel','La historia de Egipto','Las leyes de Babilonia'],'Escrito en griego.'],
+ ['t','¿Qué es la Vulgata?','La primera traducción de la Biblia al latín',['Un evangelio','Un libro persa','Una epopeya india'],'De San Jerónimo, siglo IV.'],
+ ['t','¿Qué evangelio es el más breve y el más antiguo?','El de Marcos',['El de Juan','El de Lucas','El de Mateo'],'Hacia los años 65-70.'],
+ ['t','¿Por qué Mateo, Marcos y Lucas se llaman sinópticos?','Porque se pueden poner en columnas y comparar',['Porque son muy cortos','Porque están en hebreo','Porque hablan del fin del mundo'],'Tienen muchos puntos en común.'],
+ ['t','¿Qué evangelio incluye la parábola del Buen Samaritano?','El de Lucas',['El de Marcos','El de Juan','El de Mateo'],'Lucas también escribió los Hechos de los Apóstoles.'],
+ ['t','¿Qué evangelio es el único que cuenta las bodas de Caná?','El de Juan',['El de Mateo','El de Marcos','El de Lucas'],'Y el lavatorio de los pies.'],
+ ['t','¿A quién iba dirigido el evangelio de Mateo?','A cristianos de origen judío',['A filósofos griegos','A los romanos paganos','A los persas'],'Presenta a Jesús como nuevo Moisés.'],
+ ['t','¿De qué trata el Apocalipsis?','Del fin del mundo',['Del nacimiento de Jesús','De las leyes de Moisés','De los viajes de Pablo'],'Escrito por San Juan.'],
+ ['t','¿Qué es el Talmud?','Una especie de enciclopedia del saber hebreo',['Un evangelio','Un libro persa','Una traducción latina'],'Siglo V d. C.']]};
+
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='lit-t3-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'Las literaturas orientales'],[2,'La Biblia y el mundo']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco </b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ if(s.wire)s.wire();$('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente! Mañana lo bordas.':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba del tema 3</h2><p>15 preguntas de todas las fichas, como un examen. Al final, nota sobre 10 y qué fichas repasar.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),1)));list.push(...wpick(QS.filter(q=>!list.includes(q)),9));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'quien',ico:'¿Quién soy?',n:'¿Quién soy?',d:'Personajes y autores del tema: 3 pistas, cuantas menos uses, más puntos.',best:v=>v+' puntos'},
+{id:'ord',ico:'3000 a. C.',n:'Ordena en el tiempo',d:'Pon los hechos literarios del más antiguo al más reciente.',best:v=>v+(v===1?' error':' errores')},
+{id:'une',ico:'Une',n:'Une parejas',d:'Obras con su autor o cultura, y términos con su significado.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Clasifica contra reloj',d:'Clasifica obras, autores y libros en 60 segundos.',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({quien:gQuien,ord:gOrd,une:gUne,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+
+/* ¿Quién soy? */
+const WHO=[['Zaratustra',['Fui una figura religiosa de la antigua Persia.','Se me atribuye un libro sagrado.','Ese libro es el Avesta (siglo VIII a. C.).']],
+ ['Gilgamesh',['Fui un rey legendario de Mesopotamia.','Mis aventuras se escribieron en tablillas de arcilla.','Gobernaba la ciudad sumeria de Uruk.']],
+ ['Hammurabi',['Fui rey en Mesopotamia.','Quise que todo mi reino tuviera las mismas leyes.','Mi código incluye la Ley del Talión: «ojo por ojo, diente por diente».']],
+ ['Asurbanipal',['Fui rey en Mesopotamia.','Dediqué mi vida a reunir y guardar textos.','Creé la biblioteca de Nínive.']],
+ ['Sinuhé',['Soy un personaje de la literatura egipcia.','Era oficial de palacio y huí a Siria.','Huí al morir el faraón Amenemhat.']],
+ ['Lao Tse',['Fui un pensador de la antigua China.','Viví en el siglo VII antes de Cristo.','Soy un filósofo chino.']],
+ ['Confucio',['Fui un pensador de la antigua China.','Viví en el siglo VI antes de Cristo.','Soy uno de los filósofos más influyentes de China.']],
+ ['Viasa',['Soy un autor de la literatura india.','Se me atribuye una epopeya gigantesca.','Esa epopeya es el Mahabharata, con más de 200.000 versos.']],
+ ['Valmiki',['Soy un autor de la literatura india.','Se me atribuye una gran epopeya.','Esa epopeya es el Ramayana, sobre el príncipe Rama.']],
+ ['Moisés',['Soy un personaje fundamental de la Biblia.','La tradición me atribuye cinco libros.','Esos libros son: Génesis, Éxodo, Levítico, Números y Deuteronomio.']],
+ ['San Jerónimo',['Viví en el siglo IV después de Cristo.','Hice una traducción importantísima al latín.','Traduje la Biblia y esa versión se llama la Vulgata.']],
+ ['San Juan',['Escribí un evangelio muy distinto a los otros tres.','Cuento las bodas de Caná y el lavatorio de los pies.','También se me atribuye el Apocalipsis.']]];
+function gQuien(){const R_=shuffle(WHO).slice(0,8);let k=0,pts=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>¿Quién soy?</span><span id="hud">0 puntos</span></div><div id="pb"></div><ol class="clues" id="clues"></ol><div class="actions"><button class="ghost" id="more" type="button">Otra pista</button></div><div class="opts grid" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('quien',pts,false);$('#clues').innerHTML='';$('#opts').innerHTML='';$('#more').hidden=true;$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${pts} puntos de 24`,`${b?'¡Nueva mejor marca! ':''}Con 1 pista ganas 3 puntos; con 2, 2; con 3, 1.`,gQuien);return}
+  const [name,cl]=R_[k];let shown=1,done=false;$('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';
+  const showC=()=>{$('#clues').innerHTML=cl.slice(0,shown).map(c=>`<li>${c}</li>`).join('');$('#more').hidden=shown>=3||done};showC();
+  $('#more').onclick=()=>{if(shown<3){shown++;showC()}};
+  const opts=shuffle([name,...shuffle(WHO.filter(w=>w[0]!==name)).slice(0,3).map(w=>w[0])]);
+  $('#opts').innerHTML=opts.map(o=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${o}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;if(b.textContent===name){done=true;const g=4-shown;pts+=g;res.push(true);b.classList.add('right');$('#hud').textContent=pts+' puntos';$('#fb').className='fb okk';$('#fb').textContent=`¡Sí, soy ${name}! +${g} ${g===1?'punto':'puntos'}.`}
+   else{b.classList.add('wrong');b.disabled=true;if(shown<3){shown++;showC();$('#fb').className='fb ko';$('#fb').textContent='No. Te doy otra pista.';return}done=true;res.push(false);$('#opts').querySelectorAll('.opt').forEach(x=>{if(x.textContent===name)x.classList.add('right')});$('#fb').className='fb ko';$('#fb').textContent=`Era ${name}.`}
+   $('#opts').querySelectorAll('.opt').forEach(x=>x.disabled=true);shown=3;showC();
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R_.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* Ordena en el tiempo */
+const CRONO=[['Literaturas antiguas',[['Siglo VIII a. C.','El Avesta, libro sagrado persa'],['3500-2400 a. C.','Imperio Antiguo egipcio: inscripciones en pirámides'],['3500-1750 a. C.','Sumeria: las primeras escrituras y el Poema de Gilgamesh'],['1750-538 a. C.','Babilonia: Código de Hammurabi'],['Siglo VII a. C.','Lao Tse, filósofo chino'],['Siglo VI a. C.','Confucio, filósofo chino']]],
+ ['La Biblia',[['Siglo I a. C.','Se pone por escrito el Antiguo Testamento'],['Hacia 65-70','Marcos escribe el evangelio más antiguo'],['Hacia el año 80','Mateo escribe su evangelio'],['Hacia el año 85','Lucas escribe su evangelio y los Hechos'],['Hacia el año 90','Juan escribe su evangelio'],['Siglo IV d. C.','San Jerónimo traduce la Biblia al latín: la Vulgata'],['Siglo V d. C.','Se compone el Talmud']]]];
+function gOrd(){let ki=0,err=0;const L=CRONO;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ordena en el tiempo</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="pool" id="pool"></div><ol class="ladder" id="lad"></ol><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const set=()=>{if(ki>=L.length){const b=setBest('ord',err,true);$('#q').textContent='';$('#pool').innerHTML='';$('#lad').innerHTML='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Recuerda: «a. C.» es antes de Cristo; «d. C.» es después.`,gOrd);return}
+  const [tt,items]=L[ki];let placed=0;$('#q').innerHTML=`${tt}: toca los hechos <b>del más antiguo al más reciente</b>`;$('#lad').innerHTML='';
+  $('#pool').innerHTML=shuffle(items.map((it,i)=>[it[1],i])).map(([t,i])=>`<button class="ev" type="button" data-i="${i}">${t}</button>`).join('');
+  $('#pool').querySelectorAll('.ev').forEach(b=>b.onclick=()=>{if(+b.dataset.i===placed){$('#lad').insertAdjacentHTML('beforeend',`<li><b>${items[placed][0]}</b>${items[placed][1]}</li>`);b.remove();placed++;if(placed===items.length){ki++;setTimeout(set,1100)}}else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}})};set()}
+
+/* Une parejas */
+const DEFS=[['Avesta','Libro sagrado persa'],['Zaratustra','Se le atribuye el Avesta'],['Jeroglíficos','Escritura del antiguo Egipto'],['Piedra Rosetta','Permitió descifrar los jeroglíficos'],['Sinuhé','Oficial egipcio que huyó a Siria'],['Gilgamesh','Rey legendario de Uruk'],['Código de Hammurabi','Primer texto legal conservado'],['Asurbanipal','Creó la biblioteca de Nínive'],['Ley del Talión','Ojo por ojo, diente por diente'],['Vedas','Cuatro libros de himnos religiosos indios'],['Mahabharata','Epopeya india de más de 200.000 versos'],['Ramayana','Epopeya india del príncipe Rama'],['Calila e Dimna','Traducción castellana del Panchatantra'],['Vulgata','Primera traducción de la Biblia al latín'],['Sinópticos','Mateo, Marcos y Lucas'],['Talmud','Enciclopedia del saber hebreo'],['Apocalipsis','Libro sobre el fin del mundo']];
+const DATOS=[['Avesta','Literatura persa'],['Libro de los muertos','Literatura egipcia'],['Poema de Gilgamesh','Literatura mesopotámica'],['Los Vedas','Literatura india'],['La Biblia','Literatura hebrea'],['Lao Tse','Literatura china'],['Marcos','Evangelio más antiguo'],['Lucas','Buen Samaritano y Hechos'],['Juan','Bodas de Caná y lavatorio'],['Mateo','Para cristianos de origen judío'],['Moisés','Libros históricos del AT'],['Rey David','Libros poéticos del AT']];
+function gUne(){let mode='def',round=0,err=0;
+ const setup=()=>{round=0;err=0;
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Une parejas</span><span id="hud">Errores: 0</span></div><div class="chips" id="modes"><button type="button" data-m="def" aria-pressed="${mode==='def'}">Obras y significados</button><button type="button" data-m="obra" aria-pressed="${mode==='obra'}">Obras y culturas</button></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+  $('#modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;setup()});play()};
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has unido 12 parejas.`,setup);return}
+  const pairs=shuffle(mode==='def'?DEFS:DATOS).slice(0,6);
+  $('#q').innerHTML=mode==='def'?`Ronda ${round+1} de 2: toca un término y luego su significado.`:`Ronda ${round+1} de 2: une cada obra o autor con su literatura o dato.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca algo de la columna izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};
+ setup()}
+
+/* Clasifica contra reloj */
+const DECKS={
+lit:{n:'¿De qué literatura es?',c:['Persa','Egipcia','Mesopotámica','China','India','Hebrea'],it:[['El Avesta',0],['Zaratustra',0],['Jeroglíficos',1],['Piedra Rosetta',1],['Sinuhé',1],['Libro de los muertos',1],['Gilgamesh',2],['Hammurabi',2],['Asurbanipal',2],['Tablillas de arcilla',2],['Lao Tse',3],['Confucio',3],['Li Tai Pe',3],['Tablillas de bambú',3],['Vedas',4],['Mahabharata',4],['Ramayana',4],['Panchatantra',4],['Biblia',5],['Talmud',5],['Moisés',5],['Vulgata',5]]},
+at:{n:'Libros del AT',c:['Históricos','Filosóficos','Poéticos','Proféticos'],it:[['Génesis',0],['Éxodo',0],['Levítico',0],['Números',0],['Deuteronomio',0],['Libro de Job',1],['Proverbios',1],['Cantar de los cantares',2],['Salmos',2],['Jeremías',3],['Daniel',3],['Isaías',3]]},
+ev:{n:'Evangelios',c:['Mateo','Marcos','Lucas','Juan'],it:[['El más breve y antiguo',1],['Discípulo de Pedro',1],['Escrito en Roma',1],['Para cristianos judíos',0],['Jesús como nuevo Moisés',0],['De cultura griega',2],['Buen Samaritano',2],['Hechos de los Apóstoles',2],['Bodas de Caná',3],['Samaritana',3],['Lavatorio de los pies',3],['Jesús es el Verbo',3],['Filosofía griega',3]]}};
+function gCla(){let dk='lit';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length<=4?'grid':'three'}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Viajera de Oriente',()=>ST.filter(s=>s.t===1).every(s=>S.stars[s.id]===3)],['Biblista',()=>ST.filter(s=>s.t===2).every(s=>S.stars[s.id]===3)],['Sabia antigua',()=>(S.games.quien||0)>=18],['Cronista',()=>S.games.ord===0],['Rápida como un escriba',()=>(S.games.cla||0)>=25],['Pareja perfecta',()=>S.games.une===0],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>
