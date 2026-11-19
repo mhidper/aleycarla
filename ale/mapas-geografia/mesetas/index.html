@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Las Mesetas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#e8e3ef; --paper:#fcfbfe; --grid:#d8d0e2; --ink:#1e1230; --muted:#6a5d7a; --line:#cdc3d8;
+  --marker:#9b2335; --marker-soft:#fce0e4; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#1e1230; --btn-fg:#fcfbfe; --chip:#ffffff;
+  --star:#d9a400; --geo:#2a5faa;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e0a16; --paper:#181222; --grid:#241c30; --ink:#e6dff0; --muted:#a898ba; --line:#302840;
+  --marker:#d64a5e; --marker-soft:#3a1420; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e6dff0; --btn-fg:#0e0a16; --chip:#1e1630;
+  --star:#ffd23f; --geo:#5a8fd4; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e0a16; --paper:#181222; --grid:#241c30; --ink:#e6dff0; --muted:#a898ba; --line:#302840;
+  --marker:#d64a5e; --marker-soft:#3a1420; --ok:#4fc68c; --ok-soft:#17332a; --btn:#e6dff0; --btn-fg:#0e0a16; --chip:#1e1630;
+  --star:#ffd23f; --geo:#5a8fd4; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;margin:0}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--geo);color:var(--paper);border-color:var(--geo)}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,10,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--geo)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--geo);color:var(--geo)}
+.dot.done{background:var(--geo);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+.chuleta{border:2px solid var(--geo)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--geo);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+.idea{margin:0;background:var(--paper);border:2px solid var(--geo);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--geo);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.nums{display:flex;flex-wrap:wrap;gap:8px}.num{flex:1 1 150px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column}
+.num b{font:800 1.5rem var(--f-display);color:var(--geo);font-variant-numeric:tabular-nums}.num span{font-size:.9rem;color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--geo);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--geo);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--geo);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../../#ale/mapas-geografia">← Mapas y Geografía de Ale</a>
+  <header>
+    <div><h1>Las Mesetas <span>Ale</span></h1>
+    <p>Castilla y León, Castilla-La Mancha, Extremadura y Madrid: provincias, pueblos, ríos, patrimonio y personajes.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={ro:'#9b2335',az:'#2a5faa',ve:'#2d6a4f',na:'#c47a20',ma:'#7a4a28',gr:'#6a5d7a',mo:'#b05010'};
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${o}>${t}</text>`;
+
+/* =================== DIBUJOS =================== */
+const DR={
+acueducto:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f4ede2"/>
+ <rect x="60" y="160" width="300" height="12" fill="#c4a878" stroke="#8a7040" stroke-width="1.5" rx="2"/>
+ ${[80,120,160,200,240,280,320].map(x=>`<rect x="${x-6}" y="100" width="12" height="60" fill="#c4a878" stroke="#8a7040" stroke-width="1"/><path d="M${x-20} 100 A20 20 0 0 1 ${x+20} 100" fill="none" stroke="#8a7040" stroke-width="2"/>`).join('')}
+ <rect x="60" y="92" width="300" height="10" fill="#c4a878" stroke="#8a7040" stroke-width="1.5" rx="2"/>
+ ${[100,140,180,220,260,300].map(x=>`<rect x="${x-5}" y="40" width="10" height="52" fill="#c4a878" stroke="#8a7040" stroke-width="1"/><path d="M${x-18} 40 A18 18 0 0 1 ${x+18} 40" fill="none" stroke="#8a7040" stroke-width="2"/>`).join('')}
+ <rect x="80" y="32" width="260" height="10" fill="#c4a878" stroke="#8a7040" stroke-width="1.5" rx="2"/>
+ <line x1="208" y1="10" x2="208" y2="32" stroke="#8a7040" stroke-width="2"/>
+ ${T(210,194,'Acueducto de Segovia — Patrimonio de la Humanidad','font-size="10" font-weight="700" fill="#6a5d4f"')}`}),
+molino:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f4ede2"/>
+ <rect x="195" y="60" width="30" height="120" fill="#e8dcc8" stroke="#8a7a3a" stroke-width="2" rx="4"/>
+ <polygon points="210,30 195,55 225,55" fill="#c4a878" stroke="#8a7a3a" stroke-width="2"/>
+ <circle cx="210" cy="72" r="6" fill="#8a7a3a"/>
+ <line x1="210" y1="72" x2="130" y2="30" stroke="#6a5020" stroke-width="4" stroke-linecap="round"/>
+ <line x1="210" y1="72" x2="290" y2="30" stroke="#6a5020" stroke-width="4" stroke-linecap="round"/>
+ <line x1="210" y1="72" x2="280" y2="120" stroke="#6a5020" stroke-width="4" stroke-linecap="round"/>
+ <line x1="210" y1="72" x2="140" y2="120" stroke="#6a5020" stroke-width="4" stroke-linecap="round"/>
+ <rect x="80" y="175" width="260" height="6" fill="#d4c8a0" rx="3"/>
+ ${T(210,194,'Molinos de viento — símbolo de La Mancha','font-size="10" font-weight="700" fill="#6a5d4f"')}`}),
+teatro:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f4ede2"/>
+ <path d="M60 160 Q210 60 360 160" fill="none" stroke="#8a7040" stroke-width="3"/>
+ ${[90,130,170,210,250,290,330].map((x,i)=>`<rect x="${x-5}" y="${100+Math.abs(i-3)*8}" width="10" height="${60-Math.abs(i-3)*8}" fill="#c4a878" stroke="#8a7040" stroke-width="1.5" rx="2"/><circle cx="${x}" cy="${95+Math.abs(i-3)*8}" r="6" fill="none" stroke="#8a7040" stroke-width="1.5"/>`).join('')}
+ <path d="M75 160 L345 160" stroke="#8a7040" stroke-width="2"/>
+ <path d="M90 160 L90 170 Q210 185 330 170 L330 160" fill="#e8dcc8" stroke="#8a7040" stroke-width="1.5"/>
+ ${T(210,194,'Teatro romano de Mérida — Patrimonio de la Humanidad','font-size="10" font-weight="700" fill="#6a5d4f"')}`}),
+escorial:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f4ede2"/>
+ <rect x="100" y="80" width="220" height="100" fill="#d4c8b0" stroke="#8a7040" stroke-width="2"/>
+ <rect x="100" y="70" width="220" height="12" fill="#c4a878" stroke="#8a7040" stroke-width="1.5"/>
+ <rect x="190" y="40" width="40" height="30" fill="#c4a878" stroke="#8a7040" stroke-width="1.5"/>
+ <circle cx="210" cy="40" r="10" fill="none" stroke="#8a7040" stroke-width="2"/><line x1="210" y1="28" x2="210" y2="22" stroke="#8a7040" stroke-width="2"/>
+ ${[120,155,265,300].map(x=>`<rect x="${x-8}" y="40" width="16" height="30" fill="#c4a878" stroke="#8a7040" stroke-width="1.5"/><rect x="${x-3}" y="36" width="6" height="6" fill="#8a7040"/>`).join('')}
+ ${[130,160,190,220,250,280].map(x=>`<rect x="${x-6}" y="95" width="12" height="18" fill="#a89878" stroke="#8a7040" stroke-width="1" rx="6"/>`).join('')}
+ <rect x="195" y="140" width="30" height="40" fill="#8a7040" rx="15"/>
+ ${T(210,194,'El Escorial — Patrimonio de la Humanidad','font-size="10" font-weight="700" fill="#6a5d4f"')}`}),
+mapa:()=>({vb:'0 0 420 220',s:`<rect width="420" height="220" rx="8" fill="#e8e0d4"/>
+ <rect x="30" y="20" width="360" height="180" rx="6" fill="#f4ede2" stroke="#c4b898" stroke-width="1.5"/>
+ <rect x="60" y="30" width="180" height="80" rx="4" fill="#6080c0" opacity=".25" stroke="#2a5faa" stroke-width="2"/>
+ ${T(150,65,'Castilla y León','font-size="13" font-weight="800" fill="#1e3a6a"')}${T(150,80,'9 provincias','font-size="10" fill="#2a5faa"')}
+ <rect x="60" y="115" width="180" height="75" rx="4" fill="#c06040" opacity=".2" stroke="#9b2335" stroke-width="2"/>
+ ${T(150,148,'Castilla-La Mancha','font-size="13" font-weight="800" fill="#6a1a20"')}${T(150,163,'5 provincias','font-size="10" fill="#9b2335"')}
+ <rect x="245" y="60" width="120" height="90" rx="4" fill="#40a060" opacity=".2" stroke="#2d6a4f" stroke-width="2"/>
+ ${T(305,100,'Extremadura','font-size="12" font-weight="800" fill="#1a4a2f"')}${T(305,115,'2 provincias','font-size="10" fill="#2d6a4f"')}
+ <circle cx="305" cy="52" r="22" fill="#c47a20" opacity=".25" stroke="#c47a20" stroke-width="2"/>
+ ${T(305,50,'Madrid','font-size="10" font-weight="800" fill="#7a4a10"')}${T(305,60,'1 prov.','font-size="8" fill="#c47a20"')}
+ <path d="M150 110 L150 115" stroke="#6a5d7a" stroke-width="2" stroke-dasharray="3 2"/>
+ ${T(210,210,'Las 4 comunidades del interior de España','font-size="10.5" font-weight="700" fill="#6a5d4f"')}`})
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg>${label?`<figcaption>${label}</figcaption>`:''}</figure>`}
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'c1',t:1,n:'Castilla y León',s:'9 provincias, el Duero, la comunidad más extensa',
+ idea:'La <b>comunidad más extensa</b> de España, en la <b>Meseta Norte</b>. 9 provincias alrededor del río <b>Duero</b>, con catedrales, castillos y murallas medievales.',
+ fig:()=>svgOf('acueducto','Acueducto de Segovia'),
+ b:[{k:'cards',h:'Provincias principales',it:[['Valladolid','<b>Capital</b> de CyL. Confluencia de los ríos Pisuerga y Esgueva. Pueblos: Medina del Campo (feria), Tordesillas (Juana la Loca y el Tratado), Simancas (archivo).',C.az],['Burgos','Catedral gótica famosa, donde el Cid juró a Alfonso VI. Pueblos: Miranda del Ebro (industria), Aranda del Duero (Ribera), Santo Domingo de Silos (monasterio).',C.az],['Salamanca','Universidad (de las más antiguas). Patrimonio de la Humanidad (1988). Pueblos: Alba de Tormes (Santa Teresa), Ciudad Rodrigo (catedral).',C.az],['Segovia','Acueducto romano + ciudad vieja: Patrimonio de la Humanidad (1985). El Alcázar. Pueblos: Sepúlveda, Coca (castillo), La Granja de San Ildefonso.',C.az],['Ávila','Muralla medieval, Patrimonio de la Humanidad. Santa Teresa de Jesús. Pueblo: Madrigal de las Altas Torres (Isabel la Católica).',C.az],['León','San Isidoro, Catedral y San Marcos. Pueblos: Ponferrada (paso a Galicia), Astorga (tortas), Sahagún (románico, Camino).',C.az]]},
+ {k:'cards',h:'Otras provincias',it:[['Zamora','Río Duero, románico (s. X-XIII). Pueblo: Toro (vino), Puebla de Sanabria (lago).',C.gr],['Palencia','Centro industrial, Plaza Mayor s. XVII. Pueblo: Venta de Baños (iglesia visigoda).',C.gr],['Soria','Duero en su curso alto. 2ª menos poblada (tras Teruel). Bécquer y Machado. Pueblo: Medinaceli (arco romano).',C.gr]]},
+ {k:'chips',h:'Relieve e hidrografía',it:['N: Cordillera Cantábrica','S: Sistema Central','E: Sistema Ibérico','NW: Montes de León','Río Duero','Afluentes: Pisuerga, Carrión, Esla, Tormes, Eresma']},
+ {k:'ej',h:'Clima y economía',t:'Clima <b>continental</b>. Población desigual: emigración, pierde habitantes. Economía basada en <b>cereales</b> y <b>ganadería ovina</b>, poco industrializada, renta media.'}],
+ truco:'9 provincias de CyL: «<b>Va</b>lladolid, <b>Bu</b>rgos, <b>Sa</b>lamanca, <b>Se</b>govia, <b>Á</b>vila, <b>Le</b>ón, <b>Za</b>mora, <b>Pa</b>lencia, <b>So</b>ria» → <b>Va-Bu-Sa-Se-Á-Le-Za-Pa-So</b>.'},
+{id:'c2',t:1,n:'Castilla-La Mancha',s:'5 provincias, Cervantes, molinos y el Tajo',
+ idea:'En la <b>Meseta Sur</b>, la tierra de <b>Don Quijote</b> y los <b>molinos de viento</b>. 5 provincias con la <b>menor densidad</b> de población de España. Capital: <b>Toledo</b>, Patrimonio de la Humanidad.',
+ fig:()=>svgOf('molino','Molinos de viento de La Mancha'),
+ b:[{k:'cards',h:'Provincias',it:[['Toledo','Capital de CLM, Patrimonio de la Humanidad (1987). <b>Alcázar</b>, puente de Alcántara, catedral. Metalurgia y espadas. Pueblos: Talavera (cerámica), Ocaña (batalla).',C.ro],['Ciudad Real','Sur, montes de Toledo, río Guadiana. Caza y servicios. Pueblos: Almagro (teatro), Daimiel (Tablas), Valdepeñas (vino), Tomelloso (Quijote).',C.ro],['Albacete','La más poblada de CLM. Río Júcar. Metalurgia y navajas (Museo de la Cuchillería). Pueblos: Almansa (batalla), Hellín.',C.ro],['Cuenca','Ríos Júcar y Cabriel. Menos poblada, emigración. <b>Casas Colgadas</b> y catedral. Pueblos: Belmonte (Fray Luis de León), Uclés (batalla).',C.ro],['Guadalajara','Centro de la Península, río Henares. Palacio de los Duques del Infantado. Pueblos: Sigüenza (catedral), Molina (microclima), Brihuega (batalla).',C.ro]]},
+ {k:'chips',h:'Relieve e hidrografía',it:['Montes de Toledo','Tierras llanas','S: Sierra Morena','Ríos: Guadiana, Júcar','Tajo (afluente Tiétar)','Clima continental con influencia mediterránea']},
+ {k:'ej',h:'Economía y patrimonio',t:'Tiene la <b>más baja densidad de población</b>, envejecida, con emigración. Economía agrícola: <b>viñedo</b> (Valdepeñas). Minas de Almadén y Puertollano. <b>Renta per cápita</b> por debajo de la media: la más baja tasa de crecimiento del PIB.'}],
+ truco:'5 provincias de CLM: «<b>To</b>ledo, <b>C</b>iudad <b>R</b>eal, <b>A</b>lbacete, <b>Cu</b>enca, <b>Gu</b>adalajara» → <b>To-CR-A-Cu-Gu</b> (como «tocar cucu»).'},
+{id:'c3',t:2,n:'Extremadura',s:'2 provincias, Mérida romana, dehesa y conquistadores',
+ idea:'En el <b>oeste</b>, frontera con <b>Portugal</b>. Solo 2 provincias: <b>Badajoz</b> (la más extensa de España) y <b>Cáceres</b> (Patrimonio de la Humanidad). Tierra de <b>conquistadores</b> y teatro romano.',
+ fig:()=>svgOf('teatro','Teatro romano de Mérida'),
+ b:[{k:'cards',h:'Provincias',it:[['Badajoz','La <b>provincia más extensa</b> de España. Servicios, agricultura y ganadería. Pueblos: Mérida (teatro romano), Almendralejo, Zafra (centro ganadero), Olivenza (ciudad portuguesa).',C.ve],['Cáceres','<b>Capital</b> de Extremadura. Ciudad Patrimonio de la Humanidad (UNESCO). Monasterio de Guadalupe y Monasterio de Yuste (Carlos V). Pueblos: Trujillo (Pizarro), Plasencia, Alcántara (puente), Hervás (judería).',C.ve]]},
+ {k:'chips',h:'Relieve e hidrografía',it:['N: Sistema Central','Centro: Montes de Toledo','S: Sierra Morena','Río Guadiana','Río Zújar','Clima mediterráneo (suavizado por el Atlántico)']},
+ {k:'cards',h:'Naturaleza y patrimonio',it:[['Valle del Jerte','Mancomunidad y comarca natural, declarada de interés cultural desde 1973. Famosa por la floración del cerezo.',C.ve],['Monfragüe','Parque natural de gran valor ecológico: buitres, águilas y dehesa.',C.ve],['Teatro de Mérida','Teatro romano y puente romano de Alcántara, dos joyas del patrimonio.',C.ve]]},
+ {k:'ej',h:'Economía y población',t:'Una de las <b>menos pobladas</b> de España. Mucha emigración. Base económica: <b>agricultura y ganadería</b>. Poco industrializada. La <b>última en renta per cápita</b> y la comunidad con el PIB per cápita más bajo (15.457 €). 3.ª en paro (tras Andalucía y Canarias).'}],
+ truco:'Extremadura = 2 provincias: <b>Ba</b>dajoz (la mayor de España) y <b>Cá</b>ceres (Patrimonio). <b>Ba-Cá</b> (como «vaca»).'},
+{id:'c4',t:2,n:'Comunidad de Madrid',s:'Uniprovincial, 6 millones, mayor PIB de España',
+ idea:'En el <b>centro</b> de la Península, <b>uniprovincial</b>. Más de <b>6 millones</b> de habitantes, 1 de cada 10 es inmigrante. El <b>mayor PIB per cápita</b> de España.',
+ fig:()=>svgOf('escorial','El Escorial'),
+ b:[{k:'cards',h:'Geografía',it:[['Relieve','Al norte: <b>Sierra de Guadarrama</b> y Somosierra (Sistema Central). Al sur: zona llana de la meseta, depresión.',C.na],['Hidrografía','Río <b>Tajo</b> y afluentes: Alberche, Guadarrama, Jarama y <b>Manzanares</b>. Irregulares y de escaso caudal.',C.na],['Clima','<b>Continental</b>: grandes contrastes invierno/verano, lluvias escasas. Sierras de alta montaña. Bosques caducifolios, mediterráneos y pinares.',C.na]]},
+ {k:'cards',h:'Pueblos destacados',it:[['Aranjuez','Palacio Real y jardines (Patrimonio, concierto).',C.mo],['Alcalá de Henares','Universidad histórica (Patrimonio). Cuna de <b>Cervantes</b>.',C.mo],['San Lorenzo del Escorial','Monasterio de El Escorial (Patrimonio), mandado construir por Felipe II.',C.mo],['Chinchón','Famoso por el anís y su plaza mayor.',C.mo],['Torrejón de Ardoz','Base militar.',C.mo]]},
+ {k:'ej',h:'Economía y patrimonio',t:'Agricultura y ganadería escasas. Industrias diversificadas: maquinaria, material eléctrico, productos metálicos. <b>Principal centro de servicios</b> del país. Patrimonio riquísimo: <b>Museo del Prado</b>, <b>Palacio Real</b>, Monasterio del Escorial, Universidad de Alcalá de Henares, Palacio de Aranjuez.'}],
+ truco:'Madrid = <b>centro, servicios, 6 millones, mayor PIB</b>. Patrimonio: <b>P</b>rado, <b>P</b>alacio, es<b>C</b>orial, <b>A</b>lcalá, <b>A</b>ranjuez → «<b>PPCAA</b>».'},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ if(B.k==='html')return B.t();
+ return''}).join('')}
+const CHULETA=[['Castilla y León','9 provincias (Valladolid capital). Meseta Norte, río Duero. Acueducto Segovia, murallas Ávila, Universidad Salamanca. Continental, cereales, ovejas.',C.az],['CyL — Provincias clave','Burgos (catedral gótica), Segovia (acueducto, Patrimonio 1985), Salamanca (Patrimonio 1988), Ávila (muralla), León (Catedral), Soria (Machado).',C.az],['Castilla-La Mancha','5 provincias (Toledo capital, Patrimonio 1987). Meseta Sur, molinos, Cervantes. Guadiana/Júcar/Tajo. Menor densidad, viñedo Valdepeñas.',C.ro],['CLM — Provincias clave','Ciudad Real (Valdepeñas, Almagro), Albacete (la más poblada, navajas), Cuenca (Casas Colgadas), Guadalajara (Palacio Infantado).',C.ro],['Extremadura','2 provincias: Badajoz (mayor de España) y Cáceres (Patrimonio). Frontera Portugal. Guadiana. Mérida teatro romano, Yuste (Carlos V), Trujillo (Pizarro).',C.ve],['Ext — Naturaleza','Valle del Jerte (cerezos), Monfragüe (parque). Mediterráneo suavizado. Última en renta per cápita.',C.ve],['Madrid','Uniprovincial, 6 M hab, mayor PIB. Tajo (Manzanares). Sierra Guadarrama. Prado, Palacio Real, Escorial, Alcalá, Aranjuez.',C.na],['Mad — Personajes','Cervantes (Alcalá), Quevedo, Calderón, Larra, Benavente, Ortega y Gasset, Carlos III, Dámaso Alonso.',C.na]];
+
+/* =================== PREGUNTAS =================== */
+const QB={
+c1:[['t','¿Cuántas provincias tiene Castilla y León?','9',['5','7','11'],'Es la comunidad con más provincias de España.'],
+ ['t','¿Cuál es la capital de Castilla y León?','Valladolid',['Burgos','Salamanca','León'],'En la confluencia de los ríos Pisuerga y Esgueva.'],
+ ['t','¿Qué monumento de Segovia es Patrimonio de la Humanidad?','El Acueducto romano',['La Catedral','El Alcázar de Toledo','La Muralla de Ávila'],'Ciudad vieja + acueducto son Patrimonio desde 1985.'],
+ ['t','¿Qué ciudad tiene murallas medievales Patrimonio de la Humanidad?','Ávila',['Segovia','Salamanca','Burgos'],'El recinto amurallado medieval mejor conservado de España.'],
+ ['t','¿Qué río principal atraviesa Castilla y León?','El Duero',['El Tajo','El Guadiana','El Ebro'],'Sus afluentes: Pisuerga, Carrión, Esla, Tormes, Eresma.'],
+ ['t','¿Qué universidad de CyL es una de las más antiguas de España?','La de Salamanca',['La de Valladolid','La de Burgos','La de Segovia'],'Salamanca es Patrimonio de la Humanidad desde 1988.'],
+ ['t','¿Dónde nació Isabel la Católica?','Madrigal de las Altas Torres (Ávila)',['Toledo','Burgos','Segovia'],'Un pueblo de la provincia de Ávila.'],
+ ['v','Castilla y León es la comunidad más extensa de España.',true,'Verdadero: ocupa la mayor superficie de todas las comunidades autónomas.'],
+ ['t','¿Qué cordillera está al norte de Castilla y León?','La Cordillera Cantábrica',['El Sistema Central','Sierra Morena','Los Pirineos'],'Al sur está el Sistema Central y al este el Sistema Ibérico.'],
+ ['t','¿Qué clima tiene Castilla y León?','Continental',['Mediterráneo','Subtropical','Oceánico'],'Inviernos fríos y veranos calurosos.'],
+ ['t','¿En qué pueblo está el monasterio de Santo Domingo de Silos?','En la provincia de Burgos',['En León','En Soria','En Palencia'],'Famoso por el canto gregoriano.'],
+ ['v','Soria es la segunda provincia menos poblada de España, tras Teruel.',true,'Verdadero: ha sufrido mucha emigración.']],
+c2:[['t','¿Cuántas provincias tiene Castilla-La Mancha?','5',['3','7','9'],'Toledo, Ciudad Real, Albacete, Cuenca y Guadalajara.'],
+ ['t','¿Cuál es la capital de Castilla-La Mancha?','Toledo',['Ciudad Real','Albacete','Guadalajara'],'Patrimonio de la Humanidad desde 1987.'],
+ ['t','¿Qué escritor está relacionado con La Mancha?','Cervantes',['Lorca','Machado','Bécquer'],'Don Quijote recorre los molinos de viento de La Mancha.'],
+ ['t','¿Dónde están las famosas Casas Colgadas?','En Cuenca',['En Toledo','En Guadalajara','En Albacete'],'Una de las imágenes más conocidas de Castilla-La Mancha.'],
+ ['t','¿Qué se produce en Valdepeñas?','Vino',['Aceite','Navajas','Cerámica'],'El viñedo es una de las principales actividades agrícolas de CLM.'],
+ ['t','¿Cuál es la provincia más poblada de Castilla-La Mancha?','Albacete',['Toledo','Ciudad Real','Cuenca'],'Destaca también por su metalurgia y navajas.'],
+ ['t','¿Qué pintor vivió y trabajó en Toledo?','El Greco',['Velázquez','Goya','Murillo'],'Muchas de sus obras están en la ciudad.'],
+ ['v','Castilla-La Mancha tiene la más baja densidad de población de España.',true,'Verdadero: población envejecida y mucha emigración.'],
+ ['t','¿Qué monumento destaca en Toledo?','El Alcázar y la catedral',['El Acueducto','Las Casas Colgadas','El Monasterio de Yuste'],'Toledo: metalurgia, espadas y cuchillos, y mucho turismo.'],
+ ['t','¿Dónde está el teatro clásico más famoso de CLM?','Almagro (Ciudad Real)',['Sigüenza','Belmonte','Ocaña'],'El Corral de Comedias de Almagro.']],
+c3:[['t','¿Cuántas provincias tiene Extremadura?','2',['3','4','1'],'Badajoz y Cáceres.'],
+ ['t','¿Cuál es la capital de Extremadura?','Mérida (Badajoz)',['Cáceres','Badajoz','Plasencia'],'Donde está el teatro romano.'],
+ ['t','¿Qué monumento romano hay en Mérida?','El teatro romano',['El Acueducto','El Coliseo','El Panteón'],'Patrimonio de la Humanidad junto con el puente de Alcántara.'],
+ ['t','¿Cuál es la provincia más extensa de España?','Badajoz',['Cáceres','Ciudad Real','León'],'Mayor superficie de todas las provincias españolas.'],
+ ['t','¿Qué conquistador nació en Trujillo?','Pizarro',['Hernán Cortés','Balboa','Coronado'],'Conquistador del Perú.'],
+ ['t','¿Dónde se retiró el emperador Carlos V?','Al Monasterio de Yuste (Cáceres)',['Al Escorial','A Guadalupe','A Mérida'],'Patrimonio Europeo.'],
+ ['v','Extremadura es la comunidad con el PIB per cápita más bajo de España.',true,'Verdadero: 15.457 euros, la última.'],
+ ['t','¿Qué parque natural destaca en Extremadura?','Monfragüe',['Doñana','Tablas de Daimiel','Cabañeros'],'Buitres, águilas y dehesa.'],
+ ['t','¿Con qué país limita Extremadura al oeste?','Portugal',['Francia','Marruecos','Andorra'],'También destaca Olivenza como ciudad con historia portuguesa.'],
+ ['t','¿Por qué es famoso el Valle del Jerte?','Por la floración de los cerezos',['Por los olivos','Por los molinos','Por las minas'],'Declarado de interés cultural desde 1973.']],
+c4:[['t','¿Qué tipo de comunidad es Madrid?','Uniprovincial',['Tiene 2 provincias','Tiene 3 provincias','Tiene 5 provincias'],'Solo una provincia: Madrid.'],
+ ['t','¿Cuántos millones de habitantes supera la Comunidad de Madrid?','6 millones',['3 millones','10 millones','1 millón'],'Con el área metropolitana es una de las más pobladas de Europa.'],
+ ['t','¿Qué famoso museo está en Madrid?','El Museo del Prado',['El Guggenheim','El Louvre','El British Museum'],'Uno de los más importantes del mundo.'],
+ ['t','¿Qué monasterio está en San Lorenzo del Escorial?','El Monasterio de El Escorial',['El de Yuste','El de Guadalupe','El de Silos'],'Mandado construir por Felipe II, Patrimonio de la Humanidad.'],
+ ['t','¿Qué sierra está al norte de Madrid?','La Sierra de Guadarrama',['Sierra Morena','Sierra Nevada','Los Pirineos'],'Forma parte del Sistema Central.'],
+ ['t','¿Qué escritor nació en Alcalá de Henares?','Miguel de Cervantes',['Lope de Vega','Quevedo','Calderón'],'La universidad de Alcalá también es Patrimonio de la Humanidad.'],
+ ['v','Madrid tiene el mayor PIB per cápita de España.',true,'Verdadero: principal centro de servicios del país.'],
+ ['t','¿Qué río atraviesa la ciudad de Madrid?','El Manzanares',['El Tajo','El Guadiana','El Duero'],'El Tajo es el río principal de la comunidad, pero el Manzanares cruza la capital.'],
+ ['t','¿Qué hay en Aranjuez?','Un Palacio Real y jardines',['Un teatro romano','Unas murallas medievales','Una universidad'],'Patrimonio de la Humanidad.'],
+ ['t','¿Qué clima tiene la Comunidad de Madrid?','Continental',['Oceánico','Subtropical','Desértico'],'Grandes contrastes entre invierno y verano, lluvias escasas.']]};
+
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='geo-mesetas-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'Las dos Castillas'],[2,'Extremadura y Madrid']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco </b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente! Mañana lo bordas.':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba de las Mesetas</h2><p>15 preguntas de todas las fichas: comunidades, provincias, ríos, patrimonio y personajes. Nota sobre 10.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),2)));list.push(...wpick(QS.filter(q=>!list.includes(q)),7));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'quien',ico:'¿Quién soy?',n:'¿Quién soy?',d:'Provincias, monumentos y personajes: 3 pistas, cuantas menos uses, más puntos.',best:v=>v+' puntos'},
+{id:'ord',ico:'Ordena',n:'Ordena',d:'Provincias, comunidades y ríos: de más a menos, de mayor a menor.',best:v=>v+(v===1?' error':' errores')},
+{id:'une',ico:'Une',n:'Une parejas',d:'Provincias con su dato, monumentos con su ciudad.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Clasifica contra reloj',d:'¿A qué comunidad pertenece? ¡60 segundos!',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({quien:gQuien,ord:gOrd,une:gUne,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+
+/* ¿Quién soy? */
+const WHO=[['Acueducto de Segovia',['Soy un monumento romano muy famoso.','Estoy en una ciudad de Castilla y León que es Patrimonio de la Humanidad.','Llevo agua desde hace 2000 años en Segovia.']],
+ ['Catedral de Burgos',['Soy un templo gótico impresionante.','Estoy en una ciudad donde el Cid juró a Alfonso VI.','Soy la catedral más famosa de Castilla y León.']],
+ ['Toledo',['Fui capital del reino visigodo.','Soy Patrimonio de la Humanidad desde 1987.','El Greco pintó muchas obras aquí; soy la capital de Castilla-La Mancha.']],
+ ['Las Casas Colgadas',['Estamos en una ciudad con poca población.','Somos un monumento sobre un precipicio, junto al río Júcar.','Estamos en Cuenca, Castilla-La Mancha.']],
+ ['Teatro romano de Mérida',['Soy un monumento de hace 2000 años.','Estoy en la capital de Extremadura.','Soy un teatro romano donde todavía se hacen representaciones.']],
+ ['El Escorial',['Soy un monasterio enorme, Patrimonio de la Humanidad.','Me mandó construir Felipe II.','Estoy en San Lorenzo, cerca de Madrid.']],
+ ['El Cid',['Fui un guerrero medieval muy famoso.','Juré a Alfonso VI en la catedral de Burgos.','Mi nombre completo es Rodrigo Díaz de Vivar.']],
+ ['Isabel la Católica',['Nací en Madrigal de las Altas Torres (Ávila).','Fui reina de Castilla.','Con mi marido Fernando financié el viaje de Colón a América.']],
+ ['Pizarro',['Fui un conquistador español.','Nací en Trujillo, Cáceres.','Conquisté el imperio inca del Perú.']],
+ ['Miguel de Cervantes',['Soy el escritor más famoso de la literatura española.','Nací en Alcalá de Henares, Madrid.','Escribí Don Quijote de la Mancha.']],
+ ['Museo del Prado',['Soy uno de los museos más importantes del mundo.','Albergo obras de Velázquez, Goya y El Bosco.','Estoy en Madrid.']],
+ ['Universidad de Salamanca',['Soy una de las instituciones más antiguas de España.','Mi fachada plateresca es famosa.','Estoy en una ciudad de CyL que es Patrimonio de la Humanidad desde 1988.']]];
+function gQuien(){const R_=shuffle(WHO).slice(0,8);let k=0,pts=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>¿Quién soy?</span><span id="hud">0 puntos</span></div><div id="pb"></div><ol class="clues" id="clues"></ol><div class="actions"><button class="ghost" id="more" type="button">Otra pista</button></div><div class="opts grid" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('quien',pts,false);$('#clues').innerHTML='';$('#opts').innerHTML='';$('#more').hidden=true;$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${pts} puntos de 24`,`${b?'¡Nueva mejor marca! ':''}Con 1 pista ganas 3 puntos; con 2, 2; con 3, 1.`,gQuien);return}
+  const [name,cl]=R_[k];let shown=1,done=false;$('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';
+  const showC=()=>{$('#clues').innerHTML=cl.slice(0,shown).map(c=>`<li>${c}</li>`).join('');$('#more').hidden=shown>=3||done};showC();
+  $('#more').onclick=()=>{if(shown<3){shown++;showC()}};
+  const opts=shuffle([name,...shuffle(WHO.filter(w=>w[0]!==name)).slice(0,3).map(w=>w[0])]);
+  $('#opts').innerHTML=opts.map(o=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${esc(o)}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;if(b.textContent===name){done=true;const g=4-shown;pts+=g;res.push(true);b.classList.add('right');$('#hud').textContent=pts+' puntos';$('#fb').className='fb okk';$('#fb').textContent=`¡Sí, soy ${name}! +${g} ${g===1?'punto':'puntos'}.`}
+   else{b.classList.add('wrong');b.disabled=true;if(shown<3){shown++;showC();$('#fb').className='fb ko';$('#fb').textContent='No. Te doy otra pista.';return}done=true;res.push(false);$('#opts').querySelectorAll('.opt').forEach(x=>{if(x.textContent===name)x.classList.add('right')});$('#fb').className='fb ko';$('#fb').textContent=`Era ${name}.`}
+   $('#opts').querySelectorAll('.opt').forEach(x=>x.disabled=true);shown=3;showC();
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R_.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* Ordena */
+const CRONO=[['Comunidades por número de provincias (de más a menos)',[['Castilla y León','9 provincias'],['Castilla-La Mancha','5 provincias'],['Extremadura','2 provincias'],['Madrid','1 provincia (uniprovincial)']]],
+ ['Provincias de CyL por orden alfabético (primeras 5)',[['Ávila','Murallas medievales'],['Burgos','Catedral gótica'],['León','San Isidoro y Catedral'],['Palencia','Plaza Mayor s. XVII'],['Salamanca','Universidad, Patrimonio']]],
+ ['Patrimonio de la Humanidad (por año de declaración)',[['Segovia','1985 — Acueducto y ciudad vieja'],['Toledo','1987 — Ciudad histórica'],['Salamanca','1988 — Ciudad vieja'],['Alcalá de Henares','1998 — Universidad y barrio histórico']]]];
+function gOrd(){let ki=0,err=0;const L=CRONO;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ordena</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="pool" id="pool"></div><ol class="ladder" id="lad"></ol><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const set=()=>{if(ki>=L.length){const b=setBest('ord',err,true);$('#q').textContent='';$('#pool').innerHTML='';$('#lad').innerHTML='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Recuerda el orden: provincias, comunidades y patrimonio.`,gOrd);return}
+  const [tt,items]=L[ki];let placed=0;$('#q').innerHTML=`${tt}`;$('#lad').innerHTML='';
+  $('#pool').innerHTML=shuffle(items.map((it,i)=>[it[0],i])).map(([t,i])=>`<button class="ev" type="button" data-i="${i}">${t}</button>`).join('');
+  $('#pool').querySelectorAll('.ev').forEach(b=>b.onclick=()=>{if(+b.dataset.i===placed){$('#lad').insertAdjacentHTML('beforeend',`<li><b>${items[placed][0]}</b>${items[placed][1]}</li>`);b.remove();placed++;if(placed===items.length){ki++;setTimeout(set,1100)}}else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}})};set()}
+
+/* Une parejas */
+const DEFS=[['Valladolid','Capital de Castilla y León'],['Toledo','Capital de Castilla-La Mancha'],['Mérida','Capital de Extremadura'],['Duero','Río principal de Castilla y León'],['Guadiana','Río de CLM y Extremadura'],['Manzanares','Río que cruza la ciudad de Madrid'],['Acueducto','Monumento romano de Segovia'],['Casas Colgadas','Monumento de Cuenca'],['Teatro romano','Monumento de Mérida'],['Prado','Museo de Madrid'],['Pizarro','Conquistador de Trujillo'],['Cervantes','Escritor de Alcalá de Henares'],['El Cid','Héroe de Burgos'],['El Greco','Pintor de Toledo'],['El Escorial','Monasterio de Felipe II'],['Monfragüe','Parque natural de Extremadura'],['Salamanca','Universidad Patrimonio Humanidad']];
+const DATOS=[['Badajoz','Provincia más extensa de España'],['CyL','Comunidad más extensa'],['Madrid','Mayor PIB per cápita'],['Extremadura','Menor renta per cápita'],['CLM','Menor densidad de población'],['Segovia','Patrimonio Humanidad 1985'],['Ávila','Murallas medievales'],['Albacete','Navajas y cuchillos'],['Almagro','Corral de Comedias'],['Aranjuez','Palacio Real y jardines'],['Chinchón','Famoso por el anís'],['Valdepeñas','Tierra de viñedos']];
+function gUne(){let mode='def',round=0,err=0;
+ const setup=()=>{round=0;err=0;
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Une parejas</span><span id="hud">Errores: 0</span></div><div class="chips" id="modes"><button type="button" data-m="def" aria-pressed="${mode==='def'}">Nombre y dato</button><button type="button" data-m="obra" aria-pressed="${mode==='obra'}">Lugar y característica</button></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+  $('#modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;setup()});play()};
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has unido 12 parejas.`,setup);return}
+  const pairs=shuffle(mode==='def'?DEFS:DATOS).slice(0,6);
+  $('#q').innerHTML=mode==='def'?`Ronda ${round+1} de 2: une cada nombre con su dato.`:`Ronda ${round+1} de 2: une cada lugar con su característica.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca algo de la columna izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};
+ setup()}
+
+/* Clasifica contra reloj */
+const DECKS={
+prov:{n:'¿A qué comunidad pertenece?',c:['Castilla y León','Castilla-La Mancha','Extremadura','Madrid'],it:[['Valladolid',0],['Burgos',0],['Salamanca',0],['Segovia',0],['Ávila',0],['León',0],['Soria',0],['Toledo',1],['Ciudad Real',1],['Albacete',1],['Cuenca',1],['Guadalajara',1],['Badajoz',2],['Cáceres',2],['Aranjuez',3],['Alcalá de Henares',3]]},
+rio:{n:'¿Qué río?',c:['Duero','Tajo','Guadiana','Manzanares'],it:[['Pisuerga',0],['Carrión',0],['Esla',0],['Tormes',0],['Eresma',0],['Tiétar',1],['Alberche',1],['Jarama',1],['Guadarrama',1],['Záncara',2],['Cigüela',2],['Zújar',2],['Cruza la ciudad de Madrid',3],['Escaso caudal, irregular',3]]},
+patri:{n:'¿De qué comunidad es?',c:['CyL','CLM','Extremadura','Madrid'],it:[['Acueducto de Segovia',0],['Murallas de Ávila',0],['Univ. Salamanca',0],['Catedral de Burgos',0],['Románico de Zamora',0],['Alcázar de Toledo',1],['Casas Colgadas',1],['Molinos de viento',1],['Teatro de Mérida',2],['Puente de Alcántara',2],['Monfragüe',2],['Museo del Prado',3],['El Escorial',3],['Palacio de Aranjuez',3]]}};
+function gCla(){let dk='prov';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length<=4?'grid':''}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Experta en CyL',()=>(S.stars.c1||0)===3],['Experta en CLM',()=>(S.stars.c2||0)===3],['Conoce Extremadura',()=>(S.stars.c3||0)===3],['Madrileña de corazón',()=>(S.stars.c4||0)===3],['Sabia de pistas',()=>(S.games.quien||0)>=18],['Todo en orden',()=>S.games.ord===0],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>

@@ -44,7 +44,8 @@ window.CATALOGO = {
         id: 'mapas-geografia', nombre: 'Mapas y Geografía', tono: 175, apps: [
           { titulo: 'Viaje por España: Tema 2', descripcion: 'Comunidades, provincias, pueblos, ríos, monumentos y personajes en un mapa interactivo, con juegos, prueba y pasaporte de sellos', ruta: 'ale/mapas-geografia/tema2/' },
           { titulo: 'Atlas de Geografía: Temas 1 y 2', descripcion: 'Coordenadas, proyecciones y escalas; relieve, ríos, costas, climas y paisajes de España. Fichas con mapa físico, 8 juegos y prueba', ruta: 'ale/mapas-geografia/temas-1-2/' },
-          { titulo: 'El Relieve: Tema 3', descripcion: 'Estructura de la Tierra, tectónica de placas, formas del relieve, agentes internos y externos, continentes, océanos y sostenibilidad. 6 fichas con dibujos, 4 juegos y prueba', ruta: 'ale/mapas-geografia/tema3/' }
+          { titulo: 'El Relieve: Tema 3', descripcion: 'Estructura de la Tierra, tectónica de placas, formas del relieve, agentes internos y externos, continentes, océanos y sostenibilidad. 6 fichas con dibujos, 4 juegos y prueba', ruta: 'ale/mapas-geografia/tema3/' },
+          { titulo: 'Las Mesetas', descripcion: 'Castilla y León, Castilla-La Mancha, Extremadura y Madrid: provincias, pueblos, ríos, patrimonio y personajes. 4 fichas, 4 juegos y prueba', ruta: 'ale/mapas-geografia/mesetas/' }
         ]
       },
       {
