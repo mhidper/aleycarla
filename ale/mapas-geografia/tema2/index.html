@@ -168,7 +168,7 @@ const PROV={
 /* Comunidades: código -> [nombre, capital, en los apuntes] */
 const CC={'12':['Galicia','Santiago de Compostela',1],'03':['Asturias','Oviedo',1],'06':['Cantabria','Santander',1],'16':['País Vasco','Vitoria',1],'15':['Navarra','Pamplona',1],'17':['La Rioja','Logroño',1],
 '01':['Andalucía','Sevilla',1],'18':['Ceuta','Ceuta',1],'19':['Melilla','Melilla',1],'02':['Aragón','Zaragoza',1],'09':['Cataluña','Barcelona',1],'10':['Comunidad Valenciana','Valencia',1],'14':['Murcia','Murcia',1],'04':['Islas Baleares','Palma',1],
-'07':['Castilla y León','Valladolid',0],'13':['Madrid','Madrid',0],'08':['Castilla-La Mancha','Toledo',0],'11':['Extremadura','Mérida',0],'05':['Canarias','Santa Cruz de Tenerife y Las Palmas de Gran Canaria',0]};
+'07':['Castilla y León','Valladolid',1],'13':['Madrid','Madrid',1],'08':['Castilla-La Mancha','Toledo',1],'11':['Extremadura','Mérida',1],'05':['Canarias','Santa Cruz de Tenerife y Las Palmas de Gran Canaria',0]};
 const HUE={'12':150,'03':200,'06':95,'16':330,'15':20,'17':280,'01':45,'18':0,'19':0,'02':175,'09':5,'10':240,'14':300,'04':60,'07':120,'13':355,'08':30,'11':85,'05':210};
 
 /* Fichas de los apuntes (Tema 2: patrimonio de las comunidades y provincias) */
@@ -235,6 +235,29 @@ const FICHA={
 '04':{loc:'En el Mediterráneo, al este de la Península. Islas: Mallorca, Menorca, Ibiza, Formentera y Cabrera.',uni:true,
  relieve:'Sierra de Tramuntana.',rios:'Apenas hay ríos: torrentes.',clima:'Mediterráneo de costa, húmedo. Encinas, coníferas y matorral.',
  pob:'Mallorca es la isla más poblada.',eco:'Sobre todo turismo. Renta superior a la media.',patr:'Restos megalíticos, Parque Nacional de Cabrera, Castillo de Bellver y Catedral de Palma.'},
+'07':{loc:'En el centro-norte de la Península. Es la comunidad más extensa de España.',
+ prov:{'47':['Capital de la comunidad. Se encuentra en la meseta norte, junto al río Pisuerga.','Patrimonio: Museo Nacional de Escultura.'],'09':['La más extensa de la comunidad. Tiene la catedral gótica más importante de España.','Patrimonio: Catedral de Burgos.'],'37':['Una de las ciudades universitarias más antiguas de Europa.','Patrimonio: Universidad de Salamanca y su plaza mayor.'],'40':['Famosa por su acueducto romano.','Patrimonio: Acueducto de Segovia y Alcázar.'],'05':['Una de las provincias más altas de España. Ciudad amurallada.','Patrimonio: Murallas de Ávila.'],'24':['Tiene Picos de Europa al norte y el río Esla. Fue importante en la Reconquista.','Patrimonio: Catedral de León y San Isidoro.'],'49':['Al oeste, junto a Portugal. Atravesada por el Duero. Poco poblada.','Patrimonio: Catedral de Zamora.'],'34':['En plena meseta, muy llana. Atravesada por el Carrión.','Patrimonio: Iglesia de San Martín de Frómista (Camino de Santiago).'],'42':['La menos poblada de España. Clima muy frío.','Patrimonio: Ermita de San Baudelio.']},
+ relieve:'Al norte, la cordillera Cantábrica; al sur, el Sistema Central; al este, el Sistema Ibérico; al noroeste, los Montes de León. En el centro, la meseta norte.',rios:'El Duero y sus afluentes: Pisuerga, Carrión, Esla, Tormes y Eresma.',clima:'Continental: inviernos muy fríos y largos, veranos cortos y calurosos.',
+ pob:'Muy poca densidad de población. Se concentra en las capitales de provincia.',eco:'Cereales (trigo, cebada) y ganadería ovina. Industria agroalimentaria.',
+ patr:'Catedral de Burgos, Acueducto de Segovia, Universidad de Salamanca, Murallas de Ávila, Catedral de León, Las Médulas.',
+ pers:'Adolfo Suárez, Isabel la Católica, Teresa de Jesús, San Juan de la Cruz, El Cid, Zorrilla, Miguel Delibes.'},
+'08':{loc:'En el centro-sur de la Península, en la meseta sur. Es la tercera comunidad más extensa.',
+ prov:{'45':['Capital de la comunidad. Patrimonio de la Humanidad desde 1986.','Patrimonio: Catedral, Alcázar y casco histórico.'],'13':['En plena llanura manchega. Tiene Almadén, con sus minas de mercurio.','Patrimonio: Minas de Almadén, Tablas de Daimiel.'],'02':['Al sureste, es la más industrial de la comunidad. Feria de la Navaja.','Patrimonio: Catedral de Albacete.'],'16':['Famosa por las Casas Colgadas y la Ciudad Encantada.','Patrimonio: Ciudad histórica fortificada de Cuenca.'],'19':['Paisaje de monte y páramo. Es la menos poblada de la comunidad.','Patrimonio: Palacio del Infantado.']},
+ relieve:'Los Montes de Toledo dividen la comunidad; al sur, Sierra Morena. Tierras llanas en la meseta sur.',rios:'El Guadiana, el Júcar y el Tajo.',clima:'Continental con influencia mediterránea: inviernos fríos y veranos muy calurosos.',
+ pob:'La comunidad de menor densidad de población de la Península. Muy despoblada en el interior.',eco:'Viñedo (Valdepeñas), aceite y cereales. Minas de mercurio en Almadén y petroquímica en Puertollano.',
+ patr:'Toledo, Patrimonio de la Humanidad. Ciudad Encantada de Cuenca, Casas Colgadas, Tablas de Daimiel, Molinos de viento de Campo de Criptana.',
+ pers:'Espartero, Garcilaso de la Vega, Fernando de Rojas, El Greco.'},
+'11':{loc:'En el suroeste de la Península, junto a Portugal.',
+ prov:{'06':['La provincia más extensa de España. Muy llana, con dehesas y ganadería.','Patrimonio: Teatro romano de Mérida, Alcazaba árabe.'],'10':['Su capital es Patrimonio de la Humanidad (casco antiguo medieval).','Patrimonio: Ciudad vieja de Cáceres.']},
+ relieve:'Al norte, el Sistema Central (sierra de Gata); en el centro, los Montes de Toledo; al sur, Sierra Morena.',rios:'El Guadiana y su afluente el Zújar. El Tajo pasa por el norte.',clima:'Mediterráneo continental: inviernos suaves y veranos muy calurosos.',
+ pob:'Poca densidad de población. Última comunidad en renta per cápita (15 457 €).',eco:'Ganadería (cerdo ibérico y ovino), cerezas del Valle del Jerte, corcho y energía solar.',
+ patr:'Teatro romano de Mérida, Ciudad vieja de Cáceres, Monasterio de Guadalupe, Parque Nacional de Monfragüe.',
+ pers:'Zurbarán, Espronceda, Pizarro, Hernán Cortés, Vasco Núñez de Balboa.'},
+'13':{loc:'En el centro de la Península. Es uniprovincial y la comunidad más poblada en proporción a su tamaño.',uni:true,
+ relieve:'Sierra de Guadarrama y Somosierra al norte y noroeste. En el centro y sur, llanura.',rios:'El Tajo y sus afluentes: Manzanares, Jarama, Henares y Guadarrama.',clima:'Continental de meseta: inviernos fríos y veranos muy calurosos.',
+ pob:'Más de 6 millones de habitantes. Es la comunidad con el mayor PIB per cápita de España.',eco:'Servicios, administración, finanzas, tecnología y turismo. Principal centro económico del país.',
+ patr:'Museo del Prado, Palacio Real, Monasterio de El Escorial, Universidad de Alcalá de Henares, Paisaje Cultural de Aranjuez.',extra:[['Pueblos con fama','Aranjuez, Alcalá de Henares, Chinchón, San Lorenzo de El Escorial']],
+ pers:'Cervantes, Quevedo, Calderón de la Barca, Larra, Benavente, Ortega y Gasset.'},
 };
 
 /* Pueblos de los apuntes: [pueblo, provincia, por qué es famoso] */
@@ -262,6 +285,10 @@ const PUEBLOS=[
 ['Gandía','46','la playa'],['Sagunto','46','sus restos romanos y la siderurgia'],['Villarreal','12','el fútbol'],['Peñíscola','12','el Papa Luna'],
 ['Lorca','30','su pasado medieval'],['Cartagena','30','el submarino'],['Jumilla','30','el vino'],['Caravaca de la Cruz','30','la Cruz'],['Puerto Lumbreras','30','el paso de Andalucía a Levante'],
 ['Manacor','07','Rafa Nadal'],['Ibiza','07','las vacaciones'],
+['Medina del Campo','47','su castillo y la feria'],['Tordesillas','47','el Tratado de Tordesillas'],['Aranda de Duero','09','el vino ribera del Duero'],['Miranda de Ebro','09','la industria y el Ebro'],['Béjar','37','la industria textil y la nieve'],['Ciudad Rodrigo','37','la frontera con Portugal'],['La Granja de San Ildefonso','40','el palacio y los jardines'],['Ponferrada','24','el castillo templario y Las Médulas'],['Astorga','24','su catedral y el palacio de Gaudí'],['Toro','49','el vino'],['Benavente','49','el castillo'],['Ágreda','42','la frontera con Aragón'],['El Burgo de Osma','42','su catedral'],
+['Almadén','13','las minas de mercurio'],['Puertollano','13','la petroquímica'],['Campo de Criptana','13','los molinos de viento'],['Valdepeñas','13','el vino'],['Tomelloso','13','el vino y el alcohol'],['Consuegra','45','los molinos y el azafrán'],['Talavera de la Reina','45','la cerámica'],['Sigüenza','19','su catedral y su castillo'],['Cuenca','16','las Casas Colgadas'],
+['Plasencia','10','su catedral y su mercado'],['Trujillo','10','la cuna de Pizarro'],['Guadalupe','10','su monasterio'],['Zafra','06','la «Sevilla chica»'],['Jerez de los Caballeros','06','Vasco Núñez de Balboa'],['Don Benito','06','la agricultura'],
+['Aranjuez','28','el palacio y los jardines'],['Alcalá de Henares','28','la cuna de Cervantes'],['Chinchón','28','su plaza y el anís'],['San Lorenzo de El Escorial','28','el monasterio'],['Torrejón de Ardoz','28','la base aérea'],
 ];
 /* Monumentos y lugares: [lugar, provincia] */
 const LUGARES=[
@@ -269,13 +296,21 @@ const LUGARES=[
 ['La Giralda y la Torre del Oro','41'],['Alcazaba y Museo Picasso','29'],['El Torcal','29'],['La Alhambra','18'],['El Mulhacén','18'],['La Mezquita-Catedral','14'],['Parque Nacional de Doñana','21'],['Gruta de las Maravillas','21'],['La Constitución de 1812, «La Pepa»','11'],['Nacimiento del Guadalquivir (Cazorla)','23'],['Úbeda y Baeza, Patrimonio de la Humanidad','23'],['Cultivos bajo plástico','04'],
 ['Basílica del Pilar','50'],['Monasterio de Piedra','50'],['Los Amantes de Teruel','44'],['Parque Nacional de Ordesa','22'],['Montserrat y la Sagrada Familia','08'],['Monasterio de Poblet','43'],['Barrio judío y Catedral de Gerona','17'],
 ['Ciudad de las Artes y las Ciencias','46'],['Lonja de la Seda','46'],['Teatro romano de Sagunto','46'],['Dama de Elche','03'],['Museo Salzillo','30'],['Castillo de Bellver','07'],['Parque Nacional de Cabrera','07'],['Murallas Reales','51'],['Monte Gurugú','52'],
+['Catedral de Burgos','09'],['Acueducto de Segovia','40'],['Universidad de Salamanca','37'],['Murallas de Ávila','05'],['Catedral de León','24'],['Las Médulas','24'],
+['Toledo, Patrimonio de la Humanidad','45'],['Casas Colgadas de Cuenca','16'],['Molinos de Campo de Criptana','13'],['Tablas de Daimiel','13'],
+['Teatro romano de Mérida','06'],['Ciudad vieja de Cáceres','10'],['Monasterio de Guadalupe','10'],['Parque Nacional de Monfragüe','10'],
+['Museo del Prado','28'],['Palacio Real de Madrid','28'],['Monasterio de El Escorial','28'],['Universidad de Alcalá de Henares','28'],
 ];
 /* Personajes de los apuntes: [persona, comunidad] */
 const PERS=[['Rosalía de Castro','12'],['Emilia Pardo Bazán','12'],['Valle-Inclán','12'],['Camilo José Cela','12'],['Concepción Arenal','12'],['María Pita','12'],
 ['Clarín','03'],['Jovellanos','03'],['Campoamor','03'],['Menéndez Pelayo','06'],['Gerardo Diego','06'],['Juan de la Cosa','06'],['Torres Quevedo','06'],
 ['Unamuno','16'],['Pío Baroja','16'],['Juan Sebastián Elcano','16'],['Blas de Lezo','16'],['San Ignacio de Loyola','16'],['San Francisco Javier','15'],['Pablo Sarasate','15'],['Gonzalo de Berceo','17'],
 ['Velázquez','01'],['Murillo','01'],['Bécquer','01'],['Antonio Machado','01'],['Picasso','01'],['María Zambrano','01'],['Federico García Lorca','01'],['Mariana Pineda','01'],['Rafael Alberti','01'],['Manuel de Falla','01'],['Juan Ramón Jiménez','01'],['Séneca','01'],['Góngora','01'],['Averroes','01'],
-['Joaquín Costa','02'],['Ramón J. Sender','02'],['Dalí','09'],['Gaudí','09'],['Miró','09'],['General Prim','09'],['Sorolla','10'],['Blasco Ibáñez','10'],['Miguel Hernández','10'],['Floridablanca','14']];
+['Joaquín Costa','02'],['Ramón J. Sender','02'],['Dalí','09'],['Gaudí','09'],['Miró','09'],['General Prim','09'],['Sorolla','10'],['Blasco Ibáñez','10'],['Miguel Hernández','10'],['Floridablanca','14'],
+['Adolfo Suárez','07'],['Isabel la Católica','07'],['Teresa de Jesús','07'],['El Cid','07'],['Miguel Delibes','07'],['San Juan de la Cruz','07'],['Zorrilla','07'],
+['Espartero','08'],['Garcilaso de la Vega','08'],['Fernando de Rojas','08'],['El Greco','08'],
+['Zurbarán','11'],['Espronceda','11'],['Pizarro','11'],['Hernán Cortés','11'],['Vasco Núñez de Balboa','11'],
+['Cervantes','13'],['Quevedo','13'],['Calderón de la Barca','13'],['Larra','13'],['Benavente','13'],['Ortega y Gasset','13']];
 /* Preguntas de relieve, ríos y costumbres: [pregunta, comunidad correcta, explicación] */
 const RELQ=[
 ['¿Dónde está el Macizo Galaico?','12','En Galicia.'],['¿Qué comunidad tiene Rías Altas y Rías Bajas?','12','Galicia: costa de acantilados y rías.'],['¿Dónde está la «Costa da Morte»?','12','En Galicia; se llama así por los naufragios.'],['¿Por qué comunidad pasan el Miño y el Sil?','12','Galicia.'],
@@ -286,7 +321,11 @@ const RELQ=[
 ['¿Dónde se unen al Ebro el Cinca, el Gállego y el Jalón?','02','En Aragón.'],['¿Qué comunidad tiene el Pirineo, la depresión del Ebro y la sierra de Albarracín?','02','Aragón.'],
 ['¿Dónde están Montserrat y el Montseny?','09','En la cordillera Costero-Catalana, Cataluña.'],['¿Dónde desemboca el Ebro?','09','En Cataluña (Tarragona).'],['¿Por qué comunidad pasan el Llobregat y el Ter?','09','Cataluña.'],
 ['¿Dónde está la Albufera?','10','En Valencia, Comunidad Valenciana.'],['¿Por qué comunidad pasan el Júcar, el Turia y el Mijares?','10','La Comunidad Valenciana.'],
-['¿Qué comunidad tiene la depresión del Segura y es de las más secas de España?','14','Murcia.'],['¿Dónde está el Mar Menor?','14','En Murcia.'],['¿Dónde está la Sierra de Tramuntana?','04','En Mallorca, Islas Baleares.'],['¿Qué comunidad no tiene ríos, solo torrentes?','04','Las Islas Baleares.']];
+['¿Qué comunidad tiene la depresión del Segura y es de las más secas de España?','14','Murcia.'],['¿Dónde está el Mar Menor?','14','En Murcia.'],['¿Dónde está la Sierra de Tramuntana?','04','En Mallorca, Islas Baleares.'],['¿Qué comunidad no tiene ríos, solo torrentes?','04','Las Islas Baleares.'],
+['¿Qué comunidad tiene al norte la cordillera Cantábrica, al sur el Sistema Central y al este el Sistema Ibérico?','07','Castilla y León.'],['¿Por qué comunidad pasa el río Duero?','07','Castilla y León.'],['¿Dónde están los afluentes Pisuerga, Esla y Tormes?','07','En Castilla y León, afluentes del Duero.'],['¿Qué comunidad es la más extensa de España?','07','Castilla y León.'],
+['¿Dónde están los Montes de Toledo y las tierras llanas de la meseta sur?','08','En Castilla-La Mancha.'],['¿Qué comunidad tiene la menor densidad de población de la Península?','08','Castilla-La Mancha.'],['¿Por qué comunidad pasan el Guadiana y el Júcar?','08','Castilla-La Mancha.'],
+['¿Qué comunidad está en el suroeste, junto a Portugal, con la provincia más extensa de España?','11','Extremadura.'],['¿Dónde está el Parque Nacional de Monfragüe?','11','En Extremadura (Cáceres).'],['¿Por qué comunidad pasa el Guadiana y su afluente el Zújar?','11','Extremadura.'],
+['¿Dónde están la sierra de Guadarrama y Somosierra?','13','En la Comunidad de Madrid.'],['¿Qué comunidad uniprovincial tiene más de 6 millones de habitantes?','13','La Comunidad de Madrid.'],['¿Por qué comunidad pasan el Manzanares y el Jarama?','13','La Comunidad de Madrid, afluentes del Tajo.']];
 const COSTUMBRES=[['Hórreo','Casa típica','12'],['Caserío','Casa típica','16'],['Masía','Casa típica','09'],['Barraca','Casa típica','10'],['Cortijo','Casa típica','01'],['Muñeira','Baile','12'],['Sardana','Baile','09'],['Jota','Baile','02'],['Sevillanas','Baile','01'],['Euskera','Lengua','16'],['Gallego','Lengua','12'],['Catalán','Lengua','09'],['Valenciano','Lengua','10']];
 
 /* Resumen de cada comunidad en una frase (sale arriba de la ficha) */
@@ -304,7 +343,11 @@ const IDEA={
 '09':'En el noreste, entre los Pirineos y el Mediterráneo: la segunda comunidad más poblada, muy industrial, con Barcelona y Gaudí.',
 '10':'Mirando al Mediterráneo: costa llena de gente y de turismo, huertas, la Albufera y fiestas como las Hogueras.',
 '14':'En el sureste y de las más secas de España: huertas junto al río Segura y el Mar Menor.',
-'04':'Islas del Mediterráneo (Mallorca, Menorca, Ibiza, Formentera y Cabrera) que viven sobre todo del turismo.'};
+'04':'Islas del Mediterráneo (Mallorca, Menorca, Ibiza, Formentera y Cabrera) que viven sobre todo del turismo.',
+'07':'La comunidad más extensa de España: nueve provincias en la meseta norte, con el Duero, catedrales e inviernos muy fríos.',
+'08':'En la meseta sur, entre los Montes de Toledo y Sierra Morena: la tierra de los molinos de viento, el viñedo de Valdepeñas y la menor densidad de población peninsular.',
+'11':'Junto a Portugal, en el suroeste: dehesas, cerdo ibérico, el teatro romano de Mérida y la cuna de los conquistadores.',
+'13':'Uniprovincial y la más poblada en proporción a su tamaño: más de 6 millones de personas, con el Prado, el Palacio Real y El Escorial.'};
 
 const $=s=>document.querySelector(s);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
