@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Primeras civilizaciones</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#f1ebe2; --paper:#fdfbf7; --grid:#e6dccd; --ink:#2a1d12; --muted:#76624f; --line:#dccfbd;
+  --marker:#b0302a; --marker-soft:#fbe3df; --ok:#17734a; --ok-soft:#ddf2e6; --btn:#2a1d12; --btn-fg:#fdfbf7; --chip:#ffffff;
+  --star:#d9a400; --geo:#9a5a1a;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15100b; --paper:#1f1812; --grid:#2c231a; --ink:#f0e6da; --muted:#b9a690; --line:#3a2f24;
+  --marker:#e0645a; --marker-soft:#3d1a16; --ok:#4fc68c; --ok-soft:#17332a; --btn:#f0e6da; --btn-fg:#15100b; --chip:#261d15;
+  --star:#ffd23f; --geo:#e0a060; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15100b; --paper:#1f1812; --grid:#2c231a; --ink:#f0e6da; --muted:#b9a690; --line:#3a2f24;
+  --marker:#e0645a; --marker-soft:#3d1a16; --ok:#4fc68c; --ok-soft:#17332a; --btn:#f0e6da; --btn-fg:#15100b; --chip:#261d15;
+  --star:#ffd23f; --geo:#e0a060; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;margin:0}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.nav-links{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.link-app{font-size:.88rem;color:var(--geo);text-decoration:none;font-weight:700;border:1.5px solid var(--line);background:var(--chip);padding:4px 10px;border-radius:8px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.15em;margin-left:.15em}
+header p{margin:.35em 0 0;color:var(--muted);max-width:56ch}
+.score{display:flex;align-items:center;gap:6px;font:800 1.4rem var(--f-display);font-variant-numeric:tabular-nums}.score svg{width:28px;height:28px}
+.tabs{display:flex;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:700 .95rem var(--f-body);padding:10px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--btn);color:var(--btn-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--geo);color:var(--paper);border-color:var(--geo)}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.sheet{position:relative;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(30,20,10,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-right:56px}
+h2{font:800 1.35rem var(--f-display);margin:0;text-wrap:balance}
+h3{font:800 1.05rem var(--f-display);margin:0}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 16px;cursor:pointer}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.note{font-size:.9rem;color:var(--muted);margin:0}
+.theme-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 -4px;flex-wrap:wrap}.theme-head h2{font-size:1.2rem;color:var(--geo)}.theme-head span{font-size:.85rem;color:var(--muted);font-weight:700}
+.path{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.path li{position:relative;padding-left:58px;padding-block:6px}
+.path li::before{content:"";position:absolute;left:21px;top:0;bottom:0;border-left:3px dotted var(--line)}
+.path li:first-child::before{top:50%}.path li:last-child::before{bottom:50%}
+.stop{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.stop:hover{border-color:var(--muted)}.stop b{font:800 1.05rem var(--f-display);display:block}.stop small{color:var(--muted);font-size:.88rem;display:block}
+.dot{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 .95rem var(--f-display);background:var(--paper);border:3px solid var(--geo);color:var(--geo)}
+.dot.done{background:var(--geo);color:var(--paper)}
+.stars{display:flex;gap:2px;flex:none}.stars svg{width:20px;height:20px}
+.st-on{fill:var(--star)}.st-off{fill:none;stroke:var(--line);stroke-width:2}
+.chuleta{border:2px solid var(--geo)}
+.chuleta summary{cursor:pointer;font:800 1.15rem var(--f-display);color:var(--geo);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chuleta summary::-webkit-details-marker{display:none}
+.chuleta summary::after{content:"Abrir";font:700 .85rem var(--f-body);color:var(--muted);border:1.5px solid var(--line);border-radius:8px;padding:3px 10px}
+.chuleta[open] summary::after{content:"Cerrar"}
+.chuleta[open] summary{margin-bottom:10px}
+.idea{margin:0;background:var(--paper);border:2px solid var(--geo);border-radius:12px;padding:12px 14px;font-size:1.08rem;line-height:1.45}
+.idea span{display:block;font:700 1.35rem var(--f-hand);color:var(--geo);line-height:1;margin-bottom:4px}
+.blk{display:flex;flex-direction:column;gap:8px}
+.bh{font:800 1rem var(--f-display);margin:2px 0 0}
+.bxs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.bx{background:var(--chip);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column;gap:3px;font-size:.96rem;line-height:1.42}
+.bx>b{font:800 1.02rem var(--f-display)}.bx i{color:var(--muted)}
+.nums{display:flex;flex-wrap:wrap;gap:8px}.num{flex:1 1 150px;background:var(--chip);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column}
+.num b{font:800 1.5rem var(--f-display);color:var(--geo);font-variant-numeric:tabular-nums}.num span{font-size:.9rem;color:var(--muted)}
+.ej{border:2px dashed var(--marker);border-radius:12px;padding:10px 14px;background:var(--marker-soft)}
+.ejl{font:700 1.35rem var(--f-hand);color:var(--marker);line-height:1}.ej p{margin:4px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}.tags span{background:var(--chip);border:1.5px solid var(--geo);border-radius:999px;padding:4px 12px;font-size:.92rem}
+.truco{background:var(--marker-soft);border-radius:10px;padding:10px 12px;margin:0}.truco>b:first-child{font-family:var(--f-hand);font-size:1.4rem;color:var(--marker);margin-right:6px}
+.ill{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.ill svg{width:100%;max-width:520px;height:auto;display:block;border-radius:12px}
+.ill figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+.q{font-size:1.12rem;font-weight:700;margin:0;line-height:1.45}
+.prompt{font:800 1.22rem var(--f-display);margin:0;text-wrap:balance;line-height:1.3}
+.prompt small{display:block;font:400 .95rem var(--f-body);color:var(--muted);margin-top:2px}
+.opts{display:flex;flex-direction:column;gap:8px}.opts.two{flex-direction:row}.opts.two .opt{flex:1;text-align:center;font-weight:700}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr}.opts.three{display:grid;grid-template-columns:repeat(3,1fr)}.opts.three .opt{text-align:center;font-weight:700}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--muted)}.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}.opt.wrong{border-color:var(--marker);background:var(--marker-soft)}.opt:disabled{cursor:default}
+.exp{border-top:2px solid var(--ink);padding-top:10px;margin:0}
+.verdict{font-weight:700;margin:0}.verdict.b{color:var(--ok)}.verdict.mm{color:var(--marker)}
+.stamp{position:absolute;top:10px;right:14px;font-family:var(--f-hand);font-size:3.4rem;line-height:1;transform:rotate(-8deg);pointer-events:none}.stamp.b{color:var(--ok)}.stamp.mm{color:var(--marker)}
+.pbar{display:flex;gap:5px}.pbar i{flex:1;height:6px;border-radius:3px;background:var(--line)}.pbar i.okk{background:var(--ok)}.pbar i.ko{background:var(--marker)}.pbar i.on{background:var(--ink)}
+.bigstars{display:flex;gap:8px;justify-content:center}.bigstars svg{width:56px;height:56px}
+@media (prefers-reduced-motion:no-preference){.bigstars svg.anim{animation:pop .45s ease-out both}.bigstars svg:nth-child(2){animation-delay:.15s}.bigstars svg:nth-child(3){animation-delay:.3s}}
+@keyframes pop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.grade{font-family:var(--f-hand);color:var(--marker);font-size:4.4rem;line-height:1;border:3px solid var(--marker);border-radius:50%;width:140px;height:110px;display:grid;place-items:center;transform:rotate(-6deg);margin:6px 0 10px}
+.fb{min-height:1.5em;margin:0;font-weight:700}.fb.okk{color:var(--ok)}.fb.ko{color:var(--marker)}
+.end{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}.end p{margin:0}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{text-align:left;display:flex;flex-direction:column;gap:6px;background:var(--chip);border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;color:var(--ink);font:inherit}
+.gcard:hover{border-color:var(--muted)}.gcard .ico{font:800 1.5rem var(--f-hand);color:var(--marker);line-height:1}
+.gcard b{font:800 1.08rem var(--f-display)}.gcard small{color:var(--muted)}.gcard .best{font-size:.82rem;color:var(--ok);font-weight:700}
+.hud{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}.timer i{display:block;height:100%;background:var(--marker);transition:width .2s linear}
+.bigq{font:800 1.3rem var(--f-display);text-align:center;min-height:3.4em;display:grid;place-items:center;margin:0;text-wrap:balance;border-radius:10px;padding:4px}
+.flash-ok{animation:fok .4s}.flash-ko{animation:fko .4s}@keyframes fok{from{background:var(--ok-soft)}}@keyframes fko{from{background:var(--marker-soft)}}
+.pool{display:flex;flex-direction:column;gap:8px}
+.ev{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.ev.shake{border-color:var(--marker);animation:shake .35s}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.ladder li{background:var(--ok-soft);border-radius:8px;padding:6px 10px}.ladder li b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ok)}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{background:var(--chip);border:1px solid var(--line);border-left:5px solid var(--geo);border-radius:8px;padding:8px 12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}.match .col{display:flex;flex-direction:column;gap:8px}
+.mt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 .95rem var(--f-body);padding:9px 10px;border-radius:10px;cursor:pointer;min-height:48px}
+.mt.shake{border-color:var(--marker);animation:shake .35s}
+.mt.sel{border-color:var(--geo);background:var(--grid);font-weight:700}.mt.done{border-color:var(--ok);background:var(--ok-soft);cursor:default;opacity:.75}
+.progress{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:16px}.progress h2{font-size:1.15rem;margin:0 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:4px 10px 4px 6px;font-size:.85rem;font-weight:700;color:var(--muted)}.badge.got{color:var(--ink);border-color:var(--star)}.badge svg{width:22px;height:22px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.9rem;color:var(--muted)}
+.rbtn{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:8px;font:700 .9rem var(--f-body);padding:7px 12px;cursor:pointer;margin-left:6px}
+.rbtn:disabled{opacity:.45;cursor:default}.rbtn.danger{background:var(--marker);border-color:var(--marker);color:var(--paper)}
+.rconf{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;color:var(--ink);font-weight:700}
+.qlist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}.qlist li{display:flex;gap:10px;align-items:baseline}.qlist b{font-family:var(--f-hand);font-size:1.5rem;width:1.2em;flex:none}
+svg text{font-family:var(--f-body)}
+@media (max-width:460px){header h1{font-size:1.65rem}.opts.grid,.opts.three{grid-template-columns:1fr}.stamp{font-size:2.8rem}.match{gap:6px}.mt{font-size:.88rem;padding:8px}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-links"><a class="back" href="../../../#ale/geografia-historia">← Historia de Ale</a><a class="link-app" href="../tema3-animado/">▶ Ver las fichas animadas</a></div>
+  <header>
+    <div><h1>Primeras civilizaciones <span>Tema 3</span></h1>
+    <p>Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos y colonizadores: fichas con reto, juegos y prueba.</p></div>
+    <div class="score" id="score" aria-label="Estrellas"></div>
+  </header>
+  <div class="tabs" role="group" aria-label="Sección">
+    <button id="tEst" aria-pressed="true">Estudiar</button>
+    <button id="tJue" aria-pressed="false">Juegos</button>
+    <button id="tPru" aria-pressed="false">Prueba</button>
+  </div>
+  <main id="main"></main>
+  <section class="progress" id="progress"></section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STARP='<path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/>';
+const star=(on,cls='')=>`<svg viewBox="0 0 24 24" class="${on?'st-on':'st-off'} ${cls}" aria-hidden="true">${STARP}</svg>`;
+const C={ro:'#b0302a',az:'#1e6fd9',ve:'#17734a',na:'#b8860b',ma:'#8a5a2b',gr:'#6a5d7a',mo:'#c0127e'};
+const T=(x,y,t,o='')=>`<text x="${x}" y="${y}" ${/text-anchor/.test(o)?'':'text-anchor="middle"'} ${o}>${t}</text>`;
+
+/* =================== DIBUJOS =================== */
+const LB='font-size="10" font-weight="700" fill="#6a5d4f"';
+const DR={
+creciente:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f3e7c9"/>
+ <path d="M0 0 H200 Q180 34 136 52 Q90 64 0 80 Z" fill="#a9d0ec"/><path d="M128 120 L160 200 H178 L142 118 Z" fill="#a9d0ec"/><path d="M300 170 Q350 160 420 184 V200 H312 Z" fill="#a9d0ec"/>
+ <path d="M100 92 Q122 40 210 36 Q300 32 330 162" stroke="#2f9e5c" stroke-width="28" fill="none" stroke-linecap="round" opacity=".35"/>
+ <path d="M98 200 Q106 146 96 104 Q94 84 104 70" stroke="#2f7fd1" stroke-width="4" fill="none"/><path d="M312 36 Q334 84 342 122 Q346 148 328 170" stroke="#2f7fd1" stroke-width="4" fill="none"/><path d="M226 44 Q250 92 290 128 Q312 150 324 170" stroke="#2f7fd1" stroke-width="4" fill="none"/>
+ ${T(60,30,'Mar Mediterráneo','font-size="10" font-style="italic" fill="#21528c"')}${T(80,140,'Nilo','font-size="10" font-weight="700" fill="#21528c"')}${T(370,96,'Tigris','font-size="10" font-weight="700" fill="#21528c"')}${T(232,96,'Éufrates','font-size="10" font-weight="700" fill="#21528c" text-anchor="end"')}
+ ${T(48,176,'EGIPTO','font-size="10" font-weight="800" fill="#8a3b12"')}${T(312,110,'MESOPOTAMIA','font-size="8.5" font-weight="800" fill="#8a3b12"')}
+ <circle cx="322" cy="164" r="5" fill="#8a3b12"/>${T(372,154,'Sumer','font-size="10" font-weight="800" fill="#8a3b12"')}
+ ${T(210,22,'Creciente Fértil','font-size="14" font-weight="800" fill="#17734a"')}`}),
+linea:()=>{const P=[['Sumer','3500','1.ª civilización','#8a3b12'],['Acad','2334','Sargón I','#7a3f9e'],['Babilonia','1894','Hammurabi','#1e6fd9'],['Asiria','1365','Assurbanipal','#a33b2b'],['Persia','553','Ciro II','#17734a']];
+ return{vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f8f2e6"/><line x1="16" y1="100" x2="404" y2="100" stroke="#3a2f24" stroke-width="3"/><path d="M404 100 l-10 -6 v12 z" fill="#3a2f24"/>
+ ${P.map(([n,d,p,c],i)=>{const x=50+80*i,up=i%2===0;return`<circle cx="${x}" cy="100" r="8" fill="${c}"/><rect x="${x-38}" y="${up?28:116}" width="76" height="56" rx="8" fill="#fff" stroke="${c}" stroke-width="2"/>${T(x,up?50:138,n,`font-size="13" font-weight="800" fill="${c}"`)}${T(x,up?65:153,d+' a. C.','font-size="9.5" fill="#6a5d4f"')}${T(x,up?78:166,p,'font-size="9.5" font-weight="700" fill="#b0302a"')}`}).join('')}
+ ${T(210,194,'Sumerios → acadios → babilonios → asirios → persas',LB)}`}},
+zigurat:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#eef3f7"/><rect y="160" width="420" height="40" fill="#e3cf9f"/>
+ <polygon points="40,160 250,160 236,128 54,128" fill="#bfa075" stroke="#5a3d1b" stroke-width="2"/><polygon points="70,128 220,128 208,98 82,98" fill="#cca97d" stroke="#5a3d1b" stroke-width="2"/><polygon points="100,98 190,98 182,74 108,74" fill="#dcba8c" stroke="#5a3d1b" stroke-width="2"/><rect x="130" y="54" width="30" height="20" fill="#ffe29b" stroke="#7a5528" stroke-width="2"/><line x1="145" y1="160" x2="145" y2="74" stroke="#7a5528" stroke-width="5"/>
+ ${T(145,46,'santuario','font-size="10" font-weight="700" fill="#8a3b12"')}
+ <rect x="290" y="96" width="20" height="64" fill="#c49a68" stroke="#7a5528" stroke-width="2"/><rect x="370" y="96" width="20" height="64" fill="#c49a68" stroke="#7a5528" stroke-width="2"/>
+ ${[[-30,-4],[-22,-22],[-8,-32],[8,-32],[22,-22],[30,-4]].map(([dx,dy])=>`<rect x="${340+dx-8}" y="${92+dy}" width="16" height="12" rx="2" fill="#d9b17d" stroke="#7a5528" stroke-width="1.4"/>`).join('')}<path d="M334 50 H346 L344 62 H336 Z" fill="#b0302a"/>
+ ${T(340,40,'arco (clave)','font-size="10" font-weight="700" fill="#b0302a"')}${T(145,184,'Zigurat de ladrillo y adobe','font-size="10.5" font-weight="700" fill="#5a3d1b"')}${T(340,184,'Arco y bóveda','font-size="10.5" font-weight="700" fill="#5a3d1b"')}`}),
+nilo:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#efdcae"/><rect width="420" height="18" fill="#a9d0ec"/>
+ <polygon points="210,54 176,16 244,16" fill="#7fbf5a" opacity=".6"/><path d="M226 200 C216 170 240 150 222 120 C206 96 228 76 210 54" stroke="#7fbf5a" stroke-width="24" fill="none" opacity=".6"/>
+ <path d="M226 200 C216 170 240 150 222 120 C206 96 228 76 210 54" stroke="#2f7fd1" stroke-width="5" fill="none"/><path d="M210 54 L182 16 M210 54 L210 16 M210 54 L238 16" stroke="#2f7fd1" stroke-width="3" fill="none"/>
+ <circle cx="208" cy="66" r="5" fill="#8a3b12"/>${T(196,70,'Menfis','font-size="10" font-weight="800" fill="#8a3b12" text-anchor="end"')}
+ ${[[164,100],[178,103],[192,100]].map(([x,y],i)=>`<polygon points="${x-9+i},${y} ${x+9-i},${y} ${x},${y-14+i*2}" fill="#e3bd7c" stroke="#684a1e"/>`).join('')}${T(178,114,'Gizeh','font-size="9" fill="#684a1e"')}
+ <circle cx="232" cy="150" r="5" fill="#8a3b12"/>${T(244,154,'Tebas · Valle de los Reyes','font-size="10" font-weight="800" fill="#8a3b12" text-anchor="start"')}
+ ${T(320,40,'BAJO EGIPTO (norte, delta)','font-size="10" font-weight="800" fill="#17734a"')}${T(110,186,'ALTO EGIPTO (sur)','font-size="10" font-weight="800" fill="#17734a"')}
+ ${T(70,120,'Desierto','font-size="10" font-style="italic" fill="#76624f"')}${T(350,110,'Desierto','font-size="10" font-style="italic" fill="#76624f"')}${T(370,190,'↑ el Nilo va al norte','font-size="9" fill="#21528c"')}`}),
+balanza:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#fbf8f1"/><rect x="206" y="40" width="8" height="120" fill="#8a6330"/><rect x="170" y="158" width="80" height="10" rx="3" fill="#8a6330"/>
+ <line x1="120" y1="40" x2="300" y2="40" stroke="#d9a400" stroke-width="6" stroke-linecap="round"/><circle cx="210" cy="40" r="6" fill="#8a6330"/>
+ <path d="M130 40 L108 96 M130 40 L152 96 M290 40 L268 96 M290 40 L312 96" stroke="#8a6330" stroke-width="1.5"/><path d="M104 96 Q130 112 156 96 Z" fill="#d9a400"/><path d="M264 96 Q290 112 316 96 Z" fill="#d9a400"/>
+ <path d="M130 94 C120 82 122 74 130 80 C138 74 140 82 130 94 Z" fill="#c0392b"/><path d="M290 94 Q280 76 292 60 Q298 78 290 94 Z" fill="#fff" stroke="#999"/>
+ ${T(130,130,'corazón','font-size="11" font-weight="800" fill="#c0392b"')}${T(290,130,'pluma de Maat','font-size="11" font-weight="800" fill="#8a3b12"')}
+ ${T(210,190,'El Juicio de Osiris: si el corazón no pesa más que la pluma, a los campos de Aaru',LB)}`}),
+tumbas:()=>{const G=[['Mastaba','3000 a. C.',`<polygon points="-34,30 34,30 24,-8 -24,-8" fill="#d9b477" stroke="#684a1e" stroke-width="2"/><line x1="0" y1="30" x2="0" y2="50" stroke="#222" stroke-width="4"/><rect x="-9" y="46" width="18" height="9" fill="#5a3d1b"/>`],['Escalonada','2600 a. C.',[[70,18],[54,6],[38,-6],[22,-18]].map(([w,y])=>`<rect x="${-w/2}" y="${y}" width="${w}" height="12" fill="#e3bd7c" stroke="#684a1e" stroke-width="1.5"/>`).join('')],['Pirámide','2500 a. C.',`<polygon points="-44,30 44,30 0,-44" fill="#e8c68c" stroke="#684a1e" stroke-width="2"/><path d="M-8 24 L8 6 L-4 -4 L6 -18" stroke="#4a3010" stroke-width="2.5" fill="none"/>`],['Hipogeo','1500 a. C.',`<path d="M-42 30 L-42 -10 Q-10 -50 42 -24 L42 30 Z" fill="#c49e68" stroke="#684a1e" stroke-width="2"/><rect x="-32" y="8" width="12" height="22" fill="#1b120c"/><path d="M-22 18 H12 V30" stroke="#1b120c" stroke-width="6" fill="none"/><rect x="6" y="24" width="16" height="8" fill="#f5d061"/>`]];
+ return{vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#eef3f7"/><rect y="140" width="420" height="60" fill="#e3cf9f"/>${G.map(([n,d,g],i)=>`<g transform="translate(${60+100*i} 110)">${g}${T(0,-58,n,'font-size="12" font-weight="800" fill="#8a3b12"')}${T(0,-46,d,'font-size="9.5" fill="#6a5d4f"')}</g>${i<3?`<path d="M${104+100*i} 120 h12" stroke="#b0302a" stroke-width="2.5"/><path d="M${118+100*i} 120 l-6 -4 v8 z" fill="#b0302a"/>`:''}`).join('')}${T(210,190,'Cada vez más grandes… y al final, escondidas en la roca',LB)}`}},
+cartuchos:()=>{const P=[['Osiris','dios del más allá','#17734a'],['Akhenatón','dios Atón','#d9a400'],['Nefertiti','el busto','#1e4f94'],['Tutankamón','faraón niño','#b8860b'],['Ramsés II','Qadesh','#b0302a'],['Cleopatra VII','última reina','#7a3f9e']];
+ return{vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#f8ecd2"/>${P.map(([n,d,c],i)=>{const x=72+138*(i%3),y=52+86*Math.floor(i/3);return`<rect x="${x-60}" y="${y-30}" width="120" height="60" rx="30" fill="#fff" stroke="${c}" stroke-width="3"/><line x1="${x+60}" y1="${y-22}" x2="${x+60}" y2="${y+22}" stroke="${c}" stroke-width="5"/>${T(x-2,y-2,n,`font-size="13" font-weight="800" fill="${c}"`)}${T(x-2,y+14,d,'font-size="9.5" fill="#6a5d4f"')}`}).join('')}${T(210,194,'Los nombres de los faraones se escribían dentro de un cartucho',LB)}`}},
+barco:()=>({vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#cfe6f5"/><path d="M0 150 Q60 140 120 150 T240 150 V200 H0 Z" fill="#a9d0ec"/>
+ <path d="M30 140 H190 L170 166 H50 Z" fill="#7a4a28" stroke="#4a2e10" stroke-width="2"/><line x1="110" y1="140" x2="110" y2="56" stroke="#5a3d1b" stroke-width="3"/><path d="M112 60 L160 130 H112 Z" fill="#8e2a7a"/><path d="M190 140 Q204 132 200 120" stroke="#4a2e10" stroke-width="4" fill="none"/>
+ ${T(110,186,'Barco fenicio con vela de púrpura','font-size="10" font-weight="700" fill="#21528c"')}
+ <rect x="254" y="30" width="150" height="138" rx="10" fill="#fff" stroke="#8a3b12" stroke-width="2"/>${T(329,52,'Alfabeto: 22 signos','font-size="12" font-weight="800" fill="#8a3b12"')}
+ <text x="290" y="112" font-size="38" font-weight="700" text-anchor="middle" fill="#b0302a" font-family="Georgia,serif" transform="rotate(-90 290 98)">A</text><text x="366" y="112" font-size="38" font-weight="700" text-anchor="middle" fill="#1e4f94" font-family="Georgia,serif">A</text><path d="M312 98 H340" stroke="#3a2f24" stroke-width="2"/><path d="M344 98 l-7 -4 v8 z" fill="#3a2f24"/>
+ ${T(290,140,'fenicio','font-size="10" font-weight="700" fill="#b0302a"')}${T(366,140,'griego/latino','font-size="10" font-weight="700" fill="#1e4f94"')}${T(329,158,'solo consonantes','font-size="9.5" fill="#6a5d4f"')}`}),
+castro:()=>({vb:'0 0 420 200',s:`<rect width="210" height="200" rx="8" fill="#eef5ec"/><rect x="210" width="210" height="200" rx="8" fill="#fbf1e2"/>
+ <path d="M10 200 Q105 70 200 200 Z" fill="#b9a46f"/><ellipse cx="105" cy="140" rx="64" ry="20" fill="none" stroke="#7a6a3a" stroke-width="3" stroke-dasharray="6 3"/>
+ ${[[76,140],[105,132],[134,140],[90,154],[120,155]].map(([x,y])=>`<rect x="${x-10}" y="${y-10}" width="20" height="10" fill="#a07850"/><path d="M${x-13} ${y-10} L${x} ${y-24} L${x+13} ${y-10} Z" fill="#d9c27a" stroke="#9a8340"/>`).join('')}
+ ${T(105,26,'Castro celta','font-size="14" font-weight="800" fill="#17734a"')}${T(105,44,'en alto · casas redondas · sin calles','font-size="9.5" fill="#3a2f24"')}
+ <rect x="244" y="62" width="144" height="116" fill="#e9d6b0" stroke="#7a5528" stroke-width="4"/>${Array.from({length:12},(_,i)=>`<rect x="${254+(i%4)*34}" y="${72+Math.floor(i/4)*36}" width="24" height="24" fill="#d9b17d" stroke="#7a5528" stroke-width="1.2"/>`).join('')}
+ ${T(316,26,'Oppidum ibero','font-size="14" font-weight="800" fill="#8a3b12"')}${T(316,44,'muralla · calles ordenadas','font-size="9.5" fill="#3a2f24"')}`}),
+colonias:()=>{const sy=y=>Math.round(y*.84+8);const P='60,40 200,30 300,45 330,70 300,110 290,150 260,190 200,215 140,215 90,200 60,150 50,90'.split(' ').map(p=>{const[x,y]=p.split(',').map(Number);return`${x+20},${sy(y)}`}).join(' ');
+ const C=[['Gadir',100,203,'#b0302a',-6,-9],['Malaka',158,214,'#b0302a',-6,-10],['Sexi',188,214,'#b0302a',6,-10],['Abdera',216,212,'#b0302a',16,-10],['Emporion',318,58,'#1e6fd9',30,14],['Rhode',326,48,'#1e6fd9',-24,-4],['Ebusus',338,142,'#b8860b',-4,18],['Carthago Nova',262,188,'#b8860b',-44,-6]];
+ return{vb:'0 0 420 200',s:`<rect width="420" height="200" rx="8" fill="#cfe6f5"/><polygon points="${P}" fill="#efdcae" stroke="#9a7a40" stroke-width="2"/><ellipse cx="378" cy="${sy(114)}" rx="15" ry="8" fill="#efdcae" stroke="#9a7a40"/><ellipse cx="358" cy="${sy(142)}" rx="7" ry="5" fill="#efdcae" stroke="#9a7a40"/>
+ ${C.map(([n,x,y,c,dx,dy])=>`<circle cx="${x+20}" cy="${sy(y)}" r="5" fill="${c}" stroke="#fff" stroke-width="1.5"/>${T(x+20+dx,sy(y)+dy,n,`font-size="10" font-weight="800" fill="${c}"`)}`).join('')}
+ <rect x="6" y="6" width="120" height="44" rx="6" fill="#fff" stroke="#9a7a40"/>${T(66,20,'● Fenicios','font-size="9.5" font-weight="700" fill="#b0302a"')}${T(66,32,'● Griegos','font-size="9.5" font-weight="700" fill="#1e6fd9"')}${T(66,44,'● Cartagineses','font-size="9.5" font-weight="700" fill="#b8860b"')}`}}
+};
+function svgOf(key,label){const d=DR[key]();return`<figure class="ill"><svg viewBox="${d.vb}" role="img" aria-label="${esc(label)}">${d.s}</svg>${label?`<figcaption>${label}</figcaption>`:''}</figure>`}
+
+/* =================== FICHAS =================== */
+const ST=[
+{id:'m1',t:1,n:'Ríos, regadío y primeras ciudades',s:'El Creciente Fértil, Mesopotamia y las ciudades-estado',
+ idea:'Las primeras civilizaciones nacieron junto a <b>grandes ríos</b>. En <b>Mesopotamia</b> («tierra entre ríos»), entre el <b>Tigris</b> y el <b>Éufrates</b>, el riego dio <b>excedentes</b>, y con ellos nacieron las <b>primeras ciudades</b> en Sumer, en el <b>IV milenio a. C.</b>',
+ fig:()=>svgOf('creciente','El Creciente Fértil, de Egipto a Mesopotamia'),
+ b:[{k:'cards',h:'El lugar',it:[['Creciente Fértil','Franja de tierra desde el <b>Nilo</b> hasta el <b>Tigris</b>, el <b>Éufrates</b> y el golfo Pérsico. Agua dulce y cereales: la <b>cuna de la agricultura</b> y de la civilización mediterránea.',C.ve],['Mesopotamia','«<b>Tierra entre ríos</b>» (nombre griego). Hoy es Irak y partes de Siria, Turquía e Irán. Tierras <b>llanas y fértiles</b>.',C.az],['El problema','Las <b>crecidas</b> del Tigris y el Éufrates eran <b>violentas, irregulares e impredecibles</b>, en un clima semiárido.',C.ro]]},
+ {k:'chips',h:'Ingeniería hidráulica',it:['Canales de irrigación: llevan el agua lejos de la orilla','Diques y presas: frenan las crecidas y guardan agua','Drenajes: sacan el agua sobrante (y evitan la sal)']},
+ {k:'cards',h:'La revolución urbana',it:[['Excedentes','Con el riego se producía <b>más comida</b> de la que necesitaban los campesinos.',C.na],['Especialización','Ya no todos trabajaban la tierra: <b>artesanos, comerciantes, sacerdotes, soldados y burócratas</b>. Creció el <b>comercio</b>.',C.na],['Ciudades-estado','Primeras ciudades en <b>Sumer</b>: <b>Ur, Uruk, Lagash, Umma, Eridu, Nippur</b>. Cada una independiente, con su gobierno, ejército, leyes y dios. Luchaban por el agua y las tierras.',C.mo],['Cómo era una ciudad','<b>Muralla</b> de adobe; dentro, el <b>templo (zigurat)</b>, el palacio y los talleres; fuera, los <b>campos</b> y las casas de los campesinos.',C.mo]]}],
+ truco:'La cadena del tema: <b>río → riego → excedentes → oficios y comercio → ciudades</b>. Si te preguntan por qué nacieron las ciudades, cuenta la cadena en orden.'},
+{id:'m2',t:1,n:'Los pueblos de Mesopotamia',s:'Sumer, Acad, Babilonia, Asiria y Persia, y sus reyes',
+ idea:'Durante 3000 años se sucedieron en Mesopotamia <b>cinco pueblos</b>: <b>sumerios, acadios, babilonios, asirios y persas</b>. Recuerda cada uno por su rey: <b>Sargón I</b>, <b>Hammurabi</b>, <b>Assurbanipal</b> y <b>Ciro II</b>.',
+ fig:()=>svgOf('linea','Línea del tiempo de Mesopotamia'),
+ b:[{k:'cards',h:'Los cinco pueblos',it:[['Sumer (3500-2334 a. C.)','La <b>primera civilización</b>: escritura y primeras ciudades (Ur, Uruk, Lagash, Umma, Nippur). Bases de la astronomía, las matemáticas y el urbanismo.',C.ma],['Acad (2334-2193 a. C.)','Hacia el 2300 a. C. el rey <b>Sargón I</b> acabó con la supremacía de las ciudades sumerias y <b>unificó Mesopotamia</b>.',C.gr],['Babilonia (1894-1595 a. C.)','El rey <b>Hammurabi</b> creó un gran imperio y el <b>Código de Hammurabi</b>, uno de los conjuntos de leyes más antiguos.',C.az],['Asiria (1365-611 a. C.)','Dominaron Mesopotamia, Armenia y el norte de Siria y llegaron hasta Egipto. Esplendor con <b>Assurbanipal</b>. <b>Caldeos</b> y <b>persas</b> acabaron con su imperio.',C.ro],['Persia (553-330 a. C.)','<b>Ciro II el Grande</b> conquistó Babilonia en el <b>539 a. C.</b>: Mesopotamia pasó a ser una <b>satrapía</b> (provincia) del Imperio persa.',C.ve]]},
+ {k:'cards',h:'Personajes',it:[['Hammurabi','Rey de Babilonia (1792-1750 a. C.). Su código (h. 1754 a. C.) está en acadio y en cuneiforme, en una estela del <b>Louvre</b>: el dios <b>Shamash</b> le da el poder. Ley del <b>Talión</b>: «ojo por ojo, diente por diente».',C.az],['Nabucodonosor II','Rey del <b>Imperio neobabilónico</b>. Reconstruyó Babilonia con el zigurat de <b>Etemenanki</b>; la leyenda le atribuye los <b>Jardines Colgantes</b> para su esposa Amyitis. Reinó más de 40 años. Verdi le dedicó la ópera <i>Nabucco</i>.',C.az],['Ciro II el Grande','Fundó el <b>Imperio persa (aqueménida)</b>. Dejó volver a más de 40 000 hebreos a Palestina, puso <b>sátrapas</b> en cada provincia y creó el <b>primer correo imperial</b>. Castigó al río Gyndes dividiéndolo en 360 canales.',C.ve],['Jerjes I','Rey persa durante dos décadas, hijo de Darío I. En la II Guerra Médica venció a Leónidas en las <b>Termópilas</b>, pero los griegos lo derrotaron en <b>Salamina</b> y Platea. Murió asesinado.',C.ve]]}],
+ truco:'Orden de los pueblos: «<b>Su-A-Ba-A-Pe</b>» → <b>Su</b>merios, <b>A</b>cadios, <b>Ba</b>bilonios, <b>A</b>sirios, <b>Pe</b>rsas.'},
+{id:'m3',t:1,n:'Sociedad, escritura, dioses y arte',s:'Del rey al esclavo, la cuneiforme y el zigurat',
+ idea:'Una sociedad muy <b>desigual</b> (del rey a los esclavos) que inventó la <b>escritura cuneiforme</b>, adoraba a muchos dioses y construía con <b>ladrillo</b>: zigurats, arcos y bóvedas.',
+ fig:()=>svgOf('zigurat','El zigurat y el arco'),
+ b:[{k:'cards',h:'La pirámide social',it:[['1. Rey','Poder político, militar y judicial ilimitado. Gobernaba como representante de los dioses (no era un dios).',C.na],['2. Sacerdotes y aristocracia','Dirigían el culto, guardaban el grano de los templos, controlaban el comercio y cobraban tributos.',C.mo],['3. Escribas y burócratas','Dominaban la escritura y el cálculo.',C.ma],['4. Pueblo llano','Campesinos, pastores, artesanos y comerciantes: la gran mayoría. Pagaban impuestos.',C.gr],['5. Esclavos','Prisioneros de guerra o deudores, sin derechos: canteras, obras públicas y servicio doméstico.',C.ro]]},
+ {k:'ej',h:'La escritura',t:'Nació para <b>llevar las cuentas</b> del templo y del palacio (grano, ganado, impuestos). Primero fue <b>pictográfica</b> (dibujos, finales del IV milenio a. C.); hacia el <b>3500 a. C.</b>, los escribas sumerios crearon la <b>cuneiforme</b>: signos en forma de <b>cuña</b> hechos con un <b>cálamo</b> sobre <b>tablillas de arcilla</b> húmeda, que luego se cocían en hornos.'},
+ {k:'chips',h:'Religión politeísta: dioses con defectos humanos y grandes poderes',it:['Anu: el cielo','Enlil: el viento','Ishtar (Inanna): amor y guerra','Marduk: dios supremo de Babilonia','Assur: dios de los asirios']},
+ {k:'cards',h:'Arte: el triunfo del ladrillo',it:[['Materiales','Casi sin piedra ni madera: <b>adobe</b> (barro secado al sol) y <b>ladrillo cocido</b>, cubierto con cerámica vidriada y relieves.',C.ma],['Arco y bóveda','Sus dos grandes inventos: cubrir espacios enormes sin llenarlos de columnas.',C.ma],['Zigurat','Torre en <b>pirámide escalonada</b> de terrazas. Arriba, el santuario: los sacerdotes observaban los astros, guardaban tesoros y hacían sacrificios.',C.ma],['Escultura','Estatuas <b>orantes</b> como las de <b>Gudea de Lagash</b>: frontales, rígidas y con ojos muy abiertos. <b>Relieves en estelas</b> con guerras y cacerías.',C.ma]]}],
+ truco:'Mesopotamia es <b>barro</b>: escribían en barro (tablillas) y construían con barro (adobe y ladrillo).'},
+{id:'e1',t:2,n:'El Nilo y las etapas de Egipto',s:'El don del Nilo, Narmer y los tres imperios',
+ idea:'Egipto, «el <b>don del Nilo</b>», nació hacia el <b>3000 a. C.</b> en un valle estrecho entre desiertos. <b>Narmer</b> lo unificó y su historia se divide en <b>Imperio Antiguo, Medio y Nuevo</b> y la <b>Época Tardía y Ptolemaica</b>.',
+ fig:()=>svgOf('nilo','El valle del Nilo'),
+ b:[{k:'cards',h:'El Nilo',it:[['Valle entre desiertos','Franja estrecha rodeada por los desiertos del <b>Sáhara</b> y de <b>Libia</b>, que la protegían. El Nilo es el río más largo del planeta. Heródoto: «el <b>don del Nilo</b>».',C.az],['Crecida y limo','En <b>verano</b>, la crecida inundaba el valle; en <b>otoño</b> quedaba el <b>limo negro</b>, muy fértil: grandes cosechas con poco esfuerzo.',C.az],['Ciencia','<b>Astronomía</b>: calendario solar de <b>12 meses y 365 días</b>. <b>Geometría</b>: volver a medir los campos tras cada inundación.',C.az],['Alto y Bajo Egipto','<b>Alto</b>: el sur, valle estrecho entre montañas. <b>Bajo</b>: el norte, el delta que desemboca en el Mediterráneo.',C.ve]]},
+ {k:'cards',h:'Las etapas',it:[['Unificación (h. 3000 a. C.)','<b>Narmer</b> (Menes) unió el Alto y el Bajo Egipto: primer faraón, con la <b>doble corona</b>.',C.mo],['Imperio Antiguo (2635-2154 a. C.)','Capital <b>Menfis</b>. En la IV dinastía, las <b>pirámides de Gizeh</b> (Keops, Kefrén y Micerinos), una de las siete maravillas.',C.mo],['Imperio Medio (2040-1785 a. C.)','Capital <b>Tebas</b>. Comercio con Oriente Medio y Nubia. Acabó con la invasión de los <b>hicsos</b>, con carros de combate.',C.mo],['Imperio Nuevo (1554-1080 a. C.)','Expansión hasta el Éufrates. <b>Ramsés II</b> frenó a los hititas en <b>Qadesh</b>. Templos de <b>Luxor</b> y <b>Karnak</b> y <b>Valle de los Reyes</b>. Decadencia por los Pueblos del Mar y los asirios.',C.mo],['Tardía y Ptolemaica (713-31 a. C.)','<b>Alejandro Magno</b> conquistó Egipto (332 a. C.) y su general Ptolomeo fundó una dinastía. Tras <b>Cleopatra VII</b> (30 a. C.), provincia de <b>Roma</b>.',C.mo]]}],
+ truco:'<b>A-M-N</b>: Antiguo = <b>Menfis y pirámides</b>; Medio = <b>Tebas e hicsos</b>; Nuevo = <b>Ramsés II y Valle de los Reyes</b>.'},
+{id:'e2',t:2,n:'Sociedad y religión egipcias',s:'El faraón-dios, las momias y el Juicio de Osiris',
+ idea:'Una pirámide social <b>rígida</b>, con el <b>faraón</b> como dios en la cima, y una religión centrada en la <b>vida después de la muerte</b>: momias y Juicio de Osiris.',
+ fig:()=>svgOf('balanza','El Juicio de Osiris'),
+ b:[{k:'cards',h:'La pirámide social',it:[['1. Faraón','Dueño de todas las tierras, jefe del ejército y <b>encarnación del dios Horus</b>. Sus órdenes eran leyes sagradas.',C.na],['2. Altos funcionarios','Gobernadores y generales: administraban los <b>nomos</b> (provincias).',C.mo],['3. Sacerdotes','Casta hereditaria muy rica; guardianes del saber científico y religioso.',C.mo],['4. Escribas','Inventariaban los graneros, cobraban impuestos y registraban las órdenes del faraón.',C.ma],['5. Campesinos, artesanos y mercaderes','Los campesinos eran el <b>85 %</b>: entregaban gran parte de la cosecha y, en la inundación, trabajaban gratis en los monumentos.',C.gr],['6. Esclavos','Prisioneros de guerra. Eran <b>pocos</b>: tareas domésticas y minas.',C.ro]]},
+ {k:'chips',h:'Dioses: politeísmo con cuerpos humanos y cabezas de animal',it:['Ra: el sol','Amón: luz y aire (Amón-Ra)','Isis: maternidad y magia','Horus: halcón, protector de la realeza','Anubis: chacal, muerte y embalsamadores','Osiris: dios del más allá']},
+ {k:'ej',h:'La vida después de la muerte',t:'El alma, el <b>Ka</b>, vivía en el reino de <b>Osiris</b> si: <b>1)</b> se <b>conservaba el cuerpo</b>, con la momificación (vísceras en <b>vasos canopos</b>, <b>sal de natrón</b> para secar, <b>resinas</b> y <b>vendas de lino</b>), y <b>2)</b> se superaba el <b>Juicio de Osiris</b>: el corazón se pesaba frente a la <b>pluma de Maat</b>; si no pesaba más, iba a los campos de <b>Aaru</b>.'}],
+ truco:'Para el más allá, <b>dos condiciones</b>: el <b>cuerpo</b> (momia) y el <b>corazón</b> (juicio). Cuerpo + corazón = vida eterna.'},
+{id:'e3',t:2,n:'El arte egipcio',s:'Colosalismo, tumbas, número de oro y canon de perfil',
+ idea:'Arte <b>colosal</b> y casi sin cambios en 3000 años, al servicio del faraón y de la eternidad: <b>piedra</b>, techos planos y tumbas cada vez más seguras.',
+ fig:()=>svgOf('tumbas','Evolución de las tumbas egipcias'),
+ b:[{k:'cards',h:'Arquitectura',it:[['Colosalismo','Obras gigantescas para mostrar el poder eterno del faraón.',C.ma],['Inmovilismo','Las técnicas apenas cambiaron en tres milenios.',C.ma],['Materiales','Casas de <b>adobe y caña</b> (no se conservan); templos y tumbas de <b>piedra</b>, para la eternidad.',C.ma],['Adintelada','Techos planos: <b>no conocían el arco ni la bóveda</b>. Capiteles con forma de plantas: <b>papiriformes, lotiformes y palmiformes</b>.',C.ma]]},
+ {k:'cards',h:'Evolución de las tumbas',it:[['Mastaba (3000 a. C.)','Tronco de pirámide con capilla de ofrendas y la estatua del difunto; el sarcófago, en un <b>pozo</b>.',C.mo],['Pirámide escalonada (2600 a. C.)','Mastabas superpuestas: símbolo del poder del faraón en el más allá.',C.mo],['Pirámide (2500 a. C.)','Base cuadrada, galerías, cámaras y <b>trampas</b> para proteger el tesoro. Ej.: <b>Gizeh</b>.',C.mo],['Hipogeo (1500 a. C.)','Tumba <b>excavada en la roca</b>, desde el Imperio Nuevo. Ej.: <b>Valle de los Reyes</b>.',C.mo]]},
+ {k:'ej',h:'El número de oro',t:'En la pirámide de <b>Keops</b>, si divides la altura del triángulo de una cara (186,07) entre la mitad de la base (115), sale <b>1,618</b>: el número <b>phi</b> o número de oro. Es su uso en arquitectura más antiguo que se conoce.'},
+ {k:'cards',h:'Escultura y pintura',it:[['Escultura','Ley de la <b>frontalidad</b> y simetría: cuerpos rígidos, brazos pegados, rostro sin expresión y mirada al infinito.',C.az],['Canon de perfil','Cabeza, brazos y piernas de perfil; <b>ojo y torso de frente</b>.',C.az],['Colores y tamaños','Colores <b>planos</b>, sin sombras. <b>Perspectiva jerárquica</b>: el tamaño depende de la importancia social.',C.az]]}],
+ truco:'Tumbas en orden: «<b>Ma-Es-Pi-Hi</b>» (mastaba, escalonada, pirámide, hipogeo): cada vez más altas… y al final, escondidas en la roca.'},
+{id:'e4',t:2,n:'Personajes de Egipto',s:'Osiris, Akhenatón, Nefertiti, Tutankamón, Ramsés II y Cleopatra',
+ idea:'Dioses, faraones y reinas con historias de película: el mito de <b>Osiris</b>, el faraón reformador <b>Akhenatón</b>, la bella <b>Nefertiti</b>, el faraón niño <b>Tutankamón</b>, el gran <b>Ramsés II</b> y la última reina, <b>Cleopatra</b>.',
+ fig:()=>svgOf('cartuchos','Seis personajes de Egipto'),
+ b:[{k:'cards',h:'Mitos y faraones',it:[['Osiris y Seth','Hijos de Ra. <b>Seth</b>, por envidia, mató a su hermano <b>Osiris</b> y esparció sus restos. <b>Isis</b> los recompuso y lo devolvió a la vida: Osiris se hizo dios de los muertos y <b>símbolo de resurrección</b>.',C.ve],['Akhenatón (Amenofis IV)','Reforma religiosa casi <b>monoteísta</b>: impuso el culto al dios sol <b>Atón</b> en lugar de Amón. Se cambió el nombre y llevó la capital de Tebas a una ciudad nueva, <b>Akhetatón</b> (Tell al-Amarna). Arte más <b>humano y naturalista</b>.',C.na],['Nefertiti','Reina de la XVIII dinastía, esposa de Akhenatón, de gran belleza. Desapareció de los documentos de golpe: ¿muerte, caída en desgracia o gobierno con otro nombre? Su <b>busto</b> tiene el cuello alargado.',C.az],['Tutankamón','El <b>faraón niño</b> (1336-1327 a. C.), probablemente hijo de Akhenatón. Devolvió el culto a <b>Amón</b> y la capital a <b>Tebas</b>. Murió a los 18 años. <b>Howard Carter</b> halló su tumba intacta en <b>1922</b>.',C.mo],['Ramsés II','Hijo de Seti I. Luchó contra los <b>hititas</b> y firmó con ellos el <b>primer tratado de paz conocido</b>. Llevó la capital a Tanis, en el delta. Con él Egipto llegó a su mayor extensión. Vivió 93 años.',C.ro],['Cleopatra VII','Última soberana de la dinastía ptolemaica (69-30 a. C.); reinó desde los 16 años. Aliada de <b>Julio César</b> (con quien tuvo a Cesarión) y de <b>Marco Antonio</b>. Murió tras la derrota de <b>Actium</b>. Hablaba siete idiomas.',C.gr]]}],
+ truco:'<b>Amón ↔ Atón</b>: Akhenatón cambió Amón por Atón; su hijo Tutankamón volvió a Amón… ¡y lo lleva en el nombre: Tutank-<b>amón</b>!'},
+{id:'p1',t:3,n:'Fenicios y hebreos',s:'El alfabeto y el único Dios',
+ idea:'Dos pueblos pequeños con aportaciones enormes: los <b>fenicios</b>, comerciantes del mar, crearon el <b>alfabeto</b>; los <b>hebreos</b>, el <b>monoteísmo</b>.',
+ fig:()=>svgOf('barco','Fenicios: barcos y alfabeto'),
+ b:[{k:'cards',h:'Los fenicios',it:[['Dónde','Costa del actual <b>Líbano</b> (y partes de Siria e Israel), desde h. 3000 a. C. Con montañas detrás, se volcaron al mar.',C.ro],['Cómo se organizaban','<b>Ciudades-estado</b> independientes: <b>Tiro, Sidón, Biblos</b>, Arados y Ugarit. Reyes limitados por un consejo de ricos mercaderes.',C.ro],['Factorías y colonias','<b>Factoría</b>: almacén en la costa para comerciar con los pueblos de la zona, sin quedarse. <b>Colonia</b>: ciudad nueva para vivir, como <b>Cartago</b> (Túnez) o <b>Gadir</b> (Cádiz).',C.ro],['Comercio','Vendían vidrio, joyas y tejidos teñidos de <b>púrpura</b> (del caracol <b>murex</b>) a cambio de plata, oro, cobre y estaño.',C.ro],['El alfabeto','A finales del II milenio a. C.: <b>22 signos</b> que representan sonidos consonantes. Fácil y rápido; base de los alfabetos <b>griego</b> y <b>latino</b>.',C.ro]]},
+ {k:'cards',h:'Los hebreos',it:[['Origen','Tribus de <b>pastores seminómadas</b> del sur de Mesopotamia. Hacia el <b>2000 a. C.</b>, con el patriarca <b>Abraham</b>, fueron a <b>Canaán</b> (Palestina).',C.az],['Egipto y Moisés','Cautiverio en Egipto. Según la Biblia, <b>Moisés</b> («salvado de las aguas») los liberó tras las <b>10 plagas</b>, cruzó el <b>mar Rojo</b> y los guio 40 años hacia la Tierra Prometida.',C.az],['Esplendor','Siglo X a. C.: reyes <b>David</b> y <b>Salomón</b> (Templo de Jerusalén). Después, dos reinos: <b>Israel</b> (norte) y <b>Judá</b> (sur). Los invadieron babilonios, persas, macedonios y romanos.',C.az],['Monoteísmo','Un <b>único Dios</b>, Yahvé, invisible y sin imágenes. Textos sagrados: la <b>Torá</b>. Base del <b>judaísmo, el cristianismo y el islam</b>.',C.az]]}],
+ truco:'<b>Fenicios → letras</b> (el alfabeto). <b>Hebreos → fe</b> (un solo Dios). Unos nos dejaron cómo escribir y otros, una forma de creer.'},
+{id:'p2',t:3,n:'Tartessos, celtas e iberos',s:'Argantonio, el Carambolo, castros, oppida y la Dama de Elche',
+ idea:'En la Península, en el I milenio a. C.: la rica y misteriosa <b>Tartessos</b> en el suroeste y, después, dos grandes áreas: <b>celtas</b> (norte, centro y oeste) e <b>iberos</b> (sur y costa mediterránea).',
+ fig:()=>svgOf('castro','Castro celta y oppidum ibero'),
+ b:[{k:'cards',h:'Tartessos',it:[['Dónde y cuándo','Sur y suroeste de la Península, desde el inicio del I milenio a. C., «más allá de las <b>Columnas de Hércules</b>» (el estrecho de Gibraltar).',C.na],['Riqueza','Agricultura, ganado y sobre todo <b>minas</b> de Sierra Morena y Huelva (oro, plata, cobre, hierro). Allí llegaba la ruta atlántica del <b>estaño</b>. Leyes en verso en tablas de bronce.',C.na],['Argantonio','Rey legendario (670-550 a. C.), «<b>hombre de plata</b>». Según Heródoto vivió 120 años y reinó 87: quizá fue una dinastía.',C.na],['El final','Hacia el <b>500 a. C.</b> desapareció de forma misteriosa (¿los cartagineses? ¿crisis internas?).',C.na],['Tesoro del Carambolo','Hallado en <b>1958</b> en <b>Camas</b> (Sevilla): <b>21 piezas de oro</b> de 24 quilates. Hoy, en el Museo Arqueológico de Sevilla.',C.mo],['Mito de Gerión','Gigante de tres cuerpos que vivía en <b>Eritia</b> (Cádiz) con su perro Ortro y sus bueyes rojos. <b>Hércules</b> lo venció en su décimo trabajo; de su sangre nació un <b>drago</b>.',C.mo]]},
+ {k:'cards',h:'Celtas e iberos',it:[['Celtas','Norte, centro y oeste. <b>Indoeuropeos</b> de Europa central: vacceos, vettones, lusitanos, astures, cántabros. <b>Castros</b> en alto, con casas <b>redondas</b> de paja y sin calles. Ganaderos, buenos herreros y joyeros. <b>Sin escritura</b>.',C.ve],['Iberos','Sur y costa mediterránea. Pueblos de aquí: turdetanos, bastetanos, contestanos, edetanos, ilergetes. <b>Oppida</b> con calles. Moneda, comercio, trigo, vid y olivo. <b>Con escritura</b>. Obra cumbre: la <b>Dama de Elche</b> (s. V a. C.).',C.ma],['Celtíberos','En el valle del Duero se mezclaron: <b>metalurgia celta</b> y <b>urbanismo ibero</b>.',C.gr]]}],
+ truco:'<b>C</b>eltas → <b>c</b>astros con <b>c</b>asas <b>c</b>irculares. <b>I</b>beros → <b>i</b>ncluyen calles, monedas y escritura.'},
+{id:'p3',t:3,n:'Las colonizaciones',s:'Fenicios, griegos y cartagineses en la Península',
+ idea:'Atraídos por los <b>metales</b>, llegaron tres pueblos: <b>fenicios</b> (s. IX a. C.), <b>griegos</b> y <b>cartagineses</b> (s. VI a. C.). Fundaron colonias y trajeron inventos que cambiaron la Península.',
+ fig:()=>svgOf('colonias','Colonias en la península Ibérica'),
+ b:[{k:'cards',h:'Los tres colonizadores',it:[['Fenicios (s. IX a. C.)','Desde <b>Tiro</b>, por el norte de África. Colonias: <b>Gadir</b> (Cádiz), <b>Malaka</b> (Málaga), <b>Sexi</b> (Almuñécar) y <b>Abdera</b> (Adra). Trajeron la minería a gran escala, el <b>torno de alfarero</b>, el hierro, el <b>alfabeto</b>, el <b>olivo</b> y la <b>vid</b>.',C.ro],['Griegos (s. VI a. C.)','De Asia Menor y los Balcanes, al <b>noreste</b>: <b>Emporion</b> (Ampurias) y <b>Rhode</b> (Rosas). Trajeron la <b>moneda</b>, avances en arte y arquitectura y extendieron la escritura.',C.az],['Cartagineses (s. VI a. C.)','Herederos de los fenicios tras la caída de Tiro. Primero, comercio desde <b>Ebusus</b> (Ibiza); luego, <b>conquista</b> para conseguir metales y soldados contra <b>Roma</b>. Fundaron <b>Carthago Nova</b> (Cartagena).',C.na]]},
+ {k:'ej',h:'Por qué vinieron',t:'Por la enorme <b>riqueza en metales</b> de la Península (plata, oro, cobre, estaño). El contacto con ellos transformó a los pueblos de aquí, sobre todo a los <b>iberos</b>.'}],
+ truco:'Nombres antiguos y actuales: <b>Gadir</b> = Cádiz, <b>Malaka</b> = Málaga, <b>Emporion</b> = Ampurias, <b>Ebusus</b> = Ibiza, <b>Carthago Nova</b> = Cartagena. ¡Se parecen!'},
+];
+function blocksHTML(s){return s.b.map(B=>{const h=B.h?`<h3 class="bh">${B.h}</h3>`:'';
+ if(B.k==='cards')return`<section class="blk">${h}<div class="bxs">${B.it.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></section>`;
+ if(B.k==='ej')return`<section class="ej"><span class="ejl">${B.h}</span><p>${B.t}</p></section>`;
+ if(B.k==='chips')return`<section class="blk">${h}<div class="tags">${B.it.map(x=>`<span>${x}</span>`).join('')}</div></section>`;
+ return''}).join('')}
+const CHULETA=[['Mesopotamia','«Tierra entre ríos» (Tigris y Éufrates). Riego → excedentes → ciudades-estado en Sumer (Ur, Uruk, Lagash), IV milenio a. C.',C.az],
+ ['Pueblos de Mesopotamia','Sumer (1.ª civilización) → Acad (Sargón I unifica) → Babilonia (Hammurabi y su código) → Asiria (Assurbanipal) → Persia (Ciro II, 539 a. C.).',C.az],
+ ['Sociedad y cultura','Rey > sacerdotes > escribas > pueblo llano > esclavos. Escritura cuneiforme en tablillas. Dioses: Anu, Enlil, Ishtar, Marduk, Assur. Zigurat, arco y bóveda.',C.az],
+ ['El Nilo','«Don del Nilo». Crecida en verano, limo negro en otoño. Calendario de 365 días. Alto Egipto (sur) y Bajo Egipto (norte, delta).',C.mo],
+ ['Etapas de Egipto','Narmer (h. 3000) → I. Antiguo (Menfis, Gizeh) → I. Medio (Tebas, hicsos) → I. Nuevo (Ramsés II, Qadesh) → Ptolemaico (Cleopatra, 30 a. C.).',C.mo],
+ ['Sociedad y religión','Faraón (Horus) > funcionarios > sacerdotes > escribas > campesinos (85 %) > esclavos (pocos). Ka, momificación, Juicio de Osiris y pluma de Maat.',C.mo],
+ ['Arte egipcio','Colosal, de piedra y adintelado. Mastaba → escalonada → pirámide (número de oro) → hipogeo. Canon de perfil y perspectiva jerárquica.',C.mo],
+ ['Fenicios y hebreos','Fenicios: Tiro, Sidón, Biblos; factorías y colonias; púrpura; alfabeto de 22 signos. Hebreos: Abraham, Moisés, David y Salomón; monoteísmo.',C.ro],
+ ['Tartessos, celtas e iberos','Tartessos: Argantonio, minas, Carambolo. Celtas: castros, sin escritura. Iberos: oppida, moneda, escritura, Dama de Elche.',C.ve],
+ ['Colonizaciones','Fenicios s. IX (Gadir, Malaka, Sexi, Abdera). Griegos s. VI (Emporion, Rhode). Cartagineses s. VI (Ebusus, Carthago Nova).',C.ve]];
+
+/* =================== PREGUNTAS =================== */
+const QB={
+m1:[['t','¿Qué significa «Mesopotamia»?','Tierra entre ríos',['Tierra del sol','Tierra de faraones','Mar interior'],'Así la llamaron los griegos: está entre el Tigris y el Éufrates.'],
+ ['t','¿Entre qué dos ríos está Mesopotamia?','El Tigris y el Éufrates',['El Nilo y el Jordán','El Indo y el Ganges','El Tigris y el Nilo'],'Hoy es sobre todo Irak.'],
+ ['t','¿Qué zona va del Nilo al Tigris y el Éufrates y es la cuna de la agricultura?','El Creciente Fértil',['El desierto del Sáhara','El golfo Pérsico','El delta del Nilo'],'Tiene forma de media luna.'],
+ ['t','¿Cómo eran las crecidas del Tigris y el Éufrates?','Violentas, irregulares e impredecibles',['Suaves y siempre en primavera','No tenían crecidas','Pequeñas y solo en invierno'],'Por eso necesitaron ingeniería hidráulica.'],
+ ['t','¿Para qué servían los diques y las presas?','Para frenar las crecidas y guardar agua para la sequía',['Para sacar el agua sobrante','Para llevar agua a los campos lejanos','Para que navegaran los barcos'],'Los canales llevan el agua y los drenajes sacan la que sobra.'],
+ ['t','¿Qué son los excedentes agrícolas?','La comida que sobra después de alimentar a los campesinos',['Los impuestos del rey','Las semillas que se pierden','Los campos sin cultivar'],'Gracias a ellos aparecieron otros oficios.'],
+ ['t','¿Dónde surgieron las primeras ciudades?','En Sumer, al sur de Mesopotamia',['En el norte de Egipto','En Fenicia','En Persia'],'En el IV milenio a. C.'],
+ ['t','¿Cuál de estas NO era una ciudad-estado sumeria?','Menfis',['Ur','Uruk','Lagash'],'Menfis fue la capital del Imperio Antiguo de Egipto.'],
+ ['v','Las ciudades-estado sumerias formaban un único Estado con un solo rey.',false,'Falso: cada ciudad era independiente, con su gobierno, ejército, leyes y dios.'],
+ ['v','Fuera de la muralla de la ciudad estaban los campos y las casas de los campesinos.',true,'Verdadero: dentro estaban el templo, el palacio y los talleres.']],
+m2:[['t','¿Cuál fue la primera civilización de la historia?','Sumer',['Babilonia','Egipto','Persia'],'Desde el 3500 a. C.: escritura y primeras ciudades.'],
+ ['t','¿Qué rey acadio unificó Mesopotamia hacia el 2300 a. C.?','Sargón I',['Hammurabi','Ciro II','Assurbanipal'],'Acabó con la supremacía de las ciudades sumerias.'],
+ ['t','¿Qué rey mandó escribir uno de los códigos de leyes más antiguos?','Hammurabi de Babilonia',['Sargón I de Acad','Nabucodonosor II','Jerjes I'],'El Código de Hammurabi, hacia el 1754 a. C.'],
+ ['t','¿Qué dice la ley del Talión?','«Ojo por ojo, diente por diente»',['«Haz el bien sin mirar a quién»','«Todos somos iguales ante la ley»','«El que roba, paga el doble»'],'Está en el Código de Hammurabi.'],
+ ['t','¿Dónde se conserva hoy la estela del Código de Hammurabi?','En el Museo del Louvre (París)',['En el Museo Británico (Londres)','En el Museo del Prado (Madrid)','En Babilonia'],'Arriba, el dios Shamash le entrega a Hammurabi las insignias del poder.'],
+ ['t','¿Con qué rey vivió Asiria su mayor esplendor?','Assurbanipal',['Sargón I','Ciro II','Ramsés II'],'Caldeos y persas acabaron con su imperio a finales del siglo VII a. C.'],
+ ['t','¿Qué rey persa conquistó Babilonia en el 539 a. C.?','Ciro II el Grande',['Jerjes I','Darío I','Nabucodonosor II'],'Mesopotamia pasó a ser una satrapía persa.'],
+ ['t','¿Qué maravilla atribuye la leyenda a Nabucodonosor II?','Los Jardines Colgantes de Babilonia',['Las pirámides de Gizeh','El Faro de Alejandría','El Templo de Jerusalén'],'Dice la leyenda que los hizo para su esposa Amyitis.'],
+ ['t','¿Qué creó Ciro II para comunicar su imperio?','El primer correo imperial',['El alfabeto','La moneda','El calendario de 365 días'],'Así controlaba a los sátrapas de cada provincia.'],
+ ['t','¿En qué batalla naval derrotaron los griegos a Jerjes I?','Salamina',['Las Termópilas','Qadesh','Actium'],'En las Termópilas Jerjes venció a Leónidas, pero perdió en Salamina y Platea.'],
+ ['v','Los asirios fueron un pueblo pacífico que nunca salió de Mesopotamia.',false,'Falso: fueron muy guerreros y llegaron hasta Egipto.']],
+m3:[['t','¿Quién estaba en la cima de la sociedad mesopotámica?','El rey',['Los sacerdotes','Los escribas','Los comerciantes'],'Su poder era ilimitado y gobernaba como representante de los dioses.'],
+ ['v','En Sumer, el rey era considerado un dios vivo.',false,'Falso: gobernaba como representante de los dioses, pero no era un dios.'],
+ ['t','¿Qué hacían los sacerdotes, además de dirigir el culto?','Guardaban el grano de los templos y cobraban tributos',['Construían las murallas','Fabricaban armas','Cuidaban el ganado'],'Administraban los almacenes de los templos y controlaban el comercio.'],
+ ['t','¿Quiénes eran los esclavos?','Prisioneros de guerra o deudores, sin derechos',['Los campesinos que pagaban impuestos','Los escribas','Los soldados'],'Estaban en la base de la sociedad.'],
+ ['t','¿Cómo se llama la escritura con signos en forma de cuña?','Cuneiforme',['Jeroglífica','Pictográfica','Alfabética'],'La crearon los escribas sumerios hacia el 3500 a. C.'],
+ ['t','¿Para qué nació la escritura?','Para llevar las cuentas del templo y del palacio',['Para escribir poemas','Para decorar los templos','Para enviar cartas'],'Contaban sacos de grano, cabezas de ganado e impuestos.'],
+ ['t','¿Sobre qué se escribía en cuneiforme?','Sobre tablillas de arcilla húmeda',['Sobre papiro','Sobre pergamino','Sobre mármol'],'Con un cálamo, y luego las cocían en hornos.'],
+ ['t','¿Qué diosa mesopotámica era la del amor y la guerra?','Ishtar',['Isis','Maat','Anu'],'También se la llamaba Inanna.'],
+ ['t','¿Cuál era el dios supremo de Babilonia?','Marduk',['Assur','Enlil','Ra'],'Assur era el dios principal de los asirios.'],
+ ['t','¿Qué dos grandes inventos dejó Mesopotamia a la arquitectura?','El arco y la bóveda',['La columna y el capitel','La pirámide y la mastaba','El dintel y el pilar'],'Permitían cubrir grandes espacios sin muchas columnas.'],
+ ['t','¿Qué era el zigurat?','Una torre en pirámide escalonada con un santuario arriba',['La tumba de un rey','Un palacio con jardines','Una muralla de piedra'],'Los sacerdotes observaban allí los astros.'],
+ ['t','¿Por qué construían con adobe y ladrillo?','Porque en el sur de Mesopotamia casi no había piedra ni madera',['Porque era más bonito que la piedra','Porque lo copiaron de los egipcios','Porque era más caro'],'El adobe es barro secado al sol.'],
+ ['t','¿Cómo eran las estatuas como las de Gudea de Lagash?','Rígidas, frontales, con ojos muy abiertos y en actitud de rezar',['Muy realistas y en movimiento','De perfil, como la pintura egipcia','Gigantes, de 20 metros'],'Mostraban devoción a los dioses.']],
+e1:[['t','¿Por qué Heródoto llamó a Egipto «el don del Nilo»?','Porque sin el río no se podría vivir en ese desierto',['Porque el Nilo arrastraba oro','Porque el faraón regalaba agua','Porque el Nilo era un dios'],'El río daba agua y limo fértil.'],
+ ['t','¿Qué desiertos rodeaban Egipto?','El del Sáhara y el de Libia',['El de Gobi y el de Atacama','El de Arabia y el del Kalahari','El de Sonora y el del Sáhara'],'Lo protegían de las invasiones.'],
+ ['t','¿Cuándo crecía el Nilo e inundaba el valle?','En verano',['En invierno','En primavera','Nunca'],'Por las lluvias en las fuentes del río, en el centro de África.'],
+ ['t','¿Qué calendario crearon los egipcios?','Un calendario solar de 12 meses y 365 días',['Uno lunar de 10 meses','Uno de 7 meses y 300 días','Uno sin meses'],'Es el antepasado del nuestro.'],
+ ['t','¿Para qué perfeccionaron la geometría?','Para volver a medir los campos tras cada inundación',['Para hacer mapas del cielo','Para jugar','Para construir barcos'],'La crecida borraba los límites de las parcelas.'],
+ ['v','El Alto Egipto estaba en el sur y el Bajo Egipto en el norte.',true,'Verdadero: el Bajo Egipto es el delta, junto al Mediterráneo.'],
+ ['t','¿Quién fue el primer faraón, que unificó Egipto hacia el 3000 a. C.?','Narmer (Menes)',['Keops','Ramsés II','Tutankamón'],'Llevó la doble corona.'],
+ ['t','¿Cuál fue la capital del Imperio Antiguo?','Menfis',['Tebas','Alejandría','Babilonia'],'En el Imperio Medio pasó a Tebas.'],
+ ['t','¿Qué pueblo con carros de combate invadió el delta al final del Imperio Medio?','Los hicsos',['Los hititas','Los persas','Los romanos'],'Venían de Asia Menor.'],
+ ['t','¿Qué faraón frenó a los hititas en la batalla de Qadesh?','Ramsés II',['Narmer','Keops','Akhenatón'],'Fue en el Imperio Nuevo.'],
+ ['t','¿Quién conquistó Egipto en el 332 a. C.?','Alejandro Magno',['Julio César','Ciro II','Ptolomeo'],'A su muerte, su general Ptolomeo fundó una dinastía.'],
+ ['t','¿Cuándo pasó Egipto a ser provincia romana?','En el 30 a. C., tras la muerte de Cleopatra VII',['En el 332 a. C.','Hacia el 3000 a. C.','En el 1080 a. C.'],'Así terminó la época ptolemaica.']],
+e2:[['t','¿De qué dios era encarnación el faraón?','Horus',['Anubis','Seth','Osiris'],'Sus órdenes eran leyes sagradas.'],
+ ['t','¿Qué eran los nomos?','Las provincias de Egipto',['Los templos','Los esclavos del faraón','Las tumbas'],'Los administraban los altos funcionarios.'],
+ ['t','¿Qué grupo cobraba impuestos e inventariaba los graneros?','Los escribas',['Los sacerdotes','Los esclavos','Los campesinos'],'También registraban las órdenes del faraón.'],
+ ['t','¿Qué hacían los campesinos durante la inundación?','Trabajaban gratis en los monumentos del faraón',['Descansaban en sus casas','Pescaban en el mar','Viajaban a Mesopotamia'],'Como no podían cultivar, los reclutaban.'],
+ ['v','En Egipto los esclavos eran muchísimos, la mayoría de la población.',false,'Falso: eran prisioneros de guerra y un grupo pequeño. La mayoría eran campesinos.'],
+ ['t','¿Qué dios tenía cabeza de chacal y era el patrón de los embalsamadores?','Anubis',['Horus','Ra','Amón'],'Era el dios de la muerte.'],
+ ['t','¿Cómo se llamaba el alma para los egipcios?','Ka',['Maat','Aaru','Atón'],'Vivía en el reino de Osiris.'],
+ ['t','¿Qué se usaba para secar el cuerpo en la momificación?','Sal de natrón',['Arena del desierto','Aceite de oliva','Agua del Nilo'],'Después lo untaban con resinas y lo vendaban con lino.'],
+ ['t','¿Dónde se guardaban las vísceras del difunto?','En los vasos canopos',['En la pirámide de Keops','En el río Nilo','En el templo de Amón'],'Se sacaban durante la momificación.'],
+ ['t','En el Juicio de Osiris, ¿con qué se pesaba el corazón?','Con la pluma de la verdad de Maat',['Con una piedra sagrada','Con el oro del difunto','Con el corazón de Osiris'],'Si no pesaba más, el difunto iba a los campos de Aaru.'],
+ ['t','¿Qué dios era el de la luz y el aire, a veces unido a Ra?','Amón',['Isis','Horus','Seth'],'Se le llamaba Amón-Ra.']],
+e3:[['t','¿Qué es el colosalismo?','Hacer obras gigantescas para mostrar el poder del faraón',['Pintar con colores muy vivos','Construir con ladrillo','Esculpir figuras pequeñas'],'Buscaba infundir temor y respeto.'],
+ ['v','Los egipcios usaban el arco y la bóveda en sus templos.',false,'Falso: su arquitectura era adintelada, con techos planos.'],
+ ['t','¿En qué se inspiraban los capiteles de las columnas egipcias?','En plantas: papiro, loto y palmera',['En animales','En el sol','En las olas del mar'],'Papiriformes, lotiformes y palmiformes.'],
+ ['t','¿Cuál fue la primera tumba egipcia, con forma de tronco de pirámide?','La mastaba',['El hipogeo','La pirámide escalonada','El zigurat'],'Hacia el 3000 a. C.'],
+ ['t','¿Cómo surgió la pirámide escalonada?','Superponiendo mastabas',['Excavando en la roca','Juntando dos pirámides','Copiando el zigurat'],'Hacia el 2600 a. C.'],
+ ['t','¿Qué tenían las pirámides dentro para proteger el tesoro?','Galerías, cámaras y trampas',['Soldados de guardia','Agua del Nilo','Nada: eran macizas'],'Por ejemplo, las de Gizeh.'],
+ ['t','¿Qué es un hipogeo?','Una tumba excavada en la roca',['Una pirámide de ladrillo','Un templo al aire libre','Una estatua'],'Como las del Valle de los Reyes, desde el Imperio Nuevo.'],
+ ['t','¿Qué número aparece en las medidas de la pirámide de Keops?','El número de oro (1,618)',['El número pi (3,14)','El 365','El 22'],'Es su uso más antiguo en arquitectura que se conoce.'],
+ ['t','En la pintura egipcia, ¿qué partes se pintaban de frente?','El ojo y el torso',['La cabeza y las piernas','Los pies y las manos','Ninguna'],'Es el canon de perfil.'],
+ ['t','¿Qué indica el tamaño de las figuras en la pintura egipcia?','Su importancia social (perspectiva jerárquica)',['Lo cerca que están','Su edad','Su altura real'],'El faraón se pinta más grande.'],
+ ['t','¿Cómo eran las esculturas egipcias?','Rígidas, frontales y simétricas, sin movimiento',['Muy realistas y en movimiento','Siempre de perfil','De barro sin cocer'],'Seguían la ley de la frontalidad.']],
+e4:[['t','¿Quién mató a Osiris por envidia?','Su hermano Seth',['Su hermana Isis','El dios Ra','Anubis'],'Y esparció sus restos por todo el mundo.'],
+ ['t','¿Quién devolvió la vida a Osiris?','Isis',['Horus','Seth','Maat'],'Recompuso sus restos; Osiris se hizo dios de los muertos.'],
+ ['t','¿Qué dios impuso Akhenatón en lugar de Amón?','Atón, el dios sol',['Ra','Horus','Anubis'],'Su reforma tenía tendencia monoteísta.'],
+ ['t','¿Cómo era el arte de la época de Amarna?','Más humano y naturalista',['Más rígido que nunca','Solo de animales','Sin figuras humanas'],'Por eso el busto de Nefertiti es tan realista.'],
+ ['t','¿De quién era esposa Nefertiti?','De Akhenatón',['De Ramsés II','De Tutankamón','De Narmer'],'Desapareció de los documentos de forma misteriosa.'],
+ ['t','¿Por qué es tan famoso Tutankamón?','Su tumba se encontró intacta, llena de riquezas',['Fue el faraón que más vivió','Construyó la pirámide de Keops','Conquistó Roma'],'La halló Howard Carter en 1922 en el Valle de los Reyes.'],
+ ['t','¿A qué edad murió Tutankamón?','A los 18 años',['A los 93 años','A los 50 años','A los 8 años'],'Por eso lo llaman el faraón niño.'],
+ ['t','¿Qué firmó Ramsés II con los hititas?','El primer tratado de paz conocido',['El primer código de leyes','Un tratado de comercio con Roma','El primer alfabeto'],'Con él Egipto llegó a su mayor extensión.'],
+ ['t','¿Con qué dos romanos se alió Cleopatra VII?','Julio César y Marco Antonio',['Alejandro Magno y Ptolomeo','Ciro y Jerjes','Augusto y Nerón'],'Con Julio César tuvo a su hijo Cesarión.'],
+ ['v','Cleopatra VII fue la última soberana de la dinastía ptolemaica.',true,'Verdadero: tras su muerte, Egipto pasó a Roma.'],
+ ['t','¿Qué faraón vivió 93 años y es considerado el último gran faraón?','Ramsés II',['Tutankamón','Akhenatón','Narmer'],'Llevó la capital a Tanis, en el delta.']],
+p1:[['t','¿Dónde vivían los fenicios?','En la costa del actual Líbano',['En el delta del Nilo','En el sur de Mesopotamia','En la península Ibérica'],'Con montañas detrás, se lanzaron al mar.'],
+ ['t','¿Cuál de estas era una ciudad-estado fenicia?','Tiro',['Ur','Menfis','Babilonia'],'También Sidón, Biblos, Arados y Ugarit.'],
+ ['t','¿Quién limitaba el poder de los reyes fenicios?','Un consejo de los mercaderes más ricos',['El faraón de Egipto','Los sacerdotes del templo','Una asamblea de esclavos'],'Eran ciudades de comerciantes.'],
+ ['t','¿Qué era una factoría fenicia?','Un almacén en la costa para comerciar, sin quedarse a vivir',['Una ciudad nueva para vivir','Un templo','Un barco de guerra'],'Las colonias, en cambio, eran ciudades para vivir.'],
+ ['t','¿Qué colonia fenicia está en la actual Túnez?','Cartago',['Gadir','Malaka','Emporion'],'La fundaron colonos de Tiro.'],
+ ['t','¿De dónde sacaban los fenicios el tinte púrpura?','Del caracol murex',['De una flor del Líbano','De la arena','Del vino'],'Teñían tejidos de lana de lujo.'],
+ ['t','¿Cuántos signos tenía el alfabeto fenicio?','22',['5','100','Más de 700'],'Representaban sonidos consonantes.'],
+ ['v','Los alfabetos griego y latino vienen del alfabeto fenicio.',true,'Verdadero: es la base de los alfabetos occidentales.'],
+ ['t','¿De dónde venían los hebreos?','Del sur de Mesopotamia',['De Egipto','De Grecia','De la península Ibérica'],'Eran pastores seminómadas.'],
+ ['t','¿Qué patriarca guio a los hebreos a Canaán hacia el 2000 a. C.?','Abraham',['Moisés','David','Salomón'],'Canaán es la actual Palestina.'],
+ ['t','Según la Biblia, ¿qué significa el nombre de Moisés?','Salvado de las aguas',['Hijo del sol','Rey de reyes','Hombre de plata'],'Su madre lo escondió en un cesto en el Nilo.'],
+ ['t','¿Qué rey hebreo mandó construir el Templo de Jerusalén?','Salomón',['David','Abraham','Moisés'],'En el siglo X a. C.'],
+ ['t','¿En qué dos reinos se dividió el pueblo hebreo?','Israel (norte) y Judá (sur)',['Alto y Bajo Egipto','Sumer y Acad','Tiro y Sidón'],'Después llegaron babilonios, persas, macedonios y romanos.'],
+ ['t','¿Qué es el monoteísmo?','Creer en un único Dios',['Creer en muchos dioses','No creer en ningún dios','Adorar al faraón'],'Fue la gran aportación de los hebreos.']],
+p2:[['t','¿Dónde estaba Tartessos?','En el sur y el suroeste de la Península',['En el norte de la Península','En las islas Baleares','En el norte de África'],'«Más allá de las Columnas de Hércules».'],
+ ['t','¿Qué eran las Columnas de Hércules?','El estrecho de Gibraltar',['Un templo de Cádiz','Las montañas de Sierra Morena','Un río de Huelva'],'Así lo llamaban los griegos.'],
+ ['t','¿Cuál fue el rey legendario de Tartessos?','Argantonio',['Gerión','Hammurabi','Ciro II'],'Su nombre significa «hombre de plata».'],
+ ['t','¿De qué era muy rica Tartessos?','De minas de oro, plata, cobre y hierro',['De petróleo','De bosques de madera','De mármol blanco'],'En Sierra Morena y Huelva.'],
+ ['t','¿Cuándo desapareció Tartessos?','Hacia el 500 a. C.',['Hacia el 3000 a. C.','En 1958','Con los romanos, en el año 0'],'Quizá por los cartagineses o por crisis internas.'],
+ ['t','¿Dónde está hoy el Tesoro del Carambolo?','En el Museo Arqueológico de Sevilla',['En el Museo del Prado','En el Louvre','En Cádiz'],'Lo encontraron unos obreros en Camas en 1958.'],
+ ['t','¿A quién venció Hércules en el mito de Gerión?','A un gigante de tres cuerpos',['A un león','A Argantonio','A un dragón de Tartessos'],'De la sangre de Gerión nació un drago.'],
+ ['t','¿Cómo se llamaban los poblados celtas en alto?','Castros',['Oppida','Factorías','Nomos'],'Con casas redondas y techo de paja.'],
+ ['t','¿Cuál de estos era un pueblo celta?','Los lusitanos',['Los turdetanos','Los contestanos','Los edetanos'],'También vacceos, vettones, astures y cántabros.'],
+ ['t','¿Cuál de estos era un pueblo ibero?','Los turdetanos',['Los vacceos','Los astures','Los cántabros'],'También bastetanos, contestanos, edetanos e ilergetes.'],
+ ['v','Los celtas tenían escritura propia.',false,'Falso: eran buenos herreros, pero no tenían escritura. Los iberos sí.'],
+ ['t','¿Cuál es la obra cumbre del arte ibero?','La Dama de Elche',['El Tesoro del Carambolo','La estela de Hammurabi','El busto de Nefertiti'],'Un busto funerario de mujer del siglo V a. C.'],
+ ['t','¿Quiénes eran los celtíberos?','La mezcla de celtas e iberos en el valle del Duero',['Celtas que vivían en Egipto','Iberos de las Baleares','Griegos de Ampurias'],'Metalurgia celta y urbanismo ibero.']],
+p3:[['t','¿Por qué llegaron los colonizadores a la Península?','Por su riqueza en metales',['Por su buen clima','Para escapar de los romanos','Para buscar el Nilo'],'Plata, oro, cobre y estaño.'],
+ ['t','¿Quiénes fueron los primeros colonizadores, en el siglo IX a. C.?','Los fenicios',['Los griegos','Los cartagineses','Los romanos'],'Vinieron desde Tiro.'],
+ ['t','¿Cómo se llamaba Cádiz en tiempos de los fenicios?','Gadir',['Malaka','Emporion','Ebusus'],'Malaka es Málaga.'],
+ ['t','¿Qué ciudad actual es la antigua Sexi?','Almuñécar',['Adra','Málaga','Rosas'],'Abdera es Adra.'],
+ ['t','¿Qué trajeron los fenicios a la Península?','El torno de alfarero, el alfabeto, el olivo y la vid',['La moneda y el arco','El papel y la brújula','Las pirámides'],'También la minería a gran escala y el hierro.'],
+ ['t','¿En qué zona de la Península se instalaron los griegos?','En el noreste',['En el sur','En el noroeste','En el centro'],'Fundaron Emporion y Rhode.'],
+ ['t','¿Qué ciudad actual es la antigua Emporion?','Ampurias',['Rosas','Cartagena','Ibiza'],'Rhode es Rosas.'],
+ ['t','¿Qué trajeron los griegos a los iberos?','La moneda',['El olivo','El torno de alfarero','Los castros'],'También avances artísticos y extendieron la escritura.'],
+ ['t','¿Desde qué isla comerciaban los cartagineses?','Ebusus (Ibiza)',['Mallorca','Sicilia','Creta'],'Después pasaron a conquistar territorio.'],
+ ['t','¿Por qué los cartagineses conquistaron territorio en la Península?','Para conseguir metales y soldados contra Roma',['Para fundar el Imperio persa','Para huir de Egipto','Para buscar estaño en Gran Bretaña'],'Fundaron Carthago Nova (Cartagena).'],
+ ['v','Los cartagineses eran herederos de los fenicios.',true,'Verdadero: tomaron el relevo tras la caída de Tiro.']]};
+
+const QS=[];Object.entries(QB).forEach(([s,arr])=>arr.forEach((q,i)=>QS.push(q[0]==='t'?{st:s,id:s+'-'+i,t:'test',q:q[1],ok:q[2],no:q[3],exp:q[4]}:{st:s,id:s+'-'+i,t:'vf',q:q[1],ok:q[2],exp:q[3]})));
+const stOf=id=>ST.find(s=>s.id===id);
+
+/* =================== ESTADO =================== */
+const KEY='hist-t3-v1';
+let S={stars:{},q:{},games:{}};try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.stars)S=Object.assign(S,r)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const st={tab:'est',confirm:false,timer:null,chu:false};
+const totalStars=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
+function stopTimers(){if(st.timer){clearInterval(st.timer);st.timer=null}}
+function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-s.ok)-.6*s.ok)}
+function wpick(list,n){const out=[],pool=[...list];while(out.length<n&&pool.length){let r=Math.random()*pool.reduce((a,q)=>a+weight(q),0);let k=0;for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function setBest(id,v,lower){const p=S.games[id];if(p==null||(lower?v<p:v>p)){S.games[id]=v;save();renderProgress();return true}return false}
+
+/* =================== ESTUDIAR / RETOS / PRUEBA =================== */
+function renderScore(){$('#score').innerHTML=`${star(true)}<span>${totalStars()}</span><small class="note" style="font:400 .85rem var(--f-body)">/ ${ST.length*3}</small>`}
+function renderEst(){const TH=[[1,'1 · Mesopotamia'],[2,'2 · El Antiguo Egipto'],[3,'3 · El Mediterráneo y la península Ibérica']];
+ $('#main').innerHTML=`<details class="sheet chuleta" ${st.chu?'open':''}><summary>Repaso en 1 minuto</summary><div class="bxs">${CHULETA.map(([t,d,c])=>`<div class="bx" style="--c:${c}"><b>${t}</b><span>${d}</span></div>`).join('')}</div></details>`+
+ TH.map(([t,n])=>{const L=ST.filter(s=>s.t===t);return`<div class="theme-head"><h2>${n}</h2><span>${L.reduce((a,s)=>a+(S.stars[s.id]||0),0)} de ${L.length*3} estrellas</span></div><ol class="path">${L.map(s=>{const i=ST.indexOf(s);const n2=S.stars[s.id]||0;return`<li><span class="dot ${n2?'done':''}">${i+1}</span><button class="stop" type="button" data-id="${s.id}"><span><b>${s.n}</b><small>${s.s}</small></span><span class="stars" aria-label="${n2} estrellas">${[1,2,3].map(k=>star(k<=n2)).join('')}</span></button></li>`}).join('')}</ol>`}).join('')+`<p class="note">Cada ficha tiene un reto de 5 preguntas: 5 aciertos son 3 estrellas, 4 son 2 y 3 son 1.</p>`;
+ $('.chuleta').addEventListener('toggle',e=>{st.chu=e.target.open});
+ $('#main').querySelectorAll('.stop').forEach(b=>b.onclick=()=>openSt(b.dataset.id))}
+function openSt(id){const s=stOf(id);const i=ST.indexOf(s);const next=ST[i+1];
+ $('#main').innerHTML=`<article class="sheet card"><div class="meta"><span>Ficha ${i+1} de ${ST.length}</span><span>${[1,2,3].map(k=>star(k<=(S.stars[id]||0))).join('')}</span></div><h2>${s.n}</h2>
+ <p class="idea"><span>En una frase</span>${s.idea}</p>${s.fig()}${blocksHTML(s)}${s.truco?`<p class="truco"><b>Truco </b>${s.truco}</p>`:''}
+ <div class="actions"><button class="primary" id="reto" type="button">Hacer el reto (5 preguntas)</button>${next?`<button class="ghost" id="sig" type="button">Siguiente ficha</button>`:''}<button class="ghost" id="volver" type="button">Volver</button></div></article>`;
+ $('#reto').onclick=()=>startQuiz({kind:'reto',id,list:wpick(QS.filter(q=>q.st===id),5)});$('#volver').onclick=()=>renderEst();if(next)$('#sig').onclick=()=>openSt(next.id);window.scrollTo({top:0})}
+let V=null;
+function startQuiz(cfg){V=Object.assign(cfg,{idx:0,res:[]});drawQ()}
+function drawQ(){const q=V.list[V.idx];const opts=q.t==='test'?shuffle([q.ok,...q.no]):['Verdadero','Falso'];V.opts=opts;V.ans=false;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>${V.kind==='reto'?stOf(V.id).n:'Prueba · '+stOf(q.st).n}</span><span>${V.idx+1} / ${V.list.length}</span></div>
+ <div class="pbar">${V.list.map((_,i)=>`<i class="${i<V.res.length?(V.res[i]?'okk':'ko'):i===V.idx?'on':''}"></i>`).join('')}</div>
+ <p class="q">${q.t==='vf'?'¿Verdadero o falso? ':''}${esc(q.q)}</p><div class="opts ${q.t==='vf'?'two':''}" id="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o)}</button>`).join('')}</div><div id="after"></div><div class="stamp" id="stamp" hidden></div></div>`;
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answerQ(+b.dataset.i));window.scrollTo({top:0})}
+function answerQ(i){if(V.ans)return;V.ans=true;const q=V.list[V.idx];const okIdx=q.t==='test'?V.opts.indexOf(q.ok):(q.ok?0:1);const ok=i===okIdx;
+ $('#opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===okIdx)b.classList.add('right');else if(k===i)b.classList.add('wrong')});
+ V.res.push(ok);const s=S.q[q.id]||(S.q[q.id]={ok:0,n:0});s.n++;if(ok)s.ok++;save();const sp=$('#stamp');sp.hidden=false;sp.className='stamp '+(ok?'b':'mm');sp.textContent=ok?'B':'M';
+ const last=V.idx===V.list.length-1;$('#after').innerHTML=`<p class="verdict ${ok?'b':'mm'}">${ok?pick(['¡Bien!','¡Exacto!','¡Muy bien!']):'No es correcto.'}</p><p class="exp">${q.exp}</p><div class="actions" style="margin-top:12px"><button class="primary" id="nx" type="button">${last?'Ver resultado':'Siguiente'}</button></div>`;
+ $('#nx').onclick=()=>{if(last)finishQuiz();else{V.idx++;drawQ()}};$('#nx').focus({preventScroll:true})}
+function finishQuiz(){const n=V.res.filter(Boolean).length;
+ if(V.kind==='reto'){const stars=n>=5?3:n===4?2:n===3?1:0;const prev=S.stars[V.id]||0;if(stars>prev){S.stars[V.id]=stars;save();renderScore();renderProgress()}const s=stOf(V.id);const next=ST[ST.indexOf(s)+1];
+  $('#main').innerHTML=`<div class="sheet" style="align-items:center;text-align:center"><div class="meta" style="align-self:stretch"><span>${s.n}</span></div><h2>${n} de 5 aciertos</h2><div class="bigstars">${[1,2,3].map(k=>star(k<=stars,k<=stars?'anim':'')).join('')}</div>
+  <p>${stars===3?'¡Ficha completada con todas las estrellas!':stars?`Has ganado ${stars} ${stars===1?'estrella':'estrellas'}.${stars>prev?' ¡Nuevo récord!':''} Repite para conseguir las 3.`:'Repasa la ficha y vuelve a intentarlo: las que fallas saldrán más.'}</p>
+  <div class="actions" style="justify-content:center"><button class="primary" id="again" type="button">Repetir el reto</button><button class="ghost" id="ficha" type="button">Ver la ficha</button>${next?`<button class="ghost" id="next" type="button">Siguiente ficha</button>`:''}</div></div>`;
+  $('#again').onclick=()=>startQuiz({kind:'reto',id:V.id,list:wpick(QS.filter(q=>q.st===V.id),5)});$('#ficha').onclick=()=>openSt(V.id);if($('#next'))$('#next').onclick=()=>openSt(next.id)}
+ else{const nota=Math.round(n/V.list.length*100)/10;setBest('prueba',nota,false);
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Prueba terminada</span></div><h2>Tu nota</h2><div class="grade">${nota.toLocaleString('es-ES')}</div>
+  <ul class="qlist">${V.list.map((q,i)=>`<li><b style="color:var(${V.res[i]?'--ok':'--marker'})">${V.res[i]?'B':'M'}</b><span>${esc(q.q)} <small class="note">(${stOf(q.st).n})</small></span></li>`).join('')}</ul>
+  <p>${nota>=9?'¡Sobresaliente! Mañana lo bordas.':nota>=5?'¡Aprobado! Repasa las fichas de las M.':'Repasa las fichas de las preguntas marcadas con M y vuelve a intentarlo.'}</p><div class="actions"><button class="primary" id="again" type="button">Otra prueba</button></div></div>`;$('#again').onclick=renderPru}
+ window.scrollTo({top:0})}
+function renderPru(){$('#main').innerHTML=`<div class="sheet"><h2>Prueba del Tema 3</h2><p>15 preguntas de todas las fichas: Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos y colonizaciones. Nota sobre 10.</p><p class="note">Tu mejor nota: ${S.games.prueba!=null?S.games.prueba.toLocaleString('es-ES'):'todavía ninguna'}.</p><div class="actions"><button class="primary" id="go" type="button">Empezar</button></div></div>`;
+ $('#go').onclick=()=>{let list=[];ST.forEach(s=>list.push(...wpick(QS.filter(q=>q.st===s.id),1)));list.push(...wpick(QS.filter(q=>!list.includes(q)),5));startQuiz({kind:'prueba',list:shuffle(list)})}}
+
+/* =================== JUEGOS =================== */
+const GAMES=[
+{id:'quien',ico:'¿Quién soy?',n:'¿Quién soy?',d:'Reyes, faraones, reinas y mitos: 3 pistas; cuantas menos uses, más puntos.',best:v=>v+' puntos'},
+{id:'ord',ico:'Ordena',n:'Ordena',d:'Los pueblos de Mesopotamia, las etapas de Egipto, las tumbas, la pirámide social y los hebreos.',best:v=>v+(v===1?' error':' errores')},
+{id:'une',ico:'Une',n:'Une parejas',d:'Cada concepto con su definición y cada personaje con lo que hizo.',best:v=>v+(v===1?' error':' errores')},
+{id:'cla',ico:'¡Rápido!',n:'Clasifica contra reloj',d:'¿Mesopotamia o Egipto? ¿Celta o ibero? ¿Quién fundó cada colonia? ¡60 segundos!',best:v=>v+' puntos'},
+];
+function renderJue(){stopTimers();$('#main').innerHTML=`<div class="games">${GAMES.map(g=>`<button class="gcard" type="button" data-g="${g.id}"><span class="ico">${g.ico}</span><b>${g.n}</b><small>${g.d}</small>${S.games[g.id]!=null?`<span class="best">Mejor: ${g.best(S.games[g.id])}</span>`:''}</button>`).join('')}</div>`;
+ $('#main').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>{stopTimers();({quien:gQuien,ord:gOrd,une:gUne,cla:gCla})[b.dataset.g]();window.scrollTo({top:0})})}
+const backB=()=>`<button class="ghost" id="gback" type="button">Otros juegos</button>`;
+function wireBack(){const b=$('#gback');if(b)b.onclick=()=>{stopTimers();renderJue()}}
+function endG(title,msg,again){$('#gend').innerHTML=`<div class="end"><h3>${title}</h3><p>${msg}</p><div class="actions"><button class="primary" id="gagain" type="button">Jugar otra vez</button>${backB()}</div></div>`;$('#gagain').onclick=again;wireBack();$('#gagain').focus({preventScroll:true})}
+const pbar=(n,res,k)=>`<div class="pbar">${Array.from({length:n},(_,i)=>`<i class="${i<res.length?(res[i]?'okk':'ko'):i===k?'on':''}"></i>`).join('')}</div>`;
+
+/* ¿Quién soy? */
+const WHO=[['Hammurabi',['Fui rey de Babilonia.','En mi estela, el dios Shamash me entrega el poder.','Mi código dice «ojo por ojo, diente por diente».']],
+ ['Sargón I',['Fui un rey acadio.','Hacia el 2300 a. C. acabé con la supremacía de las ciudades sumerias.','Unifiqué Mesopotamia por primera vez.']],
+ ['Nabucodonosor II',['Reiné más de 40 años en el Imperio neobabilónico.','Reconstruí Babilonia y el zigurat de Etemenanki.','La leyenda dice que hice los Jardines Colgantes para mi esposa.']],
+ ['Ciro II el Grande',['Fundé el Imperio persa.','Creé el primer correo imperial.','Conquisté Babilonia en el 539 a. C.']],
+ ['Jerjes I',['Fui rey de Persia, hijo de Darío I.','Vencí a Leónidas en las Termópilas.','Los griegos me derrotaron en Salamina.']],
+ ['Narmer',['También me llaman Menes.','Hacia el 3000 a. C. me puse la doble corona.','Fui el primer faraón: uní el Alto y el Bajo Egipto.']],
+ ['Akhenatón',['Antes me llamaba Amenofis IV.','Fundé una nueva capital: Akhetatón.','Cambié a Amón por el dios sol Atón.']],
+ ['Nefertiti',['Fui una reina de gran belleza.','Desaparecí de los documentos de forma misteriosa.','Fui la esposa de Akhenatón y mi busto es famosísimo.']],
+ ['Tutankamón',['Subí al trono siendo un niño.','Devolví el culto a Amón y la capital a Tebas.','Howard Carter encontró mi tumba intacta en 1922.']],
+ ['Ramsés II',['Viví 93 años.','Firmé el primer tratado de paz conocido.','Frené a los hititas en la batalla de Qadesh.']],
+ ['Cleopatra VII',['Hablaba siete idiomas.','Me alié con Julio César y con Marco Antonio.','Fui la última reina de Egipto.']],
+ ['Osiris',['Soy hijo del dios Ra.','Mi hermano Seth me mató por envidia.','Isis me devolvió la vida y soy el dios del más allá.']],
+ ['Moisés',['Mi nombre significa «salvado de las aguas».','Me crie en la corte del faraón.','Según la Biblia, guie a los hebreos por el mar Rojo.']],
+ ['Argantonio',['Mi nombre significa «hombre de plata».','Heródoto dice que viví 120 años.','Fui el rey legendario de Tartessos.']],
+ ['Gerión',['Tenía tres cuerpos unidos por la cintura.','Mi perro Ortro tenía dos cabezas.','Hércules vino a robarme los bueyes y me venció.']]];
+function gQuien(){const R_=shuffle(WHO).slice(0,8);let k=0,pts=0;const res=[];
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>¿Quién soy?</span><span id="hud">0 puntos</span></div><div id="pb"></div><ol class="clues" id="clues"></ol><div class="actions"><button class="ghost" id="more" type="button">Otra pista</button></div><div class="opts grid" id="opts"></div><p class="fb" id="fb" role="status"></p><div id="nxw"></div><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const draw=()=>{$('#nxw').innerHTML='';if(k>=R_.length){const b=setBest('quien',pts,false);$('#clues').innerHTML='';$('#opts').innerHTML='';$('#more').hidden=true;$('#fb').textContent='';$('#pb').innerHTML=pbar(8,res,99);endG(`${pts} puntos de 24`,`${b?'¡Nueva mejor marca! ':''}Con 1 pista ganas 3 puntos; con 2, 2; con 3, 1.`,gQuien);return}
+  const [name,cl]=R_[k];let shown=1,done=false;$('#pb').innerHTML=pbar(8,res,k);$('#fb').textContent='';
+  const showC=()=>{$('#clues').innerHTML=cl.slice(0,shown).map(c=>`<li>${c}</li>`).join('');$('#more').hidden=shown>=3||done};showC();
+  $('#more').onclick=()=>{if(shown<3){shown++;showC()}};
+  const opts=shuffle([name,...shuffle(WHO.filter(w=>w[0]!==name)).slice(0,3).map(w=>w[0])]);
+  $('#opts').innerHTML=opts.map(o=>`<button class="opt" type="button" style="text-align:center;font-weight:700">${esc(o)}</button>`).join('');
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;if(b.textContent===name){done=true;const g=4-shown;pts+=g;res.push(true);b.classList.add('right');$('#hud').textContent=pts+' puntos';$('#fb').className='fb okk';$('#fb').textContent=`¡Sí, soy ${name}! +${g} ${g===1?'punto':'puntos'}.`}
+   else{b.classList.add('wrong');b.disabled=true;if(shown<3){shown++;showC();$('#fb').className='fb ko';$('#fb').textContent='No. Te doy otra pista.';return}done=true;res.push(false);$('#opts').querySelectorAll('.opt').forEach(x=>{if(x.textContent===name)x.classList.add('right')});$('#fb').className='fb ko';$('#fb').textContent=`Era ${name}.`}
+   $('#opts').querySelectorAll('.opt').forEach(x=>x.disabled=true);shown=3;showC();
+   $('#nxw').innerHTML=`<div class="actions"><button class="primary" id="nx" type="button">${k===R_.length-1?'Ver resultado':'Siguiente'}</button></div>`;$('#nx').onclick=()=>{k++;draw()};$('#nx').focus({preventScroll:true})})};draw()}
+
+/* Ordena */
+const CRONO=[['Pueblos de Mesopotamia (del más antiguo al más reciente)',[['Sumerios','desde el 3500 a. C.'],['Acadios','desde el 2334 a. C.'],['Babilonios','desde el 1894 a. C.'],['Asirios','desde el 1365 a. C.'],['Persas','desde el 553 a. C.']]],
+ ['Etapas de Egipto (en orden)',[['Unificación con Narmer','h. 3000 a. C.'],['Imperio Antiguo','2635-2154 a. C. · Menfis'],['Imperio Medio','2040-1785 a. C. · Tebas'],['Imperio Nuevo','1554-1080 a. C. · Ramsés II'],['Época Tardía y Ptolemaica','713-31 a. C. · Cleopatra']]],
+ ['Tumbas egipcias (de la más antigua a la más moderna)',[['Mastaba','3000 a. C.'],['Pirámide escalonada','2600 a. C.'],['Pirámide','2500 a. C. · Gizeh'],['Hipogeo','1500 a. C. · Valle de los Reyes']]],
+ ['Pirámide social egipcia (de arriba abajo)',[['Faraón','encarnación de Horus'],['Altos funcionarios','gobiernan los nomos'],['Sacerdotes','ricos, guardan el saber'],['Escribas','impuestos y graneros'],['Campesinos, artesanos y mercaderes','la gran mayoría'],['Esclavos','prisioneros, pocos']]],
+ ['Historia de los hebreos (en orden)',[['Abraham lleva a los hebreos a Canaán','h. 2000 a. C.'],['Cautiverio en Egipto y éxodo con Moisés','según la Biblia'],['Reyes David y Salomón','siglo X a. C.'],['División en Israel y Judá','tras la muerte de Salomón']]]];
+function gOrd(){let ki=0,err=0;const L=CRONO;
+ $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Ordena</span><span id="hud">Errores: 0</span></div><p class="prompt" id="q"></p><div class="pool" id="pool"></div><ol class="ladder" id="lad"></ol><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+ const set=()=>{if(ki>=L.length){const b=setBest('ord',err,true);$('#q').textContent='';$('#pool').innerHTML='';$('#lad').innerHTML='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has ordenado pueblos, etapas, tumbas, la pirámide social y la historia de los hebreos.`,gOrd);return}
+  const [tt,items]=L[ki];let placed=0;$('#q').innerHTML=`${tt}`;$('#lad').innerHTML='';
+  $('#pool').innerHTML=shuffle(items.map((it,i)=>[it[0],i])).map(([t,i])=>`<button class="ev" type="button" data-i="${i}">${t}</button>`).join('');
+  $('#pool').querySelectorAll('.ev').forEach(b=>b.onclick=()=>{if(+b.dataset.i===placed){$('#lad').insertAdjacentHTML('beforeend',`<li><b>${items[placed][0]}</b>${items[placed][1]}</li>`);b.remove();placed++;if(placed===items.length){ki++;setTimeout(set,1100)}}else{err++;$('#hud').textContent='Errores: '+err;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}})};set()}
+
+/* Une parejas */
+const DEFS=[['Zigurat','Torre escalonada con santuario arriba'],['Cuneiforme','Escritura con signos en forma de cuña'],['Adobe','Barro secado al sol'],['Excedentes','La comida que sobra'],['Ciudad-estado','Ciudad independiente con su gobierno'],['Satrapía','Provincia del Imperio persa'],['Limo negro','Barro fértil que deja el Nilo'],['Nomo','Provincia del Antiguo Egipto'],['Mastaba','Tumba en tronco de pirámide'],['Hipogeo','Tumba excavada en la roca'],['Vasos canopos','Guardaban las vísceras del difunto'],['Ka','El alma para los egipcios'],['Factoría','Almacén fenicio para comerciar'],['Colonia','Ciudad nueva para vivir'],['Monoteísmo','Creer en un único Dios'],['Castro','Poblado celta en alto'],['Oppidum','Poblado ibero con calles'],['Murex','Caracol del tinte púrpura']];
+const DATOS=[['Hammurabi','Código de leyes'],['Sargón I','Unificó Mesopotamia'],['Ciro II','Conquistó Babilonia'],['Nabucodonosor II','Jardines Colgantes'],['Jerjes I','Termópilas y Salamina'],['Narmer','Primer faraón'],['Ramsés II','Batalla de Qadesh'],['Akhenatón','Culto al dios Atón'],['Howard Carter','Halló la tumba de Tutankamón'],['Cleopatra VII','Última reina de Egipto'],['Abraham','Llevó a los hebreos a Canaán'],['Salomón','Templo de Jerusalén'],['Moisés','Éxodo por el mar Rojo'],['Argantonio','«Hombre de plata»'],['Isis','Devolvió la vida a Osiris']];
+function gUne(){let mode='def',round=0,err=0;
+ const setup=()=>{round=0;err=0;
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Une parejas</span><span id="hud">Errores: 0</span></div><div class="chips" id="modes"><button type="button" data-m="def" aria-pressed="${mode==='def'}">Concepto y definición</button><button type="button" data-m="obra" aria-pressed="${mode==='obra'}">Personaje y hecho</button></div><p class="prompt" id="q"></p><div class="match" id="mt"></div><p class="fb" id="fb" role="status"></p><div id="gend"><div class="actions">${backB()}</div></div></div>`;wireBack();
+  $('#modes').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;setup()});play()};
+ const play=()=>{if(round>=2){const b=setBest('une',err,true);$('#mt').innerHTML='';$('#q').textContent='';endG(err?`${err} ${err===1?'error':'errores'}`:'¡Perfecto, sin errores!',`${b?'¡Nueva mejor marca! ':''}Has unido 12 parejas.`,setup);return}
+  const pairs=shuffle(mode==='def'?DEFS:DATOS).slice(0,6);
+  $('#q').innerHTML=mode==='def'?`Ronda ${round+1} de 2: une cada concepto con su definición.`:`Ronda ${round+1} de 2: une cada personaje con lo que hizo.`;
+  const L=shuffle(pairs.map((p,i)=>[p[0],i])),Rr=shuffle(pairs.map((p,i)=>[p[1],i]));let sel=null,left=6;
+  $('#mt').innerHTML=`<div class="col">${L.map(([t,i])=>`<button class="mt" type="button" data-s="L" data-i="${i}">${t}</button>`).join('')}</div><div class="col">${Rr.map(([t,i])=>`<button class="mt" type="button" data-s="R" data-i="${i}">${t}</button>`).join('')}</div>`;
+  $('#mt').querySelectorAll('.mt').forEach(b=>b.onclick=()=>{if(b.classList.contains('done'))return;
+   if(b.dataset.s==='L'){$('#mt').querySelectorAll('.mt[data-s="L"]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=b;$('#fb').textContent='';return}
+   if(!sel){$('#fb').className='fb ko';$('#fb').textContent='Primero toca algo de la columna izquierda.';return}
+   if(b.dataset.i===sel.dataset.i){[b,sel].forEach(x=>{x.classList.remove('sel');x.classList.add('done');x.disabled=true});sel=null;left--;$('#fb').className='fb okk';$('#fb').textContent='¡Pareja!';if(!left){round++;setTimeout(play,800)}}
+   else{err++;$('#hud').textContent='Errores: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('#fb').className='fb ko';$('#fb').textContent='Esa no es su pareja.'}})};
+ setup()}
+
+/* Clasifica contra reloj */
+const DECKS={
+civ:{n:'¿De qué pueblo?',c:['Mesopotamia','Egipto','Fenicios','Hebreos'],it:[['Zigurat',0],['Escritura cuneiforme',0],['Código de Hammurabi',0],['Gudea de Lagash',0],['Arco y bóveda',0],['Dios Marduk',0],['Sargón I',0],['Pirámides de Gizeh',1],['Faraón',1],['Limo negro',1],['Anubis',1],['Momificación',1],['Juicio de Osiris',1],['Alfabeto de 22 signos',2],['Tinte púrpura',2],['Tiro y Sidón',2],['Factorías y colonias',2],['Monoteísmo',3],['Templo de Jerusalén',3],['Abraham',3],['Torá',3],['Moisés',3]]},
+pen:{n:'¿Celta o ibero?',c:['Celtas','Iberos'],it:[['Castros',0],['Casas redondas',0],['Sin escritura',0],['Indoeuropeos',0],['Vacceos',0],['Lusitanos',0],['Cántabros',0],['Astures',0],['Vettones',0],['Oppida',1],['Calles ordenadas',1],['Moneda propia',1],['Con escritura',1],['Dama de Elche',1],['Turdetanos',1],['Bastetanos',1],['Contestanos',1],['Edetanos',1]]},
+col:{n:'¿Quién la fundó?',c:['Fenicios','Griegos','Cartagineses'],it:[['Gadir (Cádiz)',0],['Malaka (Málaga)',0],['Sexi (Almuñécar)',0],['Abdera (Adra)',0],['Cartago',0],['Emporion (Ampurias)',1],['Rhode (Rosas)',1],['Ebusus (Ibiza)',2],['Carthago Nova (Cartagena)',2],['Trajeron el olivo y la vid',0],['Trajeron la moneda',1],['Lucharon contra Roma',2]]},
+eta:{n:'¿Qué etapa de Egipto?',c:['I. Antiguo','I. Medio','I. Nuevo','Tardía y Ptol.'],it:[['Capital en Menfis',0],['Pirámides de Gizeh',0],['Keops, Kefrén y Micerinos',0],['Capital en Tebas',1],['Invasión de los hicsos',1],['Comercio con Nubia',1],['Ramsés II',2],['Batalla de Qadesh',2],['Valle de los Reyes',2],['Templos de Luxor y Karnak',2],['Pueblos del Mar',2],['Alejandro Magno',3],['Ptolomeo',3],['Cleopatra VII',3]]}};
+function gCla(){let dk='civ';
+ const setup=()=>{const D=DECKS[dk];let pts=0,streak=0,left=60,cur=null,deck=shuffle(D.it),k=0,miss=[];
+  $('#main').innerHTML=`<div class="sheet"><div class="meta"><span>Clasifica contra reloj</span><span>60 segundos</span></div>
+  <div class="chips" id="decks">${Object.entries(DECKS).map(([k2,d])=>`<button type="button" data-d="${k2}" aria-pressed="${k2===dk}">${d.n}</button>`).join('')}</div>
+  <div class="hud"><span id="pts">0 puntos</span><span id="stk"></span><span id="sec">60 s</span></div><div class="timer"><i id="bar" style="width:100%"></i></div>
+  <p class="bigq" id="item">Pulsa «Empezar»</p><div class="opts ${D.c.length<=4?'grid':''}" id="opts" hidden>${D.c.map((c,i)=>`<button class="opt" type="button" data-i="${i}" style="text-align:center;font-weight:700">${c}</button>`).join('')}</div>
+  <div id="gend"><div class="actions"><button class="primary" id="start" type="button">Empezar</button>${backB()}</div></div></div>`;wireBack();
+  $('#decks').querySelectorAll('button').forEach(b=>b.onclick=()=>{stopTimers();dk=b.dataset.d;setup()});
+  const next=()=>{if(k>=deck.length){deck=shuffle(D.it);k=0}cur=deck[k++];$('#item').textContent=cur[0]};
+  $('#start').onclick=()=>{$('#opts').hidden=false;$('#gend').innerHTML='';next();st.timer=setInterval(()=>{left--;$('#sec').textContent=left+' s';$('#bar').style.width=(left/60*100)+'%';if(left<=0){stopTimers();end()}},1000)};
+  $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(!cur||left<=0)return;const ok=+b.dataset.i===cur[1];const it=$('#item');it.classList.remove('flash-ok','flash-ko');void it.offsetWidth;if(ok){streak++;pts+=streak>=5?2:1}else{streak=0;miss.push(cur)}it.classList.add(ok?'flash-ok':'flash-ko');$('#pts').textContent=pts+' puntos';$('#stk').textContent=streak>=5?'¡Racha ×2!':streak>=2?'Racha '+streak:'';next()});
+  function end(){$('#opts').hidden=true;$('#item').textContent='¡Tiempo!';const better=setBest('cla',pts,false);const u=[...new Map(miss.map(m=>[m[0],m])).values()];endG(`${pts} puntos`,`${better?'¡Nueva mejor marca! ':''}${u.length?'Para repasar: '+u.slice(0,6).map(m=>`<b>${esc(m[0])}</b> → ${D.c[m[1]]}`).join('; ')+'.':'¡Sin fallos!'} Con 5 aciertos seguidos, cada uno vale doble.`,setup)}};setup()}
+
+/* =================== PROGRESO =================== */
+const all3=L=>L.every(k=>(S.stars[k]||0)===3);
+const BADGES=[['Primera estrella',()=>totalStars()>=1],['Experta en Mesopotamia',()=>all3(['m1','m2','m3'])],['Faraona',()=>all3(['e1','e2','e3','e4'])],['Navegante del Mediterráneo',()=>all3(['p1','p2','p3'])],['Sabia de pistas',()=>(S.games.quien||0)>=18],['Todo en orden',()=>S.games.ord===0],['Sobresaliente',()=>(S.games.prueba||0)>=9]];
+function renderProgress(){const any=totalStars()||Object.keys(S.games).length||Object.keys(S.q).length;
+ $('#progress').innerHTML=`<h2>Medallas</h2><div class="badges">${BADGES.map(([n,f])=>{const g=f();return`<span class="badge ${g?'got':''}">${star(g)}${n}</span>`}).join('')}</div>
+ <div class="pfoot"><span>${any?'Las medallas se ganan con las estrellas, los juegos y la prueba.':'Todavía no has empezado en este dispositivo.'}</span>${st.confirm?`<span class="rconf">¿Seguro? <button class="rbtn danger" id="rYes" type="button">Sí, borrar</button><button class="rbtn" id="rNo" type="button">Cancelar</button></span>`:`<button class="rbtn" id="rst" type="button"${any?'':' disabled'}>Borrar progreso</button>`}</div>`;
+ if($('#rst'))$('#rst').onclick=()=>{st.confirm=true;renderProgress()};if($('#rNo'))$('#rNo').onclick=()=>{st.confirm=false;renderProgress()};
+ if($('#rYes'))$('#rYes').onclick=()=>{S={stars:{},q:{},games:{}};save();st.confirm=false;renderProgress();renderScore();setTab(st.tab)}}
+function setTab(t){stopTimers();st.tab=t;[['tEst','est'],['tJue','jue'],['tPru','pru']].forEach(([id,k])=>$('#'+id).setAttribute('aria-pressed',k===t));({est:renderEst,jue:renderJue,pru:renderPru})[t]();window.scrollTo({top:0})}
+$('#tEst').onclick=()=>setTab('est');$('#tJue').onclick=()=>setTab('jue');$('#tPru').onclick=()=>setTab('pru');
+renderScore();renderProgress();setTab('est');
+</script>
+</body>
+</html>

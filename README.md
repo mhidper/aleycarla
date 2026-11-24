@@ -23,6 +23,8 @@ ale/
     verbos-irregulares/  Verbos Irregulares: de grow a send, con juegos y pronunciación
   geografia-historia/   (asignatura «Historia»)
     temas-1-2/        Expedición Historia: La Prehistoria y La Tierra y el Universo
+    tema3/            Primeras civilizaciones: Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos y colonizaciones
+    tema3-animado/    Historia animada del Tema 3: fichas paso a paso hechas con GSAP
   mapas-geografia/
     tema2/            Viaje por España: comunidades, provincias, pueblos y patrimonio (mapa del IGN vía es-atlas)
     temas-1-2/        Atlas de Geografía: conceptos geográficos y medio físico de España (temas 1 y 2)
