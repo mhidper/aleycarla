@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fichas animadas: Tema 2</title>
+<title>Fichas animadas: Megalitismo y Barroco</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
 <style>
 /* Misma familia visual que la app de los temas 1 y 2: hoja cuadriculada, rotulador magenta. El escenario de la animación es una lámina clara fija en ambos temas. */
@@ -82,8 +82,8 @@ button:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-
 <div class="wrap">
   <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
   <header>
-    <h1>Fichas animadas <span>Tema 2</span></h1>
-    <p>Megalitismo y Barroco musical, paso a paso. Pulsa «Siguiente» para ver cada parte y, al final de cada ficha, comprueba lo que has aprendido.</p>
+    <h1>Fichas animadas <span>Megalitismo y Barroco</span></h1>
+    <p>Arte del tema 2 (megalitismo) y música del tema 3 (Barroco), paso a paso. Pulsa «Siguiente» para ver cada parte y, al final de cada ficha, comprueba lo que has aprendido.</p>
   </header>
   <section class="sheet" id="sheet" aria-labelledby="ttl">
     <p class="kicker" id="kick"></p>
@@ -656,7 +656,7 @@ const stage=$('#stage');
 const st={i:0,k:-1,tl:null,play:null};
 
 function renderPick(){
-  const groups=[['Arte','Todas las fichas · Arte: Megalitismo'],['Música','Música: Barroco']];
+  const groups=[['Arte','Todas las fichas · Arte, tema 2: Megalitismo'],['Música','Música, tema 3: Barroco']];
   $('#pick').innerHTML=groups.map(([b,h])=>`<h2>${h}</h2><div class="chips">${SCENES.map((sc,i)=>sc.b===b?`<button data-i="${i}" class="${DONE[sc.id]?'done':''}" aria-current="${i===st.i}">${i+1}. ${sc.t.replace(/^Baleares: (.)/,(m,c)=>c.toUpperCase())}</button>`:'').join('')}</div>`).join('');
   $('#pick').querySelectorAll('button').forEach(b=>b.onclick=()=>load(+b.dataset.i,true));
 }

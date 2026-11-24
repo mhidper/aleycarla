@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arte y Música: Temas 1 y 2</title>
+<title>Arte y Música: Temas 1, 2 y 3</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
 <style>
 /* Layout: misma familia que el repaso de Matemáticas (hoja cuadriculada, rotulador magenta); las ilustraciones van en paneles de roca o de pergamino */
@@ -116,7 +116,7 @@ svg text{font-family:var(--f-body)}
   <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
   <header>
     <h1>Arte y Música <span>Ale</span></h1>
-    <p>Temas 1 y 2 de Historia del Arte y de la Música: arte del Paleolítico y megalitismo, música de la Edad Media y Barroco. Estudia con las fichas y después ponte a prueba.</p>
+    <p>Historia del Arte y de la Música: arte del Paleolítico (tema 1) y megalitismo (tema 2); música de la Edad Media (tema 1) y del Barroco (tema 3). Estudia con las fichas y después ponte a prueba.</p>
   </header>
   <div class="tabs" role="group" aria-label="Modo">
     <button id="tStudy" aria-pressed="true">Estudiar</button>
@@ -134,7 +134,7 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const BLOCKS={a1:'Tema 1 · Arte: Paleolítico',m1:'Tema 1 · Música: Edad Media',a2:'Tema 2 · Arte: Megalitismo',m2:'Tema 2 · Música: Barroco'};
+const BLOCKS={a1:'Tema 1 · Arte: Paleolítico',m1:'Tema 1 · Música: Edad Media',a2:'Tema 2 · Arte: Megalitismo',m2:'Tema 3 · Música: Barroco'};
 const SHORT={a1:'Paleolítico',m1:'Edad Media',a2:'Megalitismo',m2:'Barroco'};
 
 /* =================== DIBUJOS =================== */
@@ -465,7 +465,7 @@ const QS=[
 {b:'a2',t:'test',img:'talayot',q:'¿Qué construcción balear es esta?',ok:'Talayot',no:['Naveta','Taula','Dolmen'],exp:'Una torre de grandes piedras: talayot.'},
 {b:'a2',t:'test',img:'naveta',q:'¿Qué construcción balear es esta?',ok:'Naveta',no:['Talayot','Taula','Menhir'],exp:'Forma de barco invertido: naveta.'},
 {b:'a2',t:'test',img:'taula',q:'¿Qué construcción balear es esta?',ok:'Taula',no:['Dolmen','Talayot','Naveta'],exp:'Un bloque vertical y otro horizontal encima: taula.'},
-/* ---- Tema 2 Música (Barroco) ---- */
+/* ---- Tema 3 Música (Barroco) ---- */
 {b:'m2',t:'test',q:'¿Entre qué años se sitúa el Barroco musical?',ok:'1600-1750',no:['1400-1600','1750-1820','800-1200'],exp:'De 1600 a 1750.'},
 {b:'m2',t:'test',q:'¿Qué ocurre en 1750, el año que cierra el Barroco?',ok:'Muere Johann Sebastian Bach',no:['Nace Vivaldi','Se estrena El Mesías','Muere Alfonso X'],exp:'1750 es el año de la muerte de Bach.'},
 {b:'m2',t:'vf',q:'En el Barroco prevalece la música religiosa sobre la profana.',ok:false,exp:'Falso: prevalece la profana.'},
@@ -514,7 +514,7 @@ function weight(q){const s=S.q[q.id];if(!s)return 3;return Math.max(.4,1+2*(s.n-
 function nextQ(){const p=pool().filter(q=>!st.recent.includes(q.id));const list=p.length?p:pool();let r=Math.random()*list.reduce((a,q)=>a+weight(q),0);for(const q of list){r-=weight(q);if(r<=0)return q}return list[list.length-1]}
 
 /* =================== RENDER =================== */
-function renderChips(){const opts=[['all','Todo'],...Object.entries(SHORT).map(([k,v])=>[k,(k[1]==='1'?'T1 · ':'T2 · ')+v])];
+function renderChips(){const opts=[['all','Todo'],...Object.entries(SHORT).map(([k,v])=>[k,({a1:'T1',m1:'T1',a2:'T2',m2:'T3'}[k])+' · '+v])];
  $('#chips').innerHTML=opts.map(([k,v])=>`<button type="button" data-k="${k}" aria-pressed="${st.block===k}">${v}</button>`).join('');
  $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{st.block=b.dataset.k;renderChips();go()})}
 
