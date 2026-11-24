@@ -38,8 +38,8 @@ window.CATALOGO = {
       {
         id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [
           { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' },
-          { titulo: 'Primeras civilizaciones: Tema 3', descripcion: 'Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos y colonizaciones. 10 fichas con reto, 4 juegos y prueba', ruta: 'ale/geografia-historia/tema3/' },
-          { titulo: 'Historia animada: Tema 3', descripcion: 'Quince fichas animadas paso a paso: el Creciente Fértil, la ciudad-estado, la escritura, el Nilo, las momias, el alfabeto fenicio, Tartessos, celtas e iberos y las colonizaciones, con preguntas al final', ruta: 'ale/geografia-historia/tema3-animado/' }
+          { titulo: 'Primeras civilizaciones: Tema 3', descripcion: 'Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos, colonizaciones y personajes. 11 fichas con conceptos y reto, 7 juegos y prueba', ruta: 'ale/geografia-historia/tema3/' },
+          { titulo: 'Historia animada: Tema 3', descripcion: 'Fichas animadas paso a paso: el Creciente Fértil, la ciudad-estado, la escritura, el Nilo, las momias, el alfabeto fenicio, Tartessos, celtas e iberos, las colonizaciones y 14 biografías y leyendas, con preguntas al final', ruta: 'ale/geografia-historia/tema3-animado/' }
         ]
       },
       {

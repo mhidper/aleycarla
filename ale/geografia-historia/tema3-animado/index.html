@@ -88,7 +88,7 @@ button:focus-visible,.opt:focus-visible{outline:3px solid var(--marker);outline-
   </div>
   <header>
     <h1>Historia animada <span>Tema 3</span></h1>
-    <p>Las primeras civilizaciones paso a paso: Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos y colonizadores. Pulsa «Siguiente» para avanzar y comprueba lo aprendido al final de cada ficha.</p>
+    <p>Las primeras civilizaciones paso a paso: Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos, colonizadores y los personajes y leyendas del tema. Pulsa «Siguiente» para avanzar y comprueba lo aprendido al final de cada ficha.</p>
   </header>
   <section class="sheet" id="sheet" aria-labelledby="ttl">
     <p class="kicker" id="kick"></p>
@@ -688,6 +688,117 @@ const SCENES=[
  ]}
 ];
 
+/* =================== PERSONAJES Y LEYENDAS (biografías) =================== */
+const EMB={
+hammurabi:`<path d="M-26 52 V-18 Q-26 -48 0 -48 Q26 -48 26 -18 V52 Z" fill="#2c2b30"/><g class="ek2"><circle cx="11" cy="-30" r="8" fill="${GOLD}"/><rect x="5" y="-22" width="12" height="16" fill="#777"/><circle cx="-10" cy="-30" r="6" fill="#999"/><rect x="-15" y="-24" width="10" height="16" fill="#999"/></g><g class="ek1">${[0,9,18,27,36].map(y=>`<line x1="-18" y1="${y}" x2="18" y2="${y}" stroke="#aaa" stroke-width="2" stroke-dasharray="3 3"/>`).join('')}</g>`,
+nabuco:`<rect x="-46" y="22" width="92" height="22" fill="#c9a46a" stroke="#7a5528" stroke-width="2"/><rect x="-34" y="0" width="68" height="22" fill="#d6b27a" stroke="#7a5528" stroke-width="2"/><rect x="-22" y="-22" width="44" height="22" fill="#e2c08c" stroke="#7a5528" stroke-width="2"/><g class="ek2">${[[-40,22],[-20,22],[0,22],[20,22],[40,22],[-28,0],[-8,0],[12,0],[30,0],[-16,-22],[4,-22],[18,-22]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="#3d9a4a"/>`).join('')}</g><g class="ek3"><path d="M-14 -22 Q-16 -40 0 -44 Q16 -40 14 -22" fill="#3d9a4a"/></g>`,
+ciro:`<path d="M-8 -54 Q0 -30 -2 -6" stroke="#2f7fd1" stroke-width="10" fill="none" stroke-linecap="round"/><g class="ek3">${[-48,-34,-20,-6,8,22,36,50].map(x=>`<path d="M-2 -6 Q${x/2} 14 ${x} 48" stroke="#2f7fd1" stroke-width="3" fill="none"/>`).join('')}</g><g class="ek2"><rect x="-58" y="-50" width="26" height="18" rx="3" fill="#fff" stroke="#7a5528" stroke-width="2"/><path d="M-58 -50 L-45 -40 L-32 -50" stroke="#7a5528" stroke-width="2" fill="none"/></g><path d="M18 -56 V-38 L26 -46 L34 -36 L42 -46 L50 -38 V-56 Z" fill="${GOLD}" stroke="#8a5510" stroke-width="2"/>`,
+jerjes:`<path d="M-30 32 V-8 Q-30 -44 0 -44 Q30 -44 30 -8 V32 H12 V2 H-12 V32 Z" fill="#c9a24a" stroke="#7a5a10" stroke-width="3"/><path d="M-4 -44 Q4 -70 34 -60" stroke="#b0302a" stroke-width="10" fill="none" stroke-linecap="round"/><g class="ek1"><polygon points="-60,52 -40,52 -48,4" fill="#9c8a66"/><polygon points="40,52 60,52 50,8" fill="#9c8a66"/></g><g class="ek2"><path d="M-40 50 H40 L30 58 H-30 Z" fill="#7a4a28"/><line x1="0" y1="50" x2="0" y2="36" stroke="#5a3d1b" stroke-width="2"/></g>`,
+osiris:`<path d="M-18 -6 H18 L14 54 H-14 Z" fill="#f4f1e8" stroke="#999" stroke-width="1.5"/><circle cy="-18" r="15" fill="#3a9a5a"/><path d="M-11 -30 Q-13 -60 0 -72 Q13 -60 11 -30 Z" fill="#fff" stroke="#999" stroke-width="1.5"/><path d="M-10 8 L10 30 M10 8 L-10 30" stroke="${GOLD}" stroke-width="4"/><g class="ek1"><path d="M-62 40 L-48 10 L-34 40 Z" fill="#a33b2b"/><circle cx="-48" cy="4" r="7" fill="#a33b2b"/></g><g class="ek2"><path d="M40 -40 A16 16 0 1 0 56 -24 A12 12 0 1 1 40 -40 Z" fill="#cfd8e0"/></g>`,
+aton:`<circle r="26" fill="#f2b705" stroke="#c88a00" stroke-width="3"/>${[0,30,60,90,120,150,180,210,240,270,300,330].map(a=>`<g transform="rotate(${a})"><line x1="0" y1="30" x2="0" y2="54" stroke="#f2b705" stroke-width="3"/><circle cx="0" cy="56" r="3.5" fill="#d9a400"/></g>`).join('')}`,
+nefertiti:`<path d="M-34 58 Q-28 18 -6 14 H8 Q30 18 36 58 Z" fill="#c98b4e" stroke="#683d16" stroke-width="2"/><path d="M-6 14 V0 H8 V14" fill="#d9a35c"/><ellipse cx="0" cy="-12" rx="16" ry="20" fill="#d9a35c" stroke="#683d16" stroke-width="2"/><path d="M-12 -24 L-24 -66 Q4 -78 30 -64 L18 -24 Z" fill="${LAP}" stroke="#10254c" stroke-width="2"/><rect x="-18" y="-46" width="40" height="6" fill="${GOLD}"/><g class="ek2"><text x="0" y="-84" font-size="22" font-weight="800" text-anchor="middle" fill="${MAG}">?</text></g>`,
+tutank:`<path d="M-40 52 V-10 Q-40 -54 0 -54 Q40 -54 40 -10 V52 L22 30 V-6 H-22 V30 Z" fill="${GOLD}" stroke="#8a5510" stroke-width="2"/>${[-44,-34,-24,-14].map(y=>`<path d="M-40 ${y+40} H-24 M24 ${y+40} H40" stroke="${LAP}" stroke-width="5"/>`).join('')}<ellipse cx="0" cy="8" rx="20" ry="26" fill="#e8b84a" stroke="#8a5510" stroke-width="2"/><ellipse cx="-8" cy="2" rx="5" ry="3" fill="#fff"/><circle cx="-8" cy="2" r="2" fill="#000"/><ellipse cx="8" cy="2" rx="5" ry="3" fill="#fff"/><circle cx="8" cy="2" r="2" fill="#000"/><rect x="-4" y="34" width="8" height="18" fill="${LAP}"/><g class="ek3"><text x="0" y="-62" font-size="15" font-weight="800" text-anchor="middle" fill="${MAG}">1922</text></g>`,
+ramses:`<path d="M-36 50 V-6 Q-36 -50 0 -50 Q36 -50 36 -6 V50 L20 30 V-4 H-20 V30 Z" fill="#e9e1c8" stroke="#7a6a4a" stroke-width="2"/>${[-30,-18,-6,6,18].map(y=>`<path d="M-36 ${y+30} H-20 M20 ${y+30} H36" stroke="${LAP}" stroke-width="4"/>`).join('')}<ellipse cx="0" cy="6" rx="18" ry="24" fill="#b5703d"/><path d="M-6 -50 Q0 -62 6 -50" fill="${GOLD}"/><g class="ek1"><rect x="-62" y="16" width="24" height="32" rx="3" fill="#fff6d8" stroke="#8a6330" stroke-width="2"/>${[24,31,38].map(y=>`<line x1="-58" y1="${y}" x2="-42" y2="${y}" stroke="#8a6330" stroke-width="1.5"/>`).join('')}</g><g class="ek3"><text x="46" y="-40" font-size="16" font-weight="800" text-anchor="middle" fill="${MAG}">93</text></g>`,
+cleopatra:`<path d="M-34 56 Q-28 20 -6 16 H8 Q30 20 36 56 Z" fill="#7a3f9e"/><ellipse cx="0" cy="-8" rx="18" ry="22" fill="#c98b4e" stroke="#683d16" stroke-width="2"/><path d="M-22 -14 Q-26 -40 0 -42 Q26 -40 22 -14 L24 26 H16 V-14 H-16 V26 H-24 Z" fill="#111"/><rect x="-20" y="-36" width="40" height="7" fill="${GOLD}"/><path class="ek2" d="M0 -36 Q-8 -46 0 -52 Q8 -58 2 -64" stroke="${GOLD}" stroke-width="4" fill="none"/>`,
+argantonio:`<path d="M-40 10 V-24 L-22 -4 L0 -36 L22 -4 L40 -24 V10 Z" fill="#c9d1d9" stroke="#6b7680" stroke-width="3"/><rect x="-40" y="10" width="80" height="12" fill="#b8c2cc" stroke="#6b7680" stroke-width="2"/><g class="ek1">${[[-30,44],[0,48],[30,44]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="11" fill="#d8dee4" stroke="#6b7680" stroke-width="2"/>`).join('')}</g><g class="ek2"><text x="0" y="-48" font-size="15" font-weight="800" text-anchor="middle" fill="${MAG}">120</text></g>`,
+carambolo:`${[[-30,-24],[8,-30],[40,-8],[-36,12],[0,8],[30,30],[-14,42]].map(([x,y],i)=>`<path class="${i<3?'':'ek2'}" transform="translate(${x} ${y})" d="M-14 -10 Q0 -5 14 -10 Q9 0 14 10 Q0 5 -14 10 Q-9 0 -14 -10 Z" fill="${GOLD}" stroke="#8a5510" stroke-width="1.5"/>`).join('')}<g class="ek1"><path d="M-50 54 Q-50 30 -30 28 H30 Q50 30 50 54 Z" fill="#a0522d" opacity=".9"/></g>`,
+gerion:`<rect x="-36" y="0" width="72" height="50" rx="10" fill="#8a5a2b"/>${[-26,0,26].map(x=>`<circle cx="${x}" cy="-14" r="13" fill="#d9a35c" stroke="#683d16" stroke-width="2"/>`).join('')}<g class="ek1"><ellipse cx="-58" cy="40" rx="12" ry="8" fill="#555"/><circle cx="-66" cy="30" r="5" fill="#555"/><circle cx="-54" cy="28" r="5" fill="#555"/></g><g class="ek3"><path d="M50 40 Q56 10 46 -10 M46 -10 Q36 -6 30 4 M46 -10 Q56 -14 62 -6" stroke="#2d6a2d" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="46" cy="-14" rx="16" ry="8" fill="#3d8a3d"/></g>`,
+moises:`<path d="M-60 30 Q-30 20 0 30 T60 30 V60 H-60 Z" fill="#2f7fd1" opacity=".7"/><path d="M-28 22 H28 L22 36 H-22 Z" fill="#c9a46a" stroke="#7a5528" stroke-width="2"/><circle cy="16" r="8" fill="#e8c39e"/><g class="ek3"><path d="M-60 -60 Q-40 -10 -30 20 L-60 20 Z" fill="#2f7fd1"/><path d="M60 -60 Q40 -10 30 20 L60 20 Z" fill="#2f7fd1"/></g><g class="ek2">${[[-40,-40],[-10,-50],[20,-44],[44,-30]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="#a33b2b"/>`).join('')}</g>`};
+const BIOS=[
+{id:'bio-hammurabi',n:'Hammurabi',d:'1792-1750 a. C.',r:'Rey de Babilonia',c:'#1e4f94',e:'hammurabi',
+ f:[['Rey de Babilonia','la gran potencia de su tiempo','Hammurabi fue <b>rey de Babilonia</b> (1792-1750 a. C.). Con él, Babilonia se convirtió en la mayor potencia de su época.'],
+  ['Código de Hammurabi','h. 1754 a. C. · acadio y cuneiforme','Mandó escribir el <b>Código de Hammurabi</b> (h. 1754 a. C.), en acadio y escritura cuneiforme, para <b>unificar las leyes</b> de su reino.'],
+  ['El dios Shamash','le da el poder · hoy en el Louvre','En lo alto de la estela, el dios <b>Shamash</b> le entrega las insignias del poder. Hoy está en el <b>Museo del Louvre</b> (París).'],
+  ['Ley del Talión','«ojo por ojo, diente por diente»','El código recoge la <b>ley del Talión</b>: «ojo por ojo, diente por diente». Hammurabi fue un gran estratega: sabía cuándo luchar y cuándo pactar.']],
+ qs:[{q:'¿En qué lengua y escritura está el Código de Hammurabi?',ok:'En acadio y escritura cuneiforme',no:['En griego y alfabeto','En egipcio y jeroglíficos','En hebreo y alfabeto fenicio'],exp:'Es uno de los conjuntos de leyes más antiguos y mejor conservados.'},{q:'¿Qué dios entrega el poder a Hammurabi en la estela?',ok:'Shamash',no:['Marduk','Osiris','Atón'],exp:'La estela se conserva en el Museo del Louvre.'}]},
+{id:'bio-nabuco',n:'Nabucodonosor II',d:'murió en el 562 a. C.',r:'Rey neobabilónico',c:'#2d7a3d',e:'nabuco',
+ f:[['Imperio neobabilónico','hijo de Nabopolasar','Nabucodonosor II fue rey del <b>Imperio neobabilónico</b>, que fundó su padre Nabopolasar ocupando el lugar del Imperio asirio.'],
+  ['Reconstruye Babilonia','zigurat de Etemenanki','Reconstruyó Babilonia: templos, murallas, palacios y el gran zigurat de <b>Etemenanki</b>.'],
+  ['Jardines Colgantes','una de las siete maravillas','La leyenda le atribuye los <b>Jardines Colgantes de Babilonia</b>, una de las siete maravillas, para su esposa Amyitis.'],
+  ['Ópera «Nabucco»','de Verdi','Reinó más de 40 años. Verdi compuso la ópera <b>Nabucco</b> sobre cuando llevó a los judíos de Jerusalén a Babilonia.']],
+ qs:[{q:'¿Qué maravilla le atribuye la leyenda a Nabucodonosor II?',ok:'Los Jardines Colgantes de Babilonia',no:['Las pirámides de Gizeh','El Faro de Alejandría','El Templo de Jerusalén'],exp:'Según la leyenda, los mandó hacer para su esposa Amyitis.'},{q:'¿Qué compositor le dedicó una ópera?',ok:'Verdi, con «Nabucco»',no:['Mozart, con «La flauta mágica»','Haydn, con «La creación»','Beethoven, con «Fidelio»'],exp:'Trata del momento en que llevó a los judíos a Babilonia.'}]},
+{id:'bio-ciro',n:'Ciro II el Grande',d:'579-530 a. C.',r:'Fundador del Imperio persa',c:'#b8860b',e:'ciro',
+ f:[['Imperio persa','aqueménida · primera potencia','Ciro II fundó el <b>Imperio persa o aqueménida</b>, la primera potencia de su época hasta que lo conquistó Alejandro Magno.'],
+  ['Libera a los hebreos','más de 40 000 vuelven a Palestina','Permitió que más de <b>40 000 hebreos</b> salieran de Babilonia y volvieran a Palestina. Los hebreos lo llamaron «Ungido del Señor».'],
+  ['Sátrapas y correo','el primer correo imperial','Puso <b>sátrapas</b> en cada provincia y creó el <b>primer correo imperial</b> para tenerlas comunicadas y controladas.'],
+  ['El río Gyndes','lo divide en 360 canales','Cuando el río <b>Gyndes</b> ahogó a su caballo favorito, lo «castigó»: sus soldados cavaron hasta dividirlo en <b>360 canales</b> y casi secarlo.']],
+ qs:[{q:'¿Qué creó Ciro II para comunicar su imperio?',ok:'El primer correo imperial',no:['El alfabeto','La moneda','El calendario solar'],exp:'Así controlaba a los sátrapas de cada provincia.'},{q:'¿Qué hizo Ciro II con el río Gyndes?',ok:'Lo dividió en 360 canales para «castigarlo»',no:['Construyó un puente de oro','Lo desvió hasta Egipto','Lo llenó de barcos de guerra'],exp:'El río había ahogado a su caballo favorito.'}]},
+{id:'bio-jerjes',n:'Jerjes I el Grande',d:'reinó 485-465 a. C.',r:'Rey de Persia',c:'#a33b2b',e:'jerjes',
+ f:[['Rey de Persia','hijo de Darío I','Jerjes I fue rey del Imperio persa durante dos décadas. Era hijo de <b>Darío I</b>, que había empezado las Guerras Médicas contra los griegos.'],
+  ['Las Termópilas','vence a Leónidas y sus 300','En la II Guerra Médica invadió Grecia y venció en las <b>Termópilas</b> al rey espartano <b>Leónidas</b> y sus 300 guerreros, tras la traición de un pastor.'],
+  ['Salamina y Platea','derrotas persas','Saqueó Atenas, pero la flota de Temístocles lo derrotó en <b>Salamina</b>, y su ejército perdió en <b>Platea</b>.'],
+  ['Grecia sigue libre','la cultura griega llega a nosotros','Gracias a esa victoria, la cultura griega siguió libre y nos llegó a través de Sócrates o Platón. Jerjes murió asesinado.']],
+ qs:[{q:'¿Dónde venció Jerjes al espartano Leónidas?',ok:'En las Termópilas',no:['En Salamina','En Qadesh','En Actium'],exp:'Después perdió en Salamina y en Platea.'},{q:'¿Quién organizó la flota griega que derrotó a Jerjes en Salamina?',ok:'Temístocles',no:['Leónidas','Darío I','Alejandro Magno'],exp:'Temístocles era un gobernante ateniense.'}]},
+{id:'bio-osiris',n:'Osiris y Seth',d:'mito egipcio',r:'Dioses hijos de Ra',c:'#17734a',e:'osiris',
+ f:[['Hijos de Ra','dos hermanos dioses','<b>Osiris</b> y <b>Seth</b> eran hermanos, hijos del dios <b>Ra</b>.'],
+  ['Seth mata a Osiris','por envidia (como Caín y Abel)','<b>Seth</b>, por envidia, mató a Osiris y esparció sus restos por todo el mundo, como en la historia de Caín y Abel.'],
+  ['Isis lo resucita','un beso en noche de luna llena','<b>Isis</b> buscó los restos, los unió y, con un beso una noche de luna llena, le devolvió la vida.'],
+  ['Dios de los muertos','símbolo de resurrección','Osiris se convirtió en el <b>dios de los muertos</b> y en símbolo de <b>resurrección</b>: acompaña y protege a los difuntos en su viaje.']],
+ qs:[{q:'¿Quién devolvió la vida a Osiris?',ok:'Isis',no:['Seth','Ra','Anubis'],exp:'Recompuso sus restos y lo resucitó.'},{q:'¿Qué simboliza Osiris tras el mito?',ok:'La resurrección y el mundo de los muertos',no:['La guerra y la venganza','El sol del mediodía','La crecida del Nilo'],exp:'Por eso los egipcios esperaban vivir en su reino tras la muerte.'}]},
+{id:'bio-akhenaton',n:'Akhenatón',d:'Amenofis IV',r:'El faraón de Atón',c:'#c88a00',e:'aton',
+ f:[['Un solo dios: Atón','el disco solar, en lugar de Amón','El faraón <b>Amenofis IV</b> hizo una reforma religiosa casi <b>monoteísta</b>: impuso el culto a <b>Atón</b>, el disco solar, en lugar de Amón y los demás dioses.'],
+  ['Nueva capital','Akhetatón (Tell al-Amarna)','Cambió su nombre por <b>Akhenatón</b> («servidor de Atón») y llevó la capital de Tebas a una ciudad nueva: <b>Akhetatón</b>, hoy Tell al-Amarna.'],
+  ['Arte de Amarna','más humano y naturalista','El arte se volvió <b>más humano y naturalista</b>: es el periodo de Amarna.'],
+  ['¿Por qué lo hizo?','quitar poder a los sacerdotes de Amón','Quizá para quitar poder a los <b>sacerdotes de Amón</b>, o por sus propias creencias. Su esposa <b>Nefertiti</b> ganó mucho protagonismo.']],
+ qs:[{q:'¿Qué dios impuso Akhenatón?',ok:'Atón, el disco solar',no:['Amón','Horus','Osiris'],exp:'Su reforma tenía tendencia monoteísta.'},{q:'¿Cómo se llamaba la nueva capital de Akhenatón?',ok:'Akhetatón (Tell al-Amarna)',no:['Tebas','Menfis','Tanis'],exp:'Significa «el horizonte de Atón».'}]},
+{id:'bio-nefertiti',n:'Nefertiti',d:'XVIII dinastía',r:'Reina de Egipto',c:'#1e4f94',e:'nefertiti',
+ f:[['Reina de Egipto','esposa de Akhenatón','<b>Nefertiti</b> fue reina de la <b>XVIII dinastía</b>, esposa de Akhenatón, de familia real y de gran belleza.'],
+  ['Gobernó con él','como Neferneferuatón','Acompañaba al faraón en todos los actos oficiales y llegó a gobernar con él con el nombre de <b>Neferneferuatón</b>.'],
+  ['Un misterio','desaparece de los documentos','Desapareció de golpe de los documentos: ¿murió?, ¿cayó en desgracia?, ¿gobernó con otro nombre? Sigue siendo un <b>misterio</b>.'],
+  ['Su busto','naturalista, cuello alargado','Su famoso <b>busto</b> es muy naturalista, con el cuello alargado, aunque sigue siendo hierático: sin expresión ni movimiento.']],
+ qs:[{q:'¿De quién era esposa Nefertiti?',ok:'De Akhenatón',no:['De Ramsés II','De Tutankamón','De Narmer'],exp:'Llegó a gobernar con él.'},{q:'¿Qué tiene de especial el busto de Nefertiti?',ok:'Es naturalista, con el cuello alargado',no:['Es de oro macizo','Está pintado de perfil','Tiene cabeza de animal'],exp:'Es del arte de Amarna, más humano.'}]},
+{id:'bio-tutankamon',n:'Tutankamón',d:'1336-1327 a. C.',r:'El faraón niño',c:'#b8860b',e:'tutank',
+ f:[['Hijo de Akhenatón','según el ADN','Tutankamón fue faraón de la XVIII dinastía. Según el <b>ADN</b>, era hijo de Akhenatón, aunque no de Nefertiti.'],
+  ['El faraón niño','vuelve Amón · capital en Tebas','Subió al trono siendo un niño. Devolvió el culto a <b>Amón</b> (y el poder a sus sacerdotes) y la capital a <b>Tebas</b>.'],
+  ['Murió con 18 años','infección en una pierna','Murió con solo <b>18 años</b>, por una infección en una herida de la pierna. Medía 1,80 m.'],
+  ['Tumba intacta','Howard Carter, 1922','En <b>1922</b>, <b>Howard Carter</b> encontró su tumba <b>intacta</b> en el Valle de los Reyes, llena de riquezas. ¡Fue la única!']],
+ qs:[{q:'¿Por qué es tan famoso Tutankamón?',ok:'Su tumba apareció intacta, llena de riquezas',no:['Construyó la Gran Pirámide','Venció a los hititas','Fue el último faraón'],exp:'La descubrió Howard Carter en 1922.'},{q:'¿Qué dios volvió a imponer Tutankamón?',ok:'Amón',no:['Atón','Seth','Marduk'],exp:'Deshizo la reforma de Akhenatón.'}]},
+{id:'bio-ramses',n:'Ramsés II',d:'vivió 93 años',r:'El último gran faraón',c:'#a33b2b',e:'ramses',
+ f:[['Hijo de Seti I','heredero desde joven','<b>Ramsés II</b> era hijo de <b>Seti I</b>, que lo nombró heredero en vida. Se entrenó en la guerra desde pequeño.'],
+  ['Tratado de paz','el primero conocido, con los hititas','Luchó contra los <b>hititas</b> y firmó con ellos el <b>primer tratado de paz conocido</b>.'],
+  ['Mayor expansión','capital en Tanis, en el delta','Llevó la capital a <b>Tanis</b>, en el delta, cerca del peligro. Con él Egipto alcanzó su <b>mayor expansión</b>.'],
+  ['93 años','más de 150 hijos','Vivió <b>93 años</b> y tuvo más de 150 hijos: el último gran faraón. Algunos historiadores sitúan en su reinado el éxodo de los judíos.']],
+ qs:[{q:'¿Qué firmó Ramsés II con los hititas?',ok:'El primer tratado de paz conocido',no:['El primer código de leyes','Una alianza contra Roma','El primer alfabeto'],exp:'Antes había luchado contra ellos.'},{q:'¿A dónde llevó Ramsés II la capital?',ok:'A Tanis, en el delta',no:['A Menfis','A Tebas','A Alejandría'],exp:'Para estar cerca de la zona de mayor peligro.'}]},
+{id:'bio-cleopatra',n:'Cleopatra VII',d:'69-30 a. C.',r:'La última reina',c:'#7a3f9e',e:'cleopatra',
+ f:[['Última Ptolomea','reina con 16 años','<b>Cleopatra VII</b> fue la última soberana de la dinastía de los <b>Ptolomeos</b>. Heredó el trono con solo 16 años.'],
+  ['Julio César y Marco Antonio','alianzas con Roma','Se alió con <b>Julio César</b>, con quien tuvo a su hijo Cesarión, y después con <b>Marco Antonio</b>.'],
+  ['Actium (31 a. C.)','después, Egipto es romano','Tras la derrota de <b>Actium</b> (31 a. C.) murió, según la tradición, por la mordedura de una cobra. Egipto pasó a Roma.'],
+  ['Gran gobernante','hablaba siete idiomas','Hablaba <b>siete idiomas</b> y en su reinado el pueblo no pasó hambre: hoy se reconoce su gran capacidad para gobernar.']],
+ qs:[{q:'¿De qué dinastía fue la última reina Cleopatra VII?',ok:'De los Ptolomeos',no:['De los Ramésidas','De la IV dinastía','De los aqueménidas'],exp:'La fundó un general de Alejandro Magno.'},{q:'¿Cuántos idiomas hablaba Cleopatra?',ok:'Siete',no:['Dos','Uno','Doce'],exp:'Hoy se destaca su inteligencia para gobernar.'}]},
+{id:'bio-argantonio',n:'Argantonio',d:'670-550 a. C.',r:'Rey de Tartessos',c:'#6b7680',e:'argantonio',
+ f:[['Rey de Tartessos','el único con referencias históricas','<b>Argantonio</b> fue el principal rey de <b>Tartessos</b> y el único del que hay referencias históricas, por su relación con los griegos.'],
+  ['«Hombre de plata»','eso significa su nombre','Su nombre significa «<b>hombre de plata</b>»: Tartessos era muy rica en metales.'],
+  ['120 años','según Heródoto','Según el historiador griego <b>Heródoto</b>, vivió <b>120 años</b> y reinó 87. Por eso algunos creen que fue una dinastía, no un solo rey.'],
+  ['La leyenda','su hijo Terión entierra las joyas','La leyenda cuenta que luchó contra los fenicios y que su hijo <b>Terión</b> enterró las joyas reales: el origen del <b>Tesoro del Carambolo</b>.']],
+ qs:[{q:'¿Qué historiador griego habla de Argantonio?',ok:'Heródoto',no:['Platón','Estrabón','Sócrates'],exp:'Dice que vivió 120 años.'},{q:'¿Qué significa «Argantonio»?',ok:'Hombre de plata',no:['Rey del mar','Hijo del sol','Señor de los caballos'],exp:'Tartessos era rica en plata.'}]},
+{id:'bio-carambolo',n:'El Tesoro del Carambolo',d:'hallado en 1958',r:'Camas (Sevilla)',c:'#b8860b',e:'carambolo',
+ f:[['30 de septiembre de 1958','un brazalete en unas obras','En <b>1958</b>, en unas obras en el cerro del Carambolo (<b>Camas</b>, Sevilla), el obrero Alonso Hinojos encontró un brazalete.'],
+  ['¡Creían que era latón!','se repartieron las piezas','Siguieron cavando y hallaron una vasija llena de piezas. Pensaron que eran de latón y se las repartieron; uno dobló una hasta romperla.'],
+  ['21 piezas de oro','24 quilates · casi 3 kg','El arqueólogo <b>Juan de Mata Carriazo</b> lo confirmó: <b>21 piezas de oro de 24 quilates</b>. «Un tesoro digno de Argantonio».'],
+  ['Museo de Sevilla','desde 2009','Hoy se cree que era de un templo <b>fenicio</b>. Sevilla lo compró en 1964 y desde 2009 está en el <b>Museo Arqueológico de Sevilla</b>.']],
+ qs:[{q:'¿Cuántas piezas de oro tiene el Tesoro del Carambolo?',ok:'21',no:['5','100','3'],exp:'De oro de 24 quilates.'},{q:'¿Qué arqueólogo estudió el tesoro?',ok:'Juan de Mata Carriazo',no:['Howard Carter','Heródoto','Alonso Hinojos'],exp:'Alonso Hinojos fue el obrero que lo encontró.'}]},
+{id:'bio-gerion',n:'Gerión',d:'mito griego',r:'Gigante de Eritia (Cádiz)',c:'#8a5a2b',e:'gerion',
+ f:[['Rey de Eritia','la isla donde estaba Cádiz','<b>Gerión</b> es un rey de la mitología griega ligado a la península Ibérica: vivía en la isla de <b>Eritia</b>, donde los fenicios fundaron Cádiz.'],
+  ['Tres cuerpos','perro Ortro y bueyes rojos','Era un gigante con <b>tres cuerpos</b> unidos por la cintura. Tenía un perro de dos cabezas, <b>Ortro</b>, y un rebaño de bueyes rojos.'],
+  ['El 10.º trabajo de Hércules','venía a robar los bueyes','En su <b>décimo trabajo</b>, <b>Hércules</b> vino a robar los bueyes: venció a Ortro y al pastor, y Gerión lo atacó con un olivo.'],
+  ['Nace el drago','de su sangre','Hércules le lanzó una flecha envenenada que atravesó sus <b>tres corazones</b>. De su sangre nació un <b>drago</b>.']],
+ qs:[{q:'¿Qué tenía de especial Gerión?',ok:'Tres cuerpos unidos por la cintura',no:['Alas de águila','Un solo ojo','Cabeza de toro'],exp:'Por eso Hércules atravesó sus tres corazones.'},{q:'¿Qué árbol nació de la sangre de Gerión?',ok:'Un drago',no:['Un olivo','Una palmera','Un roble'],exp:'Gerión había atacado a Hércules con un olivo.'}]},
+{id:'bio-moises',n:'Moisés',d:'según la Biblia',r:'Libertador de los hebreos',c:'#1e6fd9',e:'moises',
+ f:[['Un cesto en el Nilo','para salvarlo','Según la Biblia, los hebreos eran esclavos en Egipto. <b>Moisés</b> nació hebreo y su madre lo escondió en un <b>cesto en el Nilo</b> para salvarlo.'],
+  ['«Salvado de las aguas»','criado en la corte','La hija del faraón lo encontró y lo llamó Moisés, «<b>salvado de las aguas</b>». Se crio en la corte del faraón.'],
+  ['Las 10 plagas','el faraón los deja salir','Dios envió <b>10 plagas</b> a Egipto (sangre, ranas, piojos, langostas…) hasta que el faraón dejó salir a los hebreos.'],
+  ['El mar Rojo','40 años hacia la Tierra Prometida','Al llegar al <b>mar Rojo</b>, las aguas se abrieron para dejarlos pasar. Moisés guio a su pueblo <b>40 años</b> hacia la Tierra Prometida.']],
+ qs:[{q:'¿Qué significa el nombre de Moisés?',ok:'Salvado de las aguas',no:['Hijo del faraón','Hombre de plata','Servidor de Atón'],exp:'Lo encontraron en un cesto en el Nilo.'},{q:'¿Cuántas plagas cayeron sobre Egipto según la Biblia?',ok:'Diez',no:['Tres','Siete','Doce'],exp:'Después el faraón dejó salir a los hebreos.'}]}];
+function mkBio(B){return{id:B.id,b:'Personajes',t:B.n,steps:B.f.map(x=>x[2]),
+ svg(){let s=`<rect width="400" height="250" fill="#f8f2e6"/><g class="bmed"><circle cx="88" cy="104" r="70" fill="#fff" stroke="${B.c}" stroke-width="4"/><g class="bemb" transform="translate(88 104)">${EMB[B.e]}</g></g>
+  <g class="bname">${T(88,200,B.n,{size:B.n.length>16?12:15,w:800,c:B.c})}${T(88,216,B.d,{size:10,c:MUT})}${chip('',88,236,B.r,B.c,10)}</g>`;
+  B.f.forEach(([t,sub],i)=>{const y=12+i*58;s+=`<g class="bc${i}" transform="translate(178 ${y})"><rect width="214" height="50" rx="10" fill="#fff" stroke="${B.c}" stroke-width="2"/><circle cx="20" cy="25" r="12" fill="${B.c}"/>${T(20,30,String(i+1),{size:13,w:800,c:'#fff'})}${T(40,22,t,{size:t.length>22?11:12.5,w:800,c:B.c,a:'start'})}${T(40,39,sub,{size:sub.length>32?8.5:9.5,c:MUT,a:'start'})}</g>`});
+  return s},
+ anim(tl,E){tl.from('.bmed',{scale:0,transformOrigin:'50% 50%',duration:.55,ease:'back.out(1.6)'});tl.from('.bname',{opacity:0,y:'+=10',duration:.35});
+  for(let k=0;k<4;k++){if(k)tl.to('.bemb',{scale:1.08,transformOrigin:'50% 50%',yoyo:true,repeat:1,duration:.22});if(document.querySelector('#stage .ek'+k))tl.from('#stage .ek'+k,{opacity:0,scale:0,transformOrigin:'50% 50%',duration:.45,ease:'back.out(1.8)'});tl.from('.bc'+k,{x:'+=40',opacity:0,duration:.45,ease:'power2.out'});E()}},
+ qs:B.qs}}
+SCENES.push(...BIOS.map(mkBio));
+
 /* =================== MOTOR REPRODUCTOR =================== */
 const KEY='hist-t3-anim-v1';
 let DONE={};try{DONE=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
@@ -706,7 +817,7 @@ function renderTags(){const sc=SCENES[st.i];const g=document.getElementById('tag
 
 
 function renderPick(){
-  const groups=[['Mesopotamia','1 · Mesopotamia'],['Egipto','2 · El Antiguo Egipto'],['Mediterráneo','3 · El Mediterráneo y la península Ibérica']];
+  const groups=[['Mesopotamia','1 · Mesopotamia'],['Egipto','2 · El Antiguo Egipto'],['Mediterráneo','3 · El Mediterráneo y la península Ibérica'],['Personajes','4 · Personajes y leyendas']];
   $('#pick').innerHTML=groups.map(([b,h])=>`<h2>${h}</h2><div class="chips">${SCENES.map((sc,i)=>sc.b===b?`<button data-i="${i}" class="${DONE[sc.id]?'done':''}" aria-current="${i===st.i}">${i+1}. ${sc.t}</button>`:'').join('')}</div>`).join('');
   $('#pick').querySelectorAll('button').forEach(b=>b.onclick=()=>load(+b.dataset.i,true));
 }
@@ -729,7 +840,7 @@ function caption(){
 function load(i,scroll){
   if(st.play)st.play.kill();if(st.tl)st.tl.kill();
   st.i=i;st.k=-1;const sc=SCENES[i];
-  $('#kick').textContent=`Ficha ${i+1} de ${SCENES.length} · ${sc.b==='Mediterráneo'?'Mediterráneo y Península':sc.b}`;
+  $('#kick').textContent=`Ficha ${i+1} de ${SCENES.length} · ${sc.b==='Mediterráneo'?'Mediterráneo y Península':sc.b==='Personajes'?'Personajes y leyendas':sc.b}`;
   $('#ttl').textContent=sc.t;stage.setAttribute('aria-label',sc.t);
   $('#quiz').hidden=true;$('#quiz').innerHTML='';
   renderPick();
