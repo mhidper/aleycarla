@@ -126,6 +126,7 @@ const staff=(x1,x2,y,gap=7,c='#8a7a5c')=>[0,1,2,3,4].map(k=>`<line x1="${x1}" y1
 const SCENES=[
 /* ---------- 1. ARCO Y BÓVEDA ---------- */
 {id:'arco',b:'Arte',t:'Mesopotamia: el arco y la bóveda',
+ keys:[["Mesopotamia", "ladrillo", "adobe"], ["pocos restos", "gran invento: el arco"], ["dovelas", "clave", "reparte el peso"], ["arcos seguidos = bóveda de cañón"]],
  steps:[
   '<b>Mesopotamia</b> («tierra entre ríos») floreció entre el <b>Tigris</b> y el <b>Éufrates</b> hacia el 3000 a. C. Al no tener piedra, construían con <b>ladrillo</b> y <b>adobe</b> (barro con paja secado al sol).',
   'Por usar materiales frágiles nos han llegado <b>pocos restos</b>. Pero para cubrir grandes salas inventaron algo revolucionario que los egipcios no usaban: el <b>arco</b>.',
@@ -193,6 +194,7 @@ const SCENES=[
 
 /* ---------- 2. ZIGURAT ---------- */
 {id:'zigurat',b:'Arte',t:'El zigurat: santuario y observatorio',
+ keys:[["zigurat", "sumerios", "puente cielo-tierra"], ["Ur-Nammu", "zigurat de Ur", "3 plantas"], ["solo suben los sacerdotes"], ["santuario de Nanna", "observatorio"]],
  steps:[
   'El <b>zigurat</b> era la gran torre escalonada de los templos mesopotámicos, creada por los <b>sumerios</b>. Se consideraba un <b>puente entre el cielo y la tierra</b>.',
   'El rey <b>Ur-Nammu</b> mandó levantar el gran <b>zigurat de Ur</b>: una mole de ladrillo macizo con <b>tres plantas escalonadas</b> y terrazas.',
@@ -235,6 +237,7 @@ const SCENES=[
 
 /* ---------- 3. PUERTA DE ISHTAR ---------- */
 {id:'ishtar',b:'Arte',t:'La Puerta de Ishtar y Babilonia',
+ keys:[["palacios", "poder del rey"], ["Nabucodonosor II", "Babilonia", "s. VI a. C."], ["Puerta de Ishtar", "ladrillo vidriado azul"], ["hoy en Berlín", "Museo de Pérgamo"]],
  steps:[
   'Frente a los templos sumerios, los <b>palacios</b> mesopotámicos eran la gran creación de los <b>acadios</b>, asirios y babilonios para exhibir el <b>poder del rey</b>.',
   'El rey <b>Nabucodonosor II</b> reconstruyó la gran ciudad de <b>Babilonia</b> en el siglo VI a. C., fortificada con doble muralla y ocho monumentales puertas.',
@@ -282,6 +285,7 @@ const SCENES=[
 
 /* ---------- 4. ESCULTURA Y HAMMURABI ---------- */
 {id:'escultura-mesop',b:'Arte',t:'Gudea, toros alados y Hammurabi',
+ keys:[["escultura exenta", "relieve"], ["Gudea", "orante", "ojos grandes"], ["toros alados", "Leona herida"], ["Código de Hammurabi", "Shamash", "282 leyes"]],
  steps:[
   'La escultura mesopotámica cuenta con dos formas: <b>esculturas exentas</b> (de bulto redondo) y <b>relieves</b> en muros y losas.',
   'Las esculturas exentas, como <b>Gudea de Lagash</b>, muestran gobernantes en actitud <b>orante</b> (manos juntas), con falda larga, turbante y <b>ojos grandes y desorbitados</b>.',
@@ -327,6 +331,7 @@ const SCENES=[
 
 /* ---------- 5. TUMBAS EGIPCIAS ---------- */
 {id:'tumbas-egipto',b:'Arte',t:'Egipto: mastaba, pirámide e hipogeo',
+ keys:[["faraón", "colosal", "adintelada"], ["mastaba", "pozo", "sarcófago"], ["Giza", "Keops, Kefren, Mikerinos"], ["hipogeo", "Valle de los Reyes"]],
  steps:[
   'El arte egipcio estaba al servicio del <b>faraón</b> y de la vida de ultratumba. La arquitectura era <b>colosal y adintelada</b> (líneas rectas, sin arcos ni bóvedas).',
   'La primera tumba fue la <b>mastaba</b>: con forma de pirámide cortada, sala de ofrendas arriba y un <b>pozo ciego subterráneo</b> donde descansaba el sarcófago.',
@@ -371,6 +376,7 @@ const SCENES=[
 
 /* ---------- 6. ABU SIMBEL Y PRODIGIO SOLAR ---------- */
 {id:'abu-simbel',b:'Arte',t:'Abu Simbel y el prodigio solar',
+ keys:[["speos", "templo excavado en la roca"], ["Abu Simbel", "Ramsés II", "estatuas de 22 m"], ["el sol entra 2 días al año"], ["21 de febrero", "19 de octubre"]],
  steps:[
   'Además de templos al aire libre (como <b>Karnak</b> y <b>Luxor</b>), los egipcios construyeron <b>speos</b>: templos excavados totalmente dentro de la roca de una montaña.',
   'El más célebre es <b>Abu Simbel</b>, mandado labrar por <b>Ramsés II</b> con una colosal fachada de <b>cuatro estatuas sentadas de 22 metros</b>.',
@@ -420,6 +426,7 @@ const SCENES=[
 
 /* ---------- 7. CANON DE 18 PUÑOS Y NEFERTITI ---------- */
 {id:'canon-nefertiti',b:'Arte',t:'El canon de 18 puños y Nefertiti',
+ keys:[["joven, fuerte y rígido", "frontalidad"], ["canon de 18 puños"], ["Amenofis IV = Akhenaton", "dios Atón"], ["Tell Amarna", "realismo", "Nefertiti"]],
  steps:[
   'La escultura del faraón era sagrada: se le representaba siempre <b>joven, fuerte y rígido</b>, mirando al frente con brazos pegados al cuerpo (ley de la frontalidad).',
   'Las proporciones no eran al azar: se seguía el <b>canon de 18 puños</b> de altura desde la frente (nacimiento del pelo) hasta la planta de los pies.',
@@ -465,6 +472,7 @@ const SCENES=[
 
 /* ---------- 8. PINTURA EGIPCIA ---------- */
 {id:'pintura-egipcia',b:'Arte',t:'Pintura: al fresco y jerárquica',
+ keys:[["templos y tumbas", "Nefertari"], ["al fresco", "colores minerales"], ["cabeza de perfil", "ojo y torso de frente"], ["perspectiva jerárquica"]],
  steps:[
   'La pintura egipcia servía para dar culto a los dioses y decorar el interior de <b>templos y tumbas</b> (como la tumba de la reina <b>Nefertari</b> en el Valle de las Reinas).',
   'Pintaban con la técnica <b>al fresco</b> sobre estuco de cal húmedo, empleando colores extraídos de <b>minerales</b>.',
@@ -509,6 +517,7 @@ const SCENES=[
 
 /* ---------- 9. CLASICISMO MUSICAL ---------- */
 {id:'clasicismo-formas',b:'Música',t:'El Clasicismo: orquesta y formas',
+ keys:[["siglo XVIII", "clara", "ordenada", "equilibrada"], ["orquesta clásica", "cuerda delante"], ["sonata", "sinfonía", "concierto"], ["conciertos públicos", "burguesía"]],
  steps:[
   'En el <b>siglo XVIII</b>, el Clasicismo busca una música <b>clara, ordenada, elegante y medida</b>, con frases musicales simétricas y equilibradas.',
   'Nace la <b>orquesta clásica moderna</b>: se ordena en semicírculo con la <b>cuerda</b> al frente (violines, violas, cellos), <b>viento madera</b> detrás, <b>metales</b> y <b>timbales</b> al fondo.',
@@ -551,6 +560,7 @@ const SCENES=[
 
 /* ---------- 10. ÓPERA SERIA VS BUFA ---------- */
 {id:'opera-seria-bufa',b:'Música',t:'La ópera: Seria frente a Bufa',
+ keys:[["ópera seria", "ópera bufa"], ["seria: mitos", "reyes", "coros"], ["bufa: vida cotidiana", "risas"], ["2 o 3 personajes", "sin coros", "«bufón»"]],
  steps:[
   'En el Clasicismo la ópera era el gran espectáculo vocal y escénico. Pero se dividió claramente en dos mundos opuestos: la <b>ópera seria</b> y la <b>ópera bufa</b>.',
   'La <b>ópera seria</b> era para reyes y aristócratas: trataba sobre <b>mitología y grandes tragedias heroicas</b>, con decorados lujosos y grandes coros para deslumbrar.',
@@ -599,6 +609,7 @@ const SCENES=[
 
 /* ---------- 11. HAYDN Y BOCCHERINI ---------- */
 {id:'haydn-boccherini',b:'Música',t:'Haydn y Boccherini',
+ keys:[["Boccherini", "violonchelo", "Madrid"], ["Haydn", "Austria", "Esterházy"], ["«padre de la sinfonía»", "Oxford"], ["«Sorpresa»", "«El reloj»"]],
  steps:[
   '<b>Luigi Boccherini</b> nació en Italia y fue un virtuoso del <b>violonchelo</b>. Pasó gran parte de su vida en <b>Madrid</b> al servicio del infante don Luis y la duquesa de Osuna, famoso por sus quintetos y minuetos.',
   '<b>Franz Joseph Haydn</b> (Austria, 1732) provenía de una familia humilde. Tras cantar de niño en la catedral de Viena y pasar apuros al cambiarle la voz, fue contratado por los riquísimos príncipes <b>Esterházy</b>.',
@@ -663,6 +674,13 @@ const HAS=typeof window.gsap!=='undefined';
 const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const stage=$('#stage');
 const st={i:0,k:-1,tl:null,play:null};
+const KBAND=`<rect y="250" width="400" height="50" fill="#fff6e0"/><line x1="0" y1="250.5" x2="400" y2="250.5" stroke="#e0d3be"/><g id="kband"></g>`;
+function renderKeys(){const sc=SCENES[st.i],g=document.getElementById('kband');if(!g||!sc.keys)return;const ks=sc.keys[st.k]||[];let size=13,ws=[];
+  const W=()=>{ws=ks.map(k=>tw(k,size));return ws.reduce((a,b)=>a+b,0)+8*Math.max(0,ks.length-1)};while(W()>388&&size>9)size-=.5;
+  const cols=[MAG,LIT,BLUE,GREEN];let x=200-W()/2;
+  g.innerHTML=ks.map((k,i)=>{const cx=x+ws[i]/2;x+=ws[i]+8;return chip('kk',cx,275,k,cols[i%4],size)}).join('');
+  if(HAS&&!RM)gsap.from('#kband .kk',{y:12,opacity:0,stagger:.12,duration:.35,ease:'back.out(2)'})}
+
 
 function renderPick(){
   const groups=[['Arte','Arte · Mesopotamia y Egipto'],['Música','Música · El Clasicismo']];
@@ -678,7 +696,7 @@ function dots(){
 function caption(){
   const sc=SCENES[st.i],c=$('#cap');
   c.classList.remove('in');void c.offsetWidth;
-  c.innerHTML=sc.steps[st.k]||'';c.classList.add('in');dots();
+  c.innerHTML=sc.steps[st.k]||'';c.classList.add('in');dots();renderKeys();
   $('#bBack').disabled=st.k<=0;
   const last=st.k>=sc.steps.length-1;
   $('#bNext').textContent=last?(st.i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera'):'Siguiente →';
@@ -701,7 +719,7 @@ function load(i,scroll){
     st.k=sc.steps.length-1;$('#bNext').textContent=i<SCENES.length-1?'Siguiente ficha →':'Volver a la primera';
     showQuiz();return;
   }
-  stage.innerHTML=sc.svg();
+  stage.setAttribute('viewBox',sc.keys?'0 0 400 300':'0 0 400 250');stage.innerHTML=sc.svg()+(sc.keys?KBAND:'');
   const tl=gsap.timeline({paused:true});
   let n=0;sc.anim(tl,()=>tl.addLabel('e'+(n++)));
   if(n!==sc.steps.length)console.warn('Pasos y etiquetas no cuadran en',sc.id,n,sc.steps.length);
