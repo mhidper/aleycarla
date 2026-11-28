@@ -18,8 +18,8 @@ window.CATALOGO = {
           { titulo: 'Arte y Música: Temas 1 a 3', descripcion: 'Arte del Paleolítico (T1) y megalitismo (T2); música de la Edad Media (T1) y del Barroco (T3). Fichas ilustradas, preguntas y prueba', ruta: 'ale/ham/temas-1-2/' },
           { titulo: 'Fichas animadas: Megalitismo y Barroco', descripcion: 'Megalitismo (arte, T2) y Barroco musical (T3) paso a paso, con animaciones y preguntas al final de cada ficha', ruta: 'ale/ham/tema2-animado/' },
           { titulo: 'Audiciones de Música', descripcion: 'Las 10 audiciones de los temas 1 y 2: fichas, juego de reconocer fragmentos y prueba', ruta: 'ale/ham/audiciones/' },
-          { titulo: 'Arte y Música: Tema 3', descripcion: 'Arte de Mesopotamia y Egipto y el Clasicismo musical: 11 fichas animadas paso a paso con comprobación, 5 juegos interactivos y prueba', ruta: 'ale/ham/tema3/' },
-          { titulo: 'Fichas animadas: Tema 3', descripcion: 'Mesopotamia, Egipto y el Clasicismo musical paso a paso: el arco y la bóveda, evolución de las tumbas, Abu Simbel, canon de 18 puños, la orquesta clásica, ópera seria vs bufa y Haydn con animaciones y preguntas', ruta: 'ale/ham/tema3-animado/' }
+          { titulo: 'Renacimiento musical (Tema 2)', descripcion: 'Los albores del siglo XV, el Renacimiento pleno, música religiosa, profana e instrumental, la danza y los compositores españoles (Encina, Flecha, Cetina, Cabezón, Mudarra, Narváez y Victoria). Esquema, 9 fichas animadas, 4 juegos y prueba', ruta: 'ale/ham/renacimiento/' },
+          { titulo: 'Primeras civilizaciones: arte (Tema 3)', descripcion: 'Mesopotamia y Egipto: el arco, el zigurat de Ur, la Puerta de Ishtar, Gudea y Hammurabi, mastabas, pirámides e hipogeos, Abu Simbel, el canon y Nefertiti, y la pintura. Mapa, 8 fichas animadas, 4 juegos y prueba', ruta: 'ale/ham/primeras-civilizaciones/' }
         ]
       },
       { id: 'lengua', nombre: 'Lengua', tono: 0, apps: [] },

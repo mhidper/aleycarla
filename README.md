@@ -12,9 +12,10 @@ ale/
     tema1-repaso/     Repaso de Matemáticas (potencias, divisibilidad, fracciones, porcentajes, reglas de tres, problemas)
   ham/
     temas-1-2/        Historia del Arte y de la Música, temas 1 y 2 (Paleolítico, megalitismo, Edad Media, Barroco)
-    tema2-animado/    Fichas animadas del Tema 2 (megalitismo y Barroco), hechas con GSAP
+    tema2-animado/    Fichas animadas: megalitismo (arte, tema 2) y Barroco (música, tema 3), hechas con GSAP
     audiciones/       Audiciones de los temas 1 y 2. Los MP3 NO están en el repo: se cargan desde el dispositivo
-    tema3/            Arte y Música, tema 3: Mesopotamia, Egipto y el Clasicismo musical
+    renacimiento/     Renacimiento musical (tema 2): esquema, fichas animadas, juegos y prueba (generada con la plantilla)
+    primeras-civilizaciones/  Arte del tema 3: Mesopotamia y Egipto (generada con la plantilla)
   literatura/
     temas-1-2/        Taller de Literatura: géneros, narración, lírica, teatro y literatura griega
     animado/          Literatura animada: fichas paso a paso hechas con GSAP
@@ -41,6 +42,7 @@ ale/
     your-ideal-breakfast/  App «Your Ideal Breakfast» (compilada; el código fuente está en fuentes/)
 carla/
 fuentes/
+  plantilla-fichas/        Plantilla de las apps con esquema, fichas animadas, juegos y prueba (ver su README)
   your-ideal-breakfast/    Código fuente React + Vite + Tailwind de esa app y guía para pasarla a Base44 (BASE44.md)
 ```
 

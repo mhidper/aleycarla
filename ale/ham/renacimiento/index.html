@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renacimiento musical</title>
+<!-- Generado con fuentes/plantilla-fichas/build.py — edita el contenido en fuentes/plantilla-fichas/contenido/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#f6f1ea; --paper:#fdfdfb; --grid:#ece4d8; --ink:#1f1d3a; --muted:#5d5a7a; --line:#dcd2c2;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --bad:#b0302a; --bad-soft:#f8e0de;
+  --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#14121c; --paper:#1d1a28; --grid:#27233a; --ink:#ece8f5; --muted:#aaa4c2; --line:#3a3450;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --bad:#ff7a70; --bad-soft:#3b1d1c;
+  --btn:#ece8f5; --btn-fg:#14121c; --chip:#221e30; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+[hidden]{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.nav-links{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.link-app{font-size:.85rem;color:var(--marker);text-decoration:none;font-weight:700;border:1.5px solid var(--line);background:var(--chip);padding:4px 10px;border-radius:8px}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.1em;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.tabs{display:flex;gap:6px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;border-bottom:2px solid var(--ink)}
+.tabs button{flex:1;border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:700 .95rem var(--f-body);padding:9px 4px;border-radius:10px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn)}
+.sheet{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:8px;padding:16px;box-shadow:0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0}
+h2.t{font:800 1.4rem var(--f-display);margin:-6px 0 0;text-wrap:balance}
+.stage{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fbf8f1;line-height:0}
+.stage svg{width:100%;height:auto;display:block}
+.stage svg text{font-family:var(--f-body)}
+.cap{font-size:1.12rem;line-height:1.5;margin:0;min-height:4.5em}
+.cap b{color:var(--marker)}
+.dots{display:flex;gap:6px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--marker)} .dots i.past{background:var(--muted)}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctrl .sp{flex:1}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 14px;cursor:pointer}
+.ghost:disabled,.primary:disabled{opacity:.4;cursor:default}
+button:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn);font-weight:700}
+.chips button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+/* Esquema */
+.pin{cursor:pointer}
+.pin:hover circle.halo,.pin:focus circle.halo{opacity:.35}
+.notes{border-left:5px solid var(--marker);padding:4px 0 4px 14px;display:flex;flex-direction:column;gap:8px}
+.notes h3{margin:0;font:800 1.25rem var(--f-display)}
+.notes ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.hint{color:var(--muted);font-size:.95rem;margin:0}
+/* Quiz */
+.quiz{display:flex;flex-direction:column;gap:16px;border-top:2px solid var(--ink);padding-top:14px}
+.quiz h3{font:800 1.15rem var(--f-display);margin:0}
+.qq{display:flex;flex-direction:column;gap:8px}
+.qq p.q{font-weight:700;margin:0;font-size:1.05rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:0;font-size:.95rem}
+.exp.b{color:var(--ok)} .exp.m{color:var(--bad)}
+.stamp{font-family:var(--f-hand);font-size:2.4rem;line-height:1;color:var(--ok);transform:rotate(-6deg);display:inline-block}
+/* Juegos */
+.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gcard{text-align:left;border:2px solid var(--line);background:var(--chip);color:var(--ink);border-radius:12px;padding:12px;cursor:pointer;font:400 .95rem var(--f-body)}
+.gcard b{display:block;font:800 1.05rem var(--f-display);margin-bottom:2px}
+.gcard .best{color:var(--ok);font-weight:700;font-size:.85rem}
+.bigcard{border:2.5px dashed var(--marker);background:var(--marker-soft);border-radius:14px;padding:18px;text-align:center;font:800 1.3rem var(--f-display);min-height:84px;display:flex;align-items:center;justify-content:center;text-wrap:balance}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.bin{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 6px;font:700 1rem var(--f-body);cursor:pointer;border-left-width:8px}
+.bin.right{background:var(--ok-soft);border-color:var(--ok)}
+.bin.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.score{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:.95rem}
+.fb{min-height:1.6em;margin:0;font-weight:700}
+.fb.ok{color:var(--ok)} .fb.ko{color:var(--bad)}
+.order{display:flex;flex-direction:column;gap:8px}
+.order button{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.order button.placed{border-color:var(--ok);background:var(--ok-soft)}
+.order button.shake{border-color:var(--bad);background:var(--bad-soft)}
+.order button .n{display:inline-block;min-width:1.6em;font-weight:800;color:var(--ok)}
+.mapdot{cursor:pointer}
+.result{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+@media (max-width:420px){header h1{font-size:1.65rem}.cap{font-size:1.04rem}.primary{padding:12px 14px}.ghost{padding:11px 10px}.games{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-links">
+    <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
+    
+  </div>
+  <header>
+    <h1>Renacimiento <span>musical</span></h1>
+    <p>Tema 2 de Música: los albores del siglo XV, el Renacimiento pleno, la música religiosa, profana, instrumental y la danza, y los compositores españoles. Mira el esquema, repasa con las fichas animadas, juega y haz la prueba.</p>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="esquema" aria-selected="true">🗺️ Esquema</button>
+    <button role="tab" data-tab="fichas" aria-selected="false">🎬 Fichas</button>
+    <button role="tab" data-tab="juegos" aria-selected="false">🎮 Juegos</button>
+    <button role="tab" data-tab="prueba" aria-selected="false">📝 Prueba</button>
+  </nav>
+
+  <section id="tab-esquema" class="sheet">
+    <p class="kicker" id="eKick"></p>
+    <h2 class="t" id="eTtl"></h2>
+    <div class="stage"><svg id="mapa" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="hint" id="mapHint"></p>
+    <div class="notes" id="notes" hidden></div>
+  </section>
+
+  <section id="tab-fichas" hidden>
+    <div class="sheet">
+      <p class="kicker" id="kick"></p>
+      <h2 class="t" id="ttl"></h2>
+      <div class="stage"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <p class="cap" id="cap" aria-live="polite"></p>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="ctrl">
+        <button class="ghost" id="bBack">← Atrás</button>
+        <button class="ghost" id="bAgain">↻ Repetir</button>
+        <span class="sp"></span>
+        <button class="primary" id="bNext">Siguiente →</button>
+      </div>
+      <div class="quiz" id="fquiz" hidden></div>
+    </div>
+    <div class="chips" id="fpick" style="margin-top:12px"></div>
+  </section>
+
+  <section id="tab-juegos" hidden><div class="sheet" id="gbox"></div></section>
+  <section id="tab-prueba" hidden><div class="sheet" id="pbox"></div></section>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="gdefs"></defs></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+/* ===== Biblioteca de dibujo compartida (lienzo de 400 x 250) ===== */
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const INK='#1f1d3a',MUT='#5d5a7a',SEA='#cfe6f5',LAND='#efe0b9',LAND2='#e3cf9c',PAPER='#fbf3e3',ORG='#e0611a';
+
+/* Texto, etiquetas y flechas */
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||13}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" fill="${o.c||INK}"${o.it?' font-style="italic"':''}${o.ff?` font-family="${o.ff}"`:''}>${s}</text>`;
+const tw=(s,size)=>Math.round([...s].length*size*.56+18);
+/* chip: palabra clave con borde (va pegada al elemento) */
+const chip=(x,y,s,c=ORG,size=13)=>{const w=tw(s,size),h=size+12;return`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="#fff" stroke="${c}" stroke-width="2"/>${T(x,y+size*.36,s,{size,c,w:700})}</g>`};
+/* tag: título o concepto principal, relleno de color */
+const tag=(x,y,s,c=ORG,size=15)=>{const w=tw(s,size),h=size+14;return`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="6" fill="${c}"/>${T(x,y+size*.36,s,{size,c:'#fff',w:700})}</g>`};
+const MK=new Set();
+function mk(c){const id='ar'+c.replace('#','');if(!MK.has(id)){MK.add(id);const d=document.getElementById('gdefs');if(d)d.insertAdjacentHTML('beforeend',`<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="${c}"/></marker>`)}return id}
+const arrow=(x1,y1,x2,y2,c=INK)=>`<path class="dr" d="M${x1} ${y1} L${x2} ${y2}" stroke="${c}" stroke-width="2.4" fill="none" marker-end="url(#${mk(c)})"/>`;
+const curve=(d,c=INK,dash=false)=>`<path class="dr" d="${d}" stroke="${c}" stroke-width="2.4" fill="none"${dash?' stroke-dasharray="6 5"':''} marker-end="url(#${mk(c)})"/>`;
+const bg=(c=PAPER)=>`<rect width="400" height="250" fill="${c}"/>`;
+
+/* Personas */
+const person=(x,y,c='#3a3a3a',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><circle cx="0" cy="0" r="5" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-5" y2="32"/><line x1="0" y1="20" x2="5" y2="32"/><line x1="-7" y1="11" x2="7" y2="11"/></g>`;
+const singer=(x,y,c='#3a3a3a',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-9 34 L-7 8 Q0 2 7 8 L9 34Z" fill="${c}"/><circle cx="0" cy="0" r="6" fill="#e7cba3" stroke="${c}" stroke-width="1.5"/><ellipse cx="0" cy="3" rx="2" ry="2.5" fill="#7a3a1e"/></g>`;
+const crown=(x,y,c='#d9a400')=>`<path d="M${x-7} ${y} L${x-7} ${y-8} L${x-3.5} ${y-4} L${x} ${y-10} L${x+3.5} ${y-4} L${x+7} ${y-8} L${x+7} ${y} Z" fill="${c}" stroke="#8a6500" stroke-width="1"/>`;
+const bust=(x,y,c='#7b2a8c',s=1,extra='')=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-26 46 Q-26 18 0 16 Q26 18 26 46Z" fill="${c}"/><circle cx="0" cy="0" r="15" fill="#e7cba3" stroke="#8a6b3c" stroke-width="1.5"/>${extra}</g>`;
+
+/* Objetos */
+const scroll=(x,y,w=70,h=44)=>`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" fill="#f7ecd2" stroke="#8a6b3c" stroke-width="1.6"/><rect x="${x-w/2-6}" y="${y-h/2-3}" width="8" height="${h+6}" rx="4" fill="#c79a55" stroke="#8a6b3c"/><rect x="${x+w/2-2}" y="${y-h/2-3}" width="8" height="${h+6}" rx="4" fill="#c79a55" stroke="#8a6b3c"/>${[0,1,2,3].map(k=>`<line x1="${x-w/2+8}" y1="${y-h/2+10+k*8}" x2="${x+w/2-8}" y2="${y-h/2+10+k*8}" stroke="#a08560" stroke-width="1.4"/>`).join('')}</g>`;
+const book=(x,y,w=90,h=60,c='#8a3b12')=>`<g><path d="M${x} ${y-h/2+4} Q${x-w/4} ${y-h/2-4} ${x-w/2} ${y-h/2} V${y+h/2} Q${x-w/4} ${y+h/2-6} ${x} ${y+h/2} Q${x+w/4} ${y+h/2-6} ${x+w/2} ${y+h/2} V${y-h/2} Q${x+w/4} ${y-h/2-4} ${x} ${y-h/2+4}Z" fill="#fbf6ea" stroke="${c}" stroke-width="2"/><line x1="${x}" y1="${y-h/2+4}" x2="${x}" y2="${y+h/2}" stroke="${c}" stroke-width="1.5"/>${[0,1,2,3].map(k=>`<path d="M${x-w/2+6} ${y-h/2+12+k*11} h${w/2-12} M${x+6} ${y-h/2+12+k*11} h${w/2-12}" stroke="#555" stroke-width="1"/>`).join('')}</g>`;
+const house=(x,y,w=16,h=12,c='#e9cfa0')=>`<g><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="${c}" stroke="#7a5528" stroke-width="1.2"/><path d="M${x-w/2-2} ${y-h} L${x} ${y-h-7} L${x+w/2+2} ${y-h} Z" fill="#b5532c" stroke="#7a3a1e" stroke-width="1"/></g>`;
+const wave=(y,c='#9cc8e6')=>`<path d="M0 ${y} q10 -5 20 0 ${Array(19).fill('t20 0').join(' ')}" stroke="${c}" stroke-width="1.6" fill="none"/>`;
+
+/* Música */
+const staff=(x1,x2,y,gap=7,c='#8a7a5c')=>[0,1,2,3,4].map(k=>`<line x1="${x1}" y1="${y+k*gap}" x2="${x2}" y2="${y+k*gap}" stroke="${c}" stroke-width="1.1"/>`).join('');
+const note=(x,y,c=INK,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="5.5" ry="4" transform="rotate(-20)" fill="${c}"/><line x1="5" y1="-1" x2="5" y2="-24" stroke="${c}" stroke-width="2"/></g>`;
+const notes2=(x,y,c=INK,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="5.5" ry="4" transform="rotate(-20)" fill="${c}"/><ellipse cx="16" cy="-4" rx="5.5" ry="4" transform="rotate(-20)" fill="${c}"/><path d="M5 -1 V-24 L21 -28 V-5" stroke="${c}" stroke-width="2" fill="none"/><path d="M5 -24 L21 -28" stroke="${c}" stroke-width="4"/></g>`;
+const lute=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="14" rx="18" ry="22" fill="#c98b47" stroke="#6e4317" stroke-width="2"/><circle cx="0" cy="8" r="5" fill="#4a2c0e"/><rect x="-4" y="-34" width="8" height="26" fill="#8a5a24"/><path d="M-6 -34 L-14 -44 L-2 -40Z" fill="#6e4317"/>${[-2,0,2].map(d=>`<line x1="${d}" y1="-34" x2="${d}" y2="30" stroke="#f3e3c3" stroke-width=".7"/>`).join('')}</g>`;
+const vihuela=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 0 Q-20 12 -14 22 Q-18 34 -8 40 Q0 42 8 40 Q18 34 14 22 Q20 12 14 0 Q8 -6 0 -4 Q-8 -6 -14 0Z" fill="#d9a35c" stroke="#6e4317" stroke-width="2"/><circle cx="0" cy="18" r="5" fill="#4a2c0e"/><rect x="-3.5" y="-40" width="7" height="38" fill="#8a5a24"/><rect x="-6" y="-48" width="12" height="9" rx="2" fill="#6e4317"/>${[-2,0,2].map(d=>`<line x1="${d}" y1="-40" x2="${d}" y2="34" stroke="#f3e3c3" stroke-width=".7"/>`).join('')}</g>`;
+const harp=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 40 L-16 -36 Q10 -40 20 -10 Q22 20 -16 40Z" fill="none" stroke="#8a5a24" stroke-width="5" stroke-linejoin="round"/>${[0,1,2,3,4,5,6].map(k=>`<line x1="-16" y1="${-28+k*9}" x2="${Math.min(18,-12+k*6)}" y2="${-28+k*9+ (k<4?6:0)}" stroke="#d9b04a" stroke-width="1"/>`).join('')}</g>`;
+const organ=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-34" y="0" width="68" height="34" fill="#8a5a24" stroke="#4a2c0e" stroke-width="2"/><rect x="-28" y="18" width="56" height="8" fill="#fff" stroke="#333"/>${[-28,-20,-12,-4,4,12,20].map(a=>`<rect x="${a+5}" y="18" width="3" height="5" fill="#222"/>`).join('')}${[-30,-22,-14,-6,2,10,18,26].map((a,i)=>`<rect x="${a}" y="${-50+Math.abs(i-3.5)*8}" width="6" height="${50-Math.abs(i-3.5)*8}" rx="3" fill="#c9cdd2" stroke="#6b7078"/>`).join('')}</g>`;
+const clavi=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-44" y="-16" width="88" height="22" fill="#a8743a" stroke="#4a2c0e" stroke-width="2"/><rect x="-36" y="-8" width="40" height="10" fill="#fff" stroke="#333"/>${[-33,-27,-21,-15,-9,-3].map(a=>`<rect x="${a}" y="-8" width="3" height="6" fill="#222"/>`).join('')}<line x1="-40" y1="6" x2="-40" y2="30" stroke="#4a2c0e" stroke-width="4"/><line x1="40" y1="6" x2="40" y2="30" stroke="#4a2c0e" stroke-width="4"/></g>`;
+const flute=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="-34" width="8" height="68" rx="3" fill="#d9a35c" stroke="#6e4317" stroke-width="1.5"/>${[-14,-4,6,16].map(a=>`<circle cx="0" cy="${a}" r="2" fill="#4a2c0e"/>`).join('')}</g>`;
+const trombone=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 -6 H34 Q42 -6 42 0 Q42 6 34 6 H-10" fill="none" stroke="#c99a1e" stroke-width="3.5"/><path d="M-30 -6 L-46 -18 L-46 6 Z" fill="#e5b93c" stroke="#c99a1e" stroke-width="2"/><circle cx="-10" cy="6" r="3" fill="#c99a1e"/></g>`;
+const viola=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 -6 Q-22 6 -14 16 Q-20 30 -8 38 Q0 40 8 38 Q20 30 14 16 Q22 6 14 -6 Q8 -12 0 -10 Q-8 -12 -14 -6Z" fill="#a8521f" stroke="#4a2c0e" stroke-width="2"/><path d="M-5 10 q-3 4 0 8 M5 10 q3 4 0 8" stroke="#2a1606" stroke-width="1.5" fill="none"/><rect x="-3" y="-42" width="6" height="34" fill="#2a1606"/><path d="M-30 30 L30 -20" stroke="#6e4317" stroke-width="2"/></g>`;
+const facistol=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 80 L-20 96 M6 80 L20 96 M0 80 V96" stroke="#4a2c0e" stroke-width="4"/><rect x="-6" y="10" width="12" height="72" fill="#7a4a1e"/><path d="M-46 10 L46 10 L36 -40 L-36 -40Z" fill="#7a4a1e" stroke="#4a2c0e" stroke-width="2"/><g transform="translate(0 -18)">${'<rect x="-34" y="-20" width="68" height="40" fill="#fbf6ea" stroke="#8a3b12" stroke-width="2"/><line x1="0" y1="-20" x2="0" y2="20" stroke="#8a3b12"/>'}${[-10,-2,6,14].map(a=>`<path d="M-30 ${a} h26 M4 ${a} h26" stroke="#555" stroke-width="1"/>`).join('')}</g></g>`;
+const church=(x,y,s=1,c='#d9c7a0')=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-40" y="-40" width="80" height="40" fill="${c}" stroke="#7a5528" stroke-width="2"/><path d="M-46 -40 L0 -64 L46 -40Z" fill="#b5532c" stroke="#7a3a1e" stroke-width="2"/><rect x="26" y="-90" width="16" height="50" fill="${c}" stroke="#7a5528" stroke-width="2"/><path d="M24 -90 L34 -108 L44 -90Z" fill="#b5532c"/><path d="M-8 0 V-20 Q0 -30 8 -20 V0Z" fill="#7a5528"/><circle cx="0" cy="-48" r="6" fill="#9fd6e8" stroke="#7a5528"/></g>`;
+const palace=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-50" y="-44" width="100" height="44" fill="#efd9b0" stroke="#7a5528" stroke-width="2"/>${[-40,-20,0,20,40].map(a=>`<rect x="${a-5}" y="-36" width="10" height="14" fill="#9fd6e8" stroke="#7a5528"/>`).join('')}<rect x="-8" y="-18" width="16" height="18" fill="#7a5528"/><path d="M-54 -44 H54 L48 -52 H-48Z" fill="#b5532c"/><rect x="-62" y="-70" width="16" height="70" fill="#e6cfa3" stroke="#7a5528" stroke-width="2"/><rect x="46" y="-70" width="16" height="70" fill="#e6cfa3" stroke="#7a5528" stroke-width="2"/><path d="M-64 -70 L-54 -84 L-44 -70Z M44 -70 L54 -84 L64 -70Z" fill="#b5532c"/></g>`;
+
+</script>
+<script>
+/*META {
+ "out": "ale/ham/renacimiento/index.html",
+ "title": "Renacimiento musical",
+ "h1": "Renacimiento", "h1span": "musical",
+ "intro": "Tema 2 de Música: los albores del siglo XV, el Renacimiento pleno, la música religiosa, profana, instrumental y la danza, y los compositores españoles. Mira el esquema, repasa con las fichas animadas, juega y haz la prueba.",
+ "back": "../../../#ale/ham", "backtxt": "Arte y Música de Ale",
+ "acc": "#c0127e", "accsoft": "#fbe4f1", "accdark": "#ff5fb9", "accdarksoft": "#3a1a33"
+} META*/
+
+const C={alb:'#8a3b12',ple:'#1e5fb4',rel:'#7b2a8c',pro:'#b0302a',ins:'#17734a',dan:'#b8860b',com:'#c0127e'};
+
+/* ---------- dibujos propios del tema ---------- */
+const coins=(x,y)=>`<g>${[0,1,2].map(k=>`<ellipse cx="${x}" cy="${y-k*6}" rx="14" ry="5" fill="#f2c230" stroke="#8a6500" stroke-width="1.2"/>`).join('')}</g>`;
+const blind=(x,y,s=1)=>`<rect x="${x-13*s}" y="${y-3*s}" width="${26*s}" height="${6*s}" rx="${3*s}" fill="#222"/>`;
+const dolphin=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-22 6 Q-10 -14 14 -6 Q22 -2 26 4 Q18 4 14 8 Q0 12 -14 8 L-24 16 L-20 6Z" fill="#4b82d9" stroke="#1e4f94" stroke-width="1.5"/><path d="M0 -8 L4 -18 L8 -8" fill="#4b82d9" stroke="#1e4f94"/><circle cx="16" cy="-1" r="1.5" fill="#fff"/></g>`;
+const voiceLine=(y,c,lbl,d)=>`<g class="mv" data-dx="${d}"><path d="M84 ${y} C120 ${y-14} 160 ${y+14} 210 ${y} S300 ${y-12} 360 ${y}" stroke="${c}" stroke-width="4" fill="none" stroke-linecap="round"/>${note(150,y+4,c,.8)}${note(260,y+2,c,.8)}${T(78,y+5,lbl,{size:13,w:800,c,a:'end'})}</g>`;
+
+window.APP={
+store:'ham_renac',
+cats:{
+ alb:{n:'Siglo XV: los albores',c:C.alb},ple:{n:'Siglo XVI: Renacimiento pleno',c:C.ple},rel:{n:'Música religiosa',c:C.rel},
+ pro:{n:'Música profana',c:C.pro},ins:{n:'Música instrumental',c:C.ins},dan:{n:'La danza',c:C.dan},com:{n:'Compositores',c:C.com}
+},
+
+/* ================= ESQUEMA ================= */
+esquema:{
+ kicker:'El esquema del tema',title:'Renacimiento musical de un vistazo',hint:'Toca cada parte del esquema para ver las ideas clave.',viewBox:'0 0 400 260',
+ nodes:{
+  alb:[92,30,'Albores · s. XV'],ple:[308,30,'Pleno · s. XVI'],rel:[70,96,'Religiosa'],pro:[330,96,'Profana'],
+  ins:[70,164,'Instrumental'],dan:[330,164,'La danza'],voz:[90,232,'Poetas y cantores'],tec:[200,240,'Tecla y vihuela'],vic:[318,232,'Victoria']
+ },
+ draw(sel){
+  let s=`<rect width="400" height="260" fill="#fbf3e3"/>`;
+  for(const[k,[x,y]]of Object.entries(this.nodes))s+=`<path d="M200 130 L${x} ${y}" stroke="${this.items[k].c}" stroke-width="2.4" stroke-dasharray="4 4"/>`;
+  s+=`<g transform="translate(200 130)"><polygon points="-70,-16 -56,-30 56,-30 70,-16 70,16 56,30 -56,30 -70,16" fill="#fff" stroke="#c0127e" stroke-width="3"/>${T(0,-4,'Renacimiento',{size:15,w:800,ff:'var(--f-display)'})}${T(0,14,'musical',{size:15,w:800,c:'#c0127e',ff:'var(--f-display)'})}</g>`;
+  s+=`<g opacity=".5">${notes2(150,92,'#c0127e',.8)}${note(255,88,'#c0127e',.8)}${note(150,186,'#c0127e',.7)}${notes2(240,190,'#c0127e',.7)}</g>`;
+  for(const[k,[x,y,l]]of Object.entries(this.nodes)){const c=this.items[k].c,on=sel===k,w=tw(l,13);
+   s+=`<g class="pin" data-k="${k}" style="cursor:pointer"><rect x="${x-w/2}" y="${y-13}" width="${w}" height="26" rx="7" fill="${on?c:'#fff'}" stroke="${c}" stroke-width="2.2"/>${T(x,y+5,l,{size:13,w:800,c:on?'#fff':c})}</g>`}
+  return s;
+ },
+ items:{
+  alb:{t:'Los albores (siglo XV)',c:C.alb,scene:'albores',notes:['Nobles y príncipes mantienen <b>músicos permanentes</b> para fiestas y viajes: nacen las <b>capillas privadas</b>','Para los oficios religiosos, unos <b>15 cantores</b> y <b>4 o 5 instrumentistas</b>','Predomina la <b>música franco-flamenca</b>, extendida por Europa','Gana importancia la <b>música profana</b>','Los <b>instrumentos</b> ganan peso propio transcribiendo la música vocal']},
+  ple:{t:'Renacimiento pleno (siglo XVI)',c:C.ple,scene:'pleno',notes:['1. <b>Culminación de la polifonía</b>','2. La voz cantada se <b>sustituye por instrumentos</b>','3. El músico trabaja bajo la protección de un <b>mecenas</b> y empieza a ser <b>valorado</b>']},
+  rel:{t:'Música religiosa',c:C.rel,scene:'religiosa',notes:['<b>Música coral</b> leída en grandes libros sobre un atril giratorio: el <b>facistol</b>','Formas: el <b>motete</b> y la <b>misa</b> (a cuatro o cinco voces)','El <b>Concilio de Trento</b> quiso una música religiosa «<b>entendible</b>» y llamó a la polifonía anterior (Ars Nova) «<b>ruido infernal</b>»']},
+  pro:{t:'Música profana',c:C.pro,scene:'profana',notes:['<b>Madrigal italiano</b>: sobre un poema libre de gran calidad literaria, en <b>estilo recitativo</b>. Lo canta un <b>solista</b> y se pueden añadir instrumentos. Gran figura: <b>Claudio Monteverdi</b>','<b>Villancico</b>: basado en la <b>repetición de un estribillo</b>']},
+  ins:{t:'Música instrumental',c:C.ins,scene:'instrumental',notes:['Formas: la <b>tocata</b> y la <b>fantasía</b>, de carácter libre: importa la <b>imaginación</b> o la <b>improvisación</b> del compositor','Instrumentos: el <b>órgano</b>, los de tecla como el <b>clavicordio</b> (antecedente del piano), el <b>arpa</b> y, algo menos, el <b>laúd</b>']},
+  dan:{t:'La danza',c:C.dan,scene:'danza',notes:['Actividad social muy apreciada','<b>Pavana</b>: movimientos solemnes y elegantes','<b>Gallarda</b>: más rápida','Las acompañaban <b>flautas, cornetas, trombones, violas, laúdes y arpas</b>']},
+  voz:{t:'Poetas y cantores',c:C.com,scene:'voz',notes:['<b>Juan del Encina</b>: poeta, músico y dramaturgo. 68 piezas en el <b>Cancionero musical de Barbieri</b>; escribió el tratado «<b>Arte de la poesía castellana</b>»','<b>Mateo Flecha</b>: catalán, famoso por sus «<b>ensaladas</b>» a 4 o 5 voces que mezclan lenguas para divertir a los cortesanos','<b>Gutierre de Cetina</b>: poeta sevillano, soldado en Italia, apodado «<b>Vandalio</b>». Su famoso <b>madrigal</b> está dedicado a Laura Gonzaga']},
+  tec:{t:'Tecla y vihuela',c:C.com,scene:'tecla',notes:['<b>Antonio de Cabezón</b>: organista <b>ciego</b> de Carlos I y Felipe II; autor de las <b>primeras variaciones</b> de la música española','<b>Alonso Mudarra</b>: uno de los <b>siete vihuelistas</b> españoles; «Fantasía que contrahaze el arpa», «Claros y frescos ríos», «Guárdame las vacas»','<b>Luis de Narváez</b>: vihuelista; «<b>Los seis libros del Delphín</b>», música en cifra para tañer vihuela']},
+  vic:{t:'Tomás Luis de Victoria',c:C.com,scene:'victoria',notes:['Nace en <b>Ávila</b> (1548) y muere en <b>Madrid</b> (1611). Niño de coro en Ávila','En <b>1565</b> viaja a <b>Roma</b>; recibe lecciones de <b>Palestrina</b>; en 1575 se ordena sacerdote','En <b>1587</b> vuelve a España: capellán y maestro de capilla de las <b>Descalzas Reales</b>, al servicio de la emperatriz María','Su estilo, con <b>equilibrio y pureza</b>, ya anuncia la expresividad barroca']}
+ }
+},
+
+/* ================= FICHAS ================= */
+scenes:[
+{id:'albores',cat:'alb',short:'Albores (s. XV)',t:'Los albores: el siglo XV',steps:[
+ {clear:1,d:`${bg('#eef3f7')}<path d="M0 205 H400 V250 H0Z" fill="#d8c79c"/>${palace(110,205,1.1)}${church(300,205,1)}
+  <g class="mv" data-dx="-80">${person(195,150,C.alb,1.5)}${lute(226,182,.6)}</g>
+  ${tag(200,26,'Capillas privadas',C.alb,16)}${chip(110,104,'nobles y príncipes',ORG,12)}${chip(200,232,'músicos permanentes',C.alb,13)}${chip(300,82,'fiestas y viajes',ORG,12)}`,
+  c:'En el <b>siglo XV</b>, los <b>nobles y príncipes</b> querían música en sus fiestas y viajes. Para tenerla siempre, contrataban <b>músicos permanentes</b>: así nacieron las <b>capillas privadas</b>.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Una capilla para la misa',C.alb,15)}
+  <g>${[0,1,2,3,4].map(c=>[0,1,2].map(r=>singer(60+c*26,86+r*36,['#7b2a8c','#1e5fb4','#b0302a'][r],.75)).join('')).join('')}</g>
+  ${chip(112,212,'unos 15 cantores',C.alb,13)}
+  <g class="mv" data-dx="80">${flute(240,120,.8)}${viola(280,118,.7)}${trombone(320,96,.6)}${lute(350,130,.6)}</g>
+  ${chip(300,212,'4 o 5 instrumentistas',C.alb,13)}`,
+  c:'Para los <b>oficios religiosos</b> la capilla tenía, de media, unos <b>15 cantores</b> y solo <b>4 o 5 instrumentistas</b>: mandaba la voz.'},
+ {clear:1,d:`${bg(SEA)}<path d="M0 250 L0 120 Q60 90 120 110 L150 60 Q200 40 260 60 L330 40 L400 70 V250Z" fill="${LAND}" stroke="#b49a62" stroke-width="2"/>
+  <g class="pop"><ellipse cx="190" cy="80" rx="58" ry="26" fill="${C.alb}"/>${T(190,76,'música',{size:12,w:700,c:'#fff'})}${T(190,92,'franco-flamenca',{size:12,w:700,c:'#fff'})}</g>
+  ${curve('M170 96 Q120 150 80 190',C.alb)}${curve('M200 104 Q230 170 240 210',C.alb)}${curve('M216 72 Q280 70 340 100',C.alb)}
+  ${chip(80,210,'España',C.alb,12)}${chip(250,228,'Italia',C.alb,12)}${chip(350,120,'Alemania',C.alb,12)}${tag(200,24,'Se extiende por Europa',C.alb,15)}`,
+  c:'En ese siglo predominaba la <b>música franco-flamenca</b> (de Francia y Flandes), que se extendió por toda Europa.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Cambios que llegan',C.alb,15)}
+  <g>${palace(95,140,.8)}${chip(95,170,'gana la música profana',ORG,12)}${notes2(130,70,C.pro,.9)}</g>
+  <g>${book(270,100,80,50)}${curve('M270 130 Q270 150 300 160',C.ins)}${lute(320,175,.7)}${chip(268,226,'los instrumentos copian la música vocal',C.ins,11)}</g>`,
+  c:'Además, la <b>música profana</b> (no religiosa) ganó importancia, y los <b>instrumentos</b> empezaron a tener peso propio <b>transcribiendo</b> (copiando para tocar) la música vocal.'}
+],quiz:[
+ {q:'¿Qué eran las capillas privadas del siglo XV?',a:'Grupos de músicos permanentes de nobles y príncipes',o:['Iglesias pequeñas sin música','Escuelas de baile','Libros de partituras'],e:'Los tenían para sus fiestas, viajes y oficios.'},
+ {q:'¿Cómo era una capilla para los oficios religiosos?',a:'Unos 15 cantores y 4 o 5 instrumentistas',o:['Solo instrumentistas','Un único cantante','100 músicos de orquesta'],e:'Mandaba la voz.'},
+ {q:'¿Qué música predominaba en el siglo XV?',a:'La franco-flamenca',o:['La barroca','La egipcia','El flamenco andaluz'],e:'Se extendió por toda Europa.'}
+]},
+
+{id:'pleno',cat:'ple',short:'Pleno (s. XVI)',t:'Renacimiento pleno: el siglo XVI',steps:[
+ {clear:1,d:`${bg()}${tag(200,24,'1 · Culminación de la polifonía',C.ple,15)}
+  ${voiceLine(70,'#7b2a8c','Soprano',200)}${voiceLine(110,'#b0302a','Contralto',-200)}${voiceLine(150,'#17734a','Tenor',200)}${voiceLine(190,'#1e5fb4','Bajo',-200)}
+  ${chip(200,232,'varias voces a la vez, cada una con su melodía',ORG,12)}`,
+  c:'El siglo XVI tiene tres rasgos. El primero: la <b>polifonía</b> (varias voces, cada una con su propia melodía) llega a su <b>punto más alto</b>.'},
+ {clear:1,d:`${bg()}${tag(200,24,'2 · Los instrumentos sustituyen la voz',C.ple,15)}
+  <g class="fo">${singer(110,100,'#7b2a8c',1.6)}${notes2(150,90,'#7b2a8c',.9)}</g>
+  ${arrow(170,140,230,140,C.ple)}
+  <g class="pop">${viola(290,130,1.1)}${notes2(320,80,C.ins,.9)}</g>${chip(110,200,'voz cantada',C.rel,13)}${chip(290,210,'instrumento',C.ins,13)}`,
+  c:'El segundo: la voz cantada empieza a <b>sustituirse por instrumentos</b>, que tocan la misma melodía.'},
+ {clear:1,d:`${bg()}${tag(200,24,'3 · El mecenas',C.ple,15)}
+  <g>${person(110,110,'#7b2a8c',1.6)}${crown(110,103)}${chip(110,190,'mecenas',C.ple,14)}</g>
+  <g class="mv" data-dx="-90">${coins(200,150)}</g>
+  <g>${person(290,110,C.com,1.6)}${lute(318,150,.6)}${chip(290,190,'músico',C.com,14)}</g>
+  ${chip(200,228,'el músico empieza a ser valorado',ORG,13)}`,
+  c:'El tercero: el músico trabaja bajo la protección de un <b>mecenas</b> (un noble rico que le paga) y empieza a ser <b>valorado</b> como artista.'}
+],quiz:[
+ {q:'¿Qué le pasa a la polifonía en el siglo XVI?',a:'Llega a su culminación',o:['Desaparece','Se inventa por primera vez','Se prohíbe en las iglesias'],e:'Es su momento de máximo esplendor.'},
+ {q:'¿Qué es un mecenas?',a:'Alguien rico que protege y paga al músico',o:['Un instrumento de tecla','Un tipo de danza','Un libro de coro'],e:'Gracias a él, el músico empieza a ser valorado.'},
+ {q:'¿Qué sustituye a la voz cantada en el Renacimiento pleno?',a:'Los instrumentos',o:['El silencio','Los aplausos','Los coros de niños'],e:'Tocan la misma melodía.'}
+]},
+
+{id:'religiosa',cat:'rel',short:'Religiosa',t:'La música religiosa',steps:[
+ {clear:1,d:`${bg('#f1ece4')}<path d="M0 0 H400 V250 H0Z" fill="none"/>${tag(200,24,'Música coral',C.rel,16)}
+  ${facistol(200,110,1.05)}
+  <g class="mv" data-dx="-60">${singer(110,130,'#7b2a8c',1.1)}${singer(80,140,'#1e5fb4',1.1)}</g><g class="mv" data-dx="60">${singer(290,130,'#b0302a',1.1)}${singer(320,140,'#17734a',1.1)}</g>
+  ${chip(320,70,'facistol',ORG,14)}${chip(85,70,'grandes libros',C.rel,12)}${T(200,240,'atril giratorio',{size:12,c:MUT,it:1})}`,
+  c:'Era <b>música coral</b>: todos los cantores leían de <b>grandes libros</b> colocados sobre un atril que gira, el <b>facistol</b>.'},
+ {clear:1,d:`${bg()}<line x1="200" y1="45" x2="200" y2="235" stroke="${MUT}" stroke-dasharray="5 5" stroke-width="2"/>
+  ${tag(100,26,'Motete',C.rel,16)}${book(100,105,90,56,C.rel)}${chip(100,170,'obra religiosa breve',ORG,12)}
+  ${tag(300,26,'Misa',C.rel,16)}<g>${[0,1,2,3,4].map(k=>singer(250+k*25,85,['#7b2a8c','#b0302a','#17734a','#1e5fb4','#8a3b12'][k],.85)).join('')}</g>${chip(300,150,'4 o 5 voces',ORG,14)}`,
+  c:'Sus dos formas principales son el <b>motete</b>, una obra religiosa breve, y la <b>misa</b>, compuesta para <b>cuatro o cinco voces</b>.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Concilio de Trento',C.rel,16)}
+  <g class="fo"><path d="M40 70 C80 140 120 60 160 150 S120 200 60 120 S150 90 170 200" stroke="#8a3b12" stroke-width="3" fill="none"/><path d="M50 190 C100 60 140 200 170 80" stroke="#b0302a" stroke-width="3" fill="none"/></g>
+  ${chip(105,225,'Ars Nova: «ruido infernal»',C.pro,12)}
+  ${arrow(185,140,225,140,C.rel)}
+  <g class="dr"><path d="M240 90 H370" stroke="#7b2a8c" stroke-width="4"/><path d="M240 120 H370" stroke="#1e5fb4" stroke-width="4"/><path d="M240 150 H370" stroke="#17734a" stroke-width="4"/></g>
+  ${chip(305,195,'música «entendible»',C.ins,13)}`,
+  c:'El <b>Concilio de Trento</b> quiso una música religiosa en la que se entendiera bien el texto. A la polifonía anterior (<b>Ars Nova</b>) llegó a llamarla «<b>ruido infernal</b>».'}
+],quiz:[
+ {q:'¿Qué es el facistol?',a:'Un atril giratorio para los grandes libros de coro',o:['Un instrumento de viento','Una danza lenta','Un tipo de misa'],e:'Todos los cantores leían del mismo libro.'},
+ {q:'¿Para cuántas voces se componía la misa?',a:'Para cuatro o cinco voces',o:['Para una sola voz','Para veinte voces','Solo para órgano'],e:''},
+ {q:'¿Qué pidió el Concilio de Trento?',a:'Una música religiosa «entendible»',o:['Más instrumentos de percusión','Prohibir la misa','Cantar solo en francés'],e:'A la polifonía anterior la llamó «ruido infernal».'}
+]},
+
+{id:'profana',cat:'pro',short:'Profana',t:'La música profana',steps:[
+ {clear:1,d:`${bg()}${tag(200,24,'Madrigal italiano',C.pro,16)}
+  ${scroll(90,110,90,60)}${chip(90,160,'poema libre',C.pro,12)}${chip(90,186,'gran calidad literaria',C.pro,11)}
+  ${arrow(145,110,185,110,C.pro)}
+  <g class="pop">${singer(220,90,C.pro,1.4)}</g>${chip(220,165,'solista',ORG,13)}
+  <g class="mv" data-dx="80">${lute(300,105,.7)}${viola(345,100,.6)}</g>${chip(325,165,'+ instrumentos',ORG,12)}
+  ${chip(200,226,'Claudio Monteverdi',C.pro,14)}`,
+  c:'El <b>madrigal italiano</b> parte de un <b>poema libre</b> de gran calidad. Se canta en <b>estilo recitativo</b> (casi hablado) por un <b>solista</b>, y se pueden añadir instrumentos. Su gran figura: <b>Claudio Monteverdi</b>.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Villancico',C.pro,16)}
+  ${[['Estribillo',1],['Copla',0],['Estribillo',1],['Copla',0],['Estribillo',1]].map(([l,e],k)=>`<g class="pop"><rect x="${22+k*74}" y="${e?90:110}" width="64" height="${e?60:40}" rx="8" fill="${e?C.pro:'#fff'}" stroke="${C.pro}" stroke-width="2"/>${T(54+k*74,e?125:135,l,{size:12,w:700,c:e?'#fff':C.pro})}</g>`).join('')}
+  ${curve('M86 160 Q130 200 196 160',ORG)}${curve('M234 160 Q278 200 344 160',ORG)}
+  ${chip(200,226,'se repite el estribillo',ORG,14)}`,
+  c:'El <b>villancico</b> se basa en la <b>repetición de un estribillo</b>: entre estrofa y estrofa vuelve siempre la misma parte.'}
+],quiz:[
+ {q:'¿En qué se basa el madrigal italiano?',a:'En un poema libre de gran calidad literaria',o:['En una oración en latín','En una danza rápida','En el sonido del órgano'],e:'Se canta en estilo recitativo.'},
+ {q:'¿Quién es un gran representante del madrigal?',a:'Claudio Monteverdi',o:['Tomás Luis de Victoria','Antonio de Cabezón','Juan del Encina'],e:''},
+ {q:'¿Qué caracteriza al villancico?',a:'La repetición de un estribillo',o:['Que solo lo toca el órgano','Que no tiene letra','Que dura más de una hora'],e:''}
+]},
+
+{id:'instrumental',cat:'ins',short:'Instrumental',t:'La música instrumental',steps:[
+ {clear:1,d:`${bg()}${tag(200,24,'Tocata y fantasía',C.ins,16)}
+  ${person(110,120,C.ins,1.6)}${clavi(110,200,.9)}
+  <g class="pop"><ellipse cx="270" cy="100" rx="90" ry="50" fill="#fff" stroke="${C.ins}" stroke-width="2"/><circle cx="185" cy="140" r="7" fill="#fff" stroke="${C.ins}" stroke-width="2"/><circle cx="170" cy="150" r="4" fill="#fff" stroke="${C.ins}" stroke-width="2"/>${notes2(240,100,C.ins,.9)}${note(300,96,ORG,.9)}${T(270,130,'¡a mi manera!',{size:12,it:1,c:MUT})}</g>
+  ${chip(270,175,'carácter libre',ORG,13)}${chip(290,210,'imaginación e improvisación',C.ins,12)}`,
+  c:'Aparecen la <b>tocata</b> y la <b>fantasía</b>, piezas de <b>carácter libre</b>: importan más la <b>imaginación</b> o la <b>improvisación</b> del compositor que una estructura fija.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Instrumentos destacados',C.ins,16)}
+  <g>${organ(70,140,.9)}${T(70,200,'órgano',{size:13,w:700})}</g>
+  <g>${clavi(170,140,.8)}${T(170,200,'clavicordio',{size:13,w:700})}${chip(170,226,'antecedente del piano',ORG,11)}</g>
+  <g>${harp(270,130,.85)}${T(270,200,'arpa',{size:13,w:700})}</g>
+  <g>${lute(345,130,.8)}${T(345,200,'laúd',{size:13,w:700})}${T(345,216,'(menos)',{size:11,c:MUT,it:1})}</g>`,
+  c:'Además del <b>órgano</b>, gustan mucho los instrumentos de <b>tecla</b> como el <b>clavicordio</b> (antecedente del piano), el <b>arpa</b> y, algo menos, el <b>laúd</b>.'}
+],quiz:[
+ {q:'¿Qué importa más en una fantasía o una tocata?',a:'La imaginación o improvisación del compositor',o:['Repetir un estribillo','Que la cante un coro','Que se entienda el texto en latín'],e:'Son piezas de carácter libre.'},
+ {q:'¿Qué instrumento es el antecedente del piano?',a:'El clavicordio',o:['El laúd','El arpa','La corneta'],e:''},
+ {q:'La tocata y la fantasía son formas…',a:'Instrumentales',o:['Religiosas para coro','De danza','De villancico'],e:''}
+]},
+
+{id:'danza',cat:'dan',short:'La danza',t:'La danza',steps:[
+ {clear:1,d:`${bg()}${tag(200,24,'Actividad social muy apreciada',C.dan,15)}<line x1="200" y1="45" x2="200" y2="235" stroke="${MUT}" stroke-dasharray="5 5" stroke-width="2"/>
+  ${tag(100,62,'Pavana',C.dan,15)}<g class="mv" data-dx="-30">${person(80,110,'#7b2a8c',1.4)}${person(120,110,'#1e5fb4',1.4)}</g>${chip(100,196,'solemne y elegante',ORG,12)}${T(100,222,'lenta…',{size:13,it:1,c:MUT})}
+  ${tag(300,62,'Gallarda',C.dan,15)}<g class="mv" data-dy="-40">${person(280,100,'#b0302a',1.4)}${person(320,96,'#17734a',1.4)}</g>${chip(300,196,'más rápida',ORG,12)}${T(300,222,'¡con saltos!',{size:13,it:1,c:MUT})}`,
+  c:'La danza era una actividad social muy apreciada. Destacaban la <b>pavana</b>, de movimientos <b>solemnes y elegantes</b>, y la <b>gallarda</b>, <b>más rápida</b>.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Las acompañaban…',C.dan,15)}
+  <g>${flute(40,120,.8)}${T(40,190,'flautas',{size:12,w:700})}</g><g>${trombone(110,120,.55)}${T(105,190,'cornetas y',{size:11,w:700})}${T(105,204,'trombones',{size:11,w:700})}</g>
+  <g>${viola(185,115,.8)}${T(185,190,'violas',{size:12,w:700})}</g><g>${lute(260,120,.8)}${T(260,190,'laúdes',{size:12,w:700})}</g><g>${harp(340,115,.8)}${T(340,190,'arpas',{size:12,w:700})}</g>`,
+  c:'Las danzas se acompañaban con <b>flautas, cornetas, trombones, violas, laúdes y arpas</b>.'}
+],quiz:[
+ {q:'¿Cómo era la pavana?',a:'Solemne y elegante',o:['Muy rápida y con saltos','Sin música','Solo para coro religioso'],e:'La rápida es la gallarda.'},
+ {q:'¿Qué danza era más rápida?',a:'La gallarda',o:['La pavana','La misa','El motete'],e:''},
+ {q:'¿Cuál NO acompañaba a las danzas según los apuntes?',a:'El piano',o:['La flauta','El laúd','El trombón'],e:'El piano aún no existía: su antecedente era el clavicordio.'}
+]},
+
+{id:'voz',cat:'com',short:'Encina, Flecha, Cetina',t:'Poetas y cantores',steps:[
+ {clear:1,d:`${bg()}${tag(200,24,'Juan del Encina',C.com,16)}
+  ${bust(80,110,C.com,1.4)}${chip(80,190,'poeta, músico',C.com,12)}${chip(80,216,'y dramaturgo',C.com,12)}
+  <g class="mv" data-dx="60">${book(195,100,90,56,C.com)}${chip(195,150,'Cancionero de Barbieri',ORG,11)}${T(195,174,'68 piezas',{size:13,w:700})}</g>
+  <g class="mv" data-dx="60">${scroll(335,100,60,40)}${T(335,146,'«Arte de la',{size:11,w:700})}${T(335,160,'poesía castellana»',{size:11,w:700})}</g>
+  ${T(260,215,'Salamanca · Roma · León',{size:12,c:MUT,it:1})}`,
+  c:'<b>Juan del Encina</b> fue poeta, músico y dramaturgo. Se conservan <b>68 piezas</b> suyas en el <b>Cancionero musical de Barbieri</b>, y escribió el tratado «<b>Arte de la poesía castellana</b>».'},
+ {clear:1,d:`${bg()}${tag(200,24,'Mateo Flecha',C.com,16)}${bust(70,110,C.com,1.3)}${chip(70,186,'catalán',C.com,12)}
+  <path d="M170 140 Q250 230 330 140Z" fill="#f6e2b3" stroke="#8a6b3c" stroke-width="2.5"/>${T(250,200,'ensalada',{size:15,w:800,c:'#8a6b3c'})}
+  ${[['castellano',190,120],['catalán',240,96],['italiano',300,118],['francés',205,70],['latín',285,72]].map(([l,x,y])=>`<g class="mv" data-dy="-50">${chip(x,y,l,ORG,11)}</g>`).join('')}
+  ${chip(250,232,'a 4 o 5 voces, para divertir',C.com,12)}`,
+  c:'<b>Mateo Flecha</b>, catalán, es famoso por sus «<b>ensaladas</b>»: obras a <b>4 o 5 voces</b> que mezclan lenguas (castellano, catalán, italiano, francés, latín) para divertir a los cortesanos.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Gutierre de Cetina',C.com,16)}${bust(80,110,C.com,1.3)}${chip(80,186,'poeta sevillano',C.com,12)}
+  <g class="mv" data-dx="50">${person(205,88,'#5d5a7a',1.5)}<line x1="221" y1="104" x2="235" y2="78" stroke="#555" stroke-width="3"/>${chip(205,160,'soldado en Italia',ORG,11)}</g>
+  <g class="pop"><path d="M310 120 C280 90 290 60 310 78 C330 60 340 90 310 120Z" fill="#e05a7a"/>${chip(310,150,'madrigal',C.com,13)}${T(310,174,'a Laura Gonzaga',{size:12,it:1,c:MUT})}</g>
+  ${chip(200,226,'apodo: «Vandalio»',ORG,13)}`,
+  c:'<b>Gutierre de Cetina</b>, poeta sevillano, fue soldado en Italia y adoptó el apodo de «<b>Vandalio</b>». Su <b>madrigal</b> más famoso está dedicado a Laura Gonzaga.'}
+],quiz:[
+ {q:'¿Qué son las «ensaladas» de Mateo Flecha?',a:'Obras que mezclan varias lenguas para divertir',o:['Recetas de cocina','Danzas lentas','Misas en latín'],e:'A 4 o 5 voces.'},
+ {q:'¿Dónde se conservan 68 piezas de Juan del Encina?',a:'En el Cancionero musical de Barbieri',o:['En los seis libros del Delphín','En el Código de Hammurabi','En el Libro de cifra nueva'],e:''},
+ {q:'¿Qué apodo pastoril adoptó Gutierre de Cetina?',a:'Vandalio',o:['Delphín','Antonio','Palestrina'],e:''}
+]},
+
+{id:'tecla',cat:'com',short:'Cabezón, Mudarra, Narváez',t:'Tecla y vihuela',steps:[
+ {clear:1,d:`${bg()}${tag(200,24,'Antonio de Cabezón',C.com,16)}
+  <g>${person(90,66,C.com,1.4)}${blind(90,66,1)}${organ(90,190,.9)}</g>${chip(90,224,'ciego desde niño',ORG,12)}
+  ${chip(270,80,'organista de Carlos I',C.com,12)}${chip(270,108,'y de Felipe II',C.com,12)}
+  <g class="pop">${chip(270,150,'primeras variaciones',ORG,13)}${T(270,176,'de la música española',{size:12,c:MUT})}</g>
+  ${T(270,205,'su hijo Hernando publicó sus obras',{size:11,c:MUT,it:1})}`,
+  c:'<b>Antonio de Cabezón</b> estudió música a pesar de quedarse <b>ciego</b>. Fue <b>organista de Carlos I y Felipe II</b> y autor de las <b>primeras variaciones</b> de la música española.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Alonso Mudarra',C.com,16)}
+  ${vihuela(80,125,1.4)}${chip(80,210,'vihuelista',C.com,13)}
+  <g class="mv" data-dx="60">${chip(265,74,'uno de los 7 vihuelistas',ORG,12)}${chip(265,110,'«Fantasía que contrahaze el arpa»',C.com,10)}${chip(265,140,'«Guárdame las vacas»',C.com,11)}${chip(265,170,'«Claros y frescos ríos»',C.com,11)}</g>
+  ${T(265,210,'catedral de Sevilla',{size:12,it:1,c:MUT})}`,
+  c:'<b>Alonso Mudarra</b> fue uno de los <b>siete vihuelistas</b> españoles. Obras célebres: «Fantasía que contrahaze el arpa», «Claros y frescos ríos» y «Guárdame las vacas». Dirigió la música de la catedral de Sevilla.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Luis de Narváez',C.com,16)}
+  ${vihuela(70,125,1.2)}
+  <g class="mv" data-dx="80">${book(250,110,140,80,'#1e4f94')}${dolphin(250,110,1.3)}</g>
+  ${chip(250,172,'«Los seis libros del Delphín»',C.com,12)}${chip(250,204,'música en cifra para vihuela',ORG,11)}${T(250,230,'romances, villancicos y diferencias',{size:11,c:MUT,it:1})}`,
+  c:'<b>Luis de Narváez</b>, vihuelista, escribió «<b>Los seis libros del Delphín</b>»: música en <b>cifra</b> para tocar la vihuela, con romances, villancicos y diferencias.'}
+],quiz:[
+ {q:'¿Quién fue el organista ciego de Carlos I y Felipe II?',a:'Antonio de Cabezón',o:['Alonso Mudarra','Mateo Flecha','Luis de Narváez'],e:'Autor de las primeras variaciones españolas.'},
+ {q:'¿Qué obra escribió Luis de Narváez?',a:'Los seis libros del Delphín',o:['Arte de la poesía castellana','Guárdame las vacas','El Cancionero de Barbieri'],e:''},
+ {q:'Alonso Mudarra tocaba…',a:'La vihuela',o:['El órgano','La trompeta','El clavicordio'],e:'Fue uno de los siete vihuelistas españoles.'}
+]},
+
+{id:'victoria',cat:'com',short:'Tomás Luis de Victoria',t:'Tomás Luis de Victoria',steps:[
+ {clear:1,d:`${bg()}<path d="M30 200 H370" stroke="${MUT}" stroke-width="3"/>${tag(200,24,'Tomás Luis de Victoria',C.com,16)}
+  <g>${church(70,170,.7)}<circle cx="70" cy="200" r="8" fill="${C.com}"/>${chip(70,226,'Ávila · 1548',C.com,12)}${chip(70,74,'niño de coro',ORG,12)}</g>`,
+  c:'<b>Tomás Luis de Victoria</b> nació en <b>Ávila</b> en <b>1548</b>, donde se formó como <b>niño de coro</b>.'},
+ {d:`<g class="mv" data-dx="-120"><circle cx="200" cy="200" r="8" fill="${C.com}"/>${chip(200,226,'Roma · 1565',C.com,12)}${bust(200,120,'#7b2a8c',.9)}${chip(200,74,'lecciones de Palestrina',ORG,11)}${T(200,180,'sacerdote en 1575',{size:11,c:MUT,it:1})}</g>`,
+  c:'En <b>1565</b> viajó a <b>Roma</b>, donde recibió lecciones de <b>Palestrina</b>, el gran maestro de la polifonía. En 1575 se ordenó sacerdote.'},
+ {d:`<g class="mv" data-dx="-120"><circle cx="330" cy="200" r="8" fill="${C.com}"/>${chip(330,226,'Madrid · 1587',C.com,12)}${palace(330,170,.55)}${chip(330,74,'Descalzas Reales',ORG,11)}${T(330,100,'emperatriz María',{size:11,c:MUT,it:1})}</g>`,
+  c:'En <b>1587</b> volvió a España protegido por <b>Felipe II</b>: fue capellán y maestro de capilla de las <b>Descalzas Reales</b> (Madrid), al servicio de la emperatriz María. Murió en Madrid en 1611.'},
+ {clear:1,d:`${bg()}${tag(200,24,'Su estilo',C.com,16)}
+  <g class="dr"><path d="M50 120 H180" stroke="#7b2a8c" stroke-width="4"/><path d="M50 145 H180" stroke="#1e5fb4" stroke-width="4"/><path d="M50 170 H180" stroke="#17734a" stroke-width="4"/></g>
+  ${chip(115,80,'equilibrio y pureza',C.com,13)}${arrow(200,145,240,145,ORG)}
+  <g class="pop"><path d="M258 170 C278 110 298 190 318 130 S348 165 372 132" stroke="#b0302a" stroke-width="4" fill="none"/></g>${chip(315,80,'anuncia el Barroco',ORG,13)}${T(315,210,'más expresivo',{size:12,it:1,c:MUT})}`,
+  c:'Su estilo, con <b>equilibrio y pureza</b>, va más allá del Renacimiento: ya <b>anuncia la expresividad barroca</b>.'}
+],quiz:[
+ {q:'¿Dónde nació Tomás Luis de Victoria?',a:'En Ávila',o:['En Roma','En Sevilla','En Lérida'],e:'En 1548.'},
+ {q:'¿Con qué gran maestro aprendió en Roma?',a:'Con Palestrina',o:['Con Monteverdi','Con Cabezón','Con Bach'],e:''},
+ {q:'¿Qué anuncia el estilo de Victoria?',a:'La expresividad barroca',o:['El jazz','La música franco-flamenca del s. XV','El fin de la polifonía religiosa'],e:''}
+]}
+],
+
+/* ================= JUEGOS ================= */
+games:[
+ {id:'quien',type:'clasifica',t:'¿Quién es?',d:'Cada dato, a su compositor',deal:12,
+  bins:{enc:{n:'Juan del Encina',c:'#8a3b12'},fle:{n:'Mateo Flecha',c:'#b8860b'},cet:{n:'Gutierre de Cetina',c:'#b0302a'},cab:{n:'Antonio de Cabezón',c:'#17734a'},mud:{n:'Alonso Mudarra',c:'#1e5fb4'},nar:{n:'Luis de Narváez',c:'#4b82d9'},vic:{n:'T. L. de Victoria',c:'#7b2a8c'}},
+  cards:[['Poeta, músico y dramaturgo','enc'],['Cancionero musical de Barbieri','enc'],['«Arte de la poesía castellana»','enc'],['Capellán de la catedral de León','enc'],
+   ['Las «ensaladas»','fle'],['Compositor catalán','fle'],['Mezcla castellano, catalán, italiano, francés y latín','fle'],['Monje en el monasterio de Poblet','fle'],
+   ['Apodo «Vandalio»','cet'],['Madrigal dedicado a Laura Gonzaga','cet'],['Poeta sevillano y soldado en Italia','cet'],
+   ['Organista ciego','cab'],['Organista de Carlos I y Felipe II','cab'],['Primeras variaciones de la música española','cab'],['Su hijo Hernando publicó sus obras','cab'],
+   ['«Guárdame las vacas»','mud'],['«Fantasía que contrahaze el arpa»','mud'],['«Claros y frescos ríos»','mud'],['Dirigió la música de la catedral de Sevilla','mud'],
+   ['«Los seis libros del Delphín»','nar'],['Música en cifra para vihuela','nar'],['Al servicio de Francisco de los Cobos','nar'],
+   ['Nació en Ávila en 1548','vic'],['Aprendió con Palestrina en Roma','vic'],['Descalzas Reales de Madrid','vic'],['Anuncia la expresividad barroca','vic']]},
+ {id:'esto',type:'binario',t:'Esto o aquello',d:'Religiosa o profana · s. XV o s. XVI · pavana o gallarda',sets:[
+  {t:'¿Religiosa o profana?',a:['Religiosa',C.rel],b:['Profana',C.pro],it:[['Motete','a'],['Misa','a'],['Madrigal','b'],['Villancico','b'],['Se lee en el facistol','a'],['Concilio de Trento','a'],['Claudio Monteverdi','b'],['Repite un estribillo','b']]},
+  {t:'¿Siglo XV o siglo XVI?',a:['Albores (s. XV)',C.alb],b:['Pleno (s. XVI)',C.ple],it:[['Nacen las capillas privadas','a'],['Predomina la música franco-flamenca','a'],['Culminación de la polifonía','b'],['El músico trabaja para un mecenas','b'],['Los instrumentos sustituyen la voz','b'],['15 cantores y 4 o 5 instrumentistas','a']]},
+  {t:'¿Pavana o gallarda?',a:['Pavana',C.dan],b:['Gallarda',ORG],it:[['Solemne','a'],['Más rápida','b'],['Elegante','a']]}
+ ]},
+ {id:'orden',type:'orden',t:'La vida de Victoria',d:'De Ávila a las Descalzas Reales',hint:'Toca los hechos en orden, del primero al último.',
+  items:['Nace en Ávila (1548)','Es niño de coro en Ávila','Viaja a Roma (1565)','Recibe lecciones de Palestrina','Se ordena sacerdote (1575)','Vuelve a España con Felipe II (1587)','Muere en Madrid (1611)']},
+ {id:'inst',type:'puntos',t:'¿Qué instrumento es?',d:'Reconoce los instrumentos del tema',prompt:'Toca:',viewBox:'0 0 400 250',r:30,
+  base:`${bg()}${organ(60,90,.8)}${clavi(170,80,.75)}${harp(270,75,.75)}${lute(355,80,.65)}${vihuela(55,195,.7)}${flute(140,195,.75)}${trombone(240,195,.6)}${viola(345,190,.7)}`,
+  spots:[['org','el órgano',60,60],['cla','el clavicordio',170,80],['arp','el arpa',270,75],['lau','el laúd',355,80],['vih','la vihuela',55,190],['flu','la flauta',140,195],['tro','el trombón',240,190],['vio','la viola',345,195]]}
+],
+
+/* ================= PRUEBA (además de las preguntas de las fichas) ================= */
+pool:[
+ {q:'¿Qué tres características tiene el Renacimiento pleno?',a:'Culmina la polifonía, los instrumentos sustituyen la voz y aparece el mecenas',o:['Nacen las capillas, la ópera y el piano','Desaparecen la voz, el órgano y la danza','Solo hay música religiosa en latín'],e:''},
+ {q:'¿Qué ganó importancia en el siglo XV?',a:'La música profana',o:['El jazz','La ópera bufa','El piano'],e:''},
+ {q:'¿Cómo ganaron peso los instrumentos en el siglo XV?',a:'Transcribiendo la música vocal',o:['Sustituyendo al coro en las misas','Con las sinfonías','Con la ópera'],e:''},
+ {q:'¿En qué estilo se canta el madrigal?',a:'En estilo recitativo',o:['A gritos','Sin letra','Solo con órgano'],e:''},
+ {q:'¿Qué formas instrumentales aparecen en el Renacimiento?',a:'La tocata y la fantasía',o:['El motete y la misa','La sinfonía y el concierto','El villancico y el madrigal'],e:''},
+ {q:'¿Con qué instrumentos se acompañaban las danzas?',a:'Flautas, cornetas, trombones, violas, laúdes y arpas',o:['Pianos y guitarras eléctricas','Solo tambores','Solo la voz'],e:''},
+ {q:'¿Cómo llamó el Concilio de Trento a la polifonía anterior (Ars Nova)?',a:'«Ruido infernal»',o:['«Música celestial»','«Ensalada»','«Fantasía»'],e:''},
+ {q:'¿Qué publicó Hernando, el hijo de Cabezón?',a:'«Obras de música para tecla, arpa y vihuela»',o:['«Los seis libros del Delphín»','«Arte de la poesía castellana»','El Cancionero de Barbieri'],e:''},
+ {q:'¿Qué ciudad italiana es clave en la vida de Victoria?',a:'Roma',o:['Venecia','Milán','Nápoles'],e:''},
+ {vf:1,q:'El madrigal italiano lo cantaba un solista y se le podían añadir instrumentos.',a:'Verdadero',e:''},
+ {vf:1,q:'La pavana era una danza muy rápida y con saltos.',a:'Falso',e:'Era solemne y elegante; la rápida es la gallarda.'},
+ {vf:1,q:'El clavicordio es un antecedente del piano actual.',a:'Verdadero',e:''},
+ {vf:1,q:'Antonio de Cabezón era vihuelista y trabajó en Poblet.',a:'Falso',e:'Era organista ciego de Carlos I y Felipe II. Poblet es Mateo Flecha.'},
+ {vf:1,q:'Mateo Flecha mezclaba varias lenguas en sus ensaladas.',a:'Verdadero',e:''},
+ {vf:1,q:'En el siglo XV predominaba la música franco-flamenca.',a:'Verdadero',e:''}
+]
+};
+
+</script>
+<script>
+/* ===== Motor común: esquema, fichas animadas, juegos y prueba =====
+   Lee la configuración de window.APP (ver contenido/*.js).
+   Clases en los dibujos de cada paso:
+     .mv  llega desplazado (data-dx, data-dy)
+     .dr  línea que se dibuja (las discontinuas aparecen)
+     .fo  se apaga hasta quedar tenue
+     .pop entra con rebote más marcado
+*/
+(function(){
+const A=window.APP;
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HAS=typeof gsap!=='undefined'&&!RM;
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(A.store+'_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(A.store+'_'+k,JSON.stringify(v))}catch(e){}}};
+const CAT=k=>A.cats[k]||{n:k,c:INK};
+
+/* ---------- ESQUEMA ---------- */
+const E=A.esquema;
+$('#eKick').textContent=E.kicker;$('#eTtl').textContent=E.title;$('#mapHint').textContent=E.hint;
+$('#mapa').setAttribute('viewBox',E.viewBox||'0 0 400 220');
+function drawMap(sel){
+  $('#mapa').innerHTML=E.draw(sel);
+  document.querySelectorAll('#mapa .pin').forEach(g=>{
+    g.setAttribute('tabindex','0');g.setAttribute('role','button');
+    const go=()=>showNotes(g.dataset.k);
+    g.addEventListener('click',go);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+  });
+}
+function showNotes(k){
+  drawMap(k);
+  const it=E.items[k],n=$('#notes');n.hidden=false;n.style.borderColor=it.c;
+  n.innerHTML=`<h3 style="color:${it.c}">${it.t}</h3><ul>${it.notes.map(x=>`<li>${x}</li>`).join('')}</ul>${it.scene?`<div><button class="primary" id="toFicha">🎬 Ver la ficha animada</button></div>`:''}`;
+  if(it.scene)$('#toFicha').onclick=()=>{openTab('fichas');loadScene(A.scenes.findIndex(s=>s.id===it.scene))};
+  $('#mapHint').textContent='Toca otra parte del esquema para cambiar.';
+  if(HAS)gsap.from(n.children,{opacity:0,y:8,stagger:.06,duration:.3});
+}
+
+/* ---------- FICHAS ---------- */
+let cur=0,step=0,tl=null;
+const done=new Set(store.get('done',[]));
+function buildPick(){
+  $('#fpick').innerHTML=A.scenes.map((s,i)=>`<button data-i="${i}" ${i===cur?'aria-current="true"':''} class="${done.has(s.id)?'done':''}" style="border-color:${CAT(s.cat).c}">${s.short||s.t}</button>`).join('');
+  $('#fpick').querySelectorAll('button').forEach(b=>b.onclick=()=>loadScene(+b.dataset.i));
+}
+function loadScene(i){cur=Math.max(0,i);step=0;$('#fquiz').hidden=true;buildPick();render(true);window.scrollTo({top:$('#tab-fichas').offsetTop-60,behavior:'smooth'})}
+function render(anim){
+  const S=A.scenes[cur],c=CAT(S.cat);
+  $('#kick').textContent=`Ficha ${cur+1} de ${A.scenes.length} · ${c.n}`;$('#kick').style.color=c.c;$('#ttl').textContent=S.t;
+  let j=step;while(j>0&&!S.steps[j].clear)j--;
+  let svg='';for(let k=j;k<=step;k++)svg+=`<g id="stp${k}">${S.steps[k].d}</g>`;
+  if(tl)tl.kill();
+  $('#stage').innerHTML=svg;
+  $('#cap').innerHTML=S.steps[step].c;
+  $('#dots').innerHTML=S.steps.map((_,k)=>`<i class="${k===step?'on':k<step?'past':''}"></i>`).join('');
+  $('#bBack').disabled=step===0;
+  $('#bNext').textContent=step===S.steps.length-1?'✓ Comprobar':'Siguiente →';
+  if(anim&&HAS)animate($('#stp'+step));
+}
+function animate(g){
+  tl=gsap.timeline();
+  [...g.children].filter(c=>!(c.tagName==='rect'&&c.getAttribute('width')==='400')).forEach(el=>{
+    if(el.classList.contains('dr')){
+      const ps=el.tagName==='path'?[el]:[...el.querySelectorAll('path,line')];
+      ps.forEach(p=>{if(p.getAttribute('stroke-dasharray')||!p.getTotalLength){tl.from(p,{opacity:0,duration:.6},'<.15');return}const L=p.getTotalLength();gsap.set(p,{strokeDasharray:L,strokeDashoffset:L});tl.to(p,{strokeDashoffset:0,duration:.8,ease:'power1.inOut'},'<.15')});
+    }
+    else if(el.classList.contains('mv'))tl.from(el,{x:+(el.dataset.dx||0),y:+(el.dataset.dy||0),opacity:0,duration:1.1,ease:'power2.out'},'<.2');
+    else if(el.classList.contains('fo'))tl.to(el,{opacity:.15,duration:1.2,delay:.6},'<');
+    else if(el.classList.contains('pop'))tl.from(el,{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(2.5)'},'<.2');
+    else tl.from(el,{opacity:0,y:8,scale:.96,transformOrigin:'50% 50%',duration:.4,ease:'back.out(1.6)'},'<.18');
+  });
+}
+$('#bNext').onclick=()=>{const S=A.scenes[cur];if(step<S.steps.length-1){step++;render(true)}else showFQuiz()};
+$('#bBack').onclick=()=>{if(step>0){step--;render(false)}};
+$('#bAgain').onclick=()=>render(true);
+function showFQuiz(){
+  const S=A.scenes[cur],q=$('#fquiz');q.hidden=false;
+  runQuiz(q,S.quiz,'¿Lo has entendido?',(ok,n)=>{
+    if(ok===n){done.add(S.id);store.set('done',[...done]);buildPick()}
+    const nx=document.createElement('div');nx.className='ctrl';
+    nx.innerHTML=`<span class="stamp">${ok}/${n}${ok===n?' ¡Genial!':''}</span><span class="sp"></span><button class="primary">${cur<A.scenes.length-1?'Siguiente ficha →':'🎮 A jugar'}</button>`;
+    nx.querySelector('button').onclick=()=>cur<A.scenes.length-1?loadScene(cur+1):openTab('juegos');
+    q.appendChild(nx);
+  });
+  q.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function runQuiz(box,qs,title,onEnd){
+  let ok=0,ans=0;box.innerHTML=`<h3>${title}</h3>`;
+  qs.forEach(Q=>{
+    const d=document.createElement('div');d.className='qq';
+    const opts=Q.vf?['Verdadero','Falso']:shuffle([Q.a,...Q.o]);
+    d.innerHTML=`<p class="q">${Q.q}</p><div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div><p class="exp" hidden></p>`;
+    d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const good=b.textContent===Q.a;if(good)ok++;ans++;
+      d.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===Q.a)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      const e=d.querySelector('.exp');e.hidden=false;e.className='exp '+(good?'b':'m');e.innerHTML=(good?'✓ ¡Bien! ':'✗ Era: <b>'+Q.a+'</b>. ')+(Q.e||'');
+      if(ans===qs.length)onEnd(ok,qs.length);
+    });
+    box.appendChild(d);
+  });
+}
+
+/* ---------- JUEGOS ---------- */
+let GID=0;
+function gMenu(){
+  GID++;const best=store.get('best',{});
+  $('#gbox').innerHTML=`<p class="kicker">Juegos</p><h2 class="t">Elige un juego</h2><div class="games">${A.games.map(g=>`<button class="gcard" data-g="${g.id}"><b>${g.t}</b>${g.d}${best[g.id]!=null?`<div class="best">Récord: ${best[g.id]}</div>`:''}</button>`).join('')}</div>`;
+  $('#gbox').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>runGame(b.dataset.g));
+}
+const runGame=id=>{const g=A.games.find(x=>x.id===id);({clasifica:gClasifica,binario:gBinario,orden:gOrden,puntos:gPuntos})[g.type](g)};
+function endGame(id,ok,n){
+  const b=store.get('best',{}),bv=store.get('bestv',{});if(bv[id]==null||ok/n>bv[id]){bv[id]=ok/n;b[id]=`${ok}/${n}`;store.set('best',b);store.set('bestv',bv)}
+  $('#gbox').innerHTML=`<div class="result"><p class="kicker">Fin del juego</p><span class="stamp">${ok}/${n}</span><p>${ok===n?'¡Perfecto! 🏆':ok>=n*.7?'¡Muy bien! Casi lo tienes.':'Repasa las fichas y vuelve a intentarlo.'}</p><div class="ctrl"><button class="ghost" id="gm">← Juegos</button><button class="primary" id="gr">↻ Otra vez</button></div></div>`;
+  $('#gm').onclick=gMenu;$('#gr').onclick=()=>runGame(id);
+}
+const gHead=(t,i,n,ok)=>`<div class="score"><span>${t}</span><span>${i+1}/${n} · ✓ ${ok}</span></div>`;
+function choiceRound(G,items,label,bins,keyOf,txtOf,wrongMsg){
+  const my=++GID;let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;if(i===items.length)return endGame(G.id,ok,items.length);
+    const it=items[i],k=keyOf(it),B=bins(it);
+    $('#gbox').innerHTML=`${gHead(label(it),i,items.length,ok)}<div class="bigcard">${txtOf(it)}</div><div class="bins">${B.map(([bk,b])=>`<button class="bin" data-k="${bk}" style="border-left-color:${b.c}">${b.n}</button>`).join('')}</div><p class="fb" id="fb"></p>`;
+    if(HAS)gsap.from('.bigcard',{scale:.8,opacity:0,duration:.3});
+    $('#gbox').querySelectorAll('.bin').forEach(b=>b.onclick=()=>{
+      const good=b.dataset.k===k;if(good)ok++;
+      $('#gbox').querySelectorAll('.bin').forEach(x=>{x.disabled=true;if(x.dataset.k===k)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Correcto!':'✗ '+wrongMsg(it,B.find(x=>x[0]===k)[1]);
+      i++;setTimeout(show,good?800:1600);
+    });
+  };show();
+}
+function gClasifica(G){
+  const bins=Object.entries(G.bins||A.cats);
+  choiceRound(G,shuffle(G.cards).slice(0,G.deal||12),()=>G.t,()=>bins,it=>it[1],it=>it[0],(it,b)=>'Es: '+b.n);
+}
+function gBinario(G){
+  const items=shuffle(G.sets.flatMap(S=>S.it.map(([t,s])=>({S,t,s}))));
+  choiceRound(G,items,it=>it.S.t,it=>[['a',{n:it.S.a[0],c:it.S.a[1]}],['b',{n:it.S.b[0],c:it.S.b[1]}]],it=>it.s,it=>it.t,(it,b)=>'Es: '+b.n);
+}
+function gOrden(G){
+  const my=++GID;let next=0,err=0;const sh=shuffle(G.items.map((t,k)=>({t,k})));
+  $('#gbox').innerHTML=`<div class="score"><span>${G.t}</span><span id="oe">fallos: 0</span></div><p class="hint">${G.hint}</p><div class="order">${sh.map(o=>`<button data-k="${o.k}"><span class="n"></span>${o.t}</button>`).join('')}</div><p class="fb" id="fb"></p>`;
+  $('#gbox').querySelectorAll('.order button').forEach(b=>b.onclick=()=>{
+    if(b.classList.contains('placed'))return;
+    if(+b.dataset.k===next){b.classList.add('placed');b.querySelector('.n').textContent=(next+1)+'.';next++;$('#fb').textContent='';
+      if(next===G.items.length){const sc=Math.max(0,G.items.length-err);setTimeout(()=>{if(my===GID)endGame(G.id,sc,G.items.length)},900)}}
+    else{err++;$('#oe').textContent='fallos: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),500);$('#fb').className='fb ko';$('#fb').textContent='Ese todavía no. ¿Qué va antes?'}
+  });
+}
+function gPuntos(G){
+  const my=++GID;const qs=shuffle(G.ask?G.spots.filter(s=>G.ask.includes(s[0])):G.spots);let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;if(i===qs.length)return endGame(G.id,ok,qs.length);
+    const Q=qs[i];
+    $('#gbox').innerHTML=`${gHead(G.t,i,qs.length,ok)}<div class="bigcard" style="font-size:1.1rem">${G.prompt||'Toca:'} ${Q[1]}</div><div class="stage"><svg viewBox="${G.viewBox||'0 0 400 220'}" xmlns="http://www.w3.org/2000/svg">${G.base}${G.spots.map(s=>`<g class="mapdot" data-k="${s[0]}"><circle cx="${s[2]}" cy="${s[3]}" r="${G.r||18}" fill="transparent"/><circle class="v" cx="${s[2]}" cy="${s[3]}" r="7" fill="${ORG}" stroke="#fff" stroke-width="2"/></g>`).join('')}</svg></div><p class="fb" id="fb"></p>`;
+    $('#gbox').querySelectorAll('.mapdot').forEach(g=>g.onclick=()=>{
+      if(g.dataset.lock)return;$('#gbox').querySelectorAll('.mapdot').forEach(x=>x.dataset.lock=1);
+      const good=g.dataset.k===Q[0];if(good)ok++;
+      const r=$('#gbox').querySelector(`.mapdot[data-k="${Q[0]}"] .v`);r.setAttribute('fill','#17734a');r.setAttribute('r','10');
+      if(!good)g.querySelector('.v').setAttribute('fill','#b0302a');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Exacto!':'✗ Era el punto verde';
+      i++;setTimeout(show,good?900:1700);
+    });
+  };show();
+}
+
+/* ---------- PRUEBA ---------- */
+function pStart(){
+  const N=A.nPrueba||15;
+  $('#pbox').innerHTML=`<p class="kicker">Prueba final</p><h2 class="t">${N} preguntas de todo el tema</h2><p class="hint">Mejor nota: ${store.get('exam','—')}</p><div><button class="primary" id="pgo">Empezar</button></div>`;
+  $('#pgo').onclick=()=>{
+    const pool=[...A.scenes.flatMap(s=>s.quiz),...A.pool];
+    const qs=shuffle(pool).slice(0,N);
+    const box=document.createElement('div');box.className='quiz';$('#pbox').innerHTML='';$('#pbox').appendChild(box);
+    runQuiz(box,qs,`Responde las ${N}`,(ok,n)=>{
+      const nota=Math.round(ok/n*100)/10;if(nota>(parseFloat(store.get('exam','0'))||0))store.set('exam',String(nota));
+      const r=document.createElement('div');r.className='result';
+      r.innerHTML=`<span class="stamp">${nota} / 10</span><p>${ok} de ${n} bien. ${nota>=9?'¡Sobresaliente! 🏆':nota>=7?'¡Muy bien!':nota>=5?'Aprobado. Repasa los fallos.':'Vuelve a las fichas y repítela.'}</p><button class="primary">↻ Otra prueba</button>`;
+      r.querySelector('button').onclick=pStart;box.appendChild(r);r.scrollIntoView({behavior:'smooth'});
+    });
+  };
+}
+
+/* ---------- PESTAÑAS ---------- */
+function openTab(t){
+  GID++;
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+  ['esquema','fichas','juegos','prueba'].forEach(x=>$('#tab-'+x).hidden=x!==t);
+  if(t==='fichas'&&!$('#stage').innerHTML)loadScene(0);
+  if(t==='juegos')gMenu();
+  if(t==='prueba')pStart();
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>openTab(b.dataset.tab));
+window.__app={openTab,loadScene,render,set:(c,s)=>{cur=c;step=s;render(false)},n:()=>A.scenes.length};
+drawMap();
+})();
+
+</script>
+</body>
+</html>

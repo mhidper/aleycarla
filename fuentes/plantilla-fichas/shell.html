@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- Generado con fuentes/plantilla-fichas/build.py — edita el contenido en fuentes/plantilla-fichas/contenido/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+{{CSS}}
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-links">
+    <a class="back" href="{{BACK}}">← {{BACKTXT}}</a>
+    {{LINKAPP}}
+  </div>
+  <header>
+    <h1>{{H1}} <span>{{H1SPAN}}</span></h1>
+    <p>{{INTRO}}</p>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="esquema" aria-selected="true">🗺️ Esquema</button>
+    <button role="tab" data-tab="fichas" aria-selected="false">🎬 Fichas</button>
+    <button role="tab" data-tab="juegos" aria-selected="false">🎮 Juegos</button>
+    <button role="tab" data-tab="prueba" aria-selected="false">📝 Prueba</button>
+  </nav>
+
+  <section id="tab-esquema" class="sheet">
+    <p class="kicker" id="eKick"></p>
+    <h2 class="t" id="eTtl"></h2>
+    <div class="stage"><svg id="mapa" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="hint" id="mapHint"></p>
+    <div class="notes" id="notes" hidden></div>
+  </section>
+
+  <section id="tab-fichas" hidden>
+    <div class="sheet">
+      <p class="kicker" id="kick"></p>
+      <h2 class="t" id="ttl"></h2>
+      <div class="stage"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <p class="cap" id="cap" aria-live="polite"></p>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="ctrl">
+        <button class="ghost" id="bBack">← Atrás</button>
+        <button class="ghost" id="bAgain">↻ Repetir</button>
+        <span class="sp"></span>
+        <button class="primary" id="bNext">Siguiente →</button>
+      </div>
+      <div class="quiz" id="fquiz" hidden></div>
+    </div>
+    <div class="chips" id="fpick" style="margin-top:12px"></div>
+  </section>
+
+  <section id="tab-juegos" hidden><div class="sheet" id="gbox"></div></section>
+  <section id="tab-prueba" hidden><div class="sheet" id="pbox"></div></section>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="gdefs"></defs></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+{{LIB}}
+</script>
+<script>
+{{CONTENT}}
+</script>
+<script>
+{{MOTOR}}
+</script>
+</body>
+</html>

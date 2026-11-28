@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arte de las primeras civilizaciones</title>
+<!-- Generado con fuentes/plantilla-fichas/build.py — edita el contenido en fuentes/plantilla-fichas/contenido/ -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#f6f1ea; --paper:#fdfdfb; --grid:#ece4d8; --ink:#1f1d3a; --muted:#5d5a7a; --line:#dcd2c2;
+  --marker:#c0127e; --marker-soft:#fbe4f1; --ok:#17734a; --ok-soft:#ddf2e6; --bad:#b0302a; --bad-soft:#f8e0de;
+  --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#14121c; --paper:#1d1a28; --grid:#27233a; --ink:#ece8f5; --muted:#aaa4c2; --line:#3a3450;
+  --marker:#ff5fb9; --marker-soft:#3a1a33; --ok:#4fc68c; --ok-soft:#17332a; --bad:#ff7a70; --bad-soft:#3b1d1c;
+  --btn:#ece8f5; --btn-fg:#14121c; --chip:#221e30; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+[hidden]{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.nav-links{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.link-app{font-size:.85rem;color:var(--marker);text-decoration:none;font-weight:700;border:1.5px solid var(--line);background:var(--chip);padding:4px 10px;border-radius:8px}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.1em;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.tabs{display:flex;gap:6px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;border-bottom:2px solid var(--ink)}
+.tabs button{flex:1;border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:700 .95rem var(--f-body);padding:9px 4px;border-radius:10px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn)}
+.sheet{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:8px;padding:16px;box-shadow:0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0}
+h2.t{font:800 1.4rem var(--f-display);margin:-6px 0 0;text-wrap:balance}
+.stage{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fbf8f1;line-height:0}
+.stage svg{width:100%;height:auto;display:block}
+.stage svg text{font-family:var(--f-body)}
+.cap{font-size:1.12rem;line-height:1.5;margin:0;min-height:4.5em}
+.cap b{color:var(--marker)}
+.dots{display:flex;gap:6px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--marker)} .dots i.past{background:var(--muted)}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctrl .sp{flex:1}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 14px;cursor:pointer}
+.ghost:disabled,.primary:disabled{opacity:.4;cursor:default}
+button:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn);font-weight:700}
+.chips button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+/* Esquema */
+.pin{cursor:pointer}
+.pin:hover circle.halo,.pin:focus circle.halo{opacity:.35}
+.notes{border-left:5px solid var(--marker);padding:4px 0 4px 14px;display:flex;flex-direction:column;gap:8px}
+.notes h3{margin:0;font:800 1.25rem var(--f-display)}
+.notes ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.hint{color:var(--muted);font-size:.95rem;margin:0}
+/* Quiz */
+.quiz{display:flex;flex-direction:column;gap:16px;border-top:2px solid var(--ink);padding-top:14px}
+.quiz h3{font:800 1.15rem var(--f-display);margin:0}
+.qq{display:flex;flex-direction:column;gap:8px}
+.qq p.q{font-weight:700;margin:0;font-size:1.05rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:0;font-size:.95rem}
+.exp.b{color:var(--ok)} .exp.m{color:var(--bad)}
+.stamp{font-family:var(--f-hand);font-size:2.4rem;line-height:1;color:var(--ok);transform:rotate(-6deg);display:inline-block}
+/* Juegos */
+.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gcard{text-align:left;border:2px solid var(--line);background:var(--chip);color:var(--ink);border-radius:12px;padding:12px;cursor:pointer;font:400 .95rem var(--f-body)}
+.gcard b{display:block;font:800 1.05rem var(--f-display);margin-bottom:2px}
+.gcard .best{color:var(--ok);font-weight:700;font-size:.85rem}
+.bigcard{border:2.5px dashed var(--marker);background:var(--marker-soft);border-radius:14px;padding:18px;text-align:center;font:800 1.3rem var(--f-display);min-height:84px;display:flex;align-items:center;justify-content:center;text-wrap:balance}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.bin{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 6px;font:700 1rem var(--f-body);cursor:pointer;border-left-width:8px}
+.bin.right{background:var(--ok-soft);border-color:var(--ok)}
+.bin.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.score{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:.95rem}
+.fb{min-height:1.6em;margin:0;font-weight:700}
+.fb.ok{color:var(--ok)} .fb.ko{color:var(--bad)}
+.order{display:flex;flex-direction:column;gap:8px}
+.order button{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.order button.placed{border-color:var(--ok);background:var(--ok-soft)}
+.order button.shake{border-color:var(--bad);background:var(--bad-soft)}
+.order button .n{display:inline-block;min-width:1.6em;font-weight:800;color:var(--ok)}
+.mapdot{cursor:pointer}
+.result{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+@media (max-width:420px){header h1{font-size:1.65rem}.cap{font-size:1.04rem}.primary{padding:12px 14px}.ghost{padding:11px 10px}.games{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-links">
+    <a class="back" href="../../../#ale/ham">← Arte y Música de Ale</a>
+    
+  </div>
+  <header>
+    <h1>Primeras civilizaciones <span>arte</span></h1>
+    <p>Tema 3 de Arte: Mesopotamia (el arco, el zigurat, la Puerta de Ishtar, la escultura y el Código de Hammurabi) y Egipto (tumbas, templos, escultura y pintura). Mira el mapa, repasa con las fichas animadas, juega y haz la prueba.</p>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="esquema" aria-selected="true">🗺️ Esquema</button>
+    <button role="tab" data-tab="fichas" aria-selected="false">🎬 Fichas</button>
+    <button role="tab" data-tab="juegos" aria-selected="false">🎮 Juegos</button>
+    <button role="tab" data-tab="prueba" aria-selected="false">📝 Prueba</button>
+  </nav>
+
+  <section id="tab-esquema" class="sheet">
+    <p class="kicker" id="eKick"></p>
+    <h2 class="t" id="eTtl"></h2>
+    <div class="stage"><svg id="mapa" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="hint" id="mapHint"></p>
+    <div class="notes" id="notes" hidden></div>
+  </section>
+
+  <section id="tab-fichas" hidden>
+    <div class="sheet">
+      <p class="kicker" id="kick"></p>
+      <h2 class="t" id="ttl"></h2>
+      <div class="stage"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <p class="cap" id="cap" aria-live="polite"></p>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="ctrl">
+        <button class="ghost" id="bBack">← Atrás</button>
+        <button class="ghost" id="bAgain">↻ Repetir</button>
+        <span class="sp"></span>
+        <button class="primary" id="bNext">Siguiente →</button>
+      </div>
+      <div class="quiz" id="fquiz" hidden></div>
+    </div>
+    <div class="chips" id="fpick" style="margin-top:12px"></div>
+  </section>
+
+  <section id="tab-juegos" hidden><div class="sheet" id="gbox"></div></section>
+  <section id="tab-prueba" hidden><div class="sheet" id="pbox"></div></section>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="gdefs"></defs></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+/* ===== Biblioteca de dibujo compartida (lienzo de 400 x 250) ===== */
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const INK='#1f1d3a',MUT='#5d5a7a',SEA='#cfe6f5',LAND='#efe0b9',LAND2='#e3cf9c',PAPER='#fbf3e3',ORG='#e0611a';
+
+/* Texto, etiquetas y flechas */
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||13}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" fill="${o.c||INK}"${o.it?' font-style="italic"':''}${o.ff?` font-family="${o.ff}"`:''}>${s}</text>`;
+const tw=(s,size)=>Math.round([...s].length*size*.56+18);
+/* chip: palabra clave con borde (va pegada al elemento) */
+const chip=(x,y,s,c=ORG,size=13)=>{const w=tw(s,size),h=size+12;return`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="#fff" stroke="${c}" stroke-width="2"/>${T(x,y+size*.36,s,{size,c,w:700})}</g>`};
+/* tag: título o concepto principal, relleno de color */
+const tag=(x,y,s,c=ORG,size=15)=>{const w=tw(s,size),h=size+14;return`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="6" fill="${c}"/>${T(x,y+size*.36,s,{size,c:'#fff',w:700})}</g>`};
+const MK=new Set();
+function mk(c){const id='ar'+c.replace('#','');if(!MK.has(id)){MK.add(id);const d=document.getElementById('gdefs');if(d)d.insertAdjacentHTML('beforeend',`<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="${c}"/></marker>`)}return id}
+const arrow=(x1,y1,x2,y2,c=INK)=>`<path class="dr" d="M${x1} ${y1} L${x2} ${y2}" stroke="${c}" stroke-width="2.4" fill="none" marker-end="url(#${mk(c)})"/>`;
+const curve=(d,c=INK,dash=false)=>`<path class="dr" d="${d}" stroke="${c}" stroke-width="2.4" fill="none"${dash?' stroke-dasharray="6 5"':''} marker-end="url(#${mk(c)})"/>`;
+const bg=(c=PAPER)=>`<rect width="400" height="250" fill="${c}"/>`;
+
+/* Personas */
+const person=(x,y,c='#3a3a3a',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><circle cx="0" cy="0" r="5" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-5" y2="32"/><line x1="0" y1="20" x2="5" y2="32"/><line x1="-7" y1="11" x2="7" y2="11"/></g>`;
+const singer=(x,y,c='#3a3a3a',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-9 34 L-7 8 Q0 2 7 8 L9 34Z" fill="${c}"/><circle cx="0" cy="0" r="6" fill="#e7cba3" stroke="${c}" stroke-width="1.5"/><ellipse cx="0" cy="3" rx="2" ry="2.5" fill="#7a3a1e"/></g>`;
+const crown=(x,y,c='#d9a400')=>`<path d="M${x-7} ${y} L${x-7} ${y-8} L${x-3.5} ${y-4} L${x} ${y-10} L${x+3.5} ${y-4} L${x+7} ${y-8} L${x+7} ${y} Z" fill="${c}" stroke="#8a6500" stroke-width="1"/>`;
+const bust=(x,y,c='#7b2a8c',s=1,extra='')=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-26 46 Q-26 18 0 16 Q26 18 26 46Z" fill="${c}"/><circle cx="0" cy="0" r="15" fill="#e7cba3" stroke="#8a6b3c" stroke-width="1.5"/>${extra}</g>`;
+
+/* Objetos */
+const scroll=(x,y,w=70,h=44)=>`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" fill="#f7ecd2" stroke="#8a6b3c" stroke-width="1.6"/><rect x="${x-w/2-6}" y="${y-h/2-3}" width="8" height="${h+6}" rx="4" fill="#c79a55" stroke="#8a6b3c"/><rect x="${x+w/2-2}" y="${y-h/2-3}" width="8" height="${h+6}" rx="4" fill="#c79a55" stroke="#8a6b3c"/>${[0,1,2,3].map(k=>`<line x1="${x-w/2+8}" y1="${y-h/2+10+k*8}" x2="${x+w/2-8}" y2="${y-h/2+10+k*8}" stroke="#a08560" stroke-width="1.4"/>`).join('')}</g>`;
+const book=(x,y,w=90,h=60,c='#8a3b12')=>`<g><path d="M${x} ${y-h/2+4} Q${x-w/4} ${y-h/2-4} ${x-w/2} ${y-h/2} V${y+h/2} Q${x-w/4} ${y+h/2-6} ${x} ${y+h/2} Q${x+w/4} ${y+h/2-6} ${x+w/2} ${y+h/2} V${y-h/2} Q${x+w/4} ${y-h/2-4} ${x} ${y-h/2+4}Z" fill="#fbf6ea" stroke="${c}" stroke-width="2"/><line x1="${x}" y1="${y-h/2+4}" x2="${x}" y2="${y+h/2}" stroke="${c}" stroke-width="1.5"/>${[0,1,2,3].map(k=>`<path d="M${x-w/2+6} ${y-h/2+12+k*11} h${w/2-12} M${x+6} ${y-h/2+12+k*11} h${w/2-12}" stroke="#555" stroke-width="1"/>`).join('')}</g>`;
+const house=(x,y,w=16,h=12,c='#e9cfa0')=>`<g><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="${c}" stroke="#7a5528" stroke-width="1.2"/><path d="M${x-w/2-2} ${y-h} L${x} ${y-h-7} L${x+w/2+2} ${y-h} Z" fill="#b5532c" stroke="#7a3a1e" stroke-width="1"/></g>`;
+const wave=(y,c='#9cc8e6')=>`<path d="M0 ${y} q10 -5 20 0 ${Array(19).fill('t20 0').join(' ')}" stroke="${c}" stroke-width="1.6" fill="none"/>`;
+
+/* Música */
+const staff=(x1,x2,y,gap=7,c='#8a7a5c')=>[0,1,2,3,4].map(k=>`<line x1="${x1}" y1="${y+k*gap}" x2="${x2}" y2="${y+k*gap}" stroke="${c}" stroke-width="1.1"/>`).join('');
+const note=(x,y,c=INK,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="5.5" ry="4" transform="rotate(-20)" fill="${c}"/><line x1="5" y1="-1" x2="5" y2="-24" stroke="${c}" stroke-width="2"/></g>`;
+const notes2=(x,y,c=INK,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="5.5" ry="4" transform="rotate(-20)" fill="${c}"/><ellipse cx="16" cy="-4" rx="5.5" ry="4" transform="rotate(-20)" fill="${c}"/><path d="M5 -1 V-24 L21 -28 V-5" stroke="${c}" stroke-width="2" fill="none"/><path d="M5 -24 L21 -28" stroke="${c}" stroke-width="4"/></g>`;
+const lute=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="14" rx="18" ry="22" fill="#c98b47" stroke="#6e4317" stroke-width="2"/><circle cx="0" cy="8" r="5" fill="#4a2c0e"/><rect x="-4" y="-34" width="8" height="26" fill="#8a5a24"/><path d="M-6 -34 L-14 -44 L-2 -40Z" fill="#6e4317"/>${[-2,0,2].map(d=>`<line x1="${d}" y1="-34" x2="${d}" y2="30" stroke="#f3e3c3" stroke-width=".7"/>`).join('')}</g>`;
+const vihuela=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 0 Q-20 12 -14 22 Q-18 34 -8 40 Q0 42 8 40 Q18 34 14 22 Q20 12 14 0 Q8 -6 0 -4 Q-8 -6 -14 0Z" fill="#d9a35c" stroke="#6e4317" stroke-width="2"/><circle cx="0" cy="18" r="5" fill="#4a2c0e"/><rect x="-3.5" y="-40" width="7" height="38" fill="#8a5a24"/><rect x="-6" y="-48" width="12" height="9" rx="2" fill="#6e4317"/>${[-2,0,2].map(d=>`<line x1="${d}" y1="-40" x2="${d}" y2="34" stroke="#f3e3c3" stroke-width=".7"/>`).join('')}</g>`;
+const harp=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 40 L-16 -36 Q10 -40 20 -10 Q22 20 -16 40Z" fill="none" stroke="#8a5a24" stroke-width="5" stroke-linejoin="round"/>${[0,1,2,3,4,5,6].map(k=>`<line x1="-16" y1="${-28+k*9}" x2="${Math.min(18,-12+k*6)}" y2="${-28+k*9+ (k<4?6:0)}" stroke="#d9b04a" stroke-width="1"/>`).join('')}</g>`;
+const organ=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-34" y="0" width="68" height="34" fill="#8a5a24" stroke="#4a2c0e" stroke-width="2"/><rect x="-28" y="18" width="56" height="8" fill="#fff" stroke="#333"/>${[-28,-20,-12,-4,4,12,20].map(a=>`<rect x="${a+5}" y="18" width="3" height="5" fill="#222"/>`).join('')}${[-30,-22,-14,-6,2,10,18,26].map((a,i)=>`<rect x="${a}" y="${-50+Math.abs(i-3.5)*8}" width="6" height="${50-Math.abs(i-3.5)*8}" rx="3" fill="#c9cdd2" stroke="#6b7078"/>`).join('')}</g>`;
+const clavi=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-44" y="-16" width="88" height="22" fill="#a8743a" stroke="#4a2c0e" stroke-width="2"/><rect x="-36" y="-8" width="40" height="10" fill="#fff" stroke="#333"/>${[-33,-27,-21,-15,-9,-3].map(a=>`<rect x="${a}" y="-8" width="3" height="6" fill="#222"/>`).join('')}<line x1="-40" y1="6" x2="-40" y2="30" stroke="#4a2c0e" stroke-width="4"/><line x1="40" y1="6" x2="40" y2="30" stroke="#4a2c0e" stroke-width="4"/></g>`;
+const flute=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="-34" width="8" height="68" rx="3" fill="#d9a35c" stroke="#6e4317" stroke-width="1.5"/>${[-14,-4,6,16].map(a=>`<circle cx="0" cy="${a}" r="2" fill="#4a2c0e"/>`).join('')}</g>`;
+const trombone=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 -6 H34 Q42 -6 42 0 Q42 6 34 6 H-10" fill="none" stroke="#c99a1e" stroke-width="3.5"/><path d="M-30 -6 L-46 -18 L-46 6 Z" fill="#e5b93c" stroke="#c99a1e" stroke-width="2"/><circle cx="-10" cy="6" r="3" fill="#c99a1e"/></g>`;
+const viola=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 -6 Q-22 6 -14 16 Q-20 30 -8 38 Q0 40 8 38 Q20 30 14 16 Q22 6 14 -6 Q8 -12 0 -10 Q-8 -12 -14 -6Z" fill="#a8521f" stroke="#4a2c0e" stroke-width="2"/><path d="M-5 10 q-3 4 0 8 M5 10 q3 4 0 8" stroke="#2a1606" stroke-width="1.5" fill="none"/><rect x="-3" y="-42" width="6" height="34" fill="#2a1606"/><path d="M-30 30 L30 -20" stroke="#6e4317" stroke-width="2"/></g>`;
+const facistol=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 80 L-20 96 M6 80 L20 96 M0 80 V96" stroke="#4a2c0e" stroke-width="4"/><rect x="-6" y="10" width="12" height="72" fill="#7a4a1e"/><path d="M-46 10 L46 10 L36 -40 L-36 -40Z" fill="#7a4a1e" stroke="#4a2c0e" stroke-width="2"/><g transform="translate(0 -18)">${'<rect x="-34" y="-20" width="68" height="40" fill="#fbf6ea" stroke="#8a3b12" stroke-width="2"/><line x1="0" y1="-20" x2="0" y2="20" stroke="#8a3b12"/>'}${[-10,-2,6,14].map(a=>`<path d="M-30 ${a} h26 M4 ${a} h26" stroke="#555" stroke-width="1"/>`).join('')}</g></g>`;
+const church=(x,y,s=1,c='#d9c7a0')=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-40" y="-40" width="80" height="40" fill="${c}" stroke="#7a5528" stroke-width="2"/><path d="M-46 -40 L0 -64 L46 -40Z" fill="#b5532c" stroke="#7a3a1e" stroke-width="2"/><rect x="26" y="-90" width="16" height="50" fill="${c}" stroke="#7a5528" stroke-width="2"/><path d="M24 -90 L34 -108 L44 -90Z" fill="#b5532c"/><path d="M-8 0 V-20 Q0 -30 8 -20 V0Z" fill="#7a5528"/><circle cx="0" cy="-48" r="6" fill="#9fd6e8" stroke="#7a5528"/></g>`;
+const palace=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-50" y="-44" width="100" height="44" fill="#efd9b0" stroke="#7a5528" stroke-width="2"/>${[-40,-20,0,20,40].map(a=>`<rect x="${a-5}" y="-36" width="10" height="14" fill="#9fd6e8" stroke="#7a5528"/>`).join('')}<rect x="-8" y="-18" width="16" height="18" fill="#7a5528"/><path d="M-54 -44 H54 L48 -52 H-48Z" fill="#b5532c"/><rect x="-62" y="-70" width="16" height="70" fill="#e6cfa3" stroke="#7a5528" stroke-width="2"/><rect x="46" y="-70" width="16" height="70" fill="#e6cfa3" stroke="#7a5528" stroke-width="2"/><path d="M-64 -70 L-54 -84 L-44 -70Z M44 -70 L54 -84 L64 -70Z" fill="#b5532c"/></g>`;
+
+</script>
+<script>
+/*META {
+ "out": "ale/ham/primeras-civilizaciones/index.html",
+ "title": "Arte de las primeras civilizaciones",
+ "h1": "Primeras civilizaciones", "h1span": "arte",
+ "intro": "Tema 3 de Arte: Mesopotamia (el arco, el zigurat, la Puerta de Ishtar, la escultura y el Código de Hammurabi) y Egipto (tumbas, templos, escultura y pintura). Mira el mapa, repasa con las fichas animadas, juega y haz la prueba.",
+ "back": "../../../#ale/ham", "backtxt": "Arte y Música de Ale",
+ "acc": "#c0127e", "accsoft": "#fbe4f1", "accdark": "#ff5fb9", "accdarksoft": "#3a1a33"
+} META*/
+
+const M='#1e4f94',G='#b8860b',SAND='#efe0b9',BRICK='#c49a68',STONE='#e0c27a';
+
+/* ---------- dibujos propios ---------- */
+const ARCH=(cx,by,r=60,w=22)=>{let s='';const n=7;for(let i=0;i<n;i++){const a=Math.PI-(i+.5)*Math.PI/n,x=cx+Math.cos(a)*r,y=by-Math.sin(a)*r,rot=90-a*180/Math.PI,key=i===3;s+=`<rect class="${key?'':'dv'}" x="${x-w/2}" y="${y-9}" width="${w}" height="18" rx="2" transform="rotate(${rot} ${x} ${y})" fill="${key?'#c0127e':'#d9b17d'}" stroke="#7a5528" stroke-width="1.5"/>`}return s};
+const zig=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><polygon points="-130,0 130,0 114,-40 -114,-40" fill="#bfa075" stroke="#5a3d1b" stroke-width="2"/><polygon points="-96,-40 96,-40 82,-76 -82,-76" fill="#cca97d" stroke="#5a3d1b" stroke-width="2"/><polygon points="-62,-76 62,-76 54,-104 -54,-104" fill="#dcba8c" stroke="#5a3d1b" stroke-width="2"/><line x1="0" y1="0" x2="0" y2="-104" stroke="#7a5528" stroke-width="6"/></g>`;
+const lion=(x,y,c='#f2c230',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-22 0 Q-24 -14 -10 -14 H12 Q22 -22 26 -12 Q30 -4 22 -2 L22 8 M-18 0 V8 M-8 0 V8 M12 0 V8 M-22 -6 Q-32 -10 -30 -18" stroke="${c}" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="20" cy="-14" r="7" fill="${c}"/></g>`;
+const pyr=(x,by,w,c=STONE)=>`<path d="M${x-w/2} ${by} L${x} ${by-w*.62} L${x+w/2} ${by}Z" fill="${c}" stroke="#a07c32" stroke-width="2"/><path d="M${x} ${by-w*.62} L${x+w/2} ${by} L${x+w*.12} ${by}Z" fill="#000" opacity=".1"/>`;
+const pharaoh=(x,y,s=1,c='#2a6cbf')=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-10 -6 L-16 22 L16 22 L10 -6Z" fill="#f2c230" stroke="#8a6500"/><path d="M-12 -6 Q0 -22 12 -6 L14 12 L8 4 L-8 4 L-14 12Z" fill="${c}" stroke="#123"/><circle cx="0" cy="-2" r="7" fill="#b9814f"/><rect x="-10" y="22" width="20" height="36" fill="#b9814f"/><rect x="-12" y="40" width="24" height="16" fill="#fff" stroke="#999"/><rect x="-8" y="58" width="6" height="30" fill="#b9814f"/><rect x="2" y="58" width="6" height="30" fill="#b9814f"/></g>`;
+const egFig=(x,y,s=1,c='#b9814f',dress='#fff')=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="2" cy="-30" rx="7" ry="8" fill="${c}"/><path d="M-4 -38 Q6 -42 10 -32 L8 -24 L-6 -26Z" fill="#111"/><ellipse cx="5" cy="-31" rx="2.5" ry="1.5" fill="#fff"/><circle cx="5" cy="-31" r="1" fill="#111"/><path d="M-12 -20 H14 L10 6 H-8Z" fill="${c}"/><path d="M-8 6 H10 L14 30 H-10Z" fill="${dress}" stroke="#aaa"/><path d="M-6 30 L-14 52 M6 30 L16 52" stroke="${c}" stroke-width="5" stroke-linecap="round"/><path d="M-12 -18 L-22 0 M14 -18 L24 -2" stroke="${c}" stroke-width="4" stroke-linecap="round"/></g>`;
+const lamassu=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-50" y="-30" width="80" height="34" rx="10" fill="#d8c3a0" stroke="#6e5530" stroke-width="2"/>${[-40,-24,10,24].map(a=>`<rect x="${a}" y="4" width="10" height="26" fill="#d8c3a0" stroke="#6e5530" stroke-width="1.5"/>`).join('')}<path d="M-30 -30 Q-10 -80 30 -64 Q10 -50 0 -30Z" fill="#c9b08a" stroke="#6e5530" stroke-width="2"/>${[0,1,2].map(k=>`<path d="M${-22+k*10} ${-38-k*6} Q${-8+k*10} ${-56-k*4} ${14+k*6} ${-58+k*2}" stroke="#6e5530" fill="none"/>`).join('')}<rect x="28" y="-48" width="22" height="30" rx="6" fill="#d8c3a0" stroke="#6e5530" stroke-width="2"/><path d="M28 -48 H50 L48 -56 H30Z" fill="#6e5530"/><path d="M34 -24 Q40 -12 48 -24" fill="#6e5530"/></g>`;
+const stele=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-34 100 L-34 -60 Q0 -84 34 -60 L34 100Z" fill="#3b3b44" stroke="#111" stroke-width="2"/><g>${person(-12,-58,'#bfa',1)}${person(14,-60,'#f2c230',1.1)}</g>${[0,1,2,3,4,5,6,7,8].map(k=>`<path d="M-26 ${-10+k*12} h52" stroke="#9a9aa8" stroke-width="2" stroke-dasharray="3 2"/>`).join('')}</g>`;
+const NILE='M118 260 C128 210 104 170 116 128 C122 98 108 80 112 66';
+const NEMAP=()=>`<rect width="400" height="260" fill="${SAND}"/><path d="M0 0 H215 L208 26 Q160 48 112 58 L0 66Z" fill="${SEA}"/>${T(60,30,'Mar Mediterráneo',{size:11,c:'#3d7ab0',it:1})}<path d="M150 112 L166 108 L232 260 L206 260Z" fill="${SEA}"/>${T(214,214,'Mar Rojo',{size:10,c:'#3d7ab0',it:1})}<path d="M318 206 Q352 206 400 236 V260 H330Z" fill="${SEA}"/>${T(382,252,'golfo Pérsico',{size:10,c:'#3d7ab0',it:1})}<path d="M${NILE.slice(1)}" stroke="#3d8fd6" stroke-width="5" fill="none"/><path d="M96 58 L112 70 L128 58" stroke="#3d8fd6" stroke-width="3" fill="none"/>${T(100,200,'Nilo',{size:11,c:'#3d7ab0',it:1,a:'end'})}<path d="M290 10 C300 70 318 140 336 200" stroke="#3d8fd6" stroke-width="4" fill="none"/><path d="M238 24 C240 90 290 150 330 202" stroke="#3d8fd6" stroke-width="4" fill="none"/>${T(318,60,'Tigris',{size:11,c:'#3d7ab0',it:1,a:'start'})}${T(232,80,'Éufrates',{size:11,c:'#3d7ab0',it:1,a:'end'})}`;
+
+window.APP={
+store:'ham_civ',
+cats:{mes:{n:'Mesopotamia',c:M},egi:{n:'Egipto',c:G}},
+
+esquema:{
+ kicker:'El mapa del tema',title:'¿Dónde está cada obra?',hint:'Toca un punto del mapa para ver sus ideas clave.',viewBox:'0 0 400 260',
+ pins:{
+  arco:[276,104,236,42,'Mesopotamia','middle'],zigurat:[338,198,296,234,'Ur: zigurat','middle'],ishtar:[300,130,244,124,'Babilonia','middle'],escultura:[318,166,236,170,'Lagash: Gudea','middle'],
+  tumbas:[110,74,30,92,'Giza','start'],canon:[116,128,30,132,'Tell Amarna','start'],pintura:[120,170,30,172,'Valle de las Reinas','start'],abu:[122,236,30,236,'Abu Simbel','start']
+ },
+ draw(sel){
+  let s=NEMAP();
+  s+=`<g opacity=".18"><ellipse cx="295" cy="120" rx="60" ry="80" fill="${M}"/><ellipse cx="116" cy="160" rx="28" ry="100" fill="${G}"/></g>`;
+  for(const[k,[x,y,lx,ly,l,a]]of Object.entries(this.pins)){
+   const c=this.items[k].c,on=sel===k,w=tw(l,12),x0=a==='start'?lx:a==='end'?lx-w:lx-w/2;
+   s+=`<g class="pin" data-k="${k}" style="cursor:pointer"><line x1="${x}" y1="${y}" x2="${x0+w/2}" y2="${ly}" stroke="${c}" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="${x}" cy="${y}" r="13" fill="${c}" opacity="${on?.35:.12}"/><circle cx="${x}" cy="${y}" r="6" fill="${c}" stroke="#fff" stroke-width="2"/><rect x="${x0}" y="${ly-11}" width="${w}" height="22" rx="6" fill="${on?c:'#fff'}" stroke="${c}" stroke-width="2"/>${T(x0+w/2,ly+4,l,{size:12,w:800,c:on?'#fff':c})}</g>`;
+  }
+  return s;
+ },
+ items:{
+  arco:{t:'Mesopotamia: el arco y la bóveda',c:M,scene:'arco',notes:['Entre el <b>Tigris</b> y el <b>Éufrates</b>; sin piedra, construían con <b>ladrillo</b> y <b>adobe</b>','Por eso quedan <b>pocos restos</b>','Gran invento: el <b>arco</b> (dovelas + <b>clave</b>, que reparte el peso)','Muchos arcos seguidos forman la <b>bóveda de cañón</b>']},
+  zigurat:{t:'El zigurat de Ur',c:M,scene:'zigurat',notes:['Torre <b>escalonada</b> de los templos, creada por los <b>sumerios</b>: «puente entre el cielo y la tierra»','El de <b>Ur</b> lo mandó el rey <b>Ur-Nammu</b>: tres plantas y terrazas','Solo subían los <b>sacerdotes</b>','Arriba, santuario de <b>Nanna</b> (la luna); también <b>observatorio</b> astronómico']},
+  ishtar:{t:'Babilonia y la Puerta de Ishtar',c:M,scene:'ishtar',notes:['Los <b>palacios</b> mostraban el poder del rey','<b>Nabucodonosor II</b> rehízo Babilonia (s. VI a. C.): doble muralla y ocho puertas','<b>Puerta de Ishtar</b>: ladrillo vidriado <b>azul</b> con <b>leones</b> y dragones','Hoy está en el <b>Museo de Pérgamo</b> de Berlín']},
+  escultura:{t:'La escultura mesopotámica',c:M,scene:'escultura',notes:['Dos tipos: <b>exenta</b> (de bulto redondo) y <b>relieve</b>','<b>Gudea de Lagash</b>: manos juntas (orante), falda larga, ojos grandes','Relieves: <b>toros alados</b> (lamassu) y escenas de caza (<b>Leona herida</b>)','<b>Código de Hammurabi</b>: estela de basalto con <b>282 leyes</b> en cuneiforme']},
+  tumbas:{t:'Egipto: las tumbas',c:G,scene:'tumbas',notes:['Arte al servicio del <b>faraón</b> y de la vida tras la muerte','Arquitectura <b>colosal</b> y <b>adintelada</b> (sin arcos)','Evolución: <b>mastaba</b> → <b>pirámide escalonada</b> → pirámides de <b>Giza</b> (Keops, Kefren, Mikerinos) → <b>hipogeo</b> (Valle de los Reyes)']},
+  abu:{t:'Abu Simbel',c:G,scene:'abu',notes:['Templos al aire libre (<b>Karnak</b>, <b>Luxor</b>) y <b>speos</b>: excavados en la roca','<b>Abu Simbel</b>, de <b>Ramsés II</b>: cuatro estatuas sentadas de <b>22 m</b>','Dos días al año (<b>21 de febrero</b> y <b>19 de octubre</b>) el sol ilumina el fondo; <b>Ptah</b> queda en la sombra']},
+  canon:{t:'Escultura: el canon y Amarna',c:G,scene:'canon',notes:['Faraón siempre joven, rígido y mirando al frente: <b>ley de la frontalidad</b>','<b>Canon de 18 puños</b>','<b>Akhenaton</b> impone al dios <b>Atón</b>: arte de <b>Tell Amarna</b>, más realista','Ejemplo: el <b>busto de Nefertiti</b>']},
+  pintura:{t:'La pintura egipcia',c:G,scene:'pintura',notes:['Decora templos y tumbas (tumba de <b>Nefertari</b>)','Técnica <b>al fresco</b>, con colores de minerales','Cabeza y piernas de <b>perfil</b>; ojo y hombros de <b>frente</b>; figuras planas','<b>Perspectiva jerárquica</b>: lo más importante, más grande']}
+ }
+},
+
+scenes:[
+{id:'arco',cat:'mes',short:'El arco',t:'Mesopotamia: el arco y la bóveda',steps:[
+ {clear:1,d:`${bg('#f4ead2')}<path class="dr" d="M70 20 C100 100 80 160 120 240" stroke="#3d8fd6" stroke-width="10" fill="none" stroke-linecap="round"/><path class="dr" d="M170 20 C190 100 170 170 220 240" stroke="#3d8fd6" stroke-width="10" fill="none" stroke-linecap="round"/>
+  ${chip(70,130,'Tigris','#21528c',12)}${chip(206,150,'Éufrates','#21528c',12)}${tag(317,34,'tierra entre ríos',M,13)}
+  <g class="mv" data-dx="80"><rect x="262" y="70" width="110" height="44" rx="4" fill="${BRICK}" stroke="#7a5528" stroke-width="2"/>${T(317,98,'ladrillo',{size:15,w:800,c:'#fff'})}</g>
+  <g class="mv" data-dx="80"><rect x="262" y="134" width="110" height="44" rx="4" fill="#d8b27c" stroke="#8a6330" stroke-width="2"/>${[0,1,2,3,4,5].map(k=>`<line x1="${276+k*16}" y1="144" x2="${272+k*16}" y2="168" stroke="#684a20" stroke-width="1.5"/>`).join('')}${T(317,162,'adobe',{size:15,w:800})}</g>
+  ${chip(317,212,'no tenían piedra',ORG,12)}`,
+  c:'<b>Mesopotamia</b> significa «tierra entre ríos»: el <b>Tigris</b> y el <b>Éufrates</b>. No tenían piedra, así que construían con <b>ladrillo</b> y <b>adobe</b> (barro con paja). Por eso quedan <b>pocos restos</b>.'},
+ {clear:1,d:`${bg()}<rect x="60" y="214" width="280" height="12" fill="#7a5528"/><rect x="118" y="134" width="26" height="80" fill="${BRICK}" stroke="#7a5528" stroke-width="2"/><rect x="256" y="134" width="26" height="80" fill="${BRICK}" stroke="#7a5528" stroke-width="2"/>
+  <g class="pop">${ARCH(200,140,70)}</g>${tag(330,30,'El arco',M,16)}
+  ${chip(78,100,'dovelas',ORG,13)}${chip(200,38,'clave',ORG,14)}`,
+  c:'Su gran invento fue el <b>arco</b>: piezas en cuña (<b>dovelas</b>) colocadas en curva. La pieza de arriba, la <b>clave</b>, las encaja todas.'},
+ {d:`<path class="dr" d="M190 72 Q130 80 132 130" stroke="#c0127e" stroke-width="3" fill="none" marker-end="url(#${mk('#c0127e')})"/><path class="dr" d="M210 72 Q270 80 268 130" stroke="#c0127e" stroke-width="3" fill="none" marker-end="url(#${mk('#c0127e')})"/>${chip(200,170,'reparte el peso a los lados','#c0127e',12)}`,
+  c:'Gracias a la clave, el peso <b>se reparte hacia los lados</b> y baja por los pilares. Así se cubren espacios grandes con piezas pequeñas.'},
+ {clear:1,d:`${bg()}${tag(200,26,'Bóveda de cañón',M,16)}
+  ${[4,3,2,1,0].map(k=>`<g class="mv" data-dx="${-30-k*10}" data-dy="${20+k*8}"><path d="M${80+k*18} ${205-k*14} Q${170+k*18} ${75-k*14} ${260+k*18} ${205-k*14}" fill="none" stroke="${k?'#b08453':'#7a5528'}" stroke-width="${k?8:10}"/></g>`).join('')}
+  ${chip(200,230,'muchos arcos seguidos',ORG,13)}`,
+  c:'Si ponemos muchos arcos seguidos, uno detrás de otro, se forma una <b>bóveda de cañón</b>: un techo curvo y resistente.'}
+],quiz:[
+ {q:'¿Con qué construían los mesopotámicos?',a:'Con ladrillo y adobe',o:['Con grandes bloques de piedra','Con madera y cristal','Con mármol blanco'],e:'No tenían piedra.'},
+ {q:'¿Cómo se llama la pieza de arriba que cierra el arco?',a:'La clave',o:['La dovela','El dintel','El pilar'],e:'Reparte el peso hacia los lados.'},
+ {q:'¿Qué es una bóveda de cañón?',a:'Muchos arcos seguidos',o:['Una pirámide','Un tipo de muralla','Una torre escalonada'],e:''}
+]},
+
+{id:'zigurat',cat:'mes',short:'El zigurat',t:'El zigurat de Ur',steps:[
+ {clear:1,d:`${bg('#eef3f7')}<path d="M0 214 H400 V250 H0Z" fill="#ebd8ab"/><g class="mv" data-dy="60">${zig(200,214,1.1)}</g>
+  ${tag(200,26,'Zigurat',M,16)}${chip(84,70,'torre escalonada',ORG,12)}${chip(318,70,'cielo ↔ tierra',ORG,12)}${chip(200,238,'creado por los sumerios',M,12)}`,
+  c:'El <b>zigurat</b> era la torre <b>escalonada</b> de los templos, creada por los <b>sumerios</b>. Se veía como un <b>puente entre el cielo y la tierra</b>.'},
+ {d:`${person(140,170,'#7a3818',1)}${person(260,170,'#7a3818',1)}<g>${crown(60,150)}${person(60,156,'#1e4f94',1.1)}${chip(60,214,'Ur-Nammu',M,12)}</g>${chip(330,130,'3 plantas',ORG,12)}${chip(330,158,'solo sacerdotes',ORG,12)}`,
+  c:'El de <b>Ur</b> lo mandó levantar el rey <b>Ur-Nammu</b>: tres plantas con terrazas. Por sus escaleras solo subían los <b>sacerdotes</b>.'},
+ {clear:1,d:`${bg('#1d2550')}<path d="M0 214 H400 V250 H0Z" fill="#8a7650"/>${zig(200,214,1.1)}${[[40,30],[90,60],[150,24],[260,40],[380,80],[60,120],[350,140]].map(([x,y])=>`<circle class="pop" cx="${x}" cy="${y}" r="2.5" fill="#fff"/>`).join('')}<rect class="pop" x="183" y="70" width="34" height="22" fill="#ffe29b" stroke="#7a5528" stroke-width="2"/><g class="pop"><path d="M330 30 A16 16 0 1 0 346 46 A12 12 0 1 1 330 30Z" fill="#ffd23f"/></g>${chip(200,52,'santuario de Nanna',ORG,12)}${chip(330,84,'la luna',M,12)}${chip(80,90,'observatorio',M,12)}${chip(80,118,'de las estrellas',M,11)}`,
+  c:'Arriba estaba el <b>santuario</b> del dios de la luna, <b>Nanna</b>. Desde allí también observaban el cielo: era un <b>observatorio astronómico</b>.'}
+],quiz:[
+ {q:'¿Qué es un zigurat?',a:'Una torre escalonada de los templos mesopotámicos',o:['Una tumba egipcia','Una puerta de Babilonia','Una estela con leyes'],e:''},
+ {q:'¿Quién mandó construir el zigurat de Ur?',a:'Ur-Nammu',o:['Ramsés II','Nabucodonosor II','Hammurabi'],e:''},
+ {q:'¿A qué dios estaba dedicado el santuario de arriba?',a:'A Nanna, la luna',o:['A Ra, el sol','A Ishtar','A Atón'],e:''}
+]},
+
+{id:'ishtar',cat:'mes',short:'Puerta de Ishtar',t:'Babilonia y la Puerta de Ishtar',steps:[
+ {clear:1,d:`${bg('#f4ead2')}${tag(200,26,'Babilonia',M,16)}
+  <rect x="30" y="70" width="340" height="140" fill="none" stroke="#8a6330" stroke-width="8"/><rect class="mv" data-dx="-20" x="44" y="84" width="312" height="112" fill="none" stroke="#a7814a" stroke-width="6"/>
+  ${[0,1,2,3,4,5,6,7].map(k=>`<rect class="pop" x="${[60,150,240,330,60,150,240,330][k]}" y="${k<4?62:202}" width="20" height="16" fill="${M}"/>`).join('')}
+  ${crown(200,118)}${person(200,124,M,1.2)}${chip(200,180,'Nabucodonosor II',M,13)}${chip(100,234,'doble muralla',ORG,12)}${chip(300,234,'ocho puertas',ORG,12)}`,
+  c:'En los <b>palacios</b> los reyes mostraban su poder. <b>Nabucodonosor II</b> reconstruyó <b>Babilonia</b> en el siglo VI a. C., con <b>doble muralla</b> y <b>ocho puertas</b>.'},
+ {clear:1,d:`${bg('#eef3f7')}<g class="mv" data-dy="40"><rect x="90" y="60" width="220" height="170" fill="${M}" stroke="#0f2c57" stroke-width="3"/><rect x="80" y="40" width="50" height="190" fill="#24599f" stroke="#0f2c57" stroke-width="3"/><rect x="270" y="40" width="50" height="190" fill="#24599f" stroke="#0f2c57" stroke-width="3"/><path d="M160 230 V160 Q200 120 240 160 V230Z" fill="#f4ead2" stroke="#d9a400" stroke-width="3"/>${[0,1,2,3].map(k=>`<rect x="${80+k*14}" y="30" width="8" height="10" fill="#24599f"/><rect x="${270+k*14}" y="30" width="8" height="10" fill="#24599f"/>`).join('')}</g>
+  <g class="pop">${lion(110,140,'#f2c230',.8)}${lion(290,140,'#f2c230',.8)}${lion(110,205,'#fff',.7)}${lion(290,205,'#fff',.7)}</g>
+  ${tag(200,22,'Puerta de Ishtar',M,15)}${chip(200,96,'ladrillo vidriado azul',ORG,12)}${chip(355,140,'leones',ORG,12)}${chip(45,140,'dragones',ORG,12)}`,
+  c:'La más bella era la <b>Puerta de Ishtar</b>: de <b>ladrillo vidriado azul</b> brillante, decorada con <b>leones</b> y dragones amarillos y blancos.'},
+ {clear:1,d:`${bg()}<g opacity=".9"><rect x="40" y="90" width="100" height="80" fill="${M}"/>${lion(90,135,'#f2c230',.7)}</g>${curve('M150 130 Q200 90 250 130',ORG)}<g class="pop">${palace(310,190,1)}</g>${chip(310,210,'Museo de Pérgamo',M,13)}${T(310,240,'Berlín',{size:13,w:700})}${tag(200,30,'¿Dónde está hoy?',M,15)}`,
+  c:'En el siglo XX la excavaron arqueólogos alemanes y la <b>reconstruyeron</b> en el <b>Museo de Pérgamo</b> de <b>Berlín</b>.'}
+],quiz:[
+ {q:'¿Quién reconstruyó Babilonia en el siglo VI a. C.?',a:'Nabucodonosor II',o:['Ur-Nammu','Ramsés II','Akhenaton'],e:''},
+ {q:'¿Cómo era la Puerta de Ishtar?',a:'De ladrillo vidriado azul con leones y dragones',o:['De piedra blanca sin decoración','De oro macizo','De madera pintada'],e:''},
+ {q:'¿Dónde está hoy la Puerta de Ishtar?',a:'En el Museo de Pérgamo de Berlín',o:['En el Louvre de París','En El Cairo','Sigue en Babilonia'],e:''}
+]},
+
+{id:'escultura',cat:'mes',short:'Escultura',t:'La escultura mesopotámica',steps:[
+ {clear:1,d:`${bg()}<line x1="200" y1="44" x2="200" y2="236" stroke="${MUT}" stroke-dasharray="5 5" stroke-width="2"/>${tag(100,26,'Exenta',M,15)}${tag(300,26,'Relieve',M,15)}
+  <g class="pop"><path d="M76 210 L82 120 Q100 106 118 120 L124 210Z" fill="#6b6f80" stroke="#333" stroke-width="2"/><circle cx="100" cy="100" r="16" fill="#7b7f90" stroke="#333" stroke-width="2"/><path d="M84 92 Q100 80 116 92" stroke="#333" stroke-width="5" fill="none"/><circle cx="94" cy="100" r="3.5" fill="#fff"/><circle cx="106" cy="100" r="3.5" fill="#fff"/><path d="M92 140 Q100 150 108 140" stroke="#333" stroke-width="3" fill="none"/></g>
+  ${chip(100,228,'Gudea de Lagash',M,12)}${chip(165,100,'ojos grandes',ORG,11)}${chip(165,146,'manos juntas',ORG,11)}
+  <rect x="226" y="60" width="150" height="150" fill="#d8c3a0" stroke="#6e5530" stroke-width="2"/><g class="mv" data-dx="40">${lamassu(300,150,.9)}</g>${chip(300,228,'toro alado (lamassu)',M,11)}`,
+  c:'Hay dos tipos: la escultura <b>exenta</b>, que se puede rodear, como <b>Gudea de Lagash</b> (manos juntas rezando, ojos grandes), y el <b>relieve</b>, pegado al muro, como los <b>toros alados</b> que protegían las puertas.'},
+ {clear:1,d:`${bg()}<g class="pop">${stele(110,130,1)}</g>${tag(270,30,'Código de Hammurabi',M,15)}
+  ${chip(270,76,'el dios Shamash le da las leyes',ORG,11)}${chip(270,110,'282 leyes',M,15)}${chip(270,144,'escritura cuneiforme',ORG,12)}${chip(270,178,'estela de basalto (2,25 m)',ORG,11)}${T(270,214,'para unificar el reino',{size:12,c:MUT,it:1})}`,
+  c:'El <b>Código de Hammurabi</b> es una <b>estela</b> de basalto: arriba, el dios del sol <b>Shamash</b> entrega las leyes al rey; debajo, <b>282 leyes</b> en escritura <b>cuneiforme</b>.'}
+],quiz:[
+ {q:'¿Qué es una escultura exenta?',a:'La que se puede rodear (de bulto redondo)',o:['La que está pegada a un muro','Una pintura al fresco','Una tumba'],e:'Como Gudea de Lagash.'},
+ {q:'¿Qué eran los lamassu?',a:'Toros alados con cabeza humana que protegían las puertas',o:['Reyes de Egipto','Leones de la Puerta de Ishtar','Sacerdotes del zigurat'],e:''},
+ {q:'¿Cuántas leyes tiene el Código de Hammurabi?',a:'282',o:['10','22','1000'],e:'Escritas en cuneiforme.'}
+]},
+
+{id:'tumbas',cat:'egi',short:'Las tumbas',t:'Egipto: de la mastaba al hipogeo',steps:[
+ {clear:1,d:`${bg('#f6e4b6')}<path d="M0 200 Q200 190 400 205 V250 H0Z" fill="#e3c88a"/>${tag(200,26,'Mastaba',G,16)}
+  <g class="pop"><path d="M100 196 L128 140 H272 L300 196Z" fill="${STONE}" stroke="#a07c32" stroke-width="2"/><rect x="150" y="160" width="30" height="24" fill="#8a6b3c"/></g>
+  <path class="dr" d="M230 196 V224" stroke="#5a3d1b" stroke-width="6"/><rect x="214" y="224" width="40" height="16" fill="#5a3d1b"/>${chip(110,120,'sala de ofrendas',ORG,12)}${chip(330,228,'pozo y sarcófago',ORG,12)}${chip(300,100,'pirámide cortada',G,12)}`,
+  c:'El arte egipcio servía al <b>faraón</b> y a la vida tras la muerte. La primera tumba fue la <b>mastaba</b>: una pirámide cortada con sala de ofrendas y un <b>pozo</b> hasta el sarcófago.'},
+ {clear:1,d:`${bg('#eef3f7')}<path d="M0 210 Q200 200 400 214 V250 H0Z" fill="#ebd8ab"/>
+  <g class="mv" data-dy="50"><path d="M40 210 L50 190 H110 L120 210Z M54 190 L62 172 H98 L106 190Z M66 172 L72 156 H88 L94 172Z" fill="${STONE}" stroke="#a07c32" stroke-width="2"/></g>${chip(80,232,'escalonada',G,12)}
+  <g class="mv" data-dy="80">${pyr(200,210,120)}${pyr(290,210,100)}${pyr(360,210,60)}</g>
+  ${tag(270,40,'Giza',G,15)}${chip(200,232,'Keops',ORG,11)}${chip(290,232,'Kefren',ORG,11)}${chip(358,232,'Mikerinos',ORG,10)}`,
+  c:'Apilando mastabas nació la <b>pirámide escalonada</b>, y después las tres de <b>Giza</b>: <b>Keops, Kefren y Mikerinos</b>, con pasillos para despistar a los ladrones.'},
+ {clear:1,d:`${bg('#f6e4b6')}<path d="M0 60 L120 40 L220 70 L330 30 L400 50 V250 H0Z" fill="#d9b86a" stroke="#a07c32" stroke-width="2"/>
+  <path class="dr" d="M150 120 H230 V180 H300" stroke="#5a3d1b" stroke-width="10" fill="none"/><rect class="pop" x="292" y="166" width="40" height="26" fill="#5a3d1b"/>
+  ${tag(200,22,'Hipogeo',G,16)}${chip(310,140,'tumba secreta',ORG,12)}${chip(110,100,'dentro de la montaña',G,11)}${chip(200,226,'Valle de los Reyes · Tutankamón',ORG,12)}`,
+  c:'Como saqueaban las pirámides, en el Imperio Nuevo crearon el <b>hipogeo</b>: tumbas secretas excavadas <b>dentro de la montaña</b>, en el <b>Valle de los Reyes</b> (como la de Tutankamón).'}
+],quiz:[
+ {q:'¿Cuál fue la primera tumba egipcia?',a:'La mastaba',o:['El hipogeo','La pirámide de Keops','El zigurat'],e:''},
+ {q:'¿Qué pirámides están en Giza?',a:'Keops, Kefren y Mikerinos',o:['Ur, Lagash y Babilonia','Luxor, Karnak y Abu Simbel','Tiro, Sidón y Biblos'],e:''},
+ {q:'¿Qué es un hipogeo?',a:'Una tumba excavada dentro de la montaña',o:['Una torre escalonada','Una pirámide cortada','Un templo al aire libre'],e:'Como la de Tutankamón.'}
+]},
+
+{id:'abu',cat:'egi',short:'Abu Simbel',t:'Abu Simbel y el milagro del sol',steps:[
+ {clear:1,d:`${bg('#f6e4b6')}<path d="M0 30 L400 30 V250 H0Z" fill="#d9b86a"/>
+  <g class="mv" data-dy="40">${[70,150,250,330].map(x=>`<g><rect x="${x-24}" y="110" width="48" height="90" fill="#c9a35c" stroke="#8a6b3c"/><circle cx="${x}" cy="88" r="18" fill="#c9a35c" stroke="#8a6b3c"/><path d="M${x-18} 80 L${x} 66 L${x+18} 80" fill="#e0c27a" stroke="#8a6b3c"/></g>`).join('')}</g>
+  <rect x="184" y="150" width="32" height="50" fill="#3a2a14"/>
+  ${tag(200,22,'Abu Simbel · Ramsés II',G,15)}${chip(110,226,'speos: excavado en la roca',ORG,11)}${chip(310,226,'estatuas de 22 m',ORG,12)}`,
+  c:'Además de templos al aire libre (<b>Karnak</b> y <b>Luxor</b>), hicieron <b>speos</b>: templos excavados en la roca. El más famoso es <b>Abu Simbel</b>, de <b>Ramsés II</b>, con cuatro estatuas sentadas de <b>22 metros</b>.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#3a2a14"/><path d="M0 0 H400 V250 H0Z" fill="none"/>
+  <g class="pop"><circle cx="30" cy="125" r="22" fill="#ffd23f"/></g>
+  <path class="dr" d="M52 125 H300" stroke="#ffd23f" stroke-width="16" stroke-opacity=".6"/>
+  <g>${[300,330,360].map(x=>`<g><rect x="${x-9}" y="110" width="18" height="40" fill="#e0c27a"/><circle cx="${x}" cy="102" r="8" fill="#e0c27a"/></g>`).join('')}<g opacity=".35"><rect x="381" y="110" width="18" height="40" fill="#e0c27a"/><circle cx="390" cy="102" r="8" fill="#e0c27a"/></g></g>
+  ${chip(150,60,'solo 2 días al año','#ffd23f',13)}${chip(330,190,'Amón, Ra y Ramsés','#ffd23f',11)}${chip(338,62,'Ptah, en sombra','#aaa',10)}${chip(160,210,'21 febrero · 19 octubre','#ffd23f',12)}`,
+  c:'Dentro ocurre un prodigio: <b>dos días al año</b>, el sol entra hasta el fondo e ilumina a <b>Amón, Ra y Ramsés II</b>, mientras <b>Ptah</b>, dios del inframundo, queda en la sombra.'}
+],quiz:[
+ {q:'¿Qué es un speos?',a:'Un templo excavado en la roca',o:['Una pirámide escalonada','Un tipo de pintura','Una estela con leyes'],e:'Como Abu Simbel.'},
+ {q:'¿Qué faraón mandó hacer Abu Simbel?',a:'Ramsés II',o:['Keops','Akhenaton','Tutankamón'],e:''},
+ {q:'¿Qué dios queda siempre en la sombra?',a:'Ptah',o:['Ra','Amón','Ramsés II'],e:'Es el dios del inframundo.'}
+]},
+
+{id:'canon',cat:'egi',short:'Canon y Nefertiti',t:'Escultura: el canon y Amarna',steps:[
+ {clear:1,d:`${bg()}${tag(200,22,'Ley de la frontalidad',G,15)}<g class="pop">${pharaoh(110,70,1.5)}</g>
+  ${chip(292,80,'siempre joven y fuerte',ORG,12)}${chip(292,112,'rígido',ORG,12)}${chip(292,144,'mira al frente',ORG,12)}${chip(292,176,'brazos pegados al cuerpo',ORG,11)}`,
+  c:'El faraón era sagrado: se le esculpía siempre <b>joven, fuerte y rígido</b>, mirando al frente con los brazos pegados al cuerpo. Es la <b>ley de la frontalidad</b>.'},
+ {d:`<g>${[...Array(18)].map((_,k)=>`<rect class="pop" x="148" y="${63+k*7.7}" width="18" height="6.5" rx="2" fill="${k%2?'#f2c230':'#c0127e'}" opacity=".85"/>`).join('')}</g>${chip(330,214,'canon de 18 puños',G,13)}`,
+  c:'Las proporciones seguían el <b>canon de 18 puños</b>: de la frente a los pies, el cuerpo medía 18 puños.'},
+ {clear:1,d:`${bg()}${tag(200,22,'Tell Amarna',G,15)}<g class="pop"><circle cx="90" cy="80" r="26" fill="#ffd23f"/>${[0,1,2,3,4,5].map(k=>`<line x1="${90+Math.cos((k*30+30)*Math.PI/180)*30}" y1="${80+Math.sin((k*30+30)*Math.PI/180)*30}" x2="${90+Math.cos((k*30+30)*Math.PI/180)*60}" y2="${80+Math.sin((k*30+30)*Math.PI/180)*60}" stroke="#d9a400" stroke-width="3"/>`).join('')}</g>${chip(90,170,'dios único: Atón',ORG,12)}${chip(90,200,'Akhenaton',G,13)}
+  <g class="mv" data-dx="60"><path d="M260 230 Q260 180 300 172 Q340 180 340 230Z" fill="#2a6cbf"/><path d="M286 172 L288 140 Q300 130 312 140 L314 172Z" fill="#b9814f"/><path d="M282 112 L284 60 Q300 46 318 60 L322 112Z" fill="#1e4f94"/><path d="M284 74 H320" stroke="#d9a400" stroke-width="5"/><ellipse cx="300" cy="118" rx="16" ry="22" fill="#b9814f"/><ellipse cx="294" cy="114" rx="3" ry="2" fill="#111"/><ellipse cx="306" cy="114" rx="3" ry="2" fill="#111"/></g>${chip(195,135,'más realista',ORG,12)}${chip(330,236,'busto de Nefertiti',G,12)}`,
+  c:'El faraón <b>Amenofis IV</b> impuso un dios único, <b>Atón</b>, y se cambió el nombre a <b>Akhenaton</b>. Con él, el arte de <b>Tell Amarna</b> se volvió más <b>realista</b>, como el <b>busto de Nefertiti</b>.'}
+],quiz:[
+ {q:'¿Qué es la ley de la frontalidad?',a:'El faraón mira al frente, rígido y con los brazos pegados',o:['Pintar todo de perfil','Construir con arcos','Repetir un estribillo'],e:''},
+ {q:'¿Cuántos puños medía la figura según el canon?',a:'18',o:['7','12','22'],e:'De la frente a los pies.'},
+ {q:'¿Qué obra es el ejemplo del arte de Tell Amarna?',a:'El busto de Nefertiti',o:['La Puerta de Ishtar','Gudea de Lagash','El zigurat de Ur'],e:'Más realista y expresivo.'}
+]},
+
+{id:'pintura',cat:'egi',short:'Pintura',t:'La pintura egipcia',steps:[
+ {clear:1,d:`${bg('#f3e6c6')}${tag(200,22,'Pintura al fresco',G,15)}<rect x="40" y="50" width="200" height="170" fill="#f7ecd2" stroke="#a07c32" stroke-width="3"/>
+  <g class="mv" data-dx="-40">${egFig(140,150,1.3,'#b9814f')}</g>
+  <g class="pop">${[['#c0392b',290],['#2a6cbf',320],['#17734a',350],['#d9a400',305],['#111',335]].map(([c,x],k)=>`<circle cx="${x}" cy="${k<3?100:130}" r="11" fill="${c}"/>`).join('')}</g>${chip(320,166,'colores de minerales',ORG,11)}${chip(320,198,'sobre cal húmeda',ORG,12)}${T(140,240,'tumba de Nefertari',{size:12,it:1,c:MUT})}`,
+  c:'Decoraban templos y tumbas, como la de la reina <b>Nefertari</b>. Pintaban <b>al fresco</b>: sobre cal húmeda, con colores sacados de <b>minerales</b>.'},
+ {clear:1,d:`${bg()}${tag(200,22,'Una regla muy estricta',G,15)}<g class="pop">${egFig(200,150,2.1,'#b9814f')}</g>
+  ${chip(80,72,'cabeza de perfil',ORG,12)}${chip(330,72,'ojo de frente',ORG,12)}${chip(330,120,'hombros de frente',ORG,12)}${chip(80,210,'piernas de perfil',ORG,12)}${chip(330,214,'plana, sin sombras',G,12)}
+  ${arrow(120,74,190,82,ORG)}${arrow(290,74,215,84,ORG)}`,
+  c:'Seguían una regla fija: <b>cabeza y piernas de perfil</b>, pero <b>ojo y hombros de frente</b>. Las figuras eran <b>planas</b>, sin volumen ni sombras.'},
+ {clear:1,d:`${bg()}${tag(200,22,'Perspectiva jerárquica',G,15)}<g class="pop">${egFig(110,140,2.4,'#b9814f','#f2c230')}${crown(110,52,'#2a6cbf')}</g>
+  <g class="mv" data-dx="60">${egFig(250,190,1,'#8a5a3a')}${egFig(300,190,1,'#8a5a3a')}${egFig(350,190,1,'#8a5a3a')}</g>
+  ${chip(110,236,'faraón: enorme',G,12)}${chip(300,236,'sirvientes: pequeños',ORG,12)}${chip(300,80,'tamaño = importancia',G,13)}`,
+  c:'Usaban la <b>perspectiva jerárquica</b>: el <b>tamaño</b> dependía de la <b>importancia</b>. El faraón o los dioses eran gigantes frente a sirvientes o prisioneros.'}
+],quiz:[
+ {q:'¿Qué técnica usaban para pintar?',a:'Al fresco, sobre cal húmeda',o:['Óleo sobre lienzo','Acuarela sobre papel','Mosaico de vidrio'],e:''},
+ {q:'¿Cómo se pintaba el ojo en una figura egipcia?',a:'De frente',o:['De perfil','Cerrado','No se pintaba'],e:'Aunque la cabeza va de perfil.'},
+ {q:'¿Qué es la perspectiva jerárquica?',a:'Los más importantes se pintan más grandes',o:['Lo lejano se pinta pequeño','Todo se pinta del mismo tamaño','Se pinta con sombras'],e:''}
+]}
+],
+
+games:[
+ {id:'meseg',type:'binario',t:'¿Mesopotamia o Egipto?',d:'Cada obra o idea, a su civilización',sets:[
+  {t:'¿Mesopotamia o Egipto?',a:['Mesopotamia',M],b:['Egipto',G],it:[['El arco y la bóveda','a'],['Zigurat de Ur','a'],['Puerta de Ishtar','a'],['Gudea de Lagash','a'],['Toros alados (lamassu)','a'],['Código de Hammurabi','a'],['Ladrillo y adobe','a'],['Arquitectura adintelada, sin arcos','b'],['Mastaba','b'],['Pirámides de Giza','b'],['Hipogeo','b'],['Abu Simbel','b'],['Canon de 18 puños','b'],['Busto de Nefertiti','b'],['Pintura de perfil y ojo de frente','b']]}]},
+ {id:'obra',type:'clasifica',t:'¿Qué obra es?',d:'Cada pista, a su obra',deal:12,
+  bins:{zig:{n:'Zigurat de Ur',c:M},ish:{n:'Puerta de Ishtar',c:'#24599f'},ham:{n:'Código de Hammurabi',c:'#3b3b44'},giz:{n:'Pirámides de Giza',c:G},abu:{n:'Abu Simbel',c:'#a07c32'},nef:{n:'Busto de Nefertiti',c:'#c0127e'}},
+  cards:[['Ur-Nammu','zig'],['Tres plantas y terrazas','zig'],['Santuario de Nanna','zig'],['Ladrillo vidriado azul','ish'],['Leones y dragones','ish'],['Museo de Pérgamo','ish'],['Nabucodonosor II','ish'],['282 leyes','ham'],['Estela de basalto','ham'],['El dios Shamash','ham'],['Keops, Kefren y Mikerinos','giz'],['Pasillos para despistar a los ladrones','giz'],['Ramsés II','abu'],['Estatuas de 22 metros','abu'],['El sol entra dos días al año','abu'],['Tell Amarna','nef'],['Arte más realista','nef'],['Hallado en 1912','nef']]},
+ {id:'tumbas',type:'orden',t:'Ordena las tumbas',d:'De la primera a la última',hint:'Toca las tumbas egipcias de la más antigua a la más moderna.',items:['Mastaba','Pirámide escalonada','Pirámides de Giza','Hipogeo del Valle de los Reyes']},
+ {id:'mapa',type:'puntos',t:'Mapa: ¿dónde está?',d:'Encuentra cada lugar',prompt:'Toca:',viewBox:'0 0 400 260',base:NEMAP(),
+  spots:[['ur','Ur (zigurat)',338,198],['bab','Babilonia (Puerta de Ishtar)',300,130],['lag','Lagash (Gudea)',318,166],['giz','Giza (pirámides)',110,74],['ama','Tell Amarna (Nefertiti)',116,128],['val','Tebas (Valle de los Reyes y de las Reinas)',120,170],['abu','Abu Simbel',122,236]]}
+],
+
+pool:[
+ {q:'¿Por qué nos han llegado pocos restos de Mesopotamia?',a:'Porque construían con ladrillo y adobe, materiales frágiles',o:['Porque no construían nada','Porque todo era de oro y se robó','Porque estaba bajo el mar'],e:''},
+ {q:'¿Quiénes crearon el zigurat?',a:'Los sumerios',o:['Los egipcios','Los fenicios','Los griegos'],e:''},
+ {q:'¿Qué representan los relieves de la Leona herida?',a:'Escenas de caza',o:['Una boda real','Una batalla naval','Una misa'],e:''},
+ {q:'¿Cómo era la arquitectura egipcia?',a:'Colosal y adintelada, sin arcos',o:['Pequeña y con muchos arcos','De madera','De ladrillo vidriado azul'],e:''},
+ {q:'¿En qué valle están los hipogeos de los faraones?',a:'En el Valle de los Reyes',o:['En el valle del Éufrates','En Giza','En Babilonia'],e:''},
+ {q:'¿Cómo se llamaba Akhenaton antes de cambiar de nombre?',a:'Amenofis IV',o:['Ramsés II','Keops','Nabucodonosor'],e:''},
+ {q:'¿Qué templos egipcios estaban al aire libre?',a:'Karnak y Luxor',o:['Abu Simbel','Ur y Lagash','El Valle de los Reyes'],e:''},
+ {vf:1,q:'Los egipcios usaban mucho el arco y la bóveda.',a:'Falso',e:'Su arquitectura era adintelada; el arco es mesopotámico.'},
+ {vf:1,q:'Gudea de Lagash es una escultura exenta.',a:'Verdadero',e:''},
+ {vf:1,q:'En la pintura egipcia las figuras tienen volumen y sombras.',a:'Falso',e:'Eran planas.'},
+ {vf:1,q:'Solo los sacerdotes podían subir al zigurat.',a:'Verdadero',e:''},
+ {vf:1,q:'La Puerta de Ishtar sigue hoy en Babilonia.',a:'Falso',e:'Está en el Museo de Pérgamo de Berlín.'}
+]
+};
+
+</script>
+<script>
+/* ===== Motor común: esquema, fichas animadas, juegos y prueba =====
+   Lee la configuración de window.APP (ver contenido/*.js).
+   Clases en los dibujos de cada paso:
+     .mv  llega desplazado (data-dx, data-dy)
+     .dr  línea que se dibuja (las discontinuas aparecen)
+     .fo  se apaga hasta quedar tenue
+     .pop entra con rebote más marcado
+*/
+(function(){
+const A=window.APP;
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HAS=typeof gsap!=='undefined'&&!RM;
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(A.store+'_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(A.store+'_'+k,JSON.stringify(v))}catch(e){}}};
+const CAT=k=>A.cats[k]||{n:k,c:INK};
+
+/* ---------- ESQUEMA ---------- */
+const E=A.esquema;
+$('#eKick').textContent=E.kicker;$('#eTtl').textContent=E.title;$('#mapHint').textContent=E.hint;
+$('#mapa').setAttribute('viewBox',E.viewBox||'0 0 400 220');
+function drawMap(sel){
+  $('#mapa').innerHTML=E.draw(sel);
+  document.querySelectorAll('#mapa .pin').forEach(g=>{
+    g.setAttribute('tabindex','0');g.setAttribute('role','button');
+    const go=()=>showNotes(g.dataset.k);
+    g.addEventListener('click',go);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+  });
+}
+function showNotes(k){
+  drawMap(k);
+  const it=E.items[k],n=$('#notes');n.hidden=false;n.style.borderColor=it.c;
+  n.innerHTML=`<h3 style="color:${it.c}">${it.t}</h3><ul>${it.notes.map(x=>`<li>${x}</li>`).join('')}</ul>${it.scene?`<div><button class="primary" id="toFicha">🎬 Ver la ficha animada</button></div>`:''}`;
+  if(it.scene)$('#toFicha').onclick=()=>{openTab('fichas');loadScene(A.scenes.findIndex(s=>s.id===it.scene))};
+  $('#mapHint').textContent='Toca otra parte del esquema para cambiar.';
+  if(HAS)gsap.from(n.children,{opacity:0,y:8,stagger:.06,duration:.3});
+}
+
+/* ---------- FICHAS ---------- */
+let cur=0,step=0,tl=null;
+const done=new Set(store.get('done',[]));
+function buildPick(){
+  $('#fpick').innerHTML=A.scenes.map((s,i)=>`<button data-i="${i}" ${i===cur?'aria-current="true"':''} class="${done.has(s.id)?'done':''}" style="border-color:${CAT(s.cat).c}">${s.short||s.t}</button>`).join('');
+  $('#fpick').querySelectorAll('button').forEach(b=>b.onclick=()=>loadScene(+b.dataset.i));
+}
+function loadScene(i){cur=Math.max(0,i);step=0;$('#fquiz').hidden=true;buildPick();render(true);window.scrollTo({top:$('#tab-fichas').offsetTop-60,behavior:'smooth'})}
+function render(anim){
+  const S=A.scenes[cur],c=CAT(S.cat);
+  $('#kick').textContent=`Ficha ${cur+1} de ${A.scenes.length} · ${c.n}`;$('#kick').style.color=c.c;$('#ttl').textContent=S.t;
+  let j=step;while(j>0&&!S.steps[j].clear)j--;
+  let svg='';for(let k=j;k<=step;k++)svg+=`<g id="stp${k}">${S.steps[k].d}</g>`;
+  if(tl)tl.kill();
+  $('#stage').innerHTML=svg;
+  $('#cap').innerHTML=S.steps[step].c;
+  $('#dots').innerHTML=S.steps.map((_,k)=>`<i class="${k===step?'on':k<step?'past':''}"></i>`).join('');
+  $('#bBack').disabled=step===0;
+  $('#bNext').textContent=step===S.steps.length-1?'✓ Comprobar':'Siguiente →';
+  if(anim&&HAS)animate($('#stp'+step));
+}
+function animate(g){
+  tl=gsap.timeline();
+  [...g.children].filter(c=>!(c.tagName==='rect'&&c.getAttribute('width')==='400')).forEach(el=>{
+    if(el.classList.contains('dr')){
+      const ps=el.tagName==='path'?[el]:[...el.querySelectorAll('path,line')];
+      ps.forEach(p=>{if(p.getAttribute('stroke-dasharray')||!p.getTotalLength){tl.from(p,{opacity:0,duration:.6},'<.15');return}const L=p.getTotalLength();gsap.set(p,{strokeDasharray:L,strokeDashoffset:L});tl.to(p,{strokeDashoffset:0,duration:.8,ease:'power1.inOut'},'<.15')});
+    }
+    else if(el.classList.contains('mv'))tl.from(el,{x:+(el.dataset.dx||0),y:+(el.dataset.dy||0),opacity:0,duration:1.1,ease:'power2.out'},'<.2');
+    else if(el.classList.contains('fo'))tl.to(el,{opacity:.15,duration:1.2,delay:.6},'<');
+    else if(el.classList.contains('pop'))tl.from(el,{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(2.5)'},'<.2');
+    else tl.from(el,{opacity:0,y:8,scale:.96,transformOrigin:'50% 50%',duration:.4,ease:'back.out(1.6)'},'<.18');
+  });
+}
+$('#bNext').onclick=()=>{const S=A.scenes[cur];if(step<S.steps.length-1){step++;render(true)}else showFQuiz()};
+$('#bBack').onclick=()=>{if(step>0){step--;render(false)}};
+$('#bAgain').onclick=()=>render(true);
+function showFQuiz(){
+  const S=A.scenes[cur],q=$('#fquiz');q.hidden=false;
+  runQuiz(q,S.quiz,'¿Lo has entendido?',(ok,n)=>{
+    if(ok===n){done.add(S.id);store.set('done',[...done]);buildPick()}
+    const nx=document.createElement('div');nx.className='ctrl';
+    nx.innerHTML=`<span class="stamp">${ok}/${n}${ok===n?' ¡Genial!':''}</span><span class="sp"></span><button class="primary">${cur<A.scenes.length-1?'Siguiente ficha →':'🎮 A jugar'}</button>`;
+    nx.querySelector('button').onclick=()=>cur<A.scenes.length-1?loadScene(cur+1):openTab('juegos');
+    q.appendChild(nx);
+  });
+  q.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function runQuiz(box,qs,title,onEnd){
+  let ok=0,ans=0;box.innerHTML=`<h3>${title}</h3>`;
+  qs.forEach(Q=>{
+    const d=document.createElement('div');d.className='qq';
+    const opts=Q.vf?['Verdadero','Falso']:shuffle([Q.a,...Q.o]);
+    d.innerHTML=`<p class="q">${Q.q}</p><div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div><p class="exp" hidden></p>`;
+    d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const good=b.textContent===Q.a;if(good)ok++;ans++;
+      d.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===Q.a)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      const e=d.querySelector('.exp');e.hidden=false;e.className='exp '+(good?'b':'m');e.innerHTML=(good?'✓ ¡Bien! ':'✗ Era: <b>'+Q.a+'</b>. ')+(Q.e||'');
+      if(ans===qs.length)onEnd(ok,qs.length);
+    });
+    box.appendChild(d);
+  });
+}
+
+/* ---------- JUEGOS ---------- */
+let GID=0;
+function gMenu(){
+  GID++;const best=store.get('best',{});
+  $('#gbox').innerHTML=`<p class="kicker">Juegos</p><h2 class="t">Elige un juego</h2><div class="games">${A.games.map(g=>`<button class="gcard" data-g="${g.id}"><b>${g.t}</b>${g.d}${best[g.id]!=null?`<div class="best">Récord: ${best[g.id]}</div>`:''}</button>`).join('')}</div>`;
+  $('#gbox').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>runGame(b.dataset.g));
+}
+const runGame=id=>{const g=A.games.find(x=>x.id===id);({clasifica:gClasifica,binario:gBinario,orden:gOrden,puntos:gPuntos})[g.type](g)};
+function endGame(id,ok,n){
+  const b=store.get('best',{}),bv=store.get('bestv',{});if(bv[id]==null||ok/n>bv[id]){bv[id]=ok/n;b[id]=`${ok}/${n}`;store.set('best',b);store.set('bestv',bv)}
+  $('#gbox').innerHTML=`<div class="result"><p class="kicker">Fin del juego</p><span class="stamp">${ok}/${n}</span><p>${ok===n?'¡Perfecto! 🏆':ok>=n*.7?'¡Muy bien! Casi lo tienes.':'Repasa las fichas y vuelve a intentarlo.'}</p><div class="ctrl"><button class="ghost" id="gm">← Juegos</button><button class="primary" id="gr">↻ Otra vez</button></div></div>`;
+  $('#gm').onclick=gMenu;$('#gr').onclick=()=>runGame(id);
+}
+const gHead=(t,i,n,ok)=>`<div class="score"><span>${t}</span><span>${i+1}/${n} · ✓ ${ok}</span></div>`;
+function choiceRound(G,items,label,bins,keyOf,txtOf,wrongMsg){
+  const my=++GID;let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;if(i===items.length)return endGame(G.id,ok,items.length);
+    const it=items[i],k=keyOf(it),B=bins(it);
+    $('#gbox').innerHTML=`${gHead(label(it),i,items.length,ok)}<div class="bigcard">${txtOf(it)}</div><div class="bins">${B.map(([bk,b])=>`<button class="bin" data-k="${bk}" style="border-left-color:${b.c}">${b.n}</button>`).join('')}</div><p class="fb" id="fb"></p>`;
+    if(HAS)gsap.from('.bigcard',{scale:.8,opacity:0,duration:.3});
+    $('#gbox').querySelectorAll('.bin').forEach(b=>b.onclick=()=>{
+      const good=b.dataset.k===k;if(good)ok++;
+      $('#gbox').querySelectorAll('.bin').forEach(x=>{x.disabled=true;if(x.dataset.k===k)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Correcto!':'✗ '+wrongMsg(it,B.find(x=>x[0]===k)[1]);
+      i++;setTimeout(show,good?800:1600);
+    });
+  };show();
+}
+function gClasifica(G){
+  const bins=Object.entries(G.bins||A.cats);
+  choiceRound(G,shuffle(G.cards).slice(0,G.deal||12),()=>G.t,()=>bins,it=>it[1],it=>it[0],(it,b)=>'Es: '+b.n);
+}
+function gBinario(G){
+  const items=shuffle(G.sets.flatMap(S=>S.it.map(([t,s])=>({S,t,s}))));
+  choiceRound(G,items,it=>it.S.t,it=>[['a',{n:it.S.a[0],c:it.S.a[1]}],['b',{n:it.S.b[0],c:it.S.b[1]}]],it=>it.s,it=>it.t,(it,b)=>'Es: '+b.n);
+}
+function gOrden(G){
+  const my=++GID;let next=0,err=0;const sh=shuffle(G.items.map((t,k)=>({t,k})));
+  $('#gbox').innerHTML=`<div class="score"><span>${G.t}</span><span id="oe">fallos: 0</span></div><p class="hint">${G.hint}</p><div class="order">${sh.map(o=>`<button data-k="${o.k}"><span class="n"></span>${o.t}</button>`).join('')}</div><p class="fb" id="fb"></p>`;
+  $('#gbox').querySelectorAll('.order button').forEach(b=>b.onclick=()=>{
+    if(b.classList.contains('placed'))return;
+    if(+b.dataset.k===next){b.classList.add('placed');b.querySelector('.n').textContent=(next+1)+'.';next++;$('#fb').textContent='';
+      if(next===G.items.length){const sc=Math.max(0,G.items.length-err);setTimeout(()=>{if(my===GID)endGame(G.id,sc,G.items.length)},900)}}
+    else{err++;$('#oe').textContent='fallos: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),500);$('#fb').className='fb ko';$('#fb').textContent='Ese todavía no. ¿Qué va antes?'}
+  });
+}
+function gPuntos(G){
+  const my=++GID;const qs=shuffle(G.ask?G.spots.filter(s=>G.ask.includes(s[0])):G.spots);let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;if(i===qs.length)return endGame(G.id,ok,qs.length);
+    const Q=qs[i];
+    $('#gbox').innerHTML=`${gHead(G.t,i,qs.length,ok)}<div class="bigcard" style="font-size:1.1rem">${G.prompt||'Toca:'} ${Q[1]}</div><div class="stage"><svg viewBox="${G.viewBox||'0 0 400 220'}" xmlns="http://www.w3.org/2000/svg">${G.base}${G.spots.map(s=>`<g class="mapdot" data-k="${s[0]}"><circle cx="${s[2]}" cy="${s[3]}" r="${G.r||18}" fill="transparent"/><circle class="v" cx="${s[2]}" cy="${s[3]}" r="7" fill="${ORG}" stroke="#fff" stroke-width="2"/></g>`).join('')}</svg></div><p class="fb" id="fb"></p>`;
+    $('#gbox').querySelectorAll('.mapdot').forEach(g=>g.onclick=()=>{
+      if(g.dataset.lock)return;$('#gbox').querySelectorAll('.mapdot').forEach(x=>x.dataset.lock=1);
+      const good=g.dataset.k===Q[0];if(good)ok++;
+      const r=$('#gbox').querySelector(`.mapdot[data-k="${Q[0]}"] .v`);r.setAttribute('fill','#17734a');r.setAttribute('r','10');
+      if(!good)g.querySelector('.v').setAttribute('fill','#b0302a');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Exacto!':'✗ Era el punto verde';
+      i++;setTimeout(show,good?900:1700);
+    });
+  };show();
+}
+
+/* ---------- PRUEBA ---------- */
+function pStart(){
+  const N=A.nPrueba||15;
+  $('#pbox').innerHTML=`<p class="kicker">Prueba final</p><h2 class="t">${N} preguntas de todo el tema</h2><p class="hint">Mejor nota: ${store.get('exam','—')}</p><div><button class="primary" id="pgo">Empezar</button></div>`;
+  $('#pgo').onclick=()=>{
+    const pool=[...A.scenes.flatMap(s=>s.quiz),...A.pool];
+    const qs=shuffle(pool).slice(0,N);
+    const box=document.createElement('div');box.className='quiz';$('#pbox').innerHTML='';$('#pbox').appendChild(box);
+    runQuiz(box,qs,`Responde las ${N}`,(ok,n)=>{
+      const nota=Math.round(ok/n*100)/10;if(nota>(parseFloat(store.get('exam','0'))||0))store.set('exam',String(nota));
+      const r=document.createElement('div');r.className='result';
+      r.innerHTML=`<span class="stamp">${nota} / 10</span><p>${ok} de ${n} bien. ${nota>=9?'¡Sobresaliente! 🏆':nota>=7?'¡Muy bien!':nota>=5?'Aprobado. Repasa los fallos.':'Vuelve a las fichas y repítela.'}</p><button class="primary">↻ Otra prueba</button>`;
+      r.querySelector('button').onclick=pStart;box.appendChild(r);r.scrollIntoView({behavior:'smooth'});
+    });
+  };
+}
+
+/* ---------- PESTAÑAS ---------- */
+function openTab(t){
+  GID++;
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+  ['esquema','fichas','juegos','prueba'].forEach(x=>$('#tab-'+x).hidden=x!==t);
+  if(t==='fichas'&&!$('#stage').innerHTML)loadScene(0);
+  if(t==='juegos')gMenu();
+  if(t==='prueba')pStart();
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>openTab(b.dataset.tab));
+window.__app={openTab,loadScene,render,set:(c,s)=>{cur=c;step=s;render(false)},n:()=>A.scenes.length};
+drawMap();
+})();
+
+</script>
+</body>
+</html>
