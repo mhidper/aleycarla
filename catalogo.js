@@ -39,7 +39,8 @@ window.CATALOGO = {
         id: 'geografia-historia', nombre: 'Historia', tono: 30, apps: [
           { titulo: 'Expedición Historia: Temas 1 y 2', descripcion: 'La Prehistoria y La Tierra y el Universo: estaciones con estrellas, juegos, tarjetas y prueba', ruta: 'ale/geografia-historia/temas-1-2/' },
           { titulo: 'Primeras civilizaciones: Tema 3', descripcion: 'Mesopotamia, Egipto, fenicios, hebreos, Tartessos, celtas, iberos, colonizaciones y personajes. 11 fichas con conceptos y reto, 7 juegos y prueba', ruta: 'ale/geografia-historia/tema3/' },
-          { titulo: 'Historia animada: Tema 3', descripcion: 'Fichas animadas paso a paso: el Creciente Fértil, la ciudad-estado, la escritura, el Nilo, las momias, el alfabeto fenicio, Tartessos, celtas e iberos, las colonizaciones y 14 biografías y leyendas, con preguntas al final', ruta: 'ale/geografia-historia/tema3-animado/' }
+          { titulo: 'Historia animada: Tema 3', descripcion: 'Fichas animadas paso a paso: el Creciente Fértil, la ciudad-estado, la escritura, el Nilo, las momias, el alfabeto fenicio, Tartessos, celtas e iberos, las colonizaciones y 14 biografías y leyendas, con preguntas al final', ruta: 'ale/geografia-historia/tema3-animado/' },
+          { titulo: 'Mediterráneo y España', descripcion: 'El esquema de Ale: fenicios, hebreos, Tartessos, celtas e iberos. Mapa interactivo, 5 fichas animadas, 4 juegos (¿de quién es?, factoría o colonia, castro u oppidum, ordena a los hebreos, mapa) y prueba de 15 preguntas', ruta: 'ale/geografia-historia/mediterraneo-espana/' }
         ]
       },
       {

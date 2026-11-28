@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mediterráneo y España</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@700&display=swap">
+<style>
+:root{
+  --bg:#f6f1ea; --paper:#fdfdfb; --grid:#ece4d8; --ink:#1f1d3a; --muted:#5d5a7a; --line:#dcd2c2;
+  --marker:#e0611a; --marker-soft:#fde8da; --ok:#17734a; --ok-soft:#ddf2e6; --bad:#b0302a; --bad-soft:#f8e0de;
+  --btn:#1f1d3a; --btn-fg:#fdfdfb; --chip:#ffffff;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#14121c; --paper:#1d1a28; --grid:#27233a; --ink:#ece8f5; --muted:#aaa4c2; --line:#3a3450;
+  --marker:#ff8a4c; --marker-soft:#3d2418; --ok:#4fc68c; --ok-soft:#17332a; --bad:#ff7a70; --bad-soft:#3b1d1c;
+  --btn:#ece8f5; --btn-fg:#14121c; --chip:#221e30; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5}
+[hidden]{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 48px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.nav-links{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.back{font-size:.9rem;color:var(--muted);text-decoration:none;font-weight:700}
+.link-app{font-size:.85rem;color:var(--marker);text-decoration:none;font-weight:700;border:1.5px solid var(--line);background:var(--chip);padding:4px 10px;border-radius:8px}
+header h1{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header h1 span{color:var(--marker);font-family:var(--f-hand);font-size:1.1em;margin-left:.15em}
+header p{margin:.4em 0 0;color:var(--muted);max-width:60ch}
+.tabs{display:flex;gap:6px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;border-bottom:2px solid var(--ink)}
+.tabs button{flex:1;border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:700 .95rem var(--f-body);padding:9px 4px;border-radius:10px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn)}
+.sheet{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:8px;padding:16px;box-shadow:0 10px 24px -18px rgba(30,20,60,.45);display:flex;flex-direction:column;gap:14px;min-width:0}
+.kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0}
+h2.t{font:800 1.4rem var(--f-display);margin:-6px 0 0;text-wrap:balance}
+.stage{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fbf8f1;line-height:0}
+.stage svg{width:100%;height:auto;display:block}
+.stage svg text{font-family:var(--f-body)}
+.cap{font-size:1.12rem;line-height:1.5;margin:0;min-height:4.5em}
+.cap b{color:var(--marker)}
+.dots{display:flex;gap:6px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--marker)} .dots i.past{background:var(--muted)}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ctrl .sp{flex:1}
+.primary{background:var(--btn);color:var(--btn-fg);border:0;border-radius:10px;font:700 1rem var(--f-body);padding:12px 20px;cursor:pointer}
+.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);border-radius:10px;font:700 1rem var(--f-body);padding:11px 14px;cursor:pointer}
+.ghost:disabled,.primary:disabled{opacity:.4;cursor:default}
+button:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:400 .9rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chips button[aria-current="true"]{background:var(--btn);color:var(--btn-fg);border-color:var(--btn);font-weight:700}
+.chips button.done::after{content:" ✓";color:var(--ok);font-weight:700}
+/* Esquema */
+.pin{cursor:pointer}
+.pin:hover circle.halo,.pin:focus circle.halo{opacity:.35}
+.notes{border-left:5px solid var(--marker);padding:4px 0 4px 14px;display:flex;flex-direction:column;gap:8px}
+.notes h3{margin:0;font:800 1.25rem var(--f-display)}
+.notes ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px}
+.hint{color:var(--muted);font-size:.95rem;margin:0}
+/* Quiz */
+.quiz{display:flex;flex-direction:column;gap:16px;border-top:2px solid var(--ink);padding-top:14px}
+.quiz h3{font:800 1.15rem var(--f-display);margin:0}
+.qq{display:flex;flex-direction:column;gap:8px}
+.qq p.q{font-weight:700;margin:0;font-size:1.05rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);font-weight:700}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:0;font-size:.95rem}
+.exp.b{color:var(--ok)} .exp.m{color:var(--bad)}
+.stamp{font-family:var(--f-hand);font-size:2.4rem;line-height:1;color:var(--ok);transform:rotate(-6deg);display:inline-block}
+/* Juegos */
+.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gcard{text-align:left;border:2px solid var(--line);background:var(--chip);color:var(--ink);border-radius:12px;padding:12px;cursor:pointer;font:400 .95rem var(--f-body)}
+.gcard b{display:block;font:800 1.05rem var(--f-display);margin-bottom:2px}
+.gcard .best{color:var(--ok);font-weight:700;font-size:.85rem}
+.bigcard{border:2.5px dashed var(--marker);background:var(--marker-soft);border-radius:14px;padding:18px;text-align:center;font:800 1.3rem var(--f-display);min-height:84px;display:flex;align-items:center;justify-content:center;text-wrap:balance}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.bin{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px 6px;font:700 1rem var(--f-body);cursor:pointer;border-left-width:8px}
+.bin.right{background:var(--ok-soft);border-color:var(--ok)}
+.bin.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.score{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:.95rem}
+.fb{min-height:1.6em;margin:0;font-weight:700}
+.fb.ok{color:var(--ok)} .fb.ko{color:var(--bad)}
+.order{display:flex;flex-direction:column;gap:8px}
+.order button{text-align:left;border:2px solid var(--line);background:var(--paper);color:var(--ink);font:400 1rem var(--f-body);padding:10px 12px;border-radius:10px;cursor:pointer}
+.order button.placed{border-color:var(--ok);background:var(--ok-soft)}
+.order button.shake{border-color:var(--bad);background:var(--bad-soft)}
+.order button .n{display:inline-block;min-width:1.6em;font-weight:800;color:var(--ok)}
+.mapdot{cursor:pointer}
+.result{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+@media (max-width:420px){header h1{font-size:1.65rem}.cap{font-size:1.04rem}.primary{padding:12px 14px}.ghost{padding:11px 10px}.games{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav-links">
+    <a class="back" href="../../../#ale/geografia-historia">← Historia de Ale</a>
+    <a class="link-app" href="../tema3/">📖 App del Tema 3</a>
+  </div>
+  <header>
+    <h1>Mediterráneo <span>y España</span></h1>
+    <p>El esquema de Ale hecho app: fenicios, hebreos, Tartessos, celtas e iberos. Mira el mapa, repasa con las fichas animadas, juega y haz la prueba.</p>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="esquema" aria-selected="true">🗺️ Esquema</button>
+    <button role="tab" data-tab="fichas" aria-selected="false">🎬 Fichas</button>
+    <button role="tab" data-tab="juegos" aria-selected="false">🎮 Juegos</button>
+    <button role="tab" data-tab="prueba" aria-selected="false">📝 Prueba</button>
+  </nav>
+
+  <!-- ESQUEMA -->
+  <section id="tab-esquema" class="sheet">
+    <p class="kicker">El esquema del cuaderno</p>
+    <h2 class="t">¿Quién vivía dónde?</h2>
+    <div class="stage"><svg id="mapa" viewBox="0 0 400 220" role="img" aria-label="Mapa del Mediterráneo con los cinco pueblos" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <p class="hint" id="mapHint">Toca un pueblo del mapa para ver sus ideas clave.</p>
+    <div class="notes" id="notes" hidden></div>
+  </section>
+
+  <!-- FICHAS -->
+  <section id="tab-fichas" hidden>
+    <div class="sheet">
+      <p class="kicker" id="kick"></p>
+      <h2 class="t" id="ttl"></h2>
+      <div class="stage"><svg id="stage" viewBox="0 0 400 250" role="img" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <p class="cap" id="cap" aria-live="polite"></p>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="ctrl">
+        <button class="ghost" id="bBack">← Atrás</button>
+        <button class="ghost" id="bAgain">↻ Repetir</button>
+        <span class="sp"></span>
+        <button class="primary" id="bNext">Siguiente →</button>
+      </div>
+      <div class="quiz" id="fquiz" hidden></div>
+    </div>
+    <div class="chips" id="fpick" style="margin-top:12px"></div>
+  </section>
+
+  <!-- JUEGOS -->
+  <section id="tab-juegos" hidden>
+    <div class="sheet" id="gbox"></div>
+  </section>
+
+  <!-- PRUEBA -->
+  <section id="tab-prueba" hidden>
+    <div class="sheet" id="pbox"></div>
+  </section>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" id="gdefs"></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const store={get(k,d){try{return JSON.parse(localStorage.getItem('medesp_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('medesp_'+k,JSON.stringify(v))}catch(e){}}};
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HAS=typeof gsap!=='undefined'&&!RM;
+
+/* ============ COLORES Y PUEBLOS ============ */
+const INK='#1f1d3a',MUT='#5d5a7a',SEA='#cfe6f5',LAND='#efe0b9',LAND2='#e3cf9c',ORG='#e0611a';
+const P={
+  fen:{n:'Fenicios',c:'#7b2a8c'},
+  heb:{n:'Hebreos',c:'#1e5fb4'},
+  tar:{n:'Tartessos',c:'#b8860b'},
+  cel:{n:'Celtas',c:'#17734a'},
+  ibe:{n:'Iberos',c:'#b0302a'}
+};
+
+/* ============ AYUDAS DE DIBUJO ============ */
+const T=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${o.size||13}" text-anchor="${o.a||'middle'}" font-weight="${o.w||400}" fill="${o.c||INK}"${o.it?' font-style="italic"':''}${o.ff?` font-family="${o.ff}"`:''}>${s}</text>`;
+const tw=(s,size)=>Math.round([...s].length*size*.56+18);
+const chip=(x,y,s,c=ORG,size=13)=>{const w=tw(s,size),h=size+12;return`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${h/2}" fill="#fff" stroke="${c}" stroke-width="2"/>${T(x,y+size*.36,s,{size,c,w:700})}</g>`};
+const tag=(x,y,s,c=ORG,size=14)=>{const w=tw(s,size),h=size+14;return`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="6" fill="${c}"/>${T(x,y+size*.36,s,{size,c:'#fff',w:700})}</g>`};
+const arrow=(x1,y1,x2,y2,c=INK,cls='dr')=>`<path class="${cls}" d="M${x1} ${y1} L${x2} ${y2}" stroke="${c}" stroke-width="2.4" fill="none" marker-end="url(#ar${c.replace('#','')})"/>`;
+const person=(x,y,c='#3a3a3a',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><circle cx="0" cy="0" r="5" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-5" y2="32"/><line x1="0" y1="20" x2="5" y2="32"/><line x1="-7" y1="11" x2="7" y2="11"/></g>`;
+const crown=(x,y,c='#d9a400')=>`<path d="M${x-7} ${y} L${x-7} ${y-8} L${x-3.5} ${y-4} L${x} ${y-10} L${x+3.5} ${y-4} L${x+7} ${y-8} L${x+7} ${y} Z" fill="${c}" stroke="#8a6500" stroke-width="1"/>`;
+const elder=(x,y)=>person(x,y,'#6b5b45',1.4)+`<path d="M${x-5} ${y+3} Q${x} ${y+18} ${x+5} ${y+3}" fill="#eee" stroke="#999" stroke-width="1"/>`;
+const ship=(x,y,sail='#7b2a8c')=>`<g transform="translate(${x} ${y})"><path d="M-30 0 L30 0 L22 12 L-22 12 Z" fill="#7a5528" stroke="#4a3216" stroke-width="1.5"/><path d="M30 0 Q38 -6 36 -12" stroke="#4a3216" stroke-width="2.5" fill="none"/><line x1="0" y1="0" x2="0" y2="-38" stroke="#4a3216" stroke-width="2.5"/><path d="M-18 -34 L18 -34 L16 -8 L-16 -8 Z" fill="${sail}" stroke="#3d1446" stroke-width="1.2"/><path d="M-18 -21 L18 -21" stroke="#fff" stroke-opacity=".5"/></g>`;
+const wave=(y,c='#9cc8e6')=>`<path d="M0 ${y} q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" stroke="${c}" stroke-width="1.6" fill="none"/>`;
+const house=(x,y,w=16,h=12,c='#e9cfa0')=>`<g><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="${c}" stroke="#7a5528" stroke-width="1.2"/><path d="M${x-w/2-2} ${y-h} L${x} ${y-h-7} L${x+w/2+2} ${y-h} Z" fill="#b5532c" stroke="#7a3a1e" stroke-width="1"/></g>`;
+const flatHouse=(x,y,w=18,h=11)=>`<rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="#e9cfa0" stroke="#7a5528" stroke-width="1.2"/><rect x="${x-2.5}" y="${y-7}" width="5" height="7" fill="#7a5528"/>`;
+const roundHut=(x,y,r=9)=>`<g><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*.45}" fill="#b99b6b"/><path d="M${x-r} ${y} L${x-r} ${y-r*.8} Q${x} ${y-r*2.1} ${x+r} ${y-r*.8} L${x+r} ${y} Z" fill="#cdb07a" stroke="#6e5530" stroke-width="1.2"/><path d="M${x-r*.9} ${y-r*.9} Q${x} ${y-r*2} ${x+r*.9} ${y-r*.9}" fill="#d9b04a" stroke="#8a6b1e" stroke-width="1"/><rect x="${x-2.5}" y="${y-6}" width="5" height="6" fill="#5a3d1b"/></g>`;
+const wheat=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" stroke="#b8860b" stroke-width="2" fill="#e5b93c"><line x1="0" y1="0" x2="0" y2="-34"/>${[0,1,2,3].map(k=>`<ellipse cx="-4" cy="${-30+k*7}" rx="3" ry="5" transform="rotate(-25 -4 ${-30+k*7})"/><ellipse cx="4" cy="${-30+k*7}" rx="3" ry="5" transform="rotate(25 4 ${-30+k*7})"/>`).join('')}</g>`;
+const grape=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -32 Q6 -40 12 -38" stroke="#4d7a2a" stroke-width="2" fill="none"/><path d="M2 -34 Q14 -36 16 -28 Q8 -26 2 -34Z" fill="#6fa23a"/>${[[-6,-26],[0,-26],[6,-26],[-3,-19],[3,-19],[9,-19],[0,-12],[6,-12],[3,-5]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="4" fill="#6b2d7a" stroke="#41164d" stroke-width=".8"/>`).join('')}</g>`;
+const olive=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0 Q-2 -14 0 -20" stroke="#6e5530" stroke-width="4" fill="none"/><circle cx="0" cy="-30" r="14" fill="#7d9a4a"/><circle cx="-10" cy="-24" r="9" fill="#8bab54"/><circle cx="10" cy="-24" r="9" fill="#6f8c3e"/>${[[-6,-30],[5,-34],[8,-22],[-9,-20]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="2.2" ry="3" fill="#2f3d1a"/>`).join('')}</g>`;
+const cow=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-18" y="-20" width="32" height="16" rx="7" fill="#fff" stroke="#333" stroke-width="1.5"/><circle cx="-6" cy="-14" r="4" fill="#333"/><circle cx="6" cy="-10" r="3" fill="#333"/><rect x="12" y="-26" width="12" height="11" rx="4" fill="#fff" stroke="#333" stroke-width="1.5"/><path d="M14 -26 l-3 -4 M22 -26 l3 -4" stroke="#333" stroke-width="1.5"/>${[-14,-6,4,10].map(a=>`<line x1="${a}" y1="-5" x2="${a}" y2="4" stroke="#333" stroke-width="2.5"/>`).join('')}</g>`;
+const sheep=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="-10" rx="12" ry="8" fill="#f5f2ea" stroke="#777" stroke-width="1.3"/><circle cx="12" cy="-13" r="4.5" fill="#444"/>${[-7,-2,4,8].map(a=>`<line x1="${a}" y1="-3" x2="${a}" y2="4" stroke="#444" stroke-width="2"/>`).join('')}</g>`;
+const nugget=(x,y,c,lbl)=>`<g><path d="M${x-14} ${y} L${x-9} ${y-11} L${x+5} ${y-13} L${x+14} ${y-3} L${x+8} ${y+7} L${x-8} ${y+7} Z" fill="${c}" stroke="#4a3a20" stroke-width="1.2"/>${T(x,y+24,lbl,{size:12,w:700})}</g>`;
+const scroll=(x,y,w=70,h=44)=>`<g><rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" fill="#f7ecd2" stroke="#8a6b3c" stroke-width="1.6"/><rect x="${x-w/2-6}" y="${y-h/2-3}" width="8" height="${h+6}" rx="4" fill="#c79a55" stroke="#8a6b3c"/><rect x="${x+w/2-2}" y="${y-h/2-3}" width="8" height="${h+6}" rx="4" fill="#c79a55" stroke="#8a6b3c"/>${[0,1,2,3].map(k=>`<line x1="${x-w/2+8}" y1="${y-h/2+10+k*8}" x2="${x+w/2-8}" y2="${y-h/2+10+k*8}" stroke="#a08560" stroke-width="1.4"/>`).join('')}</g>`;
+const coin=(x,y,r=13)=>`<g><circle cx="${x}" cy="${y}" r="${r}" fill="#c9cdd2" stroke="#6b7078" stroke-width="2"/><circle cx="${x}" cy="${y}" r="${r-4}" fill="none" stroke="#8a9098" stroke-width="1"/><path d="M${x-4} ${y+4} L${x} ${y-5} L${x+4} ${y+4}" stroke="#6b7078" stroke-width="1.8" fill="none"/></g>`;
+
+const DEFSX=`<defs>${[INK,ORG,'#7b2a8c','#1e5fb4','#b8860b','#17734a','#b0302a'].map(c=>`<marker id="ar${c.replace('#','')}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="${c}"/></marker>`).join('')}</defs>`;
+document.getElementById('gdefs').innerHTML=DEFSX;const DEFS='';
+
+/* ---- Mapa del Mediterráneo (400 x 220) ---- */
+const NORTH='M65 0 H400 V92 L376 94 L355 90 L330 90 L305 84 L290 74 L278 84 L270 102 L262 110 L256 100 L248 80 L232 62 L216 56 L205 58 L214 78 L232 100 L236 106 L228 106 L220 118 L210 117 L211 108 L198 94 L184 78 L172 66 L160 60 L145 62 L128 62 L114 64 L108 72 L98 88 L93 106 L78 124 L56 131 L40 127 L32 110 L25 84 L22 60 L48 52 L76 52 L80 38 L70 20 Z';
+const SOUTH='M0 150 L30 145 L60 142 L95 140 L125 136 L160 134 L178 132 L186 138 L196 142 L215 150 L240 162 L270 160 L300 164 L330 168 L352 162 L364 146 L368 120 L372 100 L380 94 L400 94 V220 H0 Z';
+const ISLANDS=`<ellipse cx="209" cy="128" rx="10" ry="5" fill="${LAND}" stroke="#c7b07a"/><ellipse cx="166" cy="100" rx="5" ry="10" fill="${LAND}" stroke="#c7b07a"/><ellipse cx="168" cy="81" rx="4" ry="7" fill="${LAND}" stroke="#c7b07a"/><ellipse cx="285" cy="120" rx="12" ry="3" fill="${LAND}" stroke="#c7b07a"/><ellipse cx="345" cy="104" rx="8" ry="3" fill="${LAND}" stroke="#c7b07a"/><ellipse cx="122" cy="99" rx="6" ry="3" fill="${LAND}" stroke="#c7b07a"/>`;
+const MED=(dy=0)=>`<g transform="translate(0 ${dy})"><rect width="400" height="220" fill="${SEA}"/><path d="${NORTH}" fill="${LAND}" stroke="#c7b07a" stroke-width="1.2"/><path d="${SOUTH}" fill="${LAND}" stroke="#c7b07a" stroke-width="1.2"/>${ISLANDS}</g>`;
+
+/* ---- Península Ibérica (400 x 250) ---- */
+const IB='60,40 200,30 300,45 330,70 300,110 290,150 260,190 200,215 140,215 90,200 60,150 50,90';
+const IBMAP=`<rect width="400" height="250" fill="${SEA}"/><polygon points="${IB}" fill="${LAND}" stroke="#b49a62" stroke-width="2"/><polygon points="165,31 300,45 322,62 400,28 400,0 140,0" fill="${LAND2}"/>${T(300,20,'Europa',{size:12,c:MUT,it:1})}${T(345,222,'Mar',{size:12,c:'#3d7ab0',it:1})}${T(345,236,'Mediterráneo',{size:12,c:'#3d7ab0',it:1})}${T(22,150,'Océano',{size:11,c:'#3d7ab0',it:1,a:'start'})}${T(22,163,'Atlántico',{size:11,c:'#3d7ab0',it:1,a:'start'})}`;
+const ZCEL='60,40 200,30 235,60 215,105 175,140 120,160 75,170 60,150 50,90';
+const ZIBE='300,45 330,70 300,110 290,150 260,190 200,215 150,212 185,180 235,140 255,95 265,55';
+const ZTAR='M75 175 Q120 160 175 175 Q200 195 175 212 L140 215 L95 200 Z';
+
+/* ============ ESQUEMA (MAPA) ============ */
+const PINS={
+  fen:{x:372,y:108,lx:330,ly:62,a:'end',notes:['Navegantes y comerciantes','Ciudades-estado independientes: <b>Tiro, Sidón y Biblos</b>','El poder del rey estaba limitado por un <b>consejo de ancianos</b>','<b>Factorías</b>: enclaves de comercio, puntos temporales de desembarco, sin intención de poder','<b>Colonias</b>: lugares donde se trasladaban para quedarse (<b>Cartago</b> o <b>Gadir</b>)','Comercio: oro, plata, cobre, estaño, joyas, vidrio, lana y tejidos de <b>púrpura</b>','Crearon el <b>alfabeto fenicio</b>: 22 signos abstractos, base de casi todos los alfabetos actuales']},
+  heb:{x:366,y:140,lx:330,ly:200,a:'end',notes:['Al principio, <b>pastores</b>','<b>Abraham</b> los llevó a la tierra de <b>Canaán</b>','Fueron <b>esclavos</b> en Egipto','Reyes <b>David</b> y <b>Salomón</b> (Salomón construyó el <b>Templo de Jerusalén</b>)','A la muerte de Salomón el reino se dividió en <b>Israel</b> y <b>Judá</b>','<b>Monoteísmo</b>: un solo dios, <b>Yahvé</b>; su ley está en la <b>Torá</b>']},
+  tar:{x:52,y:122,lx:20,ly:186,a:'start',notes:['El pueblo más <b>próspero y enigmático</b> de la <b>Protohistoria</b> peninsular','Rey (¿o dinastía?): <b>Argantonio</b>','Rico en <b>agricultura, ganadería y minería</b> (oro, plata, cobre y hierro)','Un <b>mito</b> habla de sus leyes escritas','<b>Desaparición misteriosa</b>']},
+  cel:{x:48,y:80,lx:20,ly:22,a:'start',notes:['Pueblos <b>indoeuropeos</b> llegados de Centroeuropa','Vivían en <b>castros</b>: poblados con casas redondas sin orden','<b>Ganadería</b> y <b>cereales</b>','Trabajaban el <b>hierro</b>','<b>No tenían escritura propia</b>','Al mezclarse con los iberos surgieron los <b>celtíberos</b>']},
+  ibe:{x:92,y:100,lx:150,ly:40,a:'middle',notes:['Vivían en el sur y en la costa mediterránea','Ciudades en <b>oppida</b>: amuralladas y con calles ordenadas (lo contrario de un castro)','Cultivaban <b>trigo, vid y olivo</b>','<b>Comercio</b> y <b>monedas</b>','Su escultura más famosa: la <b>Dama de Elche</b>']}
+};
+function drawMap(sel){
+  let s=DEFS+MED();
+  s+=`<g transform="translate(200 186)"><polygon points="-62,-14 -50,-24 50,-24 62,-14 62,14 50,24 -50,24 -62,14" fill="#fff" fill-opacity=".9" stroke="${ORG}" stroke-width="3"/>${T(0,-3,'Mediterráneo',{size:14,w:800,ff:'var(--f-display)'})}${T(0,14,'y España',{size:14,w:800,c:ORG,ff:'var(--f-display)'})}</g>`;
+  for(const[k,p]of Object.entries(PINS)){
+    const c=P[k].c,on=sel===k;
+    s+=`<g class="pin" data-k="${k}" tabindex="0" role="button" aria-label="${P[k].n}"><line x1="${p.x}" y1="${p.y}" x2="${p.lx+(p.a==='start'?8:p.a==='end'?-8:0)}" y2="${p.ly+4}" stroke="${c}" stroke-width="2" stroke-dasharray="3 3"/><circle class="halo" cx="${p.x}" cy="${p.y}" r="16" fill="${c}" opacity="${on?.35:.15}"/><circle cx="${p.x}" cy="${p.y}" r="7" fill="${c}" stroke="#fff" stroke-width="2"/>${tagAt(p.lx,p.ly,P[k].n,c,p.a,on)}</g>`;
+  }
+  $('#mapa').innerHTML=s;
+  document.querySelectorAll('#mapa .pin').forEach(g=>{
+    const go=()=>showNotes(g.dataset.k);
+    g.addEventListener('click',go);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+  });
+}
+function tagAt(x,y,s,c,a,on){const w=tw(s,14),h=26;const x0=a==='start'?x:a==='end'?x-w:x-w/2;return`<rect x="${x0}" y="${y-h/2+4}" width="${w}" height="${h}" rx="6" fill="${on?c:'#fff'}" stroke="${c}" stroke-width="2"/>${T(x0+w/2,y+9,s,{size:14,w:800,c:on?'#fff':c})}`}
+function showNotes(k){
+  drawMap(k);
+  const n=$('#notes');n.hidden=false;n.style.borderColor=P[k].c;
+  n.innerHTML=`<h3 style="color:${P[k].c}">${P[k].n}</h3><ul>${PINS[k].notes.map(x=>`<li>${x}</li>`).join('')}</ul><div><button class="primary" id="toFicha">🎬 Ver la ficha animada</button></div>`;
+  $('#toFicha').onclick=()=>{openTab('fichas');loadScene(SCENES.findIndex(s=>s.id===k))};
+  $('#mapHint').textContent='Toca otro pueblo para cambiar.';
+  if(HAS)gsap.from(n.children,{opacity:0,y:8,stagger:.06,duration:.3});
+}
+
+/* ============ FICHAS ANIMADAS ============ */
+/* Cada paso: c = texto; d = dibujo que se añade; clear = empieza lienzo nuevo.
+   Clases: .mv (llega desde data-dx/data-dy), .dr (línea que se dibuja), .fo (se apaga) */
+const SCENES=[
+{id:'fen',t:'Los fenicios, señores del mar',steps:[
+ {clear:1,d:`<rect width="400" height="250" fill="${SEA}"/>${wave(60)}${wave(150)}${wave(215)}<path d="M300 0 H400 V250 H318 C330 200 308 170 322 130 C330 90 310 50 318 0Z" fill="${LAND}" stroke="#b49a62" stroke-width="2"/><path d="M350 250 L362 40 L376 70 L388 30 L400 60 V250Z" fill="${LAND2}"/>${T(375,236,'montañas',{size:11,c:MUT,it:1})}
+  <g class="pp">${[['Biblos',318,70],['Sidón',322,140],['Tiro',320,190]].map(([n,x,y])=>`<g><circle cx="${x}" cy="${y}" r="7" fill="#7b2a8c" stroke="#fff" stroke-width="2"/>${T(x-14,y+5,n,{size:15,w:800,a:'end',c:'#7b2a8c'})}</g>`).join('')}</g>
+  ${tag(140,40,'Ciudades-estado','#7b2a8c',15)}${chip(140,72,'independientes','#7b2a8c',14)}${chip(140,104,'cada una con su gobierno','#7b2a8c',12)}`,
+  c:'Los <b>fenicios</b> vivían en una estrecha franja de costa (el actual <b>Líbano</b>), con montañas detrás. No formaban un país: eran <b>ciudades-estado independientes</b>, como <b>Tiro, Sidón y Biblos</b>.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,28,'Poder real limitado','#7b2a8c',15)}
+  <g>${person(110,120,'#7b2a8c',1.5)}${crown(110,113)}${T(110,190,'el rey',{size:15,w:800,c:'#7b2a8c'})}</g>
+  <g>${elder(262,124)}${elder(300,120)}${elder(338,124)}${T(295,190,'consejo de ancianos',{size:14,w:800,c:'#6b5b45'})}</g>
+  ${arrow(240,140,145,140,ORG)}${chip(193,118,'lo controla',ORG,13)}
+  ${T(200,226,'(los mercaderes más ricos)',{size:12,c:MUT,it:1})}`,
+  c:'Cada ciudad tenía un <b>rey</b>, pero no mandaba solo: su poder estaba <b>limitado por un consejo de ancianos</b>, formado por los comerciantes más ricos.'},
+ {clear:1,d:`<rect width="400" height="250" fill="${SEA}"/>${wave(200)}${wave(228)}<path d="M0 0 H60 C70 60 50 120 66 250 H0Z" fill="${LAND}" stroke="#b49a62" stroke-width="2"/>${T(30,30,'Península',{size:11,c:MUT,it:1})}${T(30,43,'Ibérica',{size:11,c:MUT,it:1})}<path d="M400 0 H350 C340 80 360 160 345 250 H400Z" fill="${LAND}" stroke="#b49a62" stroke-width="2"/>${T(374,30,'Fenicia',{size:12,c:'#7b2a8c',w:700})}
+  <path class="dr" d="M340 150 C260 110 150 190 75 140" stroke="#7b2a8c" stroke-width="2.4" stroke-dasharray="6 5" fill="none"/>
+  <g class="mv" data-dx="230">${ship(110,160)}</g>
+  ${tag(200,48,'Navegación','#7b2a8c',16)}${tag(200,86,'y comercio',ORG,16)}`,
+  c:'Como su tierra era pequeña y montañosa, se lanzaron al mar. Fueron grandes <b>navegantes y comerciantes</b>: recorrieron todo el Mediterráneo y llegaron hasta la <b>Península Ibérica</b>.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/><line x1="200" y1="10" x2="200" y2="240" stroke="${MUT}" stroke-width="2" stroke-dasharray="5 5"/>
+  ${tag(100,26,'FACTORÍA','#7b2a8c',15)}
+  <rect x="0" y="150" width="200" height="100" fill="${SEA}"/>${wave(200)}
+  <path d="M0 150 L200 150 L200 140 L0 140Z" fill="${LAND}"/><g><path d="M70 140 L95 108 L120 140Z" fill="#c9a46a" stroke="#7a5528" stroke-width="1.5"/><rect x="128" y="116" width="34" height="24" fill="#d9bd8a" stroke="#7a5528" stroke-width="1.5"/>${T(145,132,'🏺',{size:13})}</g>
+  <g class="mv" data-dx="-120">${ship(130,182)}</g>
+  ${chip(100,60,'enclave de comercio','#7b2a8c',12)}${chip(100,86,'punto temporal','#7b2a8c',12)}${chip(100,228,'sin intención de poder',ORG,12)}`,
+  c:'Una <b>factoría</b> era un <b>enclave de comercio</b>: un <b>punto temporal de desembarco</b> para comprar y vender con los pueblos de la zona. Llegaban, comerciaban y se iban: <b>sin intención de poder</b>.'},
+ {d:`${tag(300,26,'COLONIA',ORG,15)}
+  <g>${[[245,150],[268,146],[292,150],[316,146],[340,150],[256,124],[282,120],[308,124],[334,120],[270,98],[300,94],[328,98]].map(([x,y])=>house(x,y)).join('')}</g>
+  <path d="M225 160 L225 80 L370 80 L370 160" stroke="#7a5528" stroke-width="4" fill="none"/>
+  ${chip(300,58,'traslado permanente',ORG,12)}${chip(245,196,'Cartago','#7b2a8c',12)}${chip(335,196,'Gadir (Cádiz)','#7b2a8c',12)}${T(300,232,'se quedan a vivir',{size:13,it:1,c:MUT})}`,
+  c:'Una <b>colonia</b> era distinta: los fenicios <b>se trasladaban para quedarse</b> de forma permanente y fundaban una ciudad nueva. Las más famosas: <b>Cartago</b> (en el norte de África) y <b>Gadir</b> (la actual <b>Cádiz</b>).'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,24,'Comercio','#7b2a8c',16)}
+  ${T(95,62,'buscaban metales',{size:13,w:700,c:MUT})}
+  ${nugget(60,96,'#f2c230','oro')}${nugget(130,96,'#d7dbe0','plata')}${nugget(60,160,'#c87533','cobre')}${nugget(130,160,'#9aa0a6','estaño')}
+  <path class="dr" d="M175 100 C200 80 220 80 245 100" stroke="${ORG}" stroke-width="2.4" fill="none" marker-end="url(#are0611a)"/><path class="dr" d="M245 150 C220 170 200 170 175 150" stroke="${ORG}" stroke-width="2.4" fill="none" marker-end="url(#are0611a)"/>
+  ${T(305,62,'vendían',{size:13,w:700,c:MUT})}
+  <g><circle cx="275" cy="92" r="12" fill="none" stroke="#d9a400" stroke-width="3"/><circle cx="275" cy="80" r="4" fill="#c0127e"/>${T(275,124,'joyas',{size:12,w:700})}</g>
+  <g><path d="M325 80 L345 80 L340 106 L330 106Z" fill="#9fd6e8" fill-opacity=".7" stroke="#3d8aa6" stroke-width="1.5"/>${T(335,124,'vidrio',{size:12,w:700})}</g>
+  <g><rect x="258" y="144" width="34" height="22" rx="3" fill="#7b2a8c"/><path d="M258 152 h34 M258 158 h34" stroke="#b56cc4"/>${T(275,186,'púrpura',{size:12,w:700,c:'#7b2a8c'})}</g>
+  <g><ellipse cx="335" cy="156" rx="17" ry="11" fill="#f1ece0" stroke="#999"/>${T(335,186,'lana',{size:12,w:700})}</g>
+  ${T(200,226,'el tinte púrpura salía de un caracol de mar: el murex',{size:12,c:MUT,it:1})}`,
+  c:'Comerciaban con <b>oro, plata, cobre y estaño</b>, que buscaban por todo el Mediterráneo, y con productos de lujo: <b>joyas, vidrio, lana</b> y sobre todo <b>tejidos teñidos de púrpura</b>, el color de los reyes.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,24,'El alfabeto fenicio','#7b2a8c',16)}
+  <g stroke="#7b2a8c" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path transform="translate(80 90)" d="M-10 -12 L10 0 L-10 10 M-2 -16 L6 16"/>
+   <path transform="translate(140 90)" d="M8 -14 L-6 -14 L-10 -4 L8 -2 M8 -14 L8 16"/>
+   <path transform="translate(200 90)" d="M-8 14 L4 -14 L10 -2"/>
+  </g>
+  ${T(80,124,'«alef»',{size:12,c:MUT})}${T(140,124,'«bet»',{size:12,c:MUT})}${T(200,124,'«guímel»',{size:12,c:MUT})}
+  ${chip(320,92,'22 signos','#7b2a8c',15)}${chip(320,122,'abstractos','#7b2a8c',13)}
+  ${arrow(140,140,140,168,ORG)}
+  ${T(80,198,'A',{size:30,w:800,ff:'serif'})}${T(140,198,'B',{size:30,w:800,ff:'serif'})}${T(200,198,'C',{size:30,w:800,ff:'serif'})}
+  ${chip(300,192,'base de casi todos',ORG,13)}${chip(300,222,'los alfabetos actuales',ORG,13)}`,
+  c:'Su gran invento fue el <b>alfabeto</b>: solo <b>22 signos abstractos</b>, cada uno para un sonido (no dibujos de cosas, como los jeroglíficos). Era fácil y rápido. De él vienen el griego y el latino: es la base de <b>casi todos los alfabetos actuales</b>.'}
+],quiz:[
+ {q:'¿Cómo se organizaban los fenicios?',a:'En ciudades-estado independientes',o:['En un gran imperio con un faraón','En castros sin orden','En tribus nómadas'],e:'Tiro, Sidón y Biblos tenían cada una su gobierno.'},
+ {q:'¿Qué diferencia una factoría de una colonia?',a:'En la factoría solo comerciaban un tiempo; en la colonia se quedaban a vivir',o:['La factoría era más grande que la colonia','La colonia era solo un almacén','No hay diferencia'],e:'Factoría = punto temporal. Colonia = traslado permanente.'},
+ {q:'¿Cuántos signos tenía el alfabeto fenicio?',a:'22',o:['5','100','Más de 700'],e:'22 signos abstractos.'}
+]},
+
+{id:'heb',t:'Los hebreos y un solo dios',steps:[
+ {clear:1,d:`<rect width="400" height="250" fill="#f3e6c6"/><path d="M0 0 H70 C60 80 80 160 60 250 H0Z" fill="${SEA}"/>${T(30,130,'mar',{size:11,c:'#3d7ab0',it:1})}
+  <ellipse cx="120" cy="130" rx="46" ry="60" fill="#cfe3a9" stroke="#1e5fb4" stroke-width="2" stroke-dasharray="5 4"/>${tag(120,80,'Canaán','#1e5fb4',15)}
+  <path class="dr" d="M370 200 C300 210 230 160 170 135" stroke="#1e5fb4" stroke-width="2.4" stroke-dasharray="6 5" fill="none" marker-end="url(#ar1e5fb4)"/>
+  <g class="mv" data-dx="160" data-dy="40">${person(200,120,'#1e5fb4',1.2)}<line x1="210" y1="130" x2="214" y2="160" stroke="#6e5530" stroke-width="3"/>${sheep(240,160,.9)}${sheep(262,150,.8)}${T(200,104,'Abraham',{size:15,w:800,c:'#1e5fb4'})}</g>
+  ${chip(310,40,'pastores',ORG,15)}`,
+  c:'Al principio los <b>hebreos</b> eran <b>pastores</b> que iban de un sitio a otro con sus rebaños. Según la Biblia, <b>Abraham</b> los guio hasta la tierra de <b>Canaán</b>, junto al Mediterráneo.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#f6e4b6"/><path d="M0 200 Q200 190 400 205 V250 H0Z" fill="#e3c88a"/>
+  <path d="M230 200 L300 90 L370 200Z" fill="#e0c27a" stroke="#a07c32" stroke-width="2"/><path d="M150 200 L195 130 L240 200Z" fill="#d9b86a" stroke="#a07c32" stroke-width="2"/>
+  ${tag(200,30,'Esclavos en Egipto','#1e5fb4',15)}
+  <g class="mv" data-dx="-60">${person(70,170,'#1e5fb4')}<rect x="60" y="160" width="20" height="10" fill="#b5532c"/>${person(105,170,'#1e5fb4')}<rect x="95" y="160" width="20" height="10" fill="#b5532c"/></g>
+  ${chip(90,90,'trabajos forzados',ORG,13)}`,
+  c:'Más tarde, una parte de los hebreos acabó en <b>Egipto</b>, donde fueron <b>esclavos</b>. Según la Biblia, <b>Moisés</b> los sacó de allí y volvieron a Canaán.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#eef3f7"/><path d="M0 210 H400 V250 H0Z" fill="#d8c79c"/>
+  <g><rect x="150" y="120" width="100" height="90" fill="#f1e3bf" stroke="#8a6b3c" stroke-width="2"/><path d="M140 120 L200 78 L260 120Z" fill="#d9a400" stroke="#8a6500" stroke-width="2"/>${[165,185,215,235].map(x=>`<rect x="${x-4}" y="135" width="8" height="75" fill="#e3d2a6" stroke="#8a6b3c"/>`).join('')}<rect x="190" y="170" width="20" height="40" fill="#7a5528"/></g>
+  ${chip(200,58,'Templo de Jerusalén',ORG,14)}
+  <g>${person(70,150,'#1e5fb4',1.4)}${crown(70,143)}${T(70,236,'David',{size:15,w:800,c:'#1e5fb4'})}</g>
+  <g>${person(330,150,'#1e5fb4',1.4)}${crown(330,143)}${T(330,236,'Salomón',{size:15,w:800,c:'#1e5fb4'})}${arrow(312,170,262,170,ORG)}</g>`,
+  c:'Los hebreos formaron un reino. Sus reyes más famosos fueron <b>David</b> y su hijo <b>Salomón</b>, que construyó el gran <b>Templo de Jerusalén</b>.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,30,'Muere Salomón…','#1e5fb4',15)}
+  <g class="mv" data-dx="55"><path d="M60 80 H196 L186 120 L196 160 L186 200 H60Z" fill="#cfe0f5" stroke="#1e5fb4" stroke-width="2.5"/>${T(125,135,'ISRAEL',{size:20,w:800,c:'#1e5fb4'})}${T(125,158,'(norte)',{size:13,c:MUT})}</g>
+  <g class="mv" data-dx="-55"><path d="M340 80 H204 L194 120 L204 160 L194 200 H340Z" fill="#f5e3c4" stroke="#b8860b" stroke-width="2.5"/>${T(270,135,'JUDÁ',{size:20,w:800,c:'#8a6500'})}${T(270,158,'(sur, Jerusalén)',{size:13,c:MUT})}</g>
+  ${chip(200,228,'el reino se divide en dos',ORG,14)}`,
+  c:'Cuando <b>murió Salomón</b>, el reino se <b>dividió en dos</b>: <b>Israel</b>, al norte, y <b>Judá</b>, al sur, con capital en Jerusalén.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>
+  <g class="fo">${[60,110,160].map(x=>`<g><rect x="${x-10}" y="60" width="20" height="34" rx="6" fill="#c9a46a" stroke="#7a5528"/><circle cx="${x}" cy="55" r="8" fill="#c9a46a" stroke="#7a5528"/></g>`).join('')}${T(110,120,'muchos dioses',{size:13,c:MUT})}</g>
+  <g class="dr"><path d="M45 45 L175 105 M175 45 L45 105" stroke="#b0302a" stroke-width="4" fill="none"/></g>
+  <g><circle cx="290" cy="76" r="34" fill="#fff6c9" stroke="#d9a400" stroke-width="2"/>${[0,45,90,135,180,225,270,315].map(a=>`<line x1="${290+40*Math.cos(a*Math.PI/180)}" y1="${76+40*Math.sin(a*Math.PI/180)}" x2="${290+50*Math.cos(a*Math.PI/180)}" y2="${76+50*Math.sin(a*Math.PI/180)}" stroke="#d9a400" stroke-width="3"/>`).join('')}${T(290,82,'Yahvé',{size:17,w:800,c:'#1e5fb4'})}</g>
+  ${tag(290,146,'Monoteísmo','#1e5fb4',15)}${T(290,170,'un solo dios',{size:13,c:MUT})}
+  ${arrow(245,182,165,200,ORG)}${scroll(110,205,80,40)}${T(110,211,'Torá',{size:16,w:800,c:'#1e5fb4'})}`,
+  c:'Su gran aportación fue el <b>monoteísmo</b>: creían en <b>un solo dios, Yahvé</b>, cuando casi todos los pueblos adoraban a muchos. Sus leyes y su historia están en la <b>Torá</b>, su libro sagrado.'}
+],quiz:[
+ {q:'¿A qué tierra llevó Abraham a los hebreos?',a:'A Canaán',o:['A Egipto','A Mesopotamia','A Tartessos'],e:'Canaán, junto al Mediterráneo.'},
+ {q:'¿Qué pasó a la muerte de Salomón?',a:'El reino se dividió en Israel y Judá',o:['Los hebreos se fueron a Egipto','Se construyó el Templo','Llegó Abraham'],e:'Israel al norte y Judá al sur.'},
+ {q:'¿Qué es el monoteísmo?',a:'Creer en un solo dios',o:['Creer en muchos dioses','Adorar al rey','Un tipo de alfabeto'],e:'Los hebreos creían solo en Yahvé.'}
+]},
+
+{id:'tar',t:'Tartessos, el reino del metal',steps:[
+ {clear:1,d:`${IBMAP}<path class="dr" d="M245 160 C210 175 170 175 125 200" stroke="#3d7ab0" stroke-width="2.5" fill="none"/>${T(220,152,'Guadalquivir',{size:11,c:'#3d7ab0',it:1})}
+  <path d="${ZTAR}" fill="#b8860b" fill-opacity=".45" stroke="#b8860b" stroke-width="2.5"/>${tag(130,240,'Tartessos','#b8860b',15)}
+  ${chip(200,70,'próspero',ORG,14)}${chip(200,102,'y enigmático',ORG,14)}${chip(150,134,'Protohistoria','#b8860b',13)}`,
+  c:'<b>Tartessos</b> estaba en el suroeste de la Península, junto al <b>Guadalquivir</b>. Fue el pueblo más <b>próspero y enigmático</b> de la <b>Protohistoria</b>: lo conocemos por lo que escribieron otros pueblos (como los griegos) y por la arqueología.'},
+ {d:`<g><rect x="290" y="86" width="104" height="114" rx="10" fill="#fff" fill-opacity=".9" stroke="#b8860b"/>${person(342,108,'#8a8f96',1.4)}${crown(342,101,'#c9cdd2')}${T(342,170,'Argantonio',{size:14,w:800,c:'#8a6500'})}${T(342,188,'¿rey o dinastía?',{size:12,c:ORG,w:700})}</g>`,
+  c:'Su rey más famoso fue <b>Argantonio</b>, el «hombre de plata». Los griegos decían que vivió 120 años, así que quizá no fue un solo rey sino una <b>dinastía</b> (varios reyes de la misma familia).'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,26,'Muy rico en…','#b8860b',15)}
+  <g>${wheat(70,100,1.1)}${T(70,124,'agricultura',{size:13,w:700})}</g><g>${cow(200,98,1.1)}${T(200,124,'ganadería',{size:13,w:700})}</g>
+  <g><path d="M310 60 L345 95 M330 58 Q345 52 352 70" stroke="#5a3d1b" stroke-width="5" fill="none"/><path d="M305 98 Q330 70 360 98Z" fill="#8a7a5c"/>${T(330,124,'minería',{size:13,w:700})}</g>
+  ${arrow(330,132,330,150,ORG)}
+  ${nugget(80,180,'#f2c230','oro')}${nugget(160,180,'#d7dbe0','plata')}${nugget(240,180,'#c87533','cobre')}${nugget(320,180,'#6b6b6b','hierro')}`,
+  c:'Era riquísimo en <b>agricultura, ganadería y minería</b>. De las minas de Sierra Morena y Huelva sacaba <b>oro, plata, cobre y hierro</b>: por eso atrajo a los fenicios y a los griegos.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,30,'Un mito','#b8860b',15)}
+  <g><rect x="130" y="60" width="140" height="120" rx="6" fill="#f2c230" stroke="#8a6500" stroke-width="2.5"/>${[0,1,2,3,4,5].map(k=>`<line x1="148" y1="${82+k*16}" x2="252" y2="${82+k*16}" stroke="#8a6500" stroke-width="2"/>`).join('')}</g>
+  ${chip(200,206,'leyes escritas',ORG,15)}${T(200,236,'¿leyenda o realidad?',{size:13,c:MUT,it:1})}`,
+  c:'Los autores antiguos contaban un <b>mito</b>: que Tartessos tenía <b>leyes escritas</b> desde hacía miles de años. Nadie las ha encontrado, y eso aumenta su misterio.'},
+ {clear:1,d:`${IBMAP}<path class="fo" d="${ZTAR}" fill="#b8860b" fill-opacity=".55" stroke="#b8860b" stroke-width="2.5"/>${T(135,198,'?',{size:44,w:800,c:'#8a6500'})}${chip(250,80,'desaparición misteriosa',ORG,14)}${chip(250,112,'hacia el 500 a. C.','#b8860b',13)}`,
+  c:'Hacia el <b>500 a. C.</b> Tartessos <b>desapareció de forma misteriosa</b>. No sabemos bien por qué: quizá por los cartagineses, quizá por problemas internos.'}
+],quiz:[
+ {q:'¿Quién fue Argantonio?',a:'El rey (o dinastía) de Tartessos',o:['Un rey hebreo','Un dios celta','Un navegante fenicio'],e:'El «hombre de plata».'},
+ {q:'¿De qué metales era rica Tartessos?',a:'Oro, plata, cobre y hierro',o:['Solo de bronce','De ninguno: vivía de la pesca','Solo de estaño'],e:'Por eso llegaron los fenicios.'},
+ {q:'¿Cómo terminó Tartessos?',a:'Desapareció de forma misteriosa',o:['La conquistó Salomón','Se convirtió en Cartago','Sigue existiendo hoy'],e:'Hacia el 500 a. C., sin saber bien por qué.'}
+]},
+
+{id:'cel',t:'Los celtas y sus castros',steps:[
+ {clear:1,d:`${IBMAP}<polygon points="${ZCEL}" fill="#17734a" fill-opacity=".3" stroke="#17734a" stroke-width="2.5"/>
+  ${arrow(150,0,145,45,'#17734a')}${arrow(240,0,200,45,'#17734a')}${chip(150,14,'desde Centroeuropa','#17734a',12)}
+  ${tag(130,100,'Celtas','#17734a',16)}${chip(130,132,'indoeuropeos',ORG,14)}`,
+  c:'Los <b>celtas</b> eran pueblos <b>indoeuropeos</b>: llegaron desde <b>Centroeuropa</b> cruzando los Pirineos y se asentaron en el <b>norte, el centro y el oeste</b> de la Península.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#e9f1e4"/><path d="M0 250 L0 190 Q200 70 400 190 V250Z" fill="#a7c68a"/>
+  <ellipse cx="200" cy="150" rx="140" ry="52" fill="none" stroke="#7a6a52" stroke-width="7"/>
+  ${[[120,150],[155,128],[200,160],[240,132],[275,158],[175,180],[230,182],[110,172],[290,140],[150,160]].map(([x,y])=>roundHut(x,y)).join('')}
+  ${tag(200,30,'Castro','#17734a',16)}${chip(90,72,'casas redondas',ORG,13)}${chip(310,72,'sin orden',ORG,13)}${chip(200,230,'en lo alto, con muralla','#17734a',12)}`,
+  c:'Vivían en <b>castros</b>: poblados en lo alto de colinas, rodeados de una muralla, con <b>casas redondas colocadas sin orden</b>, sin calles rectas.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,26,'¿De qué vivían?','#17734a',15)}
+  <g>${cow(70,110,1.2)}${sheep(120,110,1)}${T(95,138,'ganadería',{size:14,w:700})}</g>
+  <g>${wheat(200,110,1.1)}${wheat(220,110,1)}${T(210,138,'cereales',{size:14,w:700})}</g>
+  <g><path d="M320 112 L320 50" stroke="#555" stroke-width="6"/><path d="M308 112 H332" stroke="#7a5528" stroke-width="5"/><path d="M320 50 L316 42 L324 42Z" fill="#555"/>${T(320,138,'armas',{size:14,w:700})}</g>
+  <rect x="120" y="165" width="160" height="52" rx="4" fill="none" stroke="#333" stroke-width="2.5" stroke-dasharray="6 4"/>${T(200,200,'HIERRO',{size:26,w:800,c:'#444'})}`,
+  c:'Se dedicaban sobre todo a la <b>ganadería</b> y a los <b>cereales</b>. Eran buenos guerreros y sabían trabajar el <b>hierro</b>, con el que hacían armas y herramientas.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${scroll(200,110,140,80)}<g class="dr"><path d="M120 60 L280 160 M280 60 L120 160" stroke="#b0302a" stroke-width="6" fill="none"/></g>
+  ${tag(200,200,'Sin escritura propia','#17734a',15)}${T(200,232,'los conocemos por griegos, romanos y arqueología',{size:12,c:MUT,it:1})}`,
+  c:'Los celtas <b>no tenían escritura propia</b>. Lo que sabemos de ellos viene de lo que escribieron los griegos y los romanos y de los restos que encuentran los arqueólogos.'},
+ {clear:1,d:`${IBMAP}<polygon points="${ZCEL}" fill="#17734a" fill-opacity=".3" stroke="#17734a" stroke-width="2"/><polygon points="${ZIBE}" fill="#b0302a" fill-opacity=".3" stroke="#b0302a" stroke-width="2"/>
+  <ellipse class="mv" data-dy="-30" cx="220" cy="110" rx="38" ry="30" fill="#7b2a8c" fill-opacity=".45" stroke="#7b2a8c" stroke-width="2.5"/>
+  ${chip(110,95,'celtas','#17734a',14)}${chip(275,175,'iberos','#b0302a',14)}${tag(220,110,'celtíberos','#7b2a8c',13)}`,
+  c:'En el centro de la Península, celtas e iberos se mezclaron: así surgieron los <b>celtíberos</b>.'}
+],quiz:[
+ {q:'¿Cómo eran los castros?',a:'Poblados en alto, con muralla y casas redondas sin orden',o:['Ciudades con calles ordenadas','Barcos fenicios','Templos hebreos'],e:'Los poblados ordenados son los oppida de los iberos.'},
+ {q:'¿Qué metal trabajaban los celtas?',a:'El hierro',o:['El oro solamente','Ninguno','El aluminio'],e:'Con él hacían armas y herramientas.'},
+ {q:'¿Quiénes eran los celtíberos?',a:'La mezcla de celtas e iberos',o:['Los fenicios de Cádiz','Los reyes de Tartessos','Los hebreos de Judá'],e:'Vivían en el centro de la Península.'}
+]},
+
+{id:'ibe',t:'Los iberos y la Dama de Elche',steps:[
+ {clear:1,d:`${IBMAP}<polygon points="${ZIBE}" fill="#b0302a" fill-opacity=".3" stroke="#b0302a" stroke-width="2.5"/>${tag(250,120,'Iberos','#b0302a',16)}${chip(160,70,'sur y costa mediterránea',ORG,13)}`,
+  c:'Los <b>iberos</b> vivían en el <b>sur</b> y en toda la <b>costa mediterránea</b> de la Península. Estaban en contacto con fenicios y griegos, y aprendieron mucho de ellos.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/><line x1="140" y1="30" x2="140" y2="240" stroke="${MUT}" stroke-dasharray="5 5" stroke-width="2"/>
+  <g opacity=".75"><ellipse cx="70" cy="140" rx="58" ry="30" fill="none" stroke="#7a6a52" stroke-width="4"/>${[[45,140],[75,125],[95,150],[60,160]].map(([x,y])=>roundHut(x,y,7)).join('')}${T(70,196,'castro (celtas)',{size:12,w:700,c:'#17734a'})}${T(70,212,'sin orden',{size:12,c:MUT})}</g>
+  <path d="M160 70 H390 V200 H160Z" fill="#ead7b0" stroke="#7a5528" stroke-width="5"/>
+  ${[0,1,2].map(r=>[0,1,2,3,4].map(c=>flatHouse(185+c*44,100+r*40)).join('')).join('')}
+  <path d="M160 120 H390 M160 160 H390" stroke="#cdb489" stroke-width="5"/>
+  ${tag(275,40,'Oppidum (plural: oppida)','#b0302a',14)}${chip(275,226,'calles ordenadas',ORG,14)}`,
+  c:'Vivían en <b>oppida</b>: ciudades amuralladas en lo alto, con casas rectangulares y <b>calles ordenadas</b>. Justo <b>lo contrario de un castro</b>, donde las casas están sin orden.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,26,'Cultivaban','#b0302a',15)}
+  <g>${wheat(80,150,1.5)}${T(80,180,'trigo',{size:16,w:800})}</g><g>${grape(200,150,1.5)}${T(200,180,'vid',{size:16,w:800})}</g><g>${olive(320,150,1.5)}${T(320,180,'olivo',{size:16,w:800})}</g>
+  ${chip(200,222,'la tríada mediterránea',ORG,13)}`,
+  c:'Eran agricultores: cultivaban <b>trigo, vid y olivo</b>, los tres cultivos típicos del Mediterráneo (de ahí salen el pan, el vino y el aceite).'},
+ {clear:1,d:`<rect width="400" height="250" fill="#fbf3e3"/>${tag(200,26,'Comercio y monedas','#b0302a',15)}
+  <g class="mv" data-dy="-60">${coin(150,110,22)}${coin(200,100,22)}${coin(250,110,22)}</g>
+  ${person(80,120,'#b0302a',1.3)}${person(320,120,'#7b2a8c',1.3)}${T(80,190,'ibero',{size:13,w:700,c:'#b0302a'})}${T(320,190,'fenicio / griego',{size:13,w:700,c:'#7b2a8c'})}
+  ${chip(200,226,'acuñaban sus propias monedas',ORG,13)}`,
+  c:'Practicaban mucho el <b>comercio</b> con fenicios y griegos, y llegaron a fabricar sus propias <b>monedas</b>. Además, a diferencia de los celtas, sí tenían escritura.'},
+ {clear:1,d:`<rect width="400" height="250" fill="#f1e8db"/>
+  <g transform="translate(200 0)"><path d="M-70 250 Q-70 175 0 165 Q70 175 70 250Z" fill="#d8b48a" stroke="#8a6b3c" stroke-width="2"/>
+   ${[0,1,2].map(k=>`<path d="M${-40+k*4} ${190+k*14} Q0 ${215+k*14} ${40-k*4} ${190+k*14}" stroke="#b5532c" stroke-width="4" fill="none"/>`).join('')}
+   <rect x="-12" y="140" width="24" height="28" fill="#e0c29a"/><ellipse cx="0" cy="118" rx="26" ry="32" fill="#e7cba3" stroke="#8a6b3c" stroke-width="2"/>
+   <path d="M-30 100 Q0 62 30 100 L26 86 Q0 70 -26 86Z" fill="#c9a46a" stroke="#8a6b3c"/>
+   <circle cx="-44" cy="118" r="20" fill="#d1ae80" stroke="#8a6b3c" stroke-width="2"/><circle cx="-44" cy="118" r="11" fill="none" stroke="#8a6b3c" stroke-width="2"/>
+   <circle cx="44" cy="118" r="20" fill="#d1ae80" stroke="#8a6b3c" stroke-width="2"/><circle cx="44" cy="118" r="11" fill="none" stroke="#8a6b3c" stroke-width="2"/></g>
+  ${tag(200,30,'Dama de Elche','#b0302a',16)}${chip(80,120,'escultura ibera',ORG,13)}${chip(325,120,'adornos y joyas',ORG,13)}${T(320,236,'hoy en Madrid',{size:12,c:MUT,it:1})}`,
+  c:'Su obra más famosa es la <b>Dama de Elche</b>, un busto de piedra de una mujer con grandes adornos a los lados de la cabeza y muchos collares. Hoy está en el Museo Arqueológico Nacional, en Madrid.'}
+],quiz:[
+ {q:'¿Qué es un oppidum?',a:'Una ciudad ibera amurallada con calles ordenadas',o:['Un poblado celta sin orden','Una colonia fenicia','Un libro sagrado hebreo'],e:'Es lo contrario de un castro.'},
+ {q:'¿Qué cultivaban los iberos?',a:'Trigo, vid y olivo',o:['Arroz y maíz','Patatas y tomates','Solo cebada'],e:'La tríada mediterránea.'},
+ {q:'¿Cuál es la escultura ibera más famosa?',a:'La Dama de Elche',o:['El Templo de Jerusalén','Argantonio','La Torá'],e:'Está en Madrid.'}
+]}
+];
+
+let cur=0,step=0,tl=null;
+const done=new Set(store.get('done',[]));
+function buildPick(){
+  $('#fpick').innerHTML=SCENES.map((s,i)=>`<button data-i="${i}" ${i===cur?'aria-current="true"':''} class="${done.has(s.id)?'done':''}" style="border-color:${P[s.id].c}">${P[s.id].n}</button>`).join('');
+  $('#fpick').querySelectorAll('button').forEach(b=>b.onclick=()=>loadScene(+b.dataset.i));
+}
+function loadScene(i){cur=i;step=0;$('#fquiz').hidden=true;buildPick();render(true);window.scrollTo({top:$('#tab-fichas').offsetTop-60,behavior:'smooth'})}
+function render(anim){
+  const S=SCENES[cur];
+  $('#kick').textContent=`Ficha ${cur+1} de ${SCENES.length} · ${P[S.id].n}`;
+  $('#kick').style.color=P[S.id].c;$('#ttl').textContent=S.t;
+  let j=step;while(j>0&&!S.steps[j].clear)j--;
+  let svg=DEFS;for(let k=j;k<=step;k++)svg+=`<g id="stp${k}">${S.steps[k].d}</g>`;
+  if(tl)tl.kill();
+  $('#stage').innerHTML=svg;
+  const cap=$('#cap');cap.innerHTML=S.steps[step].c;
+  $('#dots').innerHTML=S.steps.map((_,k)=>`<i class="${k===step?'on':k<step?'past':''}"></i>`).join('');
+  $('#bBack').disabled=step===0;
+  $('#bNext').textContent=step===S.steps.length-1?'✓ Comprobar':'Siguiente →';
+  if(anim&&HAS)animate($('#stp'+step));
+}
+function animate(g){
+  tl=gsap.timeline();
+  const kids=[...g.children].filter(c=>c.tagName!=='rect'||c.getAttribute('width')!=='400');
+  kids.forEach(el=>{
+    if(el.classList.contains('dr')){const p=el.tagName==='path'?[el]:[...el.querySelectorAll('path')];p.forEach(pp=>{if(pp.getAttribute('stroke-dasharray')){tl.from(pp,{opacity:0,duration:.6},'<.15');return}const L=pp.getTotalLength();gsap.set(pp,{strokeDasharray:L,strokeDashoffset:L});tl.to(pp,{strokeDashoffset:0,duration:.8,ease:'power1.inOut'},'<.15')});}
+    else if(el.classList.contains('mv')){tl.from(el,{x:+(el.dataset.dx||0),y:+(el.dataset.dy||0),opacity:0,duration:1.1,ease:'power2.out'},'<.2')}
+    else if(el.classList.contains('fo')){tl.to(el,{opacity:.15,duration:1.2,delay:.6},'<')}
+    else tl.from(el,{opacity:0,y:8,scale:.96,transformOrigin:'50% 50%',duration:.4,ease:'back.out(1.6)'},'<.18');
+  });
+}
+$('#bNext').onclick=()=>{const S=SCENES[cur];if(step<S.steps.length-1){step++;render(true)}else showFQuiz()};
+$('#bBack').onclick=()=>{if(step>0){step--;render(false)}};
+$('#bAgain').onclick=()=>render(true);
+function showFQuiz(){
+  const S=SCENES[cur],q=$('#fquiz');q.hidden=false;
+  runQuiz(q,S.quiz,'¿Lo has entendido?',(ok,n)=>{
+    if(ok===n){done.add(S.id);store.set('done',[...done]);buildPick()}
+    const nx=document.createElement('div');nx.className='ctrl';
+    nx.innerHTML=`<span class="stamp">${ok}/${n}${ok===n?' ¡Genial!':''}</span><span class="sp"></span>${cur<SCENES.length-1?`<button class="primary">Siguiente ficha →</button>`:`<button class="primary">🎮 A jugar</button>`}`;
+    nx.querySelector('button').onclick=()=>cur<SCENES.length-1?loadScene(cur+1):openTab('juegos');
+    q.appendChild(nx);
+  });
+  q.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function runQuiz(box,qs,title,onEnd){
+  let ok=0,ans=0;
+  box.innerHTML=`<h3>${title}</h3>`;
+  qs.forEach(Q=>{
+    const d=document.createElement('div');d.className='qq';
+    const opts=shuffle([Q.a,...Q.o]);
+    d.innerHTML=`<p class="q">${Q.q}</p><div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div><p class="exp" hidden></p>`;
+    d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const good=b.textContent===Q.a;if(good)ok++;ans++;
+      d.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.textContent===Q.a)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      const e=d.querySelector('.exp');e.hidden=false;e.className='exp '+(good?'b':'m');e.innerHTML=(good?'✓ ¡Bien! ':'✗ Era: <b>'+Q.a+'</b>. ')+(Q.e||'');
+      if(ans===qs.length)onEnd(ok,qs.length);
+    });
+    box.appendChild(d);
+  });
+}
+
+/* ============ JUEGOS ============ */
+const CARDS=[
+ ['Tiro, Sidón y Biblos','fen'],['Factorías comerciales','fen'],['Colonias: Cartago y Gadir','fen'],['Alfabeto de 22 signos','fen'],['Tejidos de púrpura','fen'],['Un consejo de ancianos limita al rey','fen'],['Grandes navegantes','fen'],
+ ['Abraham','heb'],['Tierra de Canaán','heb'],['Esclavos en Egipto','heb'],['Reyes David y Salomón','heb'],['Templo de Jerusalén','heb'],['Reinos de Israel y Judá','heb'],['Un solo dios: Yahvé','heb'],['La Torá','heb'],
+ ['Argantonio','tar'],['Desaparición misteriosa','tar'],['Minas de oro, plata, cobre y hierro','tar'],['El mito de las leyes escritas','tar'],['Próspero y enigmático','tar'],
+ ['Indoeuropeos','cel'],['Castros con casas sin orden','cel'],['Ganadería y cereales','cel'],['Trabajaban el hierro','cel'],['Sin escritura propia','cel'],
+ ['Oppida con calles ordenadas','ibe'],['Dama de Elche','ibe'],['Trigo, vid y olivo','ibe'],['Fabricaban monedas','ibe'],['Sur y costa mediterránea','ibe']
+];
+const BIN2=[
+ {t:'¿Factoría o colonia?',a:['Factoría','#7b2a8c'],b:['Colonia',ORG],it:[['Punto temporal de desembarco','a'],['Se trasladan para quedarse','b'],['Cartago','b'],['Gadir (Cádiz)','b'],['Sin intención de poder','a'],['Solo un enclave para comerciar','a'],['Ciudad nueva y permanente','b'],['Llegan, venden y se van','a']]},
+ {t:'¿Castro u oppidum?',a:['Castro','#17734a'],b:['Oppidum','#b0302a'],it:[['Casas redondas sin orden','a'],['Calles ordenadas','b'],['De los celtas','a'],['De los iberos','b'],['Casas rectangulares','b'],['Norte y oeste de la Península','a'],['Sur y costa mediterránea','b']]}
+];
+const ORDER=['Los hebreos son pastores','Abraham los lleva a Canaán','Son esclavos en Egipto','Reina David','Salomón construye el Templo de Jerusalén','Muere Salomón y el reino se divide en Israel y Judá'];
+const SPOTS=[
+ ['fen','Fenicia (Tiro, Sidón, Biblos)',372,108],['heb','Canaán, tierra de los hebreos',364,138],['egy','Egipto, donde fueron esclavos los hebreos',330,185],
+ ['car','Cartago',184,140],['gad','Gadir (Cádiz)',36,128],['tar','Tartessos',58,116],['cel','Zona celta (norte y oeste)',50,76],['ibe','Zona ibera (costa mediterránea)',94,96],['gre','Grecia',262,100]
+];
+const GAMES=[
+ {id:'quien',t:'¿De quién es?',d:'Cada idea, a su pueblo',run:gQuien},
+ {id:'esto',t:'Esto o aquello',d:'Factoría o colonia · castro u oppidum',run:gEsto},
+ {id:'orden',t:'Ordena a los hebreos',d:'De Abraham a Israel y Judá',run:gOrden},
+ {id:'mapa',t:'Mapa: ¿dónde está?',d:'Toca el punto correcto',run:gMapa}
+];
+let GID=0;
+function gMenu(){
+  GID++;
+  const best=store.get('best',{});
+  $('#gbox').innerHTML=`<p class="kicker">Juegos</p><h2 class="t">Elige un juego</h2><div class="games">${GAMES.map(g=>`<button class="gcard" data-g="${g.id}"><b>${g.t}</b>${g.d}${best[g.id]!=null?`<div class="best">Récord: ${best[g.id]}</div>`:''}</button>`).join('')}</div>`;
+  $('#gbox').querySelectorAll('.gcard').forEach(b=>b.onclick=()=>GAMES.find(g=>g.id===b.dataset.g).run());
+}
+function saveBest(id,txt,val){const b=store.get('best',{}),bv=store.get('bestv',{});if(bv[id]==null||val>bv[id]){bv[id]=val;b[id]=txt;store.set('best',b);store.set('bestv',bv)}}
+function endGame(id,ok,n){
+  saveBest(id,`${ok}/${n}`,ok/n);
+  $('#gbox').innerHTML=`<div class="result"><p class="kicker">Fin del juego</p><span class="stamp">${ok}/${n}</span><p>${ok===n?'¡Perfecto! 🏆':ok>=n*.7?'¡Muy bien! Casi lo tienes.':'Repasa las fichas y vuelve a intentarlo.'}</p><div class="ctrl"><button class="ghost" id="gm">← Juegos</button><button class="primary" id="gr">↻ Otra vez</button></div></div>`;
+  $('#gm').onclick=gMenu;$('#gr').onclick=()=>GAMES.find(g=>g.id===id).run();
+}
+function gHead(t,i,n,ok){return`<div class="score"><span>${t}</span><span>${i+1}/${n} · ✓ ${ok}</span></div>`}
+function gQuien(){
+  const my=++GID;
+  const deck=shuffle(CARDS).slice(0,12);let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;
+    if(i===deck.length)return endGame('quien',ok,deck.length);
+    const[txt,k]=deck[i];
+    $('#gbox').innerHTML=`${gHead('¿De quién es?',i,deck.length,ok)}<div class="bigcard">${txt}</div><div class="bins">${Object.entries(P).map(([pk,p])=>`<button class="bin" data-k="${pk}" style="border-left-color:${p.c}">${p.n}</button>`).join('')}</div><p class="fb" id="fb"></p>`;
+    if(HAS)gsap.from('.bigcard',{scale:.8,opacity:0,duration:.3});
+    $('#gbox').querySelectorAll('.bin').forEach(b=>b.onclick=()=>{
+      const good=b.dataset.k===k;if(good)ok++;
+      $('#gbox').querySelectorAll('.bin').forEach(x=>{x.disabled=true;if(x.dataset.k===k)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Correcto!':`✗ Es de los ${P[k].n.toLowerCase()==='tartessos'?'tartesios':P[k].n.toLowerCase()}`;
+      i++;setTimeout(show,good?800:1600);
+    });
+  };show();
+}
+function gEsto(){
+  const my=++GID;
+  const items=shuffle(BIN2.flatMap(B=>B.it.map(([t,s])=>({B,t,s}))));let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;
+    if(i===items.length)return endGame('esto',ok,items.length);
+    const{B,t,s}=items[i];
+    $('#gbox').innerHTML=`${gHead(B.t,i,items.length,ok)}<div class="bigcard">${t}</div><div class="bins"><button class="bin" data-s="a" style="border-left-color:${B.a[1]}">${B.a[0]}</button><button class="bin" data-s="b" style="border-left-color:${B.b[1]}">${B.b[0]}</button></div><p class="fb" id="fb"></p>`;
+    if(HAS)gsap.from('.bigcard',{scale:.8,opacity:0,duration:.3});
+    $('#gbox').querySelectorAll('.bin').forEach(b=>b.onclick=()=>{
+      const good=b.dataset.s===s;if(good)ok++;
+      $('#gbox').querySelectorAll('.bin').forEach(x=>{x.disabled=true;if(x.dataset.s===s)x.classList.add('right')});
+      if(!good)b.classList.add('wrong');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Correcto!':'✗ Es: '+(s==='a'?B.a[0]:B.b[0]);
+      i++;setTimeout(show,good?800:1500);
+    });
+  };show();
+}
+function gOrden(){
+  const my=++GID;
+  let next=0,err=0;const sh=shuffle(ORDER.map((t,k)=>({t,k})));
+  $('#gbox').innerHTML=`<div class="score"><span>Ordena la historia de los hebreos</span><span id="oe">fallos: 0</span></div><p class="hint">Toca los hechos en orden, del más antiguo al más reciente.</p><div class="order">${sh.map(o=>`<button data-k="${o.k}"><span class="n"></span>${o.t}</button>`).join('')}</div><p class="fb" id="fb"></p>`;
+  $('#gbox').querySelectorAll('.order button').forEach(b=>b.onclick=()=>{
+    if(b.classList.contains('placed'))return;
+    if(+b.dataset.k===next){b.classList.add('placed');b.querySelector('.n').textContent=(next+1)+'.';next++;
+      if(next===ORDER.length){const sc=Math.max(0,ORDER.length-err);setTimeout(()=>{if(my===GID)endGame('orden',sc,ORDER.length)},900)}}
+    else{err++;$('#oe').textContent='fallos: '+err;b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),500);$('#fb').className='fb ko';$('#fb').textContent='Ese todavía no. ¿Qué pasó antes?'}
+  });
+}
+function gMapa(){
+  const my=++GID;
+  const qs=shuffle(SPOTS.filter(s=>s[0]!=='gre'));let i=0,ok=0;
+  const show=()=>{
+    if(my!==GID)return;
+    if(i===qs.length)return endGame('mapa',ok,qs.length);
+    const Q=qs[i];
+    $('#gbox').innerHTML=`${gHead('Mapa',i,qs.length,ok)}<div class="bigcard" style="font-size:1.1rem">Toca: ${Q[1]}</div><div class="stage"><svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">${MED()}${SPOTS.map(s=>`<g class="mapdot" data-k="${s[0]}"><circle cx="${s[2]}" cy="${s[3]}" r="16" fill="transparent"/><circle class="v" cx="${s[2]}" cy="${s[3]}" r="7" fill="${ORG}" stroke="#fff" stroke-width="2"/></g>`).join('')}</svg></div><p class="fb" id="fb"></p>`;
+    $('#gbox').querySelectorAll('.mapdot').forEach(g=>g.onclick=()=>{
+      if(g.dataset.lock)return;$('#gbox').querySelectorAll('.mapdot').forEach(x=>x.dataset.lock=1);
+      const good=g.dataset.k===Q[0];if(good)ok++;
+      const r=$('#gbox').querySelector(`.mapdot[data-k="${Q[0]}"] .v`);r.setAttribute('fill','#17734a');r.setAttribute('r','10');
+      if(!good)g.querySelector('.v').setAttribute('fill','#b0302a');
+      $('#fb').className='fb '+(good?'ok':'ko');$('#fb').textContent=good?'✓ ¡Exacto!':'✗ Era el punto verde';
+      i++;setTimeout(show,good?900:1700);
+    });
+  };show();
+}
+
+/* ============ PRUEBA ============ */
+const POOL=[
+ ...SCENES.flatMap(s=>s.quiz),
+ {q:'¿Qué tres ciudades-estado fenicias aparecen en el esquema?',a:'Tiro, Sidón y Biblos',o:['Ur, Uruk y Babilonia','Gadir, Malaka y Sexi','Atenas, Esparta y Corinto'],e:''},
+ {q:'¿Quién limitaba el poder del rey fenicio?',a:'Un consejo de ancianos',o:['El faraón','Los sacerdotes de Yahvé','Argantonio'],e:''},
+ {q:'Cartago y Gadir eran…',a:'Colonias fenicias',o:['Factorías temporales','Castros celtas','Oppida iberos'],e:''},
+ {q:'¿Qué vendían los fenicios?',a:'Joyas, vidrio y tejidos de púrpura',o:['Patatas y maíz','Papel y pólvora','Coches y barcos de vapor'],e:''},
+ {q:'¿Qué construyó Salomón?',a:'El Templo de Jerusalén',o:['Las pirámides','Un castro','La ciudad de Cartago'],e:''},
+ {q:'¿Cómo se llama el dios de los hebreos?',a:'Yahvé',o:['Zeus','Ra','Argantonio'],e:''},
+ {q:'¿Cómo se llama el libro sagrado de las leyes hebreas?',a:'La Torá',o:['La Ilíada','El Código de Hammurabi','El Libro de los Muertos'],e:''},
+ {q:'¿Dónde estaba Tartessos?',a:'En el suroeste de la Península, junto al Guadalquivir',o:['En el norte, junto a los Pirineos','En Canaán','En la costa del Líbano'],e:''},
+ {q:'¿Qué significa que Tartessos sea de la Protohistoria?',a:'Que lo conocemos sobre todo por lo que escribieron otros pueblos',o:['Que es de la Prehistoria más antigua','Que es de la Edad Media','Que inventó la escritura'],e:''},
+ {q:'Los celtas eran pueblos…',a:'Indoeuropeos',o:['Fenicios','Egipcios','Hebreos'],e:''},
+ {q:'¿Qué tenían los iberos que NO tenían los celtas?',a:'Escritura propia y monedas',o:['Castros','Ganado','Casas'],e:''},
+ {q:'¿Dónde vivían los iberos?',a:'En el sur y la costa mediterránea',o:['En el norte y el oeste','En Egipto','En Fenicia'],e:''},
+ {vf:1,q:'Una factoría fenicia era un lugar donde los fenicios se quedaban a vivir para siempre.',a:'Falso',o:['Verdadero'],e:'Eso es una colonia. La factoría era un punto temporal.'},
+ {vf:1,q:'El alfabeto fenicio es la base de casi todos los alfabetos actuales.',a:'Verdadero',o:['Falso'],e:''},
+ {vf:1,q:'Los hebreos fueron esclavos en Egipto.',a:'Verdadero',o:['Falso'],e:''},
+ {vf:1,q:'En los castros celtas las calles estaban muy ordenadas.',a:'Falso',o:['Verdadero'],e:'Las casas estaban sin orden; los ordenados son los oppida.'},
+ {vf:1,q:'Los celtíberos surgieron de la mezcla de celtas e iberos.',a:'Verdadero',o:['Falso'],e:''},
+ {vf:1,q:'Sabemos con seguridad por qué desapareció Tartessos.',a:'Falso',o:['Verdadero'],e:'Su desaparición es un misterio.'}
+];
+function pStart(){
+  $('#pbox').innerHTML=`<p class="kicker">Prueba final</p><h2 class="t">15 preguntas de todo el esquema</h2><p class="hint">Mejor nota: ${store.get('exam','—')}</p><div><button class="primary" id="pgo">Empezar</button></div>`;
+  $('#pgo').onclick=()=>{
+    const qs=shuffle(POOL).slice(0,15).map(q=>q.vf?{...q,o:q.o}:q);
+    const box=document.createElement('div');box.className='quiz';
+    $('#pbox').innerHTML='';$('#pbox').appendChild(box);
+    runQuiz(box,qs,'Responde las 15',(ok,n)=>{
+      const nota=Math.round(ok/n*100)/10;const prev=parseFloat(store.get('exam','0'))||0;if(nota>prev)store.set('exam',String(nota));
+      const r=document.createElement('div');r.className='result';
+      r.innerHTML=`<span class="stamp">${nota} / 10</span><p>${ok} de ${n} bien. ${nota>=9?'¡Sobresaliente! 🏆':nota>=7?'¡Muy bien!':nota>=5?'Aprobado. Repasa los fallos.':'Vuelve a las fichas y repítela.'}</p><button class="primary">↻ Otra prueba</button>`;
+      r.querySelector('button').onclick=pStart;box.appendChild(r);r.scrollIntoView({behavior:'smooth'});
+    });
+  };
+}
+
+/* ============ PESTAÑAS ============ */
+function openTab(t){
+  GID++;
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+  ['esquema','fichas','juegos','prueba'].forEach(x=>$('#tab-'+x).hidden=x!==t);
+  if(t==='fichas'&&!$('#stage').innerHTML)loadScene(0);
+  if(t==='juegos')gMenu();
+  if(t==='prueba')pStart();
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>openTab(b.dataset.tab));
+drawMap();
+</script>
+</body>
+</html>
